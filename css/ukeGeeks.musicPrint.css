@@ -1,0 +1,8 @@
+body {
+	padding:.1em;
+}
+/* HEADER
+  ------------------------------ */
+header hgroup aside{
+	display:none;
+}

@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+### REWRITES ###
+RewriteEngine On
+RewriteBase /
+
+# RewriteRule ^songbook/?$ /song-list.php [L,QSA]
+RewriteRule ^songbook/(.*)$ /song.php?song=$1 [L,QSA]
+
+</IfModule>
