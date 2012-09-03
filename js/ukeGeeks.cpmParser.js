@@ -70,6 +70,11 @@ ukeGeeks.cpmParser.prototype = {
 		if (tmp.length > 0){
 			song.title = tmp[0];
 		}
+		// Artist
+		tmp = this._getInfo(songDom, this.blockTypeEnum.Artist);
+		if (tmp.length > 0){
+			song.artist = tmp[0];
+		}
 		// Song Subtitle
 		tmp = this._getInfo(songDom, this.blockTypeEnum.Subtitle);
 		if (tmp.length > 0){
@@ -145,6 +150,7 @@ ukeGeeks.cpmParser.prototype = {
 		ChordDefinition: 105,
 		UkeGeeksMeta: 106,
 		ColumnBreak: 107, // Defining this as an instruction instead of a node since I'm not requiring a Begin/End syntax and it simplifies processing
+		Artist: 108,
 		// Text Types
 		ChordText: 201,
 		PlainText: 202,
@@ -285,7 +291,7 @@ ukeGeeks.cpmParser.prototype = {
 				}
 			}
 			else{
-				var s = this.trim(lines[i]);
+				var s = ukeGeeks.toolsLite.trim(lines[i]);
 				if (s.length > 0){
 					tmpBlk.lines.push(s);
 				}
@@ -298,9 +304,13 @@ ukeGeeks.cpmParser.prototype = {
 	},
 
 	/**
-	 * Goes through songNodes and those that are "instructions" are exploded and the resulting 
-	 * songDomElement replaces the original line. The regular expression ches for 
-	 * instructions of format: {commandVerb: commandArguments}
+	 * Goes through songNodes, those nodes that are "instructions" are exploded and 
+	 * a "the resulting "songDomElement" built, this songDomElement then replaces the 
+	 * original line. 
+	 * 
+	 * The regular expression look for instructions with this format: 
+	 * {commandVerb: commandArguments}
+	 * 
 	 * @method _parseInstr
 	 * @private
 	 * @param song {songNodeArray} 
@@ -326,6 +336,9 @@ ukeGeeks.cpmParser.prototype = {
 						case 't':
 							tmpBlk.type = this.blockTypeEnum.Title;
 							break;
+						case 'artist':
+							tmpBlk.type = this.blockTypeEnum.Artist;
+							break;
 						case 'subtitle':
 						case 'st':
 							tmpBlk.type = this.blockTypeEnum.Subtitle;
@@ -347,7 +360,7 @@ ukeGeeks.cpmParser.prototype = {
 							tmpBlk.type = 'Undefined-'+verb;
 							break;
 					}
-					tmpBlk.lines[0] = this.trim(args);
+					tmpBlk.lines[0] = ukeGeeks.toolsLite.trim(args);
 					song[i].lines[j] = tmpBlk;
 				}
 			}
@@ -391,8 +404,7 @@ ukeGeeks.cpmParser.prototype = {
 	_markChordLines: function(song){
 		var regEx = {
 			chord : /\[(.+?)]/i,
-			allChords : /\[(.+?)]/img,
-			trim : /^\s+|\s+$/g
+			allChords : /\[(.+?)]/img
 		};
 		
 		var hasChrd;
@@ -405,7 +417,7 @@ ukeGeeks.cpmParser.prototype = {
 					if (typeof(line) == 'string'){
 						hasChrd = regEx.chord.test(line);
 						this.hasChords = this.hasChords || hasChrd;
-						isChrdOnly = hasChrd && (line.replace(regEx.allChords, '').replace(regEx.trim, '').length < 1);
+						isChrdOnly = hasChrd && (ukeGeeks.toolsLite.trim(line.replace(regEx.allChords, '')).length < 1);
 						// need to find
 						song[i].lines[j] = {
 							type: (isChrdOnly ? this.blockTypeEnum.ChordOnlyText
@@ -442,16 +454,6 @@ ukeGeeks.cpmParser.prototype = {
 			}
 		}
 		return rtn;
-	},
-
-	/** TODO: MOVE. Not DRY!!!
-	 * Removes all white space at the begining and end of a string.
- 	 * @method trim
-	 * @param str {String} String to trim.
-	 * @return {String} Returns string without leading and following white space characters.
-	 */
-	trim: function(str){
-		return str.replace(/^\s+|\s+$/g, '');
 	},
 	
 	/**

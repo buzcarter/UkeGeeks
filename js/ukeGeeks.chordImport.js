@@ -38,9 +38,6 @@ ukeGeeks.chordImport = new function(){
 		// extra commands
 		instr: /{\s*instrument\s*:\s*(.*?)\s*}/i,
 		tuning: /{\s*tuning\s*:\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*}/i,
-		// common
-		dbleSpace: /\s{2,}/g,
-		trim: /^\s+|\s+$/g,
 		// single digit numbers
 		//num: /(\d)/g,
 		numOrX: /(\d{1,2}|x)/gi,
@@ -55,7 +52,7 @@ ukeGeeks.chordImport = new function(){
 	 * @return {array<chordParts>}
 	 */
 	var _lineToParts = function(line){
-		var s = line.replace(regEx.dbleSpace, ' ').replace(regEx.trim, '');
+		var s = ukeGeeks.toolsLite.pack(line);
 		if (s.length > 1 && s[0] != '#'){
 			var m = s.match(regEx.define);
 			if (m && m.length > 1){
@@ -113,7 +110,7 @@ ukeGeeks.chordImport = new function(){
 		if (!c){
 			return null;
 		}
-		return c[1].replace(regEx.dbleSpace, ' ');
+		return ukeGeeks.toolsLite.pack(c[1]);
 	};
 	
 	/**

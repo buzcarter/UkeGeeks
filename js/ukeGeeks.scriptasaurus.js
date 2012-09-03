@@ -26,7 +26,7 @@ ukeGeeks.scriptasaurus = new function(){
 	this.run = function(offset){
 		var offset = (arguments.length > 0) ? arguments[0] : ukeGeeks.definitions.instrument.sopranoUke;
 		var h = document.getElementById(ukeGeeks.settings.ids.songText);
-		if (!h) return;
+		if (!h) return null;
 	
 		ukeGeeks.definitions.useInstrument(offset);
 		
@@ -48,9 +48,7 @@ ukeGeeks.scriptasaurus = new function(){
 		// Show chord diagrams inline with lyrics
 		if (ukeGeeks.settings.inlineDiagrams){
 			var b = document.getElementsByTagName('body')[0];
-			if (b.className.search('ugsInlineDiagrams') < 0) { 
-				b.className += " ugsInlineDiagrams "; 
-			}
+			ukeGeeks.toolsLite.addClass(b, 'ugsInlineDiagrams');
 			painter.showInline(chordsInUse);
 		}
 	
@@ -62,6 +60,16 @@ ukeGeeks.scriptasaurus = new function(){
 		// error reporting:
 		showErrors(painter.getErrors());
 		
+		var container = document.getElementById(ukeGeeks.settings.ids.container);
+		if (container){
+			if (!song.hasChords){
+				ukeGeeks.toolsLite.addClass(container, 'ugsNoChords');
+			}
+			else{
+				ukeGeeks.toolsLite.removeClass(container, 'ugsNoChords');
+			}
+		}
+
 		// done!
 		return song;
 	};

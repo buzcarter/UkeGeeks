@@ -51,7 +51,13 @@ ukeGeeks.data = new function(){
 	   */
 		this.album = '';
 		/**
-		 * Subtitle, usually Artist Info
+		 * Artist Info
+		 * @property artist
+	   * @type string
+	   */
+		this.artist = '';
+		/**
+		 * Subtitle, often Artist Info
 		 * @property st
 	   * @type string
 	   */

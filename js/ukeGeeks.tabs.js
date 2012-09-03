@@ -16,16 +16,6 @@ ukeGeeks.tabs.prototype = {
 	 */
 	init: function(){
 	},
-
-	/**
-	 * Removes all white space at the begining and end of a string.
-	 * @method trim
-	 * @param str {String} String to trim.
-	 * @return {String} Returns string without leading and following white space characters.
-	 */
-	trim: function(str){
-		return str.replace(/^\s+|\s+$/g, '');
-	},
 	
 	/**
 	 * Races through all &lt;pre&gt; tags within h, any with the CSS class of "ugsTabs" will be replaced with the canvas element.
@@ -55,7 +45,7 @@ ukeGeeks.tabs.prototype = {
 		var lns = text.split('\n');
 		var tab = [];
 		for(var i in lns){
-			var s = this.trim(lns[i]);
+			var s = ukeGeeks.toolsLite.trim(lns[i]);
 			if (s.length > 0){
 				tab.push(s);
 			}
@@ -77,22 +67,23 @@ ukeGeeks.tabs.prototype = {
 		// validate inTabs input...
 		// TODO: instead of this if it's text pop the entire processing back to loadBlocks!
 		inTabs = (typeof(inTabs) == 'string') ? (inTabs.split('\n')) : inTabs;
-		if (inTabs.length < 4) return;
+		if (inTabs.length < 4) {
+			return;
+		}
 		// read tabs
 		var tabInfo = this._readTabs(inTabs);
-		var labelOffset = (tabInfo.hasLabels)? ukeGeeks.settings.tabs.labelWidth: 0;
+		var labelOffset = (tabInfo.hasLabels) ? ukeGeeks.settings.tabs.labelWidth: 0;
 		var tabs = tabInfo.tabs;
 		// how much space?
-		var length = (ukeGeeks.settings.tabs.noteSpacing * tabs[0].length + labelOffset) + (ukeGeeks.settings.tabs.dotRadius) ;
 		var height = (3 * ukeGeeks.settings.tabs.lineSpacing) + (2 * ukeGeeks.settings.tabs.dotRadius) + ukeGeeks.settings.tabs.bottomPadding;
 		// prep canvas
 		outElement = (typeof(outElement) == 'string') ? document.getElementById(outElement) : outElement;
-		var ctx = ukeGeeks.canvasTools.addCanvas(outElement, length, height);
+		var ctx = ukeGeeks.canvasTools.addCanvas(outElement, this._getWidth(tabs, labelOffset, false), height);
 		var pos = {
 			x: ukeGeeks.settings.tabs.dotRadius + labelOffset,
 			y: 1 + ukeGeeks.settings.tabs.dotRadius
-			};
-		this._drawStaff(ctx, pos, length, ukeGeeks.settings.tabs);
+		};
+		this._drawStaff(ctx, pos, this._getWidth(tabs, labelOffset, true), ukeGeeks.settings.tabs);
 		this._drawNotes(ctx, pos, tabs, ukeGeeks.settings.tabs);
 		if (tabInfo.hasLabels){
 			this._drawLabels(ctx, pos, ukeGeeks.settings.tabs);
@@ -122,7 +113,30 @@ ukeGeeks.tabs.prototype = {
 			hasLabels: hasLabels
 		};
 	},
-
+	
+	/**
+	 * @method _getWidth
+	 * @private
+	 * @param tabs {2Darray}
+	 * @param labelOffset {int}
+	 * @param isTruncate {bool} If TRUE returns the length of the line, allowing for a terminating "|" character, othwrwise, it's for cavas width
+	 * @return {int}
+	 */
+	_getWidth : function(tabs, labelOffset, isTruncate){
+		if (!isTruncate){
+			return (ukeGeeks.settings.tabs.noteSpacing * tabs[0].length) + labelOffset + ukeGeeks.settings.tabs.dotRadius;
+		}
+		
+		var len = tabs[0].length;
+		var plusDot = ukeGeeks.settings.tabs.dotRadius;
+		if (tabs[0][len - 1] == '|'){
+			len -= 1;
+			plusDot = 0;
+		}
+		
+		return ukeGeeks.settings.tabs.noteSpacing * len + labelOffset + plusDot;
+	},
+	
 	/**
 	 * Processes ukeStrings stripping the first character from each line
 	 * @method _rdTbStripLabels
@@ -316,17 +330,21 @@ ukeGeeks.tabs.prototype = {
 				c = tabs[i][j];
 				// (c != '-'){
 				if (c == '|'){
+					var jnum = parseInt(j, 10);
+					var heavy = 
+						(((jnum + 1) < (tabs[i].length - 1)) && (tabs[i][jnum + 1] == '|'))
+						|| ((jnum == (tabs[i].length - 1)) && (tabs[i][jnum - 1] == '|'));
 					this._drawMeasure(ctx, {
 						x: center.x,
 						y: pos.y
-						}, settings);
+					}, settings, heavy);
 				}
 				else if (!isNaN(c)){
 					ukeGeeks.canvasTools.drawDot(ctx, center, settings.dotRadius, settings.dotColor);
 					ukeGeeks.canvasTools.drawText(ctx, {
 						x: center.x,
 						y: (center.y + 0.5 * settings.dotRadius)
-						}, c, settings.textFont, settings.textColor);
+					}, c, settings.textFont, settings.textColor);
 				}
 				center.x += settings.noteSpacing;
 			}
@@ -341,15 +359,16 @@ ukeGeeks.tabs.prototype = {
 	 * @param ctx {canvasContext} Handle to active canvas context
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param settings {settingsObj}
+	 * @param heavy {bool} if TRUE hevy line
 	 * @return {void}
 	 */
-	_drawMeasure: function(ctx, pos, settings){
+	_drawMeasure: function(ctx, pos, settings, heavy){
 		var offset = settings.lineWidth / 2;
 		ctx.beginPath();
 		ctx.moveTo(pos.x + offset, pos.y);  
 		ctx.lineTo(pos.x + offset, pos.y + 3 * settings.lineSpacing);
 		ctx.strokeStyle = settings.lineColor;
-		ctx.lineWidth = settings.lineWidth;
+		ctx.lineWidth = (heavy ? 4.5 : 1) * settings.lineWidth;
 		ctx.stroke();
 		ctx.closePath();
 	},
@@ -364,12 +383,12 @@ ukeGeeks.tabs.prototype = {
 	 * @return {void}
 	 */
 	_drawLabels: function(ctx, pos, settings){
-		var labels = ukeGeeks.settings.tuning.reverse();// ['A','E','C','G'];
+		var labels = ukeGeeks.settings.tuning.slice(0).reverse();// ['A','E','C','G'];
 		for (var i=0; i < 4; i++){
 			ukeGeeks.canvasTools.drawText(ctx, {
 				x: 1,
 				y: (pos.y + (i + 0.3) * settings.lineSpacing)
-				}, labels[i], settings.labelFont, settings.lineColor, 'left');
+			}, labels[i], settings.labelFont, settings.lineColor, 'left');
 		}
 	}
 }

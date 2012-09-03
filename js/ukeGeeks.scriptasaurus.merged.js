@@ -158,7 +158,8 @@ ukeGeeks.settings = new function(){
 	 */
 	this.ids = {
 		songText: 'ukeSongText', // element holding the song's text
-		canvas: 'ukeChordsCanvas' // canvas 
+		canvas: 'ukeChordsCanvas', // canvas 
+		container: 'ukeSongContainer' // wraps BOTH Song Text and Chord Canvas
 	};
 	
 	/**
@@ -270,7 +271,13 @@ ukeGeeks.data = new function(){
 	   */
 		this.album = '';
 		/**
-		 * Subtitle, usually Artist Info
+		 * Artist Info
+		 * @property artist
+	   * @type string
+	   */
+		this.artist = '';
+		/**
+		 * Subtitle, often Artist Info
 		 * @property st
 	   * @type string
 	   */
@@ -383,6 +390,61 @@ ukeGeeks.data = new function(){
 
 }
 ;/**
+ * some jQuery-like tools (very, very crappy. wish we could count on jQuery being on the page.)
+ * if you do want to use jQuery (and why wouldn't you) I'm not offended if you yank this out.
+ * @class toolsLite
+ * @namespace ukeGeeks
+ * @project UkeGeeks' Scriptasaurus 
+ */
+ukeGeeks.toolsLite = new function(){
+	var regEx = {
+		dbleSpace: /\s{2,}/g,
+		trim: /^\s+|\s+$/g
+	};
+	
+	/**
+	 * adds className to element. 
+	 * @method addClass
+	 * @param element {DOM_element} target element
+	 * @param className {string} CSS classname to add
+	 * @return {void}
+	 */
+	this.addClass = function(element, className){
+		if (!this.hasClass(element,className)) { 
+			element.className += ' ' + className; 
+		}
+	};
+	
+	this.hasClass = function(element, className) {
+		return element.className.match(getRegEx(className));
+	};
+
+	this.removeClass = function(element, className) {
+		if (this.hasClass(element, className)) {
+			var reg = getRegEx(className);
+			element.className=element.className.replace(reg,' ');
+		}
+	};
+	
+	var getRegEx = function(className){
+		return new RegExp('(\\s|^)'+className+'(\\s|$)');
+	};
+	
+	/**
+	 * Removes all white space at the begining and end of a string.
+	 * @method trim
+	 * @param str {String} String to trim.
+	 * @return {String} Returns string without leading and following white space characters.
+	 */
+	this.trim = function(str){
+		return str.replace(regEx.trim, '');
+	};
+	
+	this.pack = function(value){
+		return value.replace(regEx.dbleSpace, ' ').replace(regEx.trim, '');
+	};
+};
+;/**
  * Converts text to JSON objects. Accetps either large text blocks or single lines of 
  * text written in CPM syntax (looks for instrument, tuning, and define statements). 
  * @class chordImport
@@ -422,9 +484,6 @@ ukeGeeks.chordImport = new function(){
 		// extra commands
 		instr: /{\s*instrument\s*:\s*(.*?)\s*}/i,
 		tuning: /{\s*tuning\s*:\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*}/i,
-		// common
-		dbleSpace: /\s{2,}/g,
-		trim: /^\s+|\s+$/g,
 		// single digit numbers
 		//num: /(\d)/g,
 		numOrX: /(\d{1,2}|x)/gi,
@@ -439,7 +498,7 @@ ukeGeeks.chordImport = new function(){
 	 * @return {array<chordParts>}
 	 */
 	var _lineToParts = function(line){
-		var s = line.replace(regEx.dbleSpace, ' ').replace(regEx.trim, '');
+		var s = ukeGeeks.toolsLite.pack(line);
 		if (s.length > 1 && s[0] != '#'){
 			var m = s.match(regEx.define);
 			if (m && m.length > 1){
@@ -497,7 +556,7 @@ ukeGeeks.chordImport = new function(){
 		if (!c){
 			return null;
 		}
-		return c[1].replace(regEx.dbleSpace, ' ');
+		return ukeGeeks.toolsLite.pack(c[1]);
 	};
 	
 	/**
@@ -1026,7 +1085,7 @@ ukeGeeks.definitions = new function(){
 {define: Bbsus2 frets 3 0 1 1 fingers 3 0 1 1}\
 {define: Bbsus4 frets 3 3 1 1 fingers 3 3 1 1}\
 {define: Bbaug frets 3 2 2 5 fingers 2 1 1 4 add: string 1 fret 2 finger 1 add: string 4 fret 2 finger 1}\
-{define: Bb9 frets 1 2 1 3}\
+{define: Bb9 frets 1 2 1 3 fingers 2 1 4 3}\
 {define: BbMaj7 frets 2 2 1 1 fingers 2 2 1 1}\
 {define: Bbm7-5 frets 1 1 0 1 fingers 1 2 0 3}\
 # B\
@@ -1645,6 +1704,11 @@ ukeGeeks.cpmParser.prototype = {
 		if (tmp.length > 0){
 			song.title = tmp[0];
 		}
+		// Artist
+		tmp = this._getInfo(songDom, this.blockTypeEnum.Artist);
+		if (tmp.length > 0){
+			song.artist = tmp[0];
+		}
 		// Song Subtitle
 		tmp = this._getInfo(songDom, this.blockTypeEnum.Subtitle);
 		if (tmp.length > 0){
@@ -1720,6 +1784,7 @@ ukeGeeks.cpmParser.prototype = {
 		ChordDefinition: 105,
 		UkeGeeksMeta: 106,
 		ColumnBreak: 107, // Defining this as an instruction instead of a node since I'm not requiring a Begin/End syntax and it simplifies processing
+		Artist: 108,
 		// Text Types
 		ChordText: 201,
 		PlainText: 202,
@@ -1860,7 +1925,7 @@ ukeGeeks.cpmParser.prototype = {
 				}
 			}
 			else{
-				var s = this.trim(lines[i]);
+				var s = ukeGeeks.toolsLite.trim(lines[i]);
 				if (s.length > 0){
 					tmpBlk.lines.push(s);
 				}
@@ -1873,9 +1938,13 @@ ukeGeeks.cpmParser.prototype = {
 	},
 
 	/**
-	 * Goes through songNodes and those that are "instructions" are exploded and the resulting 
-	 * songDomElement replaces the original line. The regular expression ches for 
-	 * instructions of format: {commandVerb: commandArguments}
+	 * Goes through songNodes, those nodes that are "instructions" are exploded and 
+	 * a "the resulting "songDomElement" built, this songDomElement then replaces the 
+	 * original line. 
+	 * 
+	 * The regular expression look for instructions with this format: 
+	 * {commandVerb: commandArguments}
+	 * 
 	 * @method _parseInstr
 	 * @private
 	 * @param song {songNodeArray} 
@@ -1901,6 +1970,9 @@ ukeGeeks.cpmParser.prototype = {
 						case 't':
 							tmpBlk.type = this.blockTypeEnum.Title;
 							break;
+						case 'artist':
+							tmpBlk.type = this.blockTypeEnum.Artist;
+							break;
 						case 'subtitle':
 						case 'st':
 							tmpBlk.type = this.blockTypeEnum.Subtitle;
@@ -1922,7 +1994,7 @@ ukeGeeks.cpmParser.prototype = {
 							tmpBlk.type = 'Undefined-'+verb;
 							break;
 					}
-					tmpBlk.lines[0] = this.trim(args);
+					tmpBlk.lines[0] = ukeGeeks.toolsLite.trim(args);
 					song[i].lines[j] = tmpBlk;
 				}
 			}
@@ -1966,8 +2038,7 @@ ukeGeeks.cpmParser.prototype = {
 	_markChordLines: function(song){
 		var regEx = {
 			chord : /\[(.+?)]/i,
-			allChords : /\[(.+?)]/img,
-			trim : /^\s+|\s+$/g
+			allChords : /\[(.+?)]/img
 		};
 		
 		var hasChrd;
@@ -1980,7 +2051,7 @@ ukeGeeks.cpmParser.prototype = {
 					if (typeof(line) == 'string'){
 						hasChrd = regEx.chord.test(line);
 						this.hasChords = this.hasChords || hasChrd;
-						isChrdOnly = hasChrd && (line.replace(regEx.allChords, '').replace(regEx.trim, '').length < 1);
+						isChrdOnly = hasChrd && (ukeGeeks.toolsLite.trim(line.replace(regEx.allChords, '')).length < 1);
 						// need to find
 						song[i].lines[j] = {
 							type: (isChrdOnly ? this.blockTypeEnum.ChordOnlyText
@@ -2017,16 +2088,6 @@ ukeGeeks.cpmParser.prototype = {
 			}
 		}
 		return rtn;
-	},
-
-	/** TODO: MOVE. Not DRY!!!
-	 * Removes all white space at the begining and end of a string.
- 	 * @method trim
-	 * @param str {String} String to trim.
-	 * @return {String} Returns string without leading and following white space characters.
-	 */
-	trim: function(str){
-		return str.replace(/^\s+|\s+$/g, '');
 	},
 	
 	/**
@@ -2155,16 +2216,6 @@ ukeGeeks.tabs.prototype = {
 	 */
 	init: function(){
 	},
-
-	/**
-	 * Removes all white space at the begining and end of a string.
-	 * @method trim
-	 * @param str {String} String to trim.
-	 * @return {String} Returns string without leading and following white space characters.
-	 */
-	trim: function(str){
-		return str.replace(/^\s+|\s+$/g, '');
-	},
 	
 	/**
 	 * Races through all &lt;pre&gt; tags within h, any with the CSS class of "ugsTabs" will be replaced with the canvas element.
@@ -2194,7 +2245,7 @@ ukeGeeks.tabs.prototype = {
 		var lns = text.split('\n');
 		var tab = [];
 		for(var i in lns){
-			var s = this.trim(lns[i]);
+			var s = ukeGeeks.toolsLite.trim(lns[i]);
 			if (s.length > 0){
 				tab.push(s);
 			}
@@ -2216,22 +2267,23 @@ ukeGeeks.tabs.prototype = {
 		// validate inTabs input...
 		// TODO: instead of this if it's text pop the entire processing back to loadBlocks!
 		inTabs = (typeof(inTabs) == 'string') ? (inTabs.split('\n')) : inTabs;
-		if (inTabs.length < 4) return;
+		if (inTabs.length < 4) {
+			return;
+		}
 		// read tabs
 		var tabInfo = this._readTabs(inTabs);
-		var labelOffset = (tabInfo.hasLabels)? ukeGeeks.settings.tabs.labelWidth: 0;
+		var labelOffset = (tabInfo.hasLabels) ? ukeGeeks.settings.tabs.labelWidth: 0;
 		var tabs = tabInfo.tabs;
 		// how much space?
-		var length = (ukeGeeks.settings.tabs.noteSpacing * tabs[0].length + labelOffset) + (ukeGeeks.settings.tabs.dotRadius) ;
 		var height = (3 * ukeGeeks.settings.tabs.lineSpacing) + (2 * ukeGeeks.settings.tabs.dotRadius) + ukeGeeks.settings.tabs.bottomPadding;
 		// prep canvas
 		outElement = (typeof(outElement) == 'string') ? document.getElementById(outElement) : outElement;
-		var ctx = ukeGeeks.canvasTools.addCanvas(outElement, length, height);
+		var ctx = ukeGeeks.canvasTools.addCanvas(outElement, this._getWidth(tabs, labelOffset, false), height);
 		var pos = {
 			x: ukeGeeks.settings.tabs.dotRadius + labelOffset,
 			y: 1 + ukeGeeks.settings.tabs.dotRadius
-			};
-		this._drawStaff(ctx, pos, length, ukeGeeks.settings.tabs);
+		};
+		this._drawStaff(ctx, pos, this._getWidth(tabs, labelOffset, true), ukeGeeks.settings.tabs);
 		this._drawNotes(ctx, pos, tabs, ukeGeeks.settings.tabs);
 		if (tabInfo.hasLabels){
 			this._drawLabels(ctx, pos, ukeGeeks.settings.tabs);
@@ -2261,7 +2313,30 @@ ukeGeeks.tabs.prototype = {
 			hasLabels: hasLabels
 		};
 	},
-
+	
+	/**
+	 * @method _getWidth
+	 * @private
+	 * @param tabs {2Darray}
+	 * @param labelOffset {int}
+	 * @param isTruncate {bool} If TRUE returns the length of the line, allowing for a terminating "|" character, othwrwise, it's for cavas width
+	 * @return {int}
+	 */
+	_getWidth : function(tabs, labelOffset, isTruncate){
+		if (!isTruncate){
+			return (ukeGeeks.settings.tabs.noteSpacing * tabs[0].length) + labelOffset + ukeGeeks.settings.tabs.dotRadius;
+		}
+		
+		var len = tabs[0].length;
+		var plusDot = ukeGeeks.settings.tabs.dotRadius;
+		if (tabs[0][len - 1] == '|'){
+			len -= 1;
+			plusDot = 0;
+		}
+		
+		return ukeGeeks.settings.tabs.noteSpacing * len + labelOffset + plusDot;
+	},
+	
 	/**
 	 * Processes ukeStrings stripping the first character from each line
 	 * @method _rdTbStripLabels
@@ -2455,17 +2530,21 @@ ukeGeeks.tabs.prototype = {
 				c = tabs[i][j];
 				// (c != '-'){
 				if (c == '|'){
+					var jnum = parseInt(j, 10);
+					var heavy = 
+						(((jnum + 1) < (tabs[i].length - 1)) && (tabs[i][jnum + 1] == '|'))
+						|| ((jnum == (tabs[i].length - 1)) && (tabs[i][jnum - 1] == '|'));
 					this._drawMeasure(ctx, {
 						x: center.x,
 						y: pos.y
-						}, settings);
+					}, settings, heavy);
 				}
 				else if (!isNaN(c)){
 					ukeGeeks.canvasTools.drawDot(ctx, center, settings.dotRadius, settings.dotColor);
 					ukeGeeks.canvasTools.drawText(ctx, {
 						x: center.x,
 						y: (center.y + 0.5 * settings.dotRadius)
-						}, c, settings.textFont, settings.textColor);
+					}, c, settings.textFont, settings.textColor);
 				}
 				center.x += settings.noteSpacing;
 			}
@@ -2480,15 +2559,16 @@ ukeGeeks.tabs.prototype = {
 	 * @param ctx {canvasContext} Handle to active canvas context
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param settings {settingsObj}
+	 * @param heavy {bool} if TRUE hevy line
 	 * @return {void}
 	 */
-	_drawMeasure: function(ctx, pos, settings){
+	_drawMeasure: function(ctx, pos, settings, heavy){
 		var offset = settings.lineWidth / 2;
 		ctx.beginPath();
 		ctx.moveTo(pos.x + offset, pos.y);  
 		ctx.lineTo(pos.x + offset, pos.y + 3 * settings.lineSpacing);
 		ctx.strokeStyle = settings.lineColor;
-		ctx.lineWidth = settings.lineWidth;
+		ctx.lineWidth = (heavy ? 4.5 : 1) * settings.lineWidth;
 		ctx.stroke();
 		ctx.closePath();
 	},
@@ -2503,12 +2583,12 @@ ukeGeeks.tabs.prototype = {
 	 * @return {void}
 	 */
 	_drawLabels: function(ctx, pos, settings){
-		var labels = ukeGeeks.settings.tuning.reverse();// ['A','E','C','G'];
+		var labels = ukeGeeks.settings.tuning.slice(0).reverse();// ['A','E','C','G'];
 		for (var i=0; i < 4; i++){
 			ukeGeeks.canvasTools.drawText(ctx, {
 				x: 1,
 				y: (pos.y + (i + 0.3) * settings.lineSpacing)
-				}, labels[i], settings.labelFont, settings.lineColor, 'left');
+			}, labels[i], settings.labelFont, settings.lineColor, 'left');
 		}
 	}
 }
@@ -2540,7 +2620,7 @@ ukeGeeks.scriptasaurus = new function(){
 	this.run = function(offset){
 		var offset = (arguments.length > 0) ? arguments[0] : ukeGeeks.definitions.instrument.sopranoUke;
 		var h = document.getElementById(ukeGeeks.settings.ids.songText);
-		if (!h) return;
+		if (!h) return null;
 	
 		ukeGeeks.definitions.useInstrument(offset);
 		
@@ -2562,9 +2642,7 @@ ukeGeeks.scriptasaurus = new function(){
 		// Show chord diagrams inline with lyrics
 		if (ukeGeeks.settings.inlineDiagrams){
 			var b = document.getElementsByTagName('body')[0];
-			if (b.className.search('ugsInlineDiagrams') < 0) { 
-				b.className += " ugsInlineDiagrams "; 
-			}
+			ukeGeeks.toolsLite.addClass(b, 'ugsInlineDiagrams');
 			painter.showInline(chordsInUse);
 		}
 	
@@ -2576,6 +2654,16 @@ ukeGeeks.scriptasaurus = new function(){
 		// error reporting:
 		showErrors(painter.getErrors());
 		
+		var container = document.getElementById(ukeGeeks.settings.ids.container);
+		if (container){
+			if (!song.hasChords){
+				ukeGeeks.toolsLite.addClass(container, 'ugsNoChords');
+			}
+			else{
+				ukeGeeks.toolsLite.removeClass(container, 'ugsNoChords');
+			}
+		}
+
 		// done!
 		return song;
 	};

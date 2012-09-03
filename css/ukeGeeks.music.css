@@ -171,6 +171,16 @@ pre + .ugsChorus{margin-top:3.5em;}
 	top:auto;
 	left:auto;
 }
+
+/* CHORD-ONLY (NO LYRICS) BLOCKS
+  ------------------------------ */
+.ugsNoChords aside{
+	display: none;
+}
+.ugsNoChords article{
+	margin-left: 0;
+}
+
 /* SHOW CHORD DIAGRAMS INLINE
   ------------------------------ */
 .ugsInlineDiagrams .ugsChords{

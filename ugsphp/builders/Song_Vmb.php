@@ -20,8 +20,10 @@ class Song_Vmb {
 		$data = $this->getFile(Config::SongDirectory . $this->fname);
 		$this->song = $this->parseSong($data);
 
+		$title = htmlspecialchars((($this->song->isOK) ? ($this->song->title . ((strlen($this->song->subtitle) > 0) ? (' | ' . $this->song->subtitle) : '')) : 'Not Found'));
+		
 		$modelView = new Song_Vm();
-		$modelView->PageTitle = htmlspecialchars((($this->song->isOK) ? ($this->song->title . ((strlen($this->song->subtitle) > 0) ? (' | ' . $this->song->subtitle) : '')) : 'Not Found') . ' ' . Config::PageTitleSuffix);
+		$modelView->PageTitle = ((strlen($title) > 0) ? $title : $this->fname) . ' ' . Config::PageTitleSuffix;
 		$modelView->SongTitle = htmlspecialchars($this->song->title);
 		$modelView->Subtitle = htmlspecialchars($this->song->subtitle);
 		$modelView->Artist = $this->song->artist;

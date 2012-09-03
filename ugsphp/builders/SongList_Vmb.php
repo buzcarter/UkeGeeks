@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include_once(Ugs::$config->ViewModelPath . 'SongList_Vm.php');
 
@@ -10,6 +10,7 @@ class SongList_Vmb {
 
 	// -----------------
 	private $_files = null;
+	private $pattern = '/(.*?)\.cpm\.txt$/';
 
 	// -----------------------------------------
 	// PUBLIC METHODS
@@ -22,29 +23,67 @@ class SongList_Vmb {
 		return $view;
 	}
 
+	// -----------------------------------------
+	// PRIVATE METHODS
+	// -----------------------------------------
 	/**
 	 * Emits list of links to all songs in the directory.
 	 * @method listFiles
-	 * @return (void)
+	 * @return (song array)
 	 */
 	private function listFiles() {
 		// TODO: use config's FileExtension
-		$pattern = '/(.*?)\.cpm\.txt$/';
+
 		$list = array();
 		foreach ($this->_files as $f) {
-			$s = preg_replace($pattern, '$1', $f);
-			$title = ucwords(str_replace('-', ' ', str_replace('_', ' ', $s)));
+			$s = preg_replace($this->pattern, '$1', $f);
+			$title = $this->getTitle($s);
 			$song = new SongLink();
 			$song->Title = $title;
 			$song->Uri = (Config::UseModRewrite) ? '/songbook/' . $s : '/song.php?song=' . $s;
 			$list[] = $song;
 		}
-		return $list;
+		return $this->sortSongs($list);
 	}
 
-	// -----------------------------------------
-	// PRIVATE METHODS
-	// -----------------------------------------
+	/**
+	 * Handles titles beginning with "The"
+	 * @private 
+	 * @method getTitle 
+	 * @param string $filename 
+	 * @return string
+	 */
+	private function getTitle($filename) {
+		$title = trim(ucwords(str_replace('-', ' ', str_replace('_', ' ', $filename))));
+		$pos = strpos($title, 'The ');
+		if (($pos !== false) && ($pos == 0)) {
+			$title = substr($title, 4, strlen($title)) . ', The';
+		}
+		return $title;
+	}
+
+	/**
+	 * Sorts a Song List based on title
+	 * @method sortSongs
+	 * @param SongArray $songList
+	 * @return (song array)
+	 */
+	private function sortSongs($list) {
+		$temp = array();
+		$sortedTitles = array();
+		foreach ($list as $song) {
+			$sortedTitles[] = $song->Title;
+			$temp[$song->Title] = $song;
+		}
+
+		sort($sortedTitles);
+
+		$newList = array();
+		foreach ($sortedTitles as $title) {
+			$newList[] = $temp[$title];
+		}
+		return $newList;
+	}
 
 	/**
 	 * Emits list of links to all songs in the directory.
@@ -59,7 +98,7 @@ class SongList_Vmb {
 		if (is_dir($dir)) {
 			if ($dh = opendir($dir)) {
 				while (($file = readdir($dh)) !== false) {
-					if (filetype($dir . $file) == 'file') {
+					if ((filetype($dir . $file) == 'file') && (preg_match($this->pattern, $file) === 1)){
 						$f[] = $file;
 					}
 				}

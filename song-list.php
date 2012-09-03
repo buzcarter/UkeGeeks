@@ -15,12 +15,12 @@ $model = $builder->Build();
 </head>
 <body>
 <h1>List All Songs</h1>
-	<ul>
+	<ol>
 	<?php 
 	foreach($model->SongList as $song){
 		echo('<li><a href="' . $song->Uri . '">' . $song->Title . '</a></li>');
 	}
 	?>
-	</ul>
+	</ol>
 </body>
 </html>

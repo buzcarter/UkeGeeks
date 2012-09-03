@@ -6,7 +6,7 @@
 <title>UNTITLED - ARTIST</title>
 <!-- TemplateEndEditable -->
 <script type="text/javascript">var isIE = false;</script>
-<!--[if IE]>
+<!--[if lt IE 9]>
 <script type="text/javascript">
 isIE = true;
 document.getElementsByTagName('html')[0].className = 'ie';

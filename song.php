@@ -12,7 +12,7 @@ $model = $builder->Build();
 <meta charset="utf-8" />
 <title><?php echo($model->PageTitle); ?> </title>
 <script type="text/javascript">var isIE = false;</script>
-<!--[if IE]>
+<!--[if lt IE 9]>
 <script type="text/javascript">
 isIE = true;
 document.getElementsByTagName('html')[0].className = 'ie';
@@ -49,8 +49,10 @@ document.getElementsByTagName('html')[0].className = 'ie';
 			echo('</div><!-- /.metaInfo -->');
 		}
 		?>
-	<aside id="ukeChordsCanvas"></aside>
-	<article id="ukeSongText"><pre><?php echo($model->Body); ?></pre></article>
+	<div id="ukeSongContainer">
+		<aside id="ukeChordsCanvas"></aside>
+		<article id="ukeSongText"><pre><?php echo($model->Body); ?></pre></article>
+	</div>
 </section>
 <footer>
 	<p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by UkeGeeks' Scriptasaurus &bull; ukegeeks.com</small></p>

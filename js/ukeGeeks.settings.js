@@ -137,7 +137,8 @@ ukeGeeks.settings = new function(){
 	 */
 	this.ids = {
 		songText: 'ukeSongText', // element holding the song's text
-		canvas: 'ukeChordsCanvas' // canvas 
+		canvas: 'ukeChordsCanvas', // canvas 
+		container: 'ukeSongContainer' // wraps BOTH Song Text and Chord Canvas
 	};
 	
 	/**
