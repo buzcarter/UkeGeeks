@@ -141,6 +141,11 @@ ukeGeeks.settings = new function(){
 		container: 'ukeSongContainer' // wraps BOTH Song Text and Chord Canvas
 	};
 
+	/**
+	 * CSS Class names used to find page elements-- be careful if renaming!
+	 * @property wrapClasses
+	 * @type JSON Object
+	 */
 	this.wrapClasses = {
 		wrap: 'ugs-song-wrap', // wraps BOTH Song Text and Chord Canvas
 		diagrams: 'ugs-diagrams-wrap', // canvas 

@@ -20,8 +20,9 @@ document.getElementsByTagName('html')[0].className = 'ie';
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <script type="text/javascript" src="../js/excanvas.js"></script>
 <![endif]-->
-<link rel="stylesheet" href="http://yui.yahooapis.com/2.8.0r4/build/reset/reset-min.css" />
-<link rel="stylesheet" href="/css/ukeGeeks.music.css" media="all" />
+<link rel="stylesheet" type="text/css" href="/css/yuiReset.css" />
+<link rel="stylesheet" type="text/css" href="/css/basic-page-layout.css" media="all" />
+<link rel="stylesheet" type="text/css" href="/css/ukeGeeks.music.css" media="all" />
 <link rel="stylesheet" href="/css/ukeGeeks.musicPrint.css" media="print" />
 <meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
 </head>
@@ -49,15 +50,29 @@ document.getElementsByTagName('html')[0].className = 'ie';
 			echo('</div><!-- /.metaInfo -->');
 		}
 		?>
-	<div id="ukeSongContainer">
-		<aside id="ukeChordsCanvas"></aside>
-		<article id="ukeSongText"><pre><?php echo($model->Body); ?></pre></article>
+	<div id="ukeSongContainer" class="ugsLayoutTwoColumn">
+		<aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped"></aside>
+		<article id="ukeSongText" class="ugs-source-wrap"><pre><?php echo($model->Body); ?></pre></article>
 	</div>
 </section>
 <footer>
 	<p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by UkeGeeks' Scriptasaurus &bull; ukegeeks.com</small></p>
 </footer>
-<script type="text/javascript" src="/js/ukeGeeks.scriptasaurus.min.js"></script>
+<script type="text/javascript" src="/js/ukeGeeks.namespace.js"></script> 
+<script type="text/javascript" src="/js/ukeGeeks.settings.js"></script> 
+<script type="text/javascript" src="/js/ukeGeeks.data.js"></script> 
+<script type="text/javascript" src="/js/ukeGeeks.toolsLite.js"></script> 
+<script type="text/javascript" src="/js/ukeGeeks.chordImport.js"></script> 
+<script type="text/javascript" src="/js/ukeGeeks.transpose.js"></script> 
+<script type="text/javascript" src="/js/ukeGeeks.definitions.js"></script> 
+<script type="text/javascript" src="/js/ukeGeeks.definitions.sopranoUkuleleGcea.js"></script>
+<script type="text/javascript" src="/js/ukeGeeks.canvasTools.js"></script> 
+<script type="text/javascript" src="/js/ukeGeeks.chordBrush.js"></script> 
+<script type="text/javascript" src="/js/ukeGeeks.chordParser.js"></script> 
+<script type="text/javascript" src="/js/ukeGeeks.cpmParser.js"></script> 
+<script type="text/javascript" src="/js/ukeGeeks.chordPainter.js"></script>
+<script type="text/javascript" src="/js/ukeGeeks.tabs.js"></script>
+<script type="text/javascript" src="/js/ukeGeeks.scriptasaurus.js"></script>
 <script type="text/javascript" src="/js/startup.js"></script>
 </body>
 </html>

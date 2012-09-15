@@ -15,28 +15,32 @@ ukeGeeks.scriptasaurus = new function(){
 	 */
 	this.init = function(isIeFamily){
 		ukeGeeks.settings.environment.isIe = isIeFamily;
+		ukeGeeks.definitions.useInstrument(ukeGeeks.definitions.instrument.sopranoUke);
 	};
 	
-
 	/**
-	 * Runs all Scriptasaurus methods. This is your "Do All". See data.song for structure.
+	 * Runs all Scriptasaurus methods using the element Ids defined in the settings class. 
+	 * This is your "Do All". See data.song for structure.
 	 * @method run
-	 * @param offset {int} (optional) default 0. Number of semitones to shift the tuning. See ukeGeeks.definitions.instrument.
 	 * @return {songObject}
 	 */
-	this.run = function(offset){
+	this.run = function(){
 		console.log('run (Classic Mode)');
-		var offset = (arguments.length > 0) ? arguments[0] : ukeGeeks.definitions.instrument.sopranoUke;
 		var node = _makeNodeById();
 		if (!node.diagrams || !node.text || !node.wrap) {
 			return null;
 		}
-		_runSong(node);
+		return _runSong(node);
 	};
 	
-	// =================================================================
+	/**
+	 * Same as "run" except runs using class names, this allows you to have multiple songs on a single page.
+	 * @method runByClasses
+	 * @return {Array of songObject}
+	 */
 	this.runByClasses = function(){
 		console.log('runByClasses');
+		var songs = [];
 		var songWraps = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.wrap);
 		console.log(songWraps);
 		for(var i = 0; i < songWraps.length; i++){
@@ -47,16 +51,29 @@ ukeGeeks.scriptasaurus = new function(){
 				continue;
 			}
 			//addCanvas(preTags[i]);
-			_runSong(node);
+			songs.push(_runSong(node));
 		}
+		return songs;
+	};
+
+	/**
+	 * Is this really nececessary?
+	 * @method setTuningOffset
+	 * @param offset {int} (optional) default 0. Number of semitones to shift the tuning. See ukeGeeks.definitions.instrument.
+	 */
+	this.setTuningOffset = function(offset){
+		ukeGeeks.definitions.useInstrument(offset);
 	};
 	
-	// =================================================================
+	
+	/**
+	 * 
+	 * @method _runSong
+	 * @private
+	 * @param node {nodeobjc} 
+	 */
 	var _runSong = function(nodes){
 		console.log('run Song');
-		var offset = ukeGeeks.definitions.instrument.sopranoUke;//(arguments.length > 0) ? arguments[0] : ukeGeeks.definitions.instrument.sopranoUke;
-	
-		ukeGeeks.definitions.useInstrument(offset);
 		
 		// read Music, find chords, generate HTML version of song:
 		var cpm = new ukeGeeks.cpmParser;
@@ -74,7 +91,7 @@ ukeGeeks.scriptasaurus = new function(){
 		painter.init(nodes);
 		painter.show(chordsInUse);
 		// Show chord diagrams inline with lyrics
-		if (true || ukeGeeks.settings.inlineDiagrams){
+		if (ukeGeeks.settings.inlineDiagrams){
 			ukeGeeks.toolsLite.addClass(nodes.wrap, 'ugsInlineDiagrams');
 			painter.showInline(chordsInUse);
 		}
@@ -101,6 +118,12 @@ ukeGeeks.scriptasaurus = new function(){
 		return song;
 	};
 	
+	/**
+	 * 
+	 * @method _makeNodeByClass
+	 * @private
+	 * @param wrap {domElement} 
+	 */
 	var _makeNodeByClass = function(wrap){
 		var diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
 		var text = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.text, wrap);
@@ -116,6 +139,12 @@ ukeGeeks.scriptasaurus = new function(){
 		return node;
 	};
 
+	/**
+	 * 
+	 * @method _makeNodeById
+	 * @private
+	 * @param node {nodeobjc} 
+	 */
 	var _makeNodeById = function(){
 		var node = 
 		{

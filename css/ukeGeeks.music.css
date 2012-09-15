@@ -6,40 +6,58 @@
 			Classes used by UkeGeeks in a song layout.
 */
 
-h5 + h6{
+/* old skool clearfix */
+.ugs-grouped:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+.ugs-grouped { display: block; }
+.ugs-grouped { .display: inline-block; }
+.ie8 .ugs-grouped { display: block; }
+* html .ugs-grouped { height: 1%; }
+
+/* LAYOUT (2-COLUMNS)
+  ------------------------------ */
+.ugsLayoutTwoColumn aside{
+	float:left;
+	width:225px;
+}
+.ugsLayoutTwoColumn article{
+	margin-left:250px;
+}
+
+/* CHORD CANVAS (BLOCKS)
+  ------------------------------ */
+.ugs-diagrams-wrap canvas{
+	float:left;
+	margin-right:5px;
+}
+/* 
+  ------------------------------ */
+.ugs-source-wrap h5,
+.ugs-source-wrap h6{
+	border-left:solid .5em #CCC;
+	color:#036;
+	font-family:Georgia, "Times New Roman", Times, serif;
+	font-size:1.2em;
+	font-style:italic;
+	line-height:1;
+	margin:.4em 0 1em;
+	padding:.2em 0;
+	text-indent:2.3em;
+}
+.ugs-source-wrap h6{
+	font-size:.9em;
+}
+.ugs-source-wrap h5 + h6{
 	margin-top:-1em;
 }
-pre{
+.ugs-source-wrap pre{
 	color:#333;
 	font-family:inherit;
 	padding-top:0.4em;
 	white-space:pre;
 }
-pre + h6 {margin-top: 3.5em;}
-.ie pre{
+.ugs-source-wrap pre + h6 {margin-top: 3.5em;}
+.ie .ugs-source-wrap pre{
 	font-family:Verdana, Arial, Helvetica, sans-serif;
-}
-/* HEADER
-  ------------------------------ */
-header hgroup aside{
-	float:right;
-	font-size:.8em;
-	width:auto;
-}
-/* LAYOUT (2-COLUMNS)
-  ------------------------------ */
-aside{
-	float:left;
-	width:225px;
-}
-article{
-	margin-left:250px;
-}
-/* CHORD CANVAS (BLOCKS)
-  ------------------------------ */
-aside canvas{
-	float:left;
-	margin-right:5px;
 }
 /* CHORUS BLOCK
   ------------------------------ */
@@ -201,41 +219,4 @@ pre + .ugsChorus{margin-top:3.5em;}
 .ugsColumnCount2 .ugsColumn{ width: 49.5%; }
 .ugsColumnCount3 .ugsColumn{ width: 32.5%; }
 .ugsColumnCount4 .ugsColumn{ width: 24.5%; }
-
-/*
-  ------------------------------ */
-aside ul{
-	list-style:none;
-	margin:0;
-	padding:0;
-}
-aside li{
-	float:left;
-	text-align:center;
-	margin:0 10px 10px;
-	padding:0;
-}
-aside li em{
-	display:block;
-	font-size:1.20em;
-}
-/*
-  ------------------------------ */
-.metaInfo{
-	font-size:.9em;
-	padding:.6em 0;
-}
-/*
-  ------------------------------ */
-footer{
-	clear:both;
-	color:#666666;
-	font-size:0.82em;
-	padding-top:1.6em;
-}
-footer small{
-	border-left:solid 1px #b2b2b2;
-	font-size:.9em;
-	padding-left:1em;
-}
 
