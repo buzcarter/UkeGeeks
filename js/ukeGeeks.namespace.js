@@ -1,6 +1,7 @@
 /**
   * <ul>
   * <li>Project: UkeGeeks' Scriptasaurus</li>
+	* <li>Version: 1.2</li>
   * <li>Homepage: http://ukegeeks.com</li>
   * <li>Author: Buz Carter</li>
   * <li>Contact: buz@ukegeeks.com</li>

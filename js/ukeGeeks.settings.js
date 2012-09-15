@@ -135,13 +135,12 @@ ukeGeeks.settings = new function(){
 	 * @property ids
 	 * @type JSON Object
 	 */
-	/*
 	this.ids = {
 		songText: 'ukeSongText', // element holding the song's text
 		canvas: 'ukeChordsCanvas', // canvas 
 		container: 'ukeSongContainer' // wraps BOTH Song Text and Chord Canvas
 	};
-	*/
+
 	this.wrapClasses = {
 		wrap: 'ugs-song-wrap', // wraps BOTH Song Text and Chord Canvas
 		diagrams: 'ugs-diagrams-wrap', // canvas 

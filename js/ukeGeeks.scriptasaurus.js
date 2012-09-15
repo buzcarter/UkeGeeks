@@ -17,31 +17,43 @@ ukeGeeks.scriptasaurus = new function(){
 		ukeGeeks.settings.environment.isIe = isIeFamily;
 	};
 	
+
+	/**
+	 * Runs all Scriptasaurus methods. This is your "Do All". See data.song for structure.
+	 * @method run
+	 * @param offset {int} (optional) default 0. Number of semitones to shift the tuning. See ukeGeeks.definitions.instrument.
+	 * @return {songObject}
+	 */
+	this.run = function(offset){
+		console.log('run (Classic Mode)');
+		var offset = (arguments.length > 0) ? arguments[0] : ukeGeeks.definitions.instrument.sopranoUke;
+		var node = _makeNodeById();
+		if (!node.diagrams || !node.text || !node.wrap) {
+			return null;
+		}
+		_runSong(node);
+	};
+	
 	// =================================================================
-	this.run = function(){
-		console.log('run');
+	this.runByClasses = function(){
+		console.log('runByClasses');
 		var songWraps = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.wrap);
 		console.log(songWraps);
 		for(var i = 0; i < songWraps.length; i++){
 			console.log('running loop: '+ i);
-			var nodes = _makeNode(songWraps[i]);
-			if (nodes == null){
+			var node = _makeNodeByClass(songWraps[i]);
+			if (node == null){
 				console.log('problem with nodes');
 				continue;
 			}
 			//addCanvas(preTags[i]);
-			runOnce(nodes);
+			_runSong(node);
 		}
-	//var h = document.getElementById(ukeGeeks.settings.ids.songText);
-	//if (!h) return null;
 	};
 	
 	// =================================================================
-	var runOnce = function(nodes){
-		console.log('runOnce');
-		console.log(nodes.wrap);
-		console.log(nodes.diagrams);
-		console.log(nodes.text);
+	var _runSong = function(nodes){
+		console.log('run Song');
 		var offset = ukeGeeks.definitions.instrument.sopranoUke;//(arguments.length > 0) ? arguments[0] : ukeGeeks.definitions.instrument.sopranoUke;
 	
 		ukeGeeks.definitions.useInstrument(offset);
@@ -89,7 +101,7 @@ ukeGeeks.scriptasaurus = new function(){
 		return song;
 	};
 	
-	var _makeNode = function(wrap){
+	var _makeNodeByClass = function(wrap){
 		var diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
 		var text = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.text, wrap);
 		if ((diagrams == undefined) || (diagrams.length < 1) || (text == undefined) || (text.length < 1)){
@@ -103,4 +115,14 @@ ukeGeeks.scriptasaurus = new function(){
 		};
 		return node;
 	};
+
+	var _makeNodeById = function(){
+		var node = 
+		{
+			wrap : document.getElementById(ukeGeeks.settings.ids.container),
+			diagrams : document.getElementById(ukeGeeks.settings.ids.canvas),
+			text : document.getElementById(ukeGeeks.settings.ids.songText)
+		};
+		return node;
+	}
 }
