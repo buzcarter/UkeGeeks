@@ -16,51 +16,66 @@ ukeGeeks.scriptasaurus = new function(){
 	this.init = function(isIeFamily){
 		ukeGeeks.settings.environment.isIe = isIeFamily;
 	};
-
-	/**
-	 * Runs all Scriptasaurus methods. This is your "Do All". See data.song for structure.
-	 * @method run
-	 * @param offset {int} (optional) default 0. Number of semitones to shif the tuning. See ukeGeeks.definitions.instrument.
-	 * @return {songObject}
-	 */
-	this.run = function(offset){
-		var offset = (arguments.length > 0) ? arguments[0] : ukeGeeks.definitions.instrument.sopranoUke;
-		var h = document.getElementById(ukeGeeks.settings.ids.songText);
-		if (!h) return null;
+	
+	// =================================================================
+	this.run = function(){
+		console.log('run');
+		var songWraps = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.wrap);
+		console.log(songWraps);
+		for(var i = 0; i < songWraps.length; i++){
+			console.log('running loop: '+ i);
+			var nodes = _makeNode(songWraps[i]);
+			if (nodes == null){
+				console.log('problem with nodes');
+				continue;
+			}
+			//addCanvas(preTags[i]);
+			runOnce(nodes);
+		}
+	//var h = document.getElementById(ukeGeeks.settings.ids.songText);
+	//if (!h) return null;
+	};
+	
+	// =================================================================
+	var runOnce = function(nodes){
+		console.log('runOnce');
+		console.log(nodes.wrap);
+		console.log(nodes.diagrams);
+		console.log(nodes.text);
+		var offset = ukeGeeks.definitions.instrument.sopranoUke;//(arguments.length > 0) ? arguments[0] : ukeGeeks.definitions.instrument.sopranoUke;
 	
 		ukeGeeks.definitions.useInstrument(offset);
 		
 		// read Music, find chords, generate HTML version of song:
 		var cpm = new ukeGeeks.cpmParser;
 		cpm.init();
-		var song = cpm.parse(h.innerHTML);
+		var song = cpm.parse(nodes.text.innerHTML);
 		ukeGeeks.definitions.replace(song.defs);
 	
 		var chrdPrsr = new ukeGeeks.chordParser;
 		chrdPrsr.init();
-		h.innerHTML = chrdPrsr.parse(song.body);
+		nodes.text.innerHTML = chrdPrsr.parse(song.body);
 		var chordsInUse = chrdPrsr.getChords();
 	
 		// Draw the Chord Diagrams:
 		var painter = new ukeGeeks.chordPainter;
-		painter.init();
-		painter.show(ukeGeeks.settings.ids.canvas, chordsInUse);
+		painter.init(nodes);
+		painter.show(chordsInUse);
 		// Show chord diagrams inline with lyrics
-		if (ukeGeeks.settings.inlineDiagrams){
-			var b = document.getElementsByTagName('body')[0];
-			ukeGeeks.toolsLite.addClass(b, 'ugsInlineDiagrams');
+		if (true || ukeGeeks.settings.inlineDiagrams){
+			ukeGeeks.toolsLite.addClass(nodes.wrap, 'ugsInlineDiagrams');
 			painter.showInline(chordsInUse);
 		}
 	
 		// Do Tablature:
 		var tabs = new ukeGeeks.tabs;
 		tabs.init();
-		tabs.replace(h);
+		tabs.replace(nodes.text);
 		
 		// error reporting:
-		showErrors(painter.getErrors());
+		//showErrors(painter.getErrors());
 		
-		var container = document.getElementById(ukeGeeks.settings.ids.container);
+		var container = nodes.wrap;
 		if (container){
 			if (!song.hasChords){
 				ukeGeeks.toolsLite.addClass(container, 'ugsNoChords');
@@ -73,19 +88,19 @@ ukeGeeks.scriptasaurus = new function(){
 		// done!
 		return song;
 	};
-
-	/**
-	 * Shows a JavaScript alert box containing list of unknown chords.
-	 * @method showErrors
-	 * @return {void}
-	 */
-	var showErrors = function(errs){
-		if (errs.length > 0){
-			var s = '';
-			for(var i=0; i < errs.length; i++){
-				s += errs[i]+(((i+1)==errs.length) ? '' : ', ');
-			}
-			alert('Forgive me, but I don\'t know the following chords: ' + s);
+	
+	var _makeNode = function(wrap){
+		var diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
+		var text = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.text, wrap);
+		if ((diagrams == undefined) || (diagrams.length < 1) || (text == undefined) || (text.length < 1)){
+			return null;
 		}
+		var node = 
+		{
+			wrap : wrap,
+			diagrams : diagrams[0],
+			text : text[0]
+		};
+		return node;
 	};
 }

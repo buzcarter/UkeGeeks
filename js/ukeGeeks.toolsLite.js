@@ -52,4 +52,36 @@ ukeGeeks.toolsLite = new function(){
 	this.pack = function(value){
 		return value.replace(regEx.dbleSpace, ' ').replace(regEx.trim, '');
 	};
+	
+	/**
+	 * Searches within Node for tags with specified CSS class.
+	 * @method getElementsByClass
+	 * @param searchClass {string}  CSS Classname
+	 * @param node {HtmlNode} parent node to begin search within. Defaults to entire document.
+	 * @param tag {string} restrict search to a specific tag name. defaults to all tags.
+	 * @return {arrayDomElements}
+	 */
+	this.getElementsByClass = function(searchClass, node, tag) {
+		if (node == null){
+			node = document;
+		}
+		if (node.getElementsByClassName){
+			return node.getElementsByClassName(searchClass);
+		}
+
+		var classElements = new Array();
+		if (tag == null){
+			tag = '*';
+		}
+		var els = node.getElementsByTagName(tag);
+		var elsLen = els.length;
+		var pattern = new RegExp("(^|\\s)"+searchClass+"(\\s|$)");
+		for (i = 0, j = 0; i < elsLen; i++) {
+			if (pattern.test(els[i].className)) {
+				classElements[j] = els[i];
+				j++;
+			}
+		}
+		return classElements;
+	};
 };

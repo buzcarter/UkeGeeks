@@ -22,27 +22,28 @@ ukeGeeks.chordPainter.prototype = {
 	 */
 	errors: [],
 
+	nodes: null,
+	
 	/**
 	 * Again this is a constructor replacement
 	 * @method init
+	 * @param domNodes {domObject} DOM Element object 
 	 * @return {void}
 	 */
-	init: function(){
+	init: function(domNodes){
 		this.brush = new ukeGeeks.chordBrush;
 		this.brush.init();
+		this.nodes = domNodes;
 	},
 	
 	/**
 	 * Plots the passed in chords (array of ) by adding canvas elements inside passed DOM element.
 	 * @method show
-	 * @param id {string} DOM Element ID -- where the chords will be drawn
 	 * @param chords {array<expandedChord>} Array of chord objects to be plotted
 	 * @return {void}
 	 */
-	show: function(id, chords){
-		var chordBox = document.getElementById(id);
-		if (!chordBox) return;
-		chordBox.innerHTML = '';
+	show: function(chords){
+		this.nodes.diagrams.innerHTML = '';
 		this.errors = [];
 		for (var i=0; i < chords.length; i++){
 			var c = ukeGeeks.definitions.get(chords[i]);
@@ -50,7 +51,7 @@ ukeGeeks.chordPainter.prototype = {
 				this.errors.push(chords[i]);
 				continue;
 			}
-			this.brush.plot(chordBox,c,ukeGeeks.settings.fretBox);
+			this.brush.plot(this.nodes.diagrams,c,ukeGeeks.settings.fretBox);
 		}
 	},
 
@@ -62,7 +63,7 @@ ukeGeeks.chordPainter.prototype = {
 	 * @return {void}
 	 */
 	showInline: function (chords){
-		var e = document.getElementById(ukeGeeks.settings.ids.songText).getElementsByTagName('code');
+		var e = this.nodes.text.getElementsByTagName('code');
 		if (e.length < 1) return;
 		for (var i=0; i < chords.length; i++){
 			var c = ukeGeeks.definitions.get(chords[i]);

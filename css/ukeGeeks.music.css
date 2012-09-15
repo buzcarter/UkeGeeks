@@ -1,38 +1,11 @@
-/* HTML5 love*/
-header,footer,section,article,aside,canvas{display:block;}
-/*bsic html */
-body {
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	font-size:12pt;
-	padding:1.5em;
-}
-h1{
-	font-family:Georgia, "Times New Roman", Times, serif;
-	font-size:2.3em;
-	margin-bottom:.1em;
-}
-h2{
-	font-size:1.4em;
-	margin-bottom:.4em;
-}
-h4{
-	font-size:1.2em;
-	padding:.3em 0 .6em;
-}
-h5,h6{
-	border-left:solid .5em #CCC;
-	color:#036;
-	font-family:Georgia, "Times New Roman", Times, serif;
-	font-size:1.2em;
-	font-style:italic;
-	line-height:1;
-	margin:.4em 0 1em;
-	padding:.2em 0;
-	text-indent:2.3em;
-}
-h6{
-	font-size:.9em;
-}
+/* 
+	Document   : ukeGeeks.music
+	Created on : May, 2010
+	Author     : Buz
+	Description:
+			Classes used by UkeGeeks in a song layout.
+*/
+
 h5 + h6{
 	margin-top:-1em;
 }
