@@ -7,13 +7,12 @@
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 <style>
-header,
-section{
+header, section {
 	border-bottom:1px solid #CCC;
 	margin-bottom:1.5em;
 	padding-bottom:1.5em;
 }
-.topOfPage{
+.topOfPage {
 	font-size:.85em;
 	text-align:right;
 }
@@ -24,9 +23,9 @@ section{
 	<header>
 		<hgroup>
 			<h1>UkeGeek's Scriptasaurus &quot;Getting Started&quot; Installation Guide</h1>
-			<h2>Revision: 1.155</h2>
+			<h2>Revision: 1.2</h2>
 		</hgroup>
-		<p>For the most up to information please visit <a href="http://ukegeeks.com">ukegeeks.com</a>.</p>
+		<p>For the most up to information please visit <a href="http://ukegeeks.com">ukegeeks.com</a>. The latest code is on <a href="https://github.com/buzcarter/UkeGeeks">GitHub</a>.</p>
 		<nav>
 			<h3>Contents of this file</h3>
 			<ol>
@@ -34,8 +33,12 @@ section{
 				<li><a href="#overview">Overview</a></li>
 				<li><a href="#contents">Contents of the zip package</a></li>
 				<li><a href="#static">Static Site Info</a></li>
-				<li><a href="#mvc">Using the PHP &quot;Lite&quot; MVC Pages</a></li>
-				<li><a href="#mod_rewrite">Using mod_rewrite For Pretty URL's</a></li>
+				<li><a href="#mvc">PHP Pages</a>
+					<ol>
+						<li><a href="#mvc">Using the PHP &quot;Lite&quot; MVC Pages</a></li>
+						<li><a href="#mod_rewrite">Using mod_rewrite For Pretty URL's</a></li>
+					</ol>
+				</li>
 				<li><a href="#trouble">Trouble Shooting</a></li>
 				<li><a href="#license">License</a></li>
 			</ol>
@@ -43,12 +46,17 @@ section{
 	</header>
 	<section id="demos">
 		<h2>Demos</h2>
-		<p>Here's two versions of &quot;My Little Grass Shack in Kealakekua&quot;:</p>
+		<p>You'll find several sample pages in this package -- hopefully one will closely match your website architecture and how you'd like to share songs. First, we have two presentations of &quot;My Little Grass Shack in Kealakekua&quot;:</p>
 		<ul>
-			<li><a href="songs/my-little-grass-shack-in-kealakekua.htm">Static HTML</a></li>
-			<li><a href="song.php?song=my-little-grass-shack-in-kealakekua.cpm.txt">&quot;Smart&quot; dynamic PHP</a></li>
+			<li><a href="songs/my-little-grass-shack-in-kealakekua.htm">Demo Static HTML (with optional Dreamweaver Template)</a> <em>(see section <a href="#static">&quot;Static Site Info</a>&quot; below)</em></li>
+			<li><a href="song.php?song=my-little-grass-shack-in-kealakekua.cpm.txt">Demo &quot;Smart&quot; dynamic PHP</a>* <em>(see section &quot;<a href="#mvc">Using the PHP &quot;Lite&quot; MVC Pages</a>&quot; below)</em></li>
 		</ul>
-		<p>If the dynamic PHP script won't work check the <a href="#trouble">Trouble Shooting</a> installation notes below</p>
+		<p>Next you'll find a single page with multiple songs, much as you would get if you're publishing your songs on your blog using a package such as WordPress:</p>
+		<ul>
+			<li><a href="songs/multiple-songs-per-page.html">Demo Multiple Songs Per Page</a></li>
+		</ul>
+		<p>Finally, if you are using WordPress there's a Uke Geeks Plugin that makes setup a two-minute, click-and-forget affair. You'll find it at: <a href="http://ukegeeks.com/wordpress">UkeGeeks.com/wordpress</a></p>
+		<p>* If the dynamic PHP script won't work check the <a href="#trouble">Trouble Shooting</a> installation notes below</p>
 		<p class="topOfPage"><a href="#">Top</a></p>
 	</section>
 	<section id="overview">
@@ -130,7 +138,7 @@ section{
 	</section>
 	<section id="static">
 		<h2>Static Site Info</h2>
-		<p>If you'll be hand building your HTML (no server application language such as PHP) I recommend using Dreamweaver's Templating System -- though this is entirely up to you. It's consistent, fast, and prevents you from accidentally editing a critical part of your file. This download includes sample templates used by the static HTML song page.</p>
+		<p>If you'll be hand building your HTML (no server application language such as PHP) I recommend using Dreamweaver's Templating System -- though this is entirely up to you. It's consistent, fast, and prevents you from accidentally editing a critical part of your file. This download includes sample templates used by the static HTML song page (located in the &quot;<code>templates</code>&quot; directory).</p>
 		<p class="topOfPage"><a href="#">Top</a></p>
 	</section>
 	<section id="mvc">
@@ -138,7 +146,8 @@ section{
 		<p>I've implemented a modified, &quot;lite&quot; Model-View-Controller architecture for this release. Why? This hopefully allows you to modify the page where the song actually appears (the &quot;View&quot;) without need to worry about breaking any of the inner workings (hint: there aren't many inner workings either).</p>
 		<p>In a nutshell, here's a file/class overview:</p>
 		<ul>
-			<li><h4>The Controller &amp; Config</h4>
+			<li>
+				<h4>The Controller &amp; Config</h4>
 				<dl>
 					<dt><code>Ugs.php</code></dt>
 					<dd>&hellip;in this modified MVC design the Views instantiate an Ugs object and call the <code>GetBuilder</code> method that returns the appropriate View Model to be displayed.</dd>
@@ -146,7 +155,8 @@ section{
 					<dd>&hellip;as the name implies settings describing where files are and various options (such as &quot;<code>UseModRewrite</code>&quot; that changes URLs to work when Apache's mod_rewrite is enabled)</dd>
 				</dl>
 			</li>
-			<li><h4>The Views</h4>
+			<li>
+				<h4>The Views</h4>
 				<p>Pages that only echo  values they are passed (these values are bundled into View Model classes). All your modifications will likely take place here -- layout, content, etc.</p>
 				<dl>
 					<dt><code>song-list.php</code></dt>
@@ -157,8 +167,9 @@ section{
 					<dd>&hellip;just displays the unformatted original song source (CPM/text) file.</dd>
 				</dl>
 			</li>
-			<li><h4>The View Models</h4>
-				<p>The fully populated objects passed to the view. All View Model classes inherit from <code>	_base_Vm.php</code>.</p>
+			<li>
+				<h4>The View Models</h4>
+				<p>The fully populated objects passed to the view. All View Model classes inherit from <code> _base_Vm.php</code>.</p>
 				<dl>
 					<dt><code>SongList_Vm.php</code></dt>
 					<dd>&hellip;data entity passed to <code>song-list.php</code>.</dd>
@@ -168,7 +179,8 @@ section{
 					<dd>&hellip;data entity passed to <code>song-source.php</code>.</dd>
 				</dl>
 			</li>
-			<li><h4>The View Model Builders</h4>
+			<li>
+				<h4>The View Model Builders</h4>
 				<p>Instantiate appropriate View Model and does whatever's required to populate it.</p>
 				<dl>
 					<dt><code>SongList_Vmb.php</code></dt>
@@ -218,11 +230,10 @@ section{
 		<p class="topOfPage"><a href="#">Top</a></p>
 	</section>
 </article>
-	<pre>
+<pre>
 Before going live replace local reset:
 http://yui.yahooapis.com/2.8.0r4/build/reset/reset-min.css
 
 </pre>
-		
 </body>
 </html>
