@@ -1,6 +1,7 @@
 /**
   * <ul>
   * <li>Project: UkeGeeks' Scriptasaurus</li>
+	* <li>Version: 1.2</li>
   * <li>Homepage: http://ukegeeks.com</li>
   * <li>Author: Buz Carter</li>
   * <li>Contact: buz@ukegeeks.com</li>
@@ -160,6 +161,17 @@ ukeGeeks.settings = new function(){
 		songText: 'ukeSongText', // element holding the song's text
 		canvas: 'ukeChordsCanvas', // canvas 
 		container: 'ukeSongContainer' // wraps BOTH Song Text and Chord Canvas
+	};
+
+	/**
+	 * CSS Class names used to find page elements-- be careful if renaming!
+	 * @property wrapClasses
+	 * @type JSON Object
+	 */
+	this.wrapClasses = {
+		wrap: 'ugs-song-wrap', // wraps BOTH Song Text and Chord Canvas
+		diagrams: 'ugs-diagrams-wrap', // canvas 
+		text: 'ugs-source-wrap' // element holding the song's text
 	};
 	
 	/**
@@ -442,6 +454,38 @@ ukeGeeks.toolsLite = new function(){
 	
 	this.pack = function(value){
 		return value.replace(regEx.dbleSpace, ' ').replace(regEx.trim, '');
+	};
+	
+	/**
+	 * Searches within Node for tags with specified CSS class.
+	 * @method getElementsByClass
+	 * @param searchClass {string}  CSS Classname
+	 * @param node {HtmlNode} parent node to begin search within. Defaults to entire document.
+	 * @param tag {string} restrict search to a specific tag name. defaults to all tags.
+	 * @return {arrayDomElements}
+	 */
+	this.getElementsByClass = function(searchClass, node, tag) {
+		if (node == null){
+			node = document;
+		}
+		if (node.getElementsByClassName){
+			return node.getElementsByClassName(searchClass);
+		}
+
+		var classElements = new Array();
+		if (tag == null){
+			tag = '*';
+		}
+		var els = node.getElementsByTagName(tag);
+		var elsLen = els.length;
+		var pattern = new RegExp("(^|\\s)"+searchClass+"(\\s|$)");
+		for (i = 0, j = 0; i < elsLen; i++) {
+			if (pattern.test(els[i].className)) {
+				classElements[j] = els[i];
+				j++;
+			}
+		}
+		return classElements;
 	};
 };
 ;/**
@@ -2131,27 +2175,28 @@ ukeGeeks.chordPainter.prototype = {
 	 */
 	errors: [],
 
+	nodes: null,
+	
 	/**
 	 * Again this is a constructor replacement
 	 * @method init
+	 * @param domNodes {domObject} DOM Element object 
 	 * @return {void}
 	 */
-	init: function(){
+	init: function(domNodes){
 		this.brush = new ukeGeeks.chordBrush;
 		this.brush.init();
+		this.nodes = domNodes;
 	},
 	
 	/**
 	 * Plots the passed in chords (array of ) by adding canvas elements inside passed DOM element.
 	 * @method show
-	 * @param id {string} DOM Element ID -- where the chords will be drawn
 	 * @param chords {array<expandedChord>} Array of chord objects to be plotted
 	 * @return {void}
 	 */
-	show: function(id, chords){
-		var chordBox = document.getElementById(id);
-		if (!chordBox) return;
-		chordBox.innerHTML = '';
+	show: function(chords){
+		this.nodes.diagrams.innerHTML = '';
 		this.errors = [];
 		for (var i=0; i < chords.length; i++){
 			var c = ukeGeeks.definitions.get(chords[i]);
@@ -2159,7 +2204,7 @@ ukeGeeks.chordPainter.prototype = {
 				this.errors.push(chords[i]);
 				continue;
 			}
-			this.brush.plot(chordBox,c,ukeGeeks.settings.fretBox);
+			this.brush.plot(this.nodes.diagrams,c,ukeGeeks.settings.fretBox);
 		}
 	},
 
@@ -2171,7 +2216,7 @@ ukeGeeks.chordPainter.prototype = {
 	 * @return {void}
 	 */
 	showInline: function (chords){
-		var e = document.getElementById(ukeGeeks.settings.ids.songText).getElementsByTagName('code');
+		var e = this.nodes.text.getElementsByTagName('code');
 		if (e.length < 1) return;
 		for (var i=0; i < chords.length; i++){
 			var c = ukeGeeks.definitions.get(chords[i]);
@@ -2609,52 +2654,96 @@ ukeGeeks.scriptasaurus = new function(){
 	 */
 	this.init = function(isIeFamily){
 		ukeGeeks.settings.environment.isIe = isIeFamily;
+		ukeGeeks.definitions.useInstrument(ukeGeeks.definitions.instrument.sopranoUke);
 	};
 
 	/**
-	 * Runs all Scriptasaurus methods. This is your "Do All". See data.song for structure.
+	 * Runs all Scriptasaurus methods using the element Ids defined in the settings class. 
+	 * This is your "Do All". See data.song for structure.
 	 * @method run
-	 * @param offset {int} (optional) default 0. Number of semitones to shif the tuning. See ukeGeeks.definitions.instrument.
 	 * @return {songObject}
 	 */
-	this.run = function(offset){
-		var offset = (arguments.length > 0) ? arguments[0] : ukeGeeks.definitions.instrument.sopranoUke;
-		var h = document.getElementById(ukeGeeks.settings.ids.songText);
-		if (!h) return null;
+	this.run = function(){
+		console.log('run (Classic Mode)');
+		var node = _makeNodeById();
+		if (!node.diagrams || !node.text || !node.wrap) {
+			return null;
+		}
+		return _runSong(node);
+	};
 	
+	/**
+	 * Same as "run" except runs using class names, this allows you to have multiple songs on a single page.
+	 * @method runByClasses
+	 * @return {Array of songObject}
+	 */
+	this.runByClasses = function(){
+		console.log('runByClasses');
+		var songs = [];
+		var songWraps = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.wrap);
+		console.log(songWraps);
+		for(var i = 0; i < songWraps.length; i++){
+			console.log('running loop: '+ i);
+			var node = _makeNodeByClass(songWraps[i]);
+			if (node == null){
+				console.log('problem with nodes');
+				continue;
+			}
+			//addCanvas(preTags[i]);
+			songs.push(_runSong(node));
+		}
+		return songs;
+	};
+	
+	/**
+	 * Is this really nececessary?
+	 * @method setTuningOffset
+	 * @param offset {int} (optional) default 0. Number of semitones to shift the tuning. See ukeGeeks.definitions.instrument.
+	 */
+	this.setTuningOffset = function(offset){
 		ukeGeeks.definitions.useInstrument(offset);
+	};
+	
+	
+	/**
+	 * 
+	 * @method _runSong
+	 * @private
+	 * @param node {nodeobjc} 
+	 */
+	var _runSong = function(nodes){
+		console.log('run Song');
 		
 		// read Music, find chords, generate HTML version of song:
 		var cpm = new ukeGeeks.cpmParser;
 		cpm.init();
-		var song = cpm.parse(h.innerHTML);
+		var song = cpm.parse(nodes.text.innerHTML);
 		ukeGeeks.definitions.replace(song.defs);
 	
 		var chrdPrsr = new ukeGeeks.chordParser;
 		chrdPrsr.init();
-		h.innerHTML = chrdPrsr.parse(song.body);
+		nodes.text.innerHTML = chrdPrsr.parse(song.body);
 		var chordsInUse = chrdPrsr.getChords();
 	
 		// Draw the Chord Diagrams:
 		var painter = new ukeGeeks.chordPainter;
-		painter.init();
-		painter.show(ukeGeeks.settings.ids.canvas, chordsInUse);
+		painter.init(nodes);
+		painter.show(chordsInUse);
 		// Show chord diagrams inline with lyrics
 		if (ukeGeeks.settings.inlineDiagrams){
-			var b = document.getElementsByTagName('body')[0];
-			ukeGeeks.toolsLite.addClass(b, 'ugsInlineDiagrams');
+			ukeGeeks.toolsLite.addClass(nodes.wrap, 'ugsInlineDiagrams');
 			painter.showInline(chordsInUse);
 		}
 	
 		// Do Tablature:
 		var tabs = new ukeGeeks.tabs;
 		tabs.init();
-		tabs.replace(h);
+		tabs.replace(nodes.text);
 		
 		// error reporting:
-		showErrors(painter.getErrors());
+		//showErrors(painter.getErrors());
 		
-		var container = document.getElementById(ukeGeeks.settings.ids.container);
+		var container = nodes.wrap;
 		if (container){
 			if (!song.hasChords){
 				ukeGeeks.toolsLite.addClass(container, 'ugsNoChords');
@@ -2669,17 +2758,39 @@ ukeGeeks.scriptasaurus = new function(){
 	};
 
 	/**
-	 * Shows a JavaScript alert box containing list of unknown chords.
-	 * @method showErrors
-	 * @return {void}
+	 * 
+	 * @method _makeNodeByClass
+	 * @private
+	 * @param wrap {domElement} 
 	 */
-	var showErrors = function(errs){
-		if (errs.length > 0){
-			var s = '';
-			for(var i=0; i < errs.length; i++){
-				s += errs[i]+(((i+1)==errs.length) ? '' : ', ');
+	var _makeNodeByClass = function(wrap){
+		var diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
+		var text = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.text, wrap);
+		if ((diagrams == undefined) || (diagrams.length < 1) || (text == undefined) || (text.length < 1)){
+			return null;
 			}
-			alert('Forgive me, but I don\'t know the following chords: ' + s);
-		}
+		var node = 
+		{
+			wrap : wrap,
+			diagrams : diagrams[0],
+			text : text[0]
+		};
+		return node;
 	};
+
+	/**
+	 * 
+	 * @method _makeNodeById
+	 * @private
+	 * @param node {nodeobjc} 
+	 */
+	var _makeNodeById = function(){
+		var node = 
+		{
+			wrap : document.getElementById(ukeGeeks.settings.ids.container),
+			diagrams : document.getElementById(ukeGeeks.settings.ids.canvas),
+			text : document.getElementById(ukeGeeks.settings.ids.songText)
+		};
+		return node;
+		}
 }
