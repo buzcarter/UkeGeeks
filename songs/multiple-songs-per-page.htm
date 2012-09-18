@@ -3,10 +3,10 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Demo Multiple Songs per Page - Uke Geeks </title>
-	<script type="text/javascript">var isIE = false;</script>
+	<script type="text/javascript">var isLegacyIe = false;</script>
 	<!--[if lt IE 9]>
 	<script type="text/javascript">
-	isIE = true;
+	isLegacyIe = true;
 	document.getElementsByTagName('html')[0].className = 'ie';
 	</script>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -294,7 +294,7 @@ The [Fm]professor [Eb]and [Fm]Mary-[Eb]Ann
 <script type="text/javascript" src="../js/ukeGeeks.scriptasaurus.js"></script>
 <script type="text/javascript">
 	// ukeGeeks.settings.ids
-if (false){//isIE){
+if (false){//isLegacyIe){
 	window.attachEvent('onload',function(){
 		ukeGeeks.scriptasaurus.init(true);
 		ukeGeeks.scriptasaurus.runByClasses();

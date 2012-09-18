@@ -11,10 +11,10 @@ $model = $builder->Build();
 <head>
 <meta charset="utf-8" />
 <title><?php echo($model->PageTitle); ?> </title>
-<script type="text/javascript">var isIE = false;</script>
+<script type="text/javascript">var isLegacyIe = false;</script>
 <!--[if lt IE 9]>
 <script type="text/javascript">
-isIE = true;
+isLegacyIe = true;
 document.getElementsByTagName('html')[0].className = 'ie';
 </script>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>

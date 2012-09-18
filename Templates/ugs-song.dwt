@@ -5,10 +5,10 @@
 <!-- TemplateBeginEditable name="doctitle" -->
 <title>UNTITLED - ARTIST</title>
 <!-- TemplateEndEditable -->
-<script type="text/javascript">var isIE = false;</script>
+<script type="text/javascript">var isLegacyIe = false;</script>
 <!--[if lt IE 9]>
 <script type="text/javascript">
-isIE = true;
+isLegacyIe = true;
 document.getElementsByTagName('html')[0].className = 'ie';
 </script>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -19,24 +19,24 @@ document.getElementsByTagName('html')[0].className = 'ie';
 <link rel="stylesheet" type="text/css" href="../css/ukeGeeks.music.css" media="all" />
 <link rel="stylesheet" type="text/css" href="../css/ukeGeeks.musicPrint.css" media="print" />
 <!-- meta UkeGeek beta .5 -->
-<!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
 </head>
 <body>
 <section>
 	<header>
-		<hgroup>
-			<!-- TemplateBeginEditable name="header" -->
+		<hgroup> <!-- TemplateBeginEditable name="header" -->
 			<h1>UNTITLED</h1>
 			<h2>ARTIST</h2>
 			<!-- TemplateEndEditable -->
 		</hgroup>
 	</header>
-	<div class="metaInfo">
-		<!-- TemplateBeginEditable name="metaInfo" -->
+	<div class="metaInfo"> <!-- TemplateBeginEditable name="metaInfo" -->
 		<p>Source: NA</p>
 		<p>Watch: NA</p>
 		<!-- TemplateEndEditable -->
-	</div><!--/.metaInfo-->
+	</div>
+	<!--/.metaInfo-->
 		<div id="ukeSongContainer" class="ugsLayoutTwoColumn ">
 			<aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped">
 		<canvas>
@@ -46,7 +46,7 @@ document.getElementsByTagName('html')[0].className = 'ie';
 			<article id="ukeSongText" class="ugs-source-wrap">
 		<pre>
 		<!-- TemplateBeginEditable name="ezChords" -->
-Paster [Am]your marked-up song[C]
+Paste [Am]your marked-up song[C]
 Here... [F]
 		<!-- TemplateEndEditable --> 
 		</pre>

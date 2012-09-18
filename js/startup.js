@@ -17,7 +17,7 @@ function checkUrlOpts(){
  * Here we've added a call to checkUrlOpts in what's otherwise a 
  * very "standard" way to run Scriptasaurus.
  */
-if (isIE){
+if (isLegacyIe){
 	window.attachEvent('onload',function(){
 		checkUrlOpts();
 		ukeGeeks.scriptasaurus.init(true);
