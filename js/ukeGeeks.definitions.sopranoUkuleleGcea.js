@@ -78,7 +78,7 @@ ukeGeeks.definitions.addInstrument("\
 {define: D7 frets 2 2 2 3 fingers 1 1 1 2 add: string 4 fret 2 finger 1}\
 {define: Dm7 frets 2 2 1 3 fingers 2 2 1 3}\
 {define: Ddim frets 1 2 1 2 fingers 1 3 2 4}\
-{define: Dmaj7 frets 2 2 2 3 fingers 1 1 1 2 add: string 4 fret 2 finger 1}\
+{define: Dmaj7 frets 2 2 2 4 fingers 1 1 1 2 add: string 4 fret 2 finger 1}\
 {define: D6 frets 2 2 2 2 fingers 2 2 2 2}\
 {define: Dsus2 frets 2 2 0 0 fingers 1 2 0 0}\
 {define: Dsus4 frets 0 2 3 0 fingers 0 1 2 0}\
