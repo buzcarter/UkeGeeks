@@ -207,4 +207,65 @@ ukeGeeks.settings = new function(){
 		isIe : false
 	};
 
+	/**
+	 * TODO: determine minimum value... 1?
+	 * @method _scaleNode
+	 * @private
+	 * @param node {datatype} Description
+	 * @param mulitplier {int} see scale method's parameter
+	 * @return {void}
+	 */
+	var _scaleNode = function(node, mulitplier){
+		if (typeof(node) == 'number'){
+			return node * mulitplier;
+		}
+		else if (typeof(node) == 'object'){
+			for(var i in node){
+				node[i] = _scaleNode(node[i], mulitplier);
+			}
+			return node;
+		}
+		return node;
+	};
+	
+	var sizeRe = /\b(\d+)(pt|px)\b/;
+	
+	/**
+	 * TODO: determine minimum font size... 5pt/px?
+	 * @method _scaleFont
+	 * @private
+	 * @param font {string} Description
+	 * @param mulitplier {int} see scale method's parameter
+	 * @return {void}
+	 */
+	var _scaleFont = function(font, mulitplier){
+		var bits = font.match(sizeRe);
+		if (bits.length < 2){
+			return font;
+		}
+		var size = parseInt(bits[1]) * mulitplier;
+		return font.replace(sizeRe, size + bits[2]);
+	};
+	
+	/**
+	 * Scales the standard chord diagram's dimensions and font sizes by multiplying
+	 * all falues by passed in value. Note: this is currently a destructive change: no
+	 * backup of original values is retained.
+	 * @method scale
+	 * @param mulitplier {int}
+	 * @return {void}
+	 */
+	this.scale = function(mulitplier){
+		if (mulitplier == 1.0){
+			return;
+		}
+		
+		for(var i in this.fonts){
+			this.fonts[i] = _scaleFont(this.fonts[i], mulitplier);
+		}
+		
+		// Note getting x/y scaled.
+		this.fretBox = _scaleNode(this.fretBox, mulitplier);
+	};
+	
 };

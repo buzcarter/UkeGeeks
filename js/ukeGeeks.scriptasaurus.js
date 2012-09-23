@@ -25,7 +25,7 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @return {songObject}
 	 */
 	this.run = function(){
-		console.log('run (Classic Mode)');
+		//console.log('run (Classic Mode)');
 		var node = _makeNodeById();
 		if (!node.diagrams || !node.text || !node.wrap) {
 			return null;
@@ -39,15 +39,15 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @return {Array of songObject}
 	 */
 	this.runByClasses = function(){
-		console.log('runByClasses');
+		//console.log('runByClasses');
 		var songs = [];
 		var songWraps = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.wrap);
-		console.log(songWraps);
+		//console.log(songWraps);
 		for(var i = 0; i < songWraps.length; i++){
-			console.log('running loop: '+ i);
+			//console.log('running loop: '+ i);
 			var node = _makeNodeByClass(songWraps[i]);
 			if (node == null){
-				console.log('problem with nodes');
+				//console.log('problem with nodes');
 				continue;
 			}
 			//addCanvas(preTags[i]);
@@ -73,7 +73,7 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @param node {nodeobjc} 
 	 */
 	var _runSong = function(nodes){
-		console.log('run Song');
+		// console.log('run Song');
 		
 		// read Music, find chords, generate HTML version of song:
 		var cpm = new ukeGeeks.cpmParser;
