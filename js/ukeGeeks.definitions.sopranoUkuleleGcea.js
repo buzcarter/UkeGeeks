@@ -15,6 +15,7 @@ ukeGeeks.definitions.addInstrument("\
 {define: Aaug frets 2 1 1 4 fingers 2 1 1 4 add: string 1 fret 1 finger 1 add: string 4 fret 1 finger 1}\
 {define: Am6 frets 2 4 2 3 fingers 1 3 1 2 add: string 2 fret 2 finger 1}\
 {define: A9 frets 0 1 0 2 fingers 0 1 0 2}\
+{define: A7sus4 frets 0 2 0 0 fingers 0 0 0 0}\
 # A# retruns Bb\
 # Bb\
 {define: Bb frets 3 2 1 1 fingers 3 2 1 1}\
@@ -56,7 +57,7 @@ ukeGeeks.definitions.addInstrument("\
 {define: Csus2 frets 0 2 3 3 fingers 0 1 2 2}\
 {define: Csus4 frets 0 0 1 3 fingers 0 0 1 3}\
 {define: Caug frets 1 0 0 3 fingers 1 0 0 4}\
-{define: C9 frets 0 2 0 2 fingers 0 2 0 1}\
+{define: C9 frets 0 2 0 1 fingers 0 2 0 1}\
 # C#\
 {define: C# frets 1 1 1 4 fingers 1 1 1 4 add: string 4 fret 1 finger 1}\
 {define: C#m frets 1 4 4 4 fingers 1 2 3 3}\
@@ -100,7 +101,7 @@ ukeGeeks.definitions.addInstrument("\
 {define: Eb9 frets 0 1 1 1}\
 # E\
 {define: E frets 4 4 4 2 fingers 2 3 4 1}\
-{define: Em frets 4 4 3 2 fingers 3 3 2 1}\
+{define: Em frets 0 4 3 2 fingers 0 3 2 1}\
 {define: E7 frets 1 2 0 2 fingers 1 2 0 3}\
 {define: Em6 frets 4 4 3 4 fingers 2 3 1 4}\
 {define: Em7 frets 0 2 0 2 fingers 0 1 0 2}\

@@ -6,6 +6,35 @@
 			Classes used by UkeGeeks in a song layout.
 */
 
+/* need to do a STRONG-ish reset (override WP theme)
+*/
+.ugs-song-wrap{
+	font-size: 100%;
+}
+.ugs-song-wrap,
+.ugs-song-wrap h5,
+.ugs-song-wrap h6,
+.ugs-song-wrap pre,
+.ugs-song-wrap code,
+.ugs-song-wrap strong,
+.ugs-song-wrap em{
+	font-family:inherit;
+	font-weight:normal;
+	font-size: inherit;
+	font-style:normal;
+	float: none;
+	line-height:1;
+	text-align:left;
+	margin:0;
+	padding:0;
+	width:auto;
+}
+/*
+,
+.ugs-song-wrap canvas,
+.ugs-song-wrap div
+*/
+
 /* old skool clearfix */
 .ugs-grouped:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
 .ugs-grouped { display: block; }
@@ -61,7 +90,7 @@
 }
 /* CHORUS BLOCK
   ------------------------------ */
-.ugsChorus{
+.ugs-song-wrap .ugsChorus{
 	border-left:solid 3px #ddd;
 	margin:1em 0 2.3em;
 }
@@ -73,33 +102,31 @@
 	font-size:1.2em;
 	text-indent:.4em;
 }
-pre + .ugsChorus{margin-top:3.5em;}
+.ugs-song-wrap pre + .ugsChorus{margin-top:3.5em;}
 
 /* TABS
   ------------------------------ */
-.ugsTabs{
+.ugs-song-wrap .ugsTabs{
 	margin:0;
 	padding:0;
 }
-.ugsTabs + .ugsPlain{
+.ugs-song-wrap .ugsTabs + .ugsPlain{
 	margin:0 0 1em;
 	padding:0;
 }
 /* PLACE CHORDS ABOVE TEXT
   ------------------------------ */
-.ugsChords{
+.ugs-song-wrap .ugsChords{
 	line-height:3;
 }
 .ugsChords code{
 	color:#eaeaea;
+	display:inline-block; /* WebKit bug */
+	/* height:1.2em; /* WebKit bug */
 	font-family:Verdana, Arial, Helvetica, sans-serif;
-	font-size:1.2em;
+	/* font-size:1.2em; */
 	font-weight:normal;
 	position:relative;
-}
-.ugsChords code{
-	display:inline-block; /* WebKit bug */
-	height:1.2em; /* WebKit bug */
 	vertical-align: middle;/* now fix the fix for Firefox */
 }
 .ugsInline .ugsChords code{
@@ -125,8 +152,8 @@ pre + .ugsChorus{margin-top:3.5em;}
 }
 /* SHOW CHORD NAMES INLINE
   ------------------------------ */
-.ugsInline,
-.ugsInline pre{
+.ugs-song-wrap .ugsInline,
+.ugs-song-wrap .ugsInline pre{
 	line-height:1.8;
 }
 .ugsInline code{
@@ -146,7 +173,7 @@ pre + .ugsChorus{margin-top:3.5em;}
 
 /* CHORD-ONLY (NO LYRICS) BLOCKS
   ------------------------------ */
-.ugsNoLyrics{
+.ugs-song-wrap .ugsNoLyrics {
 	line-height:2;
 	padding:0 0 1.2em;
 }
@@ -206,7 +233,7 @@ pre + .ugsChorus{margin-top:3.5em;}
 	top:-54px;
 }
 /* TODO: problem with packing */
-.ugsInlineSpacer{
+.ugs-song-wrap .ugsInlineSpacer{
 	display:inline-block;
 	line-height:1px;
 	width:40px;
