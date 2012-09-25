@@ -92,7 +92,7 @@ ukeGeeks.definitions = new function(){
 		return null;
 	};
 
-	// local substituions (replacements for identical chord shapes)
+	// local substitions (replacements for identical chord shapes)
 	var _subs = {'A#' : 'Bb', 'Db' : 'C#', 'D#' : 'Eb', 'Gb' : 'F#', 'Ab' : 'G#'};
 	/**
 	 * todo:

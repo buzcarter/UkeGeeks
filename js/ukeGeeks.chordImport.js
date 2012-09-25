@@ -175,12 +175,10 @@ ukeGeeks.chordImport = new function(){
 			return;
 		}
 		var m = (f[1].length == 4) ? f[1].match(regEx.any) : f[1].match(regEx.numOrX);
-		var j = 0;
-		for(var i in m){
+		for(var i = 0; i < m.length; i++){
 			var isX = m[i] == 'x' || m[i] == 'X';
-			frets[j] = isX ? 0 : parseInt(m[i]);
-			muted[j] = isX;
-			j++;
+			frets[i] = isX ? 0 : parseInt(m[i]);
+			muted[i] = isX;
 		}
 	};
 	

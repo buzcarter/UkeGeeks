@@ -1,22 +1,22 @@
 /**
   * <ul>
   * <li>Project: UkeGeeks' Scriptasaurus</li>
-	* <li>Version: 1.2</li>
+  * <li>Version: 1.2</li>
   * <li>Homepage: http://ukegeeks.com</li>
   * <li>Author: Buz Carter</li>
   * <li>Contact: buz@ukegeeks.com</li>
-	* <li>Copyright: Copyright 2010 Buz Carter.</li>
-	* <li>License GNU General Public License (http://www.gnu.org/licenses/gpl.html)</li>
-	* <ul>
+  * <li>Copyright: Copyright 2010 Buz Carter.</li>
+  * <li>License GNU General Public License (http://www.gnu.org/licenses/gpl.html)</li>
+  * <ul>
   * 	
   * <p>== Overview
   * <p>Reads marked-up music (lyrics + chords) extracting all of the chords used;
   * Generates a chord diagrams using HTML5 <canvas> and rewrites the music with
   * standard HTML wrapping the chords.
-	*
-	* @module  scriptasaurus
+  *
+  * @module  scriptasaurus
   * @namespace  ukeGeeks
-	* 
+  * 
   */
 var ukeGeeks = window.ukeGeeks||{};
 
@@ -229,6 +229,67 @@ ukeGeeks.settings = new function(){
 		isIe : false
 	};
 
+	/**
+	 * TODO: determine minimum value... 1?
+	 * @method _scaleNode
+	 * @private
+	 * @param node {datatype} Description
+	 * @param mulitplier {int} see scale method's parameter
+	 * @return {void}
+	 */
+	var _scaleNode = function(node, mulitplier){
+		if (typeof(node) == 'number'){
+			return node * mulitplier;
+		}
+		else if (typeof(node) == 'object'){
+			for(var i in node){
+				node[i] = _scaleNode(node[i], mulitplier);
+			}
+			return node;
+		}
+		return node;
+	};
+	
+	var sizeRe = /\b(\d+)(pt|px)\b/;
+	
+	/**
+	 * TODO: determine minimum font size... 5pt/px?
+	 * @method _scaleFont
+	 * @private
+	 * @param font {string} Description
+	 * @param mulitplier {int} see scale method's parameter
+	 * @return {void}
+	 */
+	var _scaleFont = function(font, mulitplier){
+		var bits = font.match(sizeRe);
+		if (bits.length < 2){
+			return font;
+		}
+		var size = parseInt(bits[1]) * mulitplier;
+		return font.replace(sizeRe, size + bits[2]);
+	};
+	
+	/**
+	 * Scales the standard chord diagram's dimensions and font sizes by multiplying
+	 * all falues by passed in value. Note: this is currently a destructive change: no
+	 * backup of original values is retained.
+	 * @method scale
+	 * @param mulitplier {int}
+	 * @return {void}
+	 */
+	this.scale = function(mulitplier){
+		if (mulitplier == 1.0){
+			return;
+		}
+		
+		for(var i in this.fonts){
+			this.fonts[i] = _scaleFont(this.fonts[i], mulitplier);
+		}
+		
+		// Note getting x/y scaled.
+		this.fretBox = _scaleNode(this.fretBox, mulitplier);
+	};
+	
 };
 ;/**
  * A container or Models library. ukegeeks.data is really a "Models" namespace. Please refactor.
@@ -665,12 +726,10 @@ ukeGeeks.chordImport = new function(){
 			return;
 		}
 		var m = (f[1].length == 4) ? f[1].match(regEx.any) : f[1].match(regEx.numOrX);
-		var j = 0;
-		for(var i in m){
+		for(var i = 0; i < m.length; i++){
 			var isX = m[i] == 'x' || m[i] == 'X';
-			frets[j] = isX ? 0 : parseInt(m[i]);
-			muted[j] = isX;
-			j++;
+			frets[i] = isX ? 0 : parseInt(m[i]);
+			muted[i] = isX;
 		}
 	};
 	
@@ -1032,7 +1091,7 @@ ukeGeeks.definitions = new function(){
 		return null;
 	};
 
-	// local substituions (replacements for identical chord shapes)
+	// local substitions (replacements for identical chord shapes)
 	var _subs = {'A#' : 'Bb', 'Db' : 'C#', 'D#' : 'Eb', 'Gb' : 'F#', 'Ab' : 'G#'};
 	/**
 	 * todo:
@@ -1116,6 +1175,7 @@ ukeGeeks.definitions = new function(){
 {define: Aaug frets 2 1 1 4 fingers 2 1 1 4 add: string 1 fret 1 finger 1 add: string 4 fret 1 finger 1}\
 {define: Am6 frets 2 4 2 3 fingers 1 3 1 2 add: string 2 fret 2 finger 1}\
 {define: A9 frets 0 1 0 2 fingers 0 1 0 2}\
+{define: A7sus4 frets 0 2 0 0 fingers 0 0 0 0}\
 # A# retruns Bb\
 # Bb\
 {define: Bb frets 3 2 1 1 fingers 3 2 1 1}\
@@ -1157,7 +1217,7 @@ ukeGeeks.definitions = new function(){
 {define: Csus2 frets 0 2 3 3 fingers 0 1 2 2}\
 {define: Csus4 frets 0 0 1 3 fingers 0 0 1 3}\
 {define: Caug frets 1 0 0 3 fingers 1 0 0 4}\
-{define: C9 frets 0 2 0 2 fingers 0 2 0 1}\
+{define: C9 frets 0 2 0 1 fingers 0 2 0 1}\
 # C#\
 {define: C# frets 1 1 1 4 fingers 1 1 1 4 add: string 4 fret 1 finger 1}\
 {define: C#m frets 1 4 4 4 fingers 1 2 3 3}\
@@ -1179,7 +1239,7 @@ ukeGeeks.definitions = new function(){
 {define: D7 frets 2 2 2 3 fingers 1 1 1 2 add: string 4 fret 2 finger 1}\
 {define: Dm7 frets 2 2 1 3 fingers 2 2 1 3}\
 {define: Ddim frets 1 2 1 2 fingers 1 3 2 4}\
-{define: Dmaj7 frets 2 2 2 3 fingers 1 1 1 2 add: string 4 fret 2 finger 1}\
+{define: Dmaj7 frets 2 2 2 4 fingers 1 1 1 2 add: string 4 fret 2 finger 1}\
 {define: D6 frets 2 2 2 2 fingers 2 2 2 2}\
 {define: Dsus2 frets 2 2 0 0 fingers 1 2 0 0}\
 {define: Dsus4 frets 0 2 3 0 fingers 0 1 2 0}\
@@ -1201,7 +1261,7 @@ ukeGeeks.definitions = new function(){
 {define: Eb9 frets 0 1 1 1}\
 # E\
 {define: E frets 4 4 4 2 fingers 2 3 4 1}\
-{define: Em frets 4 4 3 2 fingers 3 3 2 1}\
+{define: Em frets 0 4 3 2 fingers 0 3 2 1}\
 {define: E7 frets 1 2 0 2 fingers 1 2 0 3}\
 {define: Em6 frets 4 4 3 4 fingers 2 3 1 4}\
 {define: Em7 frets 0 2 0 2 fingers 0 1 0 2}\
@@ -2664,7 +2724,7 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @return {songObject}
 	 */
 	this.run = function(){
-		console.log('run (Classic Mode)');
+		//console.log('run (Classic Mode)');
 		var node = _makeNodeById();
 		if (!node.diagrams || !node.text || !node.wrap) {
 			return null;
@@ -2678,15 +2738,15 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @return {Array of songObject}
 	 */
 	this.runByClasses = function(){
-		console.log('runByClasses');
+		//console.log('runByClasses');
 		var songs = [];
 		var songWraps = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.wrap);
-		console.log(songWraps);
+		//console.log(songWraps);
 		for(var i = 0; i < songWraps.length; i++){
-			console.log('running loop: '+ i);
+			//console.log('running loop: '+ i);
 			var node = _makeNodeByClass(songWraps[i]);
 			if (node == null){
-				console.log('problem with nodes');
+				//console.log('problem with nodes');
 				continue;
 			}
 			//addCanvas(preTags[i]);
@@ -2712,7 +2772,7 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @param node {nodeobjc} 
 	 */
 	var _runSong = function(nodes){
-		console.log('run Song');
+		// console.log('run Song');
 		
 		// read Music, find chords, generate HTML version of song:
 		var cpm = new ukeGeeks.cpmParser;

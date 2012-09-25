@@ -58,21 +58,7 @@ document.getElementsByTagName('html')[0].className = 'ie';
 <footer>
 	<p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by UkeGeeks' Scriptasaurus &bull; ukegeeks.com</small></p>
 </footer>
-<script type="text/javascript" src="/js/ukeGeeks.namespace.js"></script> 
-<script type="text/javascript" src="/js/ukeGeeks.settings.js"></script> 
-<script type="text/javascript" src="/js/ukeGeeks.data.js"></script> 
-<script type="text/javascript" src="/js/ukeGeeks.toolsLite.js"></script> 
-<script type="text/javascript" src="/js/ukeGeeks.chordImport.js"></script> 
-<script type="text/javascript" src="/js/ukeGeeks.transpose.js"></script> 
-<script type="text/javascript" src="/js/ukeGeeks.definitions.js"></script> 
-<script type="text/javascript" src="/js/ukeGeeks.definitions.sopranoUkuleleGcea.js"></script>
-<script type="text/javascript" src="/js/ukeGeeks.canvasTools.js"></script> 
-<script type="text/javascript" src="/js/ukeGeeks.chordBrush.js"></script> 
-<script type="text/javascript" src="/js/ukeGeeks.chordParser.js"></script> 
-<script type="text/javascript" src="/js/ukeGeeks.cpmParser.js"></script> 
-<script type="text/javascript" src="/js/ukeGeeks.chordPainter.js"></script>
-<script type="text/javascript" src="/js/ukeGeeks.tabs.js"></script>
-<script type="text/javascript" src="/js/ukeGeeks.scriptasaurus.js"></script>
+<script type="text/javascript" src="/js/ukeGeeks.scriptasaurus.min.js"></script>
 <script type="text/javascript" src="/js/startup.js"></script>
 </body>
 </html>
