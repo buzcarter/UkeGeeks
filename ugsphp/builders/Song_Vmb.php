@@ -15,9 +15,14 @@ class Song_Vmb {
 	// -----------------------------------------
 	// PUBLIC METHODS
 	// -----------------------------------------
+	
+	/**
+	 * Parses file (using URL query param) and attempts to load View Model
+	 * @return Song_Vm 
+	 */
 	public function Build() {
-		$this->fname = $this->getFilename();
-		$data = $this->getFile(Config::SongDirectory . $this->fname);
+		$this->fname = FileHelper::getFilename();
+		$data = FileHelper::getFile(Config::SongDirectory . $this->fname);
 		$this->song = $this->parseSong($data);
 
 		$title = htmlspecialchars((($this->song->isOK) ? ($this->song->title . ((strlen($this->song->subtitle) > 0) ? (' | ' . $this->song->subtitle) : '')) : 'Not Found'));
@@ -39,34 +44,13 @@ class Song_Vmb {
 	// -----------------------------------------
 	// PRIVATE METHODS
 	// -----------------------------------------
-	private function getFilename() {
-		$s = (isset($_GET['song'])) ? $_GET['song'] : '';
-		if (strlen($s) < 1){
-			return Config::NotFound_404File;
-		}
-		if (strpos($s, '.txt') || strpos($s, '.cpm')){
-			return $s;
-		}
-		$pattern = '/(.*[\/])?(.*?)(\.html?)?$/';
-		$s = preg_replace($pattern, '$2', $s) . Config::FileExtension;
-		return $s;
-	}
-
-	//****
-	private function getFile(/* string */ $fname) {
-		$data = '';
-		if (!file_exists($fname)) {
-			return null;
-			// die($errPrefix." &quot;".$fname."&quot; not found.");
-		}
-		$fh = fopen($fname, 'r');
-		$data = fread($fh, Config::MaxFileSize);
-		fclose($fh);
-		return $data;
-	}
-
-	//****
-	private function parseSong(/* string */ $text) {
+	
+	/**
+	 *
+	 * @param string $text input text file block
+	 * @return Song(object)
+	 */
+	private function parseSong($text) {
 		$song = (object) array(
 			 'isOK' => false,
 			 'title' => 'Sorry... Song Not Found',
@@ -89,27 +73,47 @@ class Song_Vmb {
 		return $song;
 	}
 
-	//****
+	/**
+	 * parses Title tag: {Title: Blah Blah}
+	 * @param string $text input string to be parses
+	 * @return string 
+	 */
 	private function getTitle($text) {
 		return $this->_matchRegEx($text, 2, "/{(t|title)\s*:\s*(.+?)}/i");
 	}
 
-	//****
+	/**
+	 * parses Subtitle tag: {Subtitle: Blah Blah}
+	 * @param string $text input string to be parses
+	 * @return string 
+	 */
 	private function getSubtitle($text) {
 		return $this->_matchRegEx($text, 2, "/{(st|subtitle)\s*:\s*(.+?)}/i");
 	}
 
-	//****
+	/**
+	 * parses Artist tag: {Artist: Blah Blah}
+	 * @param string $text input string to be parses
+	 * @return string 
+	 */
 	private function getArtist($text) {
 		return $this->_matchRegEx($text, 1, "/{artist\s*:\s*(.+?)}/i");
 	}
 
-	//****
+	/**
+	 * parses Album tag: {Album: Blah Blah}
+	 * @param string $text input string to be parses
+	 * @return string 
+	 */
 	private function getAlbum($text) {
 		return $this->_matchRegEx($text, 1, "/{album\s*:\s*(.+?)}/i");
 	}
 
-	//****
+	/**
+	 * parses Uke Geeks Meta tag: {ukegeeks-meta: Blah Blah}
+	 * @param string $text input string to be parses
+	 * @return string 
+	 */
 	private function getMeta($text) {
 		$rtn = array();
 		$regEx = "/{(ukegeeks-meta|meta)\s*:\s*(.+?)}/i";
@@ -123,6 +127,14 @@ class Song_Vmb {
 	}
 
 	// Helpers
+	
+	/**
+	 *
+	 * @param string $text input string to be parses
+	 * @param int $patternIndex 
+	 * @param string $regEx regular expression string
+	 * @return string
+	 */
 	private function _matchRegEx($text, $patternIndex, $regEx){
 		preg_match_all($regEx, $text, $matches);
 		return (count($matches[$patternIndex]) < 1) ? '' : $matches[$patternIndex][0];

@@ -50,7 +50,7 @@ document.getElementsByTagName('html')[0].className = 'ie';
 			echo('</div><!-- /.metaInfo -->');
 		}
 		?>
-	<div id="ukeSongContainer" class="ugsLayoutTwoColumn">
+	<div id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
 		<aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped"></aside>
 		<article id="ukeSongText" class="ugs-source-wrap"><pre><?php echo($model->Body); ?></pre></article>
 	</div>

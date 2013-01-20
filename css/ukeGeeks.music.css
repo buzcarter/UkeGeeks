@@ -8,16 +8,16 @@
 
 /* need to do a STRONG-ish reset (override WP theme)
 */
-.ugs-song-wrap{
+.ugs-song-wrap {
 	font-size: 100%;
 }
-.ugs-song-wrap,
-.ugs-song-wrap h5,
-.ugs-song-wrap h6,
-.ugs-song-wrap pre,
-.ugs-song-wrap code,
-.ugs-song-wrap strong,
-.ugs-song-wrap em{
+.ugs-song-wrap, 
+.ugs-song-wrap h5, 
+.ugs-song-wrap h6, 
+.ugs-song-wrap pre, 
+.ugs-song-wrap code, 
+.ugs-song-wrap strong, 
+.ugs-song-wrap em {
 	font-family:inherit;
 	font-weight:normal;
 	font-size: inherit;
@@ -36,32 +36,45 @@
 */
 
 /* old skool clearfix */
-.ugs-grouped:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
-.ugs-grouped { display: block; }
-.ugs-grouped { .display: inline-block; }
-.ie8 .ugs-grouped { display: block; }
-* html .ugs-grouped { height: 1%; }
-
+.ugs-grouped:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+.ugs-grouped {
+	display: block;
+}
+.ugs-grouped {
+.display: inline-block;
+}
+.ie8 .ugs-grouped {
+	display: block;
+}
+* html .ugs-grouped {
+	height: 1%;
+}
 /* LAYOUT (2-COLUMNS)
   ------------------------------ */
-.ugsLayoutTwoColumn aside{
+.ugsLayoutTwoColumn .ugs-diagrams-wrap {
 	float:left;
 	width:225px;
 }
-.ugsLayoutTwoColumn article{
+.ugsLayoutTwoColumn .ugs-source-wrap {
 	margin-left:250px;
 }
-
 /* CHORD CANVAS (BLOCKS)
   ------------------------------ */
-.ugs-diagrams-wrap canvas{
+.ugs-diagrams-wrap canvas {
 	float:left;
 	margin-right:5px;
 }
 /* 
   ------------------------------ */
-.ugs-source-wrap h5,
-.ugs-source-wrap h6{
+.ugs-source-wrap h5, 
+.ugs-source-wrap h6 {
 	border-left:solid .5em #CCC;
 	color:#036;
 	font-family:Georgia, "Times New Roman", Times, serif;
@@ -72,55 +85,58 @@
 	padding:.2em 0;
 	text-indent:2.3em;
 }
-.ugs-source-wrap h6{
+.ugs-source-wrap h6 {
 	font-size:.9em;
 }
-.ugs-source-wrap h5 + h6{
+.ugs-source-wrap h5 + h6 {
 	margin-top:-1em;
 }
-.ugs-source-wrap pre{
+.ugs-source-wrap pre {
 	color:#333;
 	font-family:inherit;
 	padding-top:0.4em;
 	white-space:pre;
 }
-.ugs-source-wrap pre + h6 {margin-top: 3.5em;}
-.ie .ugs-source-wrap pre{
+.ugs-source-wrap pre + h6 {
+	margin-top: 3.5em;
+}
+.ie .ugs-source-wrap pre {
 	font-family:Verdana, Arial, Helvetica, sans-serif;
 }
 /* CHORUS BLOCK
   ------------------------------ */
-.ugs-song-wrap .ugsChorus{
+.ugs-song-wrap .ugsChorus {
 	border-left:solid 3px #ddd;
 	margin:1em 0 2.3em;
 }
-.ugsChorus pre{
+.ugsChorus pre {
 	margin-left:1em;
 }
-.ie .ugsChorus h6,
-.ugsChorus > h6{
+.ie .ugsChorus h6, 
+.ugsChorus > h6 {
 	font-size:1.2em;
 	text-indent:.4em;
 }
-.ugs-song-wrap pre + .ugsChorus{margin-top:3.5em;}
-
+.ugs-song-wrap pre + .ugsChorus {
+	margin-top:3.5em;
+}
 /* TABS
   ------------------------------ */
-.ugs-song-wrap .ugsTabs{
+.ugs-song-wrap .ugsTabs {
 	margin:0;
 	padding:0;
 }
-.ugs-song-wrap .ugsTabs + .ugsPlain{
+.ugs-song-wrap .ugsTabs + .ugsPlain {
 	margin:0 0 1em;
 	padding:0;
 }
 /* PLACE CHORDS ABOVE TEXT
   ------------------------------ */
-.ugs-song-wrap .ugsChords{
+.ugs-song-wrap .ugsChords {
 	line-height:3;
 }
-.ugsChords code{
-	color:#eaeaea;
+.ugsChords code {
+	color:#efefef;
 	display:inline-block; /* WebKit bug */
 	/* height:1.2em; /* WebKit bug */
 	font-family:Verdana, Arial, Helvetica, sans-serif;
@@ -129,121 +145,125 @@
 	position:relative;
 	vertical-align: middle;/* now fix the fix for Firefox */
 }
-.ugsInline .ugsChords code{
+.ugsInline .ugsChords code {
+	color:#f2f2f2;
 	display: inline;
 	vertical-align: inherit;
 }
-.ugsChords code strong{
+.ugsChords code strong {
 	left:-4px;
 	position:absolute;
 	top:-2em;
 }
-.ugsChords code em{
+.ugsChords code em {
 	color:#d20;
 	margin:0 -3px;
 }
-.ie .ugsChords{
+.ie .ugsChords {
 	line-height:2.6;
 }
-.ie code strong,
-.ie code em{
+.ie code strong, 
+.ie code em {
 	font-weight:normal;
 	font-style:normal;
 }
 /* SHOW CHORD NAMES INLINE
   ------------------------------ */
 .ugs-song-wrap .ugsInline,
-.ugs-song-wrap .ugsInline pre{
+.ugs-song-wrap .ugsInline pre,
+.ugs-song-wrap.ugsInline pre /* added for Editor Plus -- required? */
+{
 	line-height:1.8;
 }
-.ugsInline code{
+.ugsInline code {
 	padding-left:.1em;
 }
-.ugsInline code strong{
+.ugsInline code strong {
 	position:relative;
 	top:auto;
 	left:auto;
 }
-
 /* PLAIN (lyrics only) Blocks
   ------------------------------ */
-.ugsPlain + h6{
+.ugsPlain + h6 {
 	margin-top:1.5em;
 }
-
 /* CHORD-ONLY (NO LYRICS) BLOCKS
   ------------------------------ */
 .ugs-song-wrap .ugsNoLyrics {
 	line-height:2;
 	padding:0 0 1.2em;
 }
-.ugsNoLyrics + h6{ 
+.ugsNoLyrics + h6 {
 	margin-top:.5em;
 }
-.ugsNoLyrics code{
+.ugsNoLyrics code {
 	height:auto;
 	vertical-align: baseline;
 }
-.ugsNoLyrics code strong{
+.ugsNoLyrics code strong {
 	position:relative;
 	top:auto;
 	left:auto;
 }
-
 /* CHORD-ONLY (NO LYRICS) BLOCKS
   ------------------------------ */
-.ugsNoChords aside{
+.ugsNoChords aside {
 	display: none;
 }
-.ugsNoChords article{
+.ugsNoChords article {
 	margin-left: 0;
 }
-
 /* SHOW CHORD DIAGRAMS INLINE
   ------------------------------ */
-.ugsInlineDiagrams .ugsChords{
+.ugsInlineDiagrams .ugsChords {
 	line-height:95px;
 }
-.ugsInlineDiagrams .ugsNoLyrics code{
+.ugsInlineDiagrams .ugsNoLyrics code {
 	vertical-align: text-top;
 }
-.ugsInlineDiagrams .ugsNoLyrics strong{
+.ugsInlineDiagrams .ugsNoLyrics strong {
 	position: absolute;
 }
-.ugsInlineDiagrams .ugsChords + .ugsPlain{
+.ugsInlineDiagrams .ugsChords + .ugsPlain {
 	padding-bottom: 40px;
 }
-.ugsInlineDiagrams h6 + .ugsChords{
+.ugsInlineDiagrams h6 + .ugsChords {
 	padding-top: 20px;
 }
-.ugsInlineDiagrams code{
+.ugsInlineDiagrams code {
 	font-size:.8em;
 	font-weight:normal;
 }
-.ugsInlineDiagrams .ugsChords code strong{
+.ugsInlineDiagrams .ugsChords code strong {
 	left:0;
 	line-height:1;
 	text-align:center;
-	top:-70px;
+	top:-72px;
 	width:30px;
 }
-.ugsChords code canvas{
+.ugsChords code canvas {
 	left:0;
 	position:absolute;
-	top:-54px;
+	top:-60px;
 }
 /* TODO: problem with packing */
-.ugs-song-wrap .ugsInlineSpacer{
+.ugs-song-wrap .ugsInlineSpacer {
 	display:inline-block;
 	line-height:1px;
 	width:40px;
 }
-
-
 /* Multi-Column Layouts
   ------------------------------ */
-.ugsWrap .ugsColumn{ float:left; }
-.ugsColumnCount2 .ugsColumn{ width: 49.5%; }
-.ugsColumnCount3 .ugsColumn{ width: 32.5%; }
-.ugsColumnCount4 .ugsColumn{ width: 24.5%; }
-
+.ugsWrap .ugsColumn {
+	float:left;
+}
+.ugsColumnCount2 .ugsColumn {
+	width: 49.5%;
+}
+.ugsColumnCount3 .ugsColumn {
+	width: 32.5%;
+}
+.ugsColumnCount4 .ugsColumn {
+	width: 24.5%;
+}

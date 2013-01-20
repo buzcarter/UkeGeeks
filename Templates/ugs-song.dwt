@@ -14,8 +14,8 @@ document.getElementsByTagName('html')[0].className = 'ie';
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <script type="text/javascript" src="../js/excanvas.js"></script>
 <![endif]-->
-	<link rel="stylesheet" type="text/css" href="../css/yuiReset.css" />
-	<link rel="stylesheet" type="text/css" href="../css/basic-page-layout.css" media="all" />
+<link rel="stylesheet" type="text/css" href="../css/yuiReset.css" />
+<link rel="stylesheet" type="text/css" href="../css/basic-page-layout.css" media="all" />
 <link rel="stylesheet" type="text/css" href="../css/ukeGeeks.music.css" media="all" />
 <link rel="stylesheet" type="text/css" href="../css/ukeGeeks.musicPrint.css" media="print" />
 <!-- meta UkeGeek beta .5 -->
@@ -29,7 +29,7 @@ document.getElementsByTagName('html')[0].className = 'ie';
 			<h1>UNTITLED</h1>
 			<h2>ARTIST</h2>
 			<!-- TemplateEndEditable -->
-		</hgroup>
+	</hgroup>
 	</header>
 	<div class="metaInfo"> <!-- TemplateBeginEditable name="metaInfo" -->
 		<p>Source: NA</p>
@@ -37,22 +37,22 @@ document.getElementsByTagName('html')[0].className = 'ie';
 		<!-- TemplateEndEditable -->
 	</div>
 	<!--/.metaInfo-->
-		<div id="ukeSongContainer" class="ugsLayoutTwoColumn ">
-			<aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped">
-		<canvas>
-			<p>Your browser doesn't support canvas please upgrade (FREE) to <a href="http://www.google.com/chrome">Google Chrome</a>, <a href="http://www.mozilla.com/en-US/firefox/">Firefox</a>, or <a href="http://www.apple.com/safari/">Apple Safari</a>.</p>
-		</canvas>
-	</aside>
-			<article id="ukeSongText" class="ugs-source-wrap">
-		<pre>
-		<!-- TemplateBeginEditable name="ezChords" -->
+	<div id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
+		<aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped">
+			<canvas>
+				<p>Your browser doesn't support canvas please upgrade (FREE) to <a href="http://www.google.com/chrome">Google Chrome</a>, <a href="http://www.mozilla.com/en-US/firefox/">Firefox</a>, or <a href="http://www.apple.com/safari/">Apple Safari</a>.</p>
+			</canvas>
+		</aside>
+		<article id="ukeSongText" class="ugs-source-wrap">
+			<pre>
+<!-- TemplateBeginEditable name="ezChords" -->
 Paste [Am]your marked-up song[C]
 Here... [F]
-		<!-- TemplateEndEditable --> 
+<!-- TemplateEndEditable --> 
 		</pre>
-	</article>
-		</div>
-		<!-- /#ukeSongContainer -->
+		</article>
+	</div>
+	<!-- /#ukeSongContainer -->
 </section>
 <footer>
 	<p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by <a href="http://ukegeeks.com/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.com</small></p>

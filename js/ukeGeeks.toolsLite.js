@@ -35,6 +35,15 @@ ukeGeeks.toolsLite = new function(){
 		}
 	};
 	
+	this.setClass = function(element, className, isActive) {
+		if (isActive){
+			this.addClass(element, className);
+		}
+		else{
+			this.removeClass(element, className);
+		}
+	};
+
 	var getRegEx = function(className){
 		return new RegExp('(\\s|^)'+className+'(\\s|$)');
 	};

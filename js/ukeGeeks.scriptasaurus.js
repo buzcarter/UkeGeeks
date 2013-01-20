@@ -17,7 +17,7 @@ ukeGeeks.scriptasaurus = new function(){
 		ukeGeeks.settings.environment.isIe = isIeFamily;
 		ukeGeeks.definitions.useInstrument(ukeGeeks.definitions.instrument.sopranoUke);
 	};
-	
+
 	/**
 	 * Runs all Scriptasaurus methods using the element Ids defined in the settings class. 
 	 * This is your "Do All". See data.song for structure.
@@ -26,11 +26,14 @@ ukeGeeks.scriptasaurus = new function(){
 	 */
 	this.run = function(){
 		//console.log('run (Classic Mode)');
-		var node = _makeNodeById();
-		if (!node.diagrams || !node.text || !node.wrap) {
+		var handles = _getHandlesFromId();
+		if (!handles || !handles.diagrams || !handles.text || !handles.wrap) {
 			return null;
 		}
-		return _runSong(node);
+		_errList = [];
+		var song = _runSong(handles);
+		showErrors(_errList[0]);
+		return song;
 	};
 	
 	/**
@@ -39,23 +42,18 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @return {Array of songObject}
 	 */
 	this.runByClasses = function(){
-		//console.log('runByClasses');
 		var songs = [];
 		var songWraps = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.wrap);
-		//console.log(songWraps);
 		for(var i = 0; i < songWraps.length; i++){
-			//console.log('running loop: '+ i);
-			var node = _makeNodeByClass(songWraps[i]);
-			if (node == null){
-				//console.log('problem with nodes');
+			var handles = _getHandlesFromClass(songWraps[i]);
+			if (handles == null){
 				continue;
 			}
-			//addCanvas(preTags[i]);
-			songs.push(_runSong(node));
+			songs.push(_runSong(handles));
 		}
 		return songs;
 	};
-
+	
 	/**
 	 * Is this really nececessary?
 	 * @method setTuningOffset
@@ -65,46 +63,49 @@ ukeGeeks.scriptasaurus = new function(){
 		ukeGeeks.definitions.useInstrument(offset);
 	};
 	
+	var _errList = [];
+	// song
 	
 	/**
 	 * 
 	 * @method _runSong
 	 * @private
-	 * @param node {nodeobjc} 
+	 * @param handles {ukeGeeks.data.htmlHandles}
+	 * @return {songObj}
 	 */
-	var _runSong = function(nodes){
+	var _runSong = function(handles){
 		// console.log('run Song');
 		
 		// read Music, find chords, generate HTML version of song:
 		var cpm = new ukeGeeks.cpmParser;
 		cpm.init();
-		var song = cpm.parse(nodes.text.innerHTML);
+		var song = cpm.parse(handles.text.innerHTML);
 		ukeGeeks.definitions.replace(song.defs);
 	
 		var chrdPrsr = new ukeGeeks.chordParser;
 		chrdPrsr.init();
-		nodes.text.innerHTML = chrdPrsr.parse(song.body);
+		handles.text.innerHTML = chrdPrsr.parse(song.body);
 		var chordsInUse = chrdPrsr.getChords();
 	
 		// Draw the Chord Diagrams:
 		var painter = new ukeGeeks.chordPainter;
-		painter.init(nodes);
+		painter.init(handles);
 		painter.show(chordsInUse);
 		// Show chord diagrams inline with lyrics
 		if (ukeGeeks.settings.inlineDiagrams){
-			ukeGeeks.toolsLite.addClass(nodes.wrap, 'ugsInlineDiagrams');
+			ukeGeeks.toolsLite.addClass(handles.wrap, 'ugsInlineDiagrams');
 			painter.showInline(chordsInUse);
 		}
 	
 		// Do Tablature:
 		var tabs = new ukeGeeks.tabs;
 		tabs.init();
-		tabs.replace(nodes.text);
+		tabs.replace(handles.text);
 		
 		// error reporting:
-		//showErrors(painter.getErrors());
+		_errList.push(painter.getErrors());
 		
-		var container = nodes.wrap;
+		var container = handles.wrap;
 		if (container){
 			if (!song.hasChords){
 				ukeGeeks.toolsLite.addClass(container, 'ugsNoChords');
@@ -117,41 +118,54 @@ ukeGeeks.scriptasaurus = new function(){
 		// done!
 		return song;
 	};
+
+	/**
+	 * Shows a JavaScript alert box containing list of unknown chords.
+	 * @method showErrors
+	 * @return {void}
+	 */
+	var showErrors = function(errs){
+		if (errs.length < 1) {
+			return;
+		}
+		
+		console.log(typeof(errs[0]));
+		var s = '';
+		for(var i = 0; i < errs.length; i++){
+			s += (s.length > 0) ? ', ' : '';
+			s += errs[i];
+		}
+		alert('Forgive me, but I don\'t know the following chords: ' + s);
+	};
 	
 	/**
 	 * 
-	 * @method _makeNodeByClass
+	 * @method _getHandlesFromClass
 	 * @private
 	 * @param wrap {domElement} 
+	 * @retuns {ukeGeeks.data.htmlHandles} 
 	 */
-	var _makeNodeByClass = function(wrap){
+	var _getHandlesFromClass = function(wrap){
 		var diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
 		var text = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.text, wrap);
 		if ((diagrams == undefined) || (diagrams.length < 1) || (text == undefined) || (text.length < 1)){
 			return null;
 		}
-		var node = 
-		{
-			wrap : wrap,
-			diagrams : diagrams[0],
-			text : text[0]
-		};
-		return node;
+		return new ukeGeeks.data.htmlHandles(wrap, diagrams[0], text[0]);
 	};
 
 	/**
 	 * 
-	 * @method _makeNodeById
+	 * @method _getHandlesFromId
 	 * @private
-	 * @param node {nodeobjc} 
+	 * @retuns {ukeGeeks.data.htmlHandles} 
 	 */
-	var _makeNodeById = function(){
-		var node = 
-		{
-			wrap : document.getElementById(ukeGeeks.settings.ids.container),
-			diagrams : document.getElementById(ukeGeeks.settings.ids.canvas),
-			text : document.getElementById(ukeGeeks.settings.ids.songText)
-		};
-		return node;
-	}
+	var _getHandlesFromId = function(){
+		return new ukeGeeks.data.htmlHandles(
+			document.getElementById(ukeGeeks.settings.ids.container),
+			document.getElementById(ukeGeeks.settings.ids.canvas),
+			document.getElementById(ukeGeeks.settings.ids.songText)
+		);
+	};
+	
 }

@@ -275,6 +275,10 @@ ukeGeeks.cpmParser.prototype = {
 		var tmpBlk = null;
 		var isMarker; // block marker
 		for (var i in lines){
+			// strip comments
+			if ((lines[i].length > 0) && (lines[i][0] == '#')){
+				continue;
+			}
 			isMarker = this.regEx.blocks.test(lines[i]);
 			if (isMarker || tmpBlk == null){
 				// save last block, start new one...
@@ -320,13 +324,14 @@ ukeGeeks.cpmParser.prototype = {
 		var regEx = {
 			instr : /\{[^}]+?:.*?\}/im,
 			cmdArgs : /\{.+?:(.*)\}/gi,
-			cmdVerb : /\{(.+?):.*\}/gi
+			cmdVerb : /\{(.+?)\s*:.*\}/gi
 		};
 		for (var i in song){
 			for (var j in song[i].lines){
 				if (regEx.instr.test(song[i].lines[j])){
 					var args = song[i].lines[j].replace(regEx.cmdArgs,'$1');
 					var verb = song[i].lines[j].replace(regEx.cmdVerb,'$1').toLowerCase();
+					verb = verb.replace(/\r/, ''); // IE7 bug
 					var tmpBlk = {
 						type: '',
 						lines : []

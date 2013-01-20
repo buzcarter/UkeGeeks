@@ -16,7 +16,7 @@ class SongList_Vmb {
 	// PUBLIC METHODS
 	// -----------------------------------------
 	public function Build() {
-		$this->_files = $this->getFiles(Config::SongDirectory);
+		$this->_files = $this->getFilenames(Config::SongDirectory);
 		$view = new SongList_Vm();
 		$view->SongList = $this->listFiles();
 		header('X-Powered-By: ' . Config::PoweredBy);
@@ -48,7 +48,6 @@ class SongList_Vmb {
 
 	/**
 	 * Handles titles beginning with "The"
-	 * @private 
 	 * @method getTitle 
 	 * @param string $filename 
 	 * @return string
@@ -92,19 +91,24 @@ class SongList_Vmb {
 	 * @param string $dir 
 	 * @return array
 	 */
-	private function getFiles($dir) {
-		$f = array();
+	private function getFilenames($dir) {
+		if (!is_dir($dir)) {
+			return array();
+		}
+		
 		// Open a known directory, and proceed to read its contents
-		if (is_dir($dir)) {
-			if ($dh = opendir($dir)) {
-				while (($file = readdir($dh)) !== false) {
-					if ((filetype($dir . $file) == 'file') && (preg_match($this->pattern, $file) === 1)){
-						$f[] = $file;
-					}
-				}
-				closedir($dh);
+		// yes, the assignment below is deliberate.
+		if (!($dh = opendir($dir))) {
+			return array();
+		}
+		
+		$f = array();
+		while (($file = readdir($dh)) !== false) {
+			if ((filetype($dir . $file) == 'file') && (preg_match($this->pattern, $file) === 1)){
+				$f[] = $file;
 			}
 		}
+		closedir($dh);
 		sort($f, SORT_STRING);
 		return $f;
 	}

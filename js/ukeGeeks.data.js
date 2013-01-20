@@ -124,6 +124,12 @@ ukeGeeks.data = new function(){
 		this.chords = chords;
 	};
 	
+	this.htmlHandles = function(wrap, diagrams, text){
+		this.wrap = wrap;
+		this.diagrams = diagrams;
+		this.text = text;
+	};
+	
 // -----------------------------------------------------------------------------------------
 // *** DOCUMENTAION ONLY ***
 // -----------------------------------------------------------------------------------------

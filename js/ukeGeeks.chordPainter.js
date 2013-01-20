@@ -22,18 +22,18 @@ ukeGeeks.chordPainter.prototype = {
 	 */
 	errors: [],
 
-	nodes: null,
+	handles: null,
 	
 	/**
 	 * Again this is a constructor replacement
 	 * @method init
-	 * @param domNodes {domObject} DOM Element object 
+	 * @param handles {ukeGeeks.data.htmlHandles} DOM Element object 
 	 * @return {void}
 	 */
-	init: function(domNodes){
+	init: function(handles){
 		this.brush = new ukeGeeks.chordBrush;
 		this.brush.init();
-		this.nodes = domNodes;
+		this.handles = handles;
 	},
 	
 	/**
@@ -43,7 +43,7 @@ ukeGeeks.chordPainter.prototype = {
 	 * @return {void}
 	 */
 	show: function(chords){
-		this.nodes.diagrams.innerHTML = '';
+		this.handles.diagrams.innerHTML = '';
 		this.errors = [];
 		for (var i=0; i < chords.length; i++){
 			var c = ukeGeeks.definitions.get(chords[i]);
@@ -51,7 +51,7 @@ ukeGeeks.chordPainter.prototype = {
 				this.errors.push(chords[i]);
 				continue;
 			}
-			this.brush.plot(this.nodes.diagrams,c,ukeGeeks.settings.fretBox);
+			this.brush.plot(this.handles.diagrams,c,ukeGeeks.settings.fretBox);
 		}
 	},
 
@@ -63,7 +63,7 @@ ukeGeeks.chordPainter.prototype = {
 	 * @return {void}
 	 */
 	showInline: function (chords){
-		var e = this.nodes.text.getElementsByTagName('code');
+		var e = this.handles.text.getElementsByTagName('code');
 		if (e.length < 1) return;
 		for (var i=0; i < chords.length; i++){
 			var c = ukeGeeks.definitions.get(chords[i]);
