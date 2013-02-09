@@ -88,6 +88,13 @@ ukeGeeks.data = new function(){
 	   * @type array
 	   */
 		this.defs= [];
+		
+		/**
+		 * array of chord names found in current song
+		 * @property chordNames
+	   * @type array(strings)
+	   */
+		this.chords= [];
 	};
 
 	/**

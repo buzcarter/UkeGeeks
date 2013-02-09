@@ -41,6 +41,7 @@ class Ugs{
 		$appRoot = dirname(__FILE__);
 		include_once($appRoot . '/Config.php');
 		include_once($appRoot . '/classes/FileHelper.php');
+		include_once($appRoot . '/classes/SongHelper.php');
 		include_once($appRoot . '/viewmodels/_base_Vm.php');
 		Ugs::$config = new Config($appRoot);
 	}

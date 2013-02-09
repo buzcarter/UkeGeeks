@@ -95,11 +95,13 @@ ukeGeeks.chordParser.prototype = {
 	 * @return {string}
 	 */
 	_encloseChords: function(text, chords){
+		var openBracket = ukeGeeks.settings.opts.retainBrackets ? '[' : ' ';
+		var closeBracket = ukeGeeks.settings.opts.retainBrackets ? ']' : ' ';
 		for(var i in chords){
 			do {} 
 			while(text.length != (text = text.replace(
 				'[' + chords[i] + ']', 
-				'<code data-chordName="' + chords[i] + '"><strong>[<em>' + chords[i] + '</em>]</strong></code>')).length);
+				'<code data-chordName="' + chords[i] + '"><strong>' + openBracket + '<em>' + chords[i] + '</em>' + closeBracket + '</strong></code>')).length);
 		}
 		return text;
 		/*

@@ -158,7 +158,8 @@ ukeGeeks.settings = new function(){
 	 * @type JSON Object
 	 */
 	this.opts = {
-		columnsEnabled: true
+		columnsEnabled: true,
+		retainBrackets: true
 	};
 	
 	/**

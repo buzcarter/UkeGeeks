@@ -38,4 +38,36 @@ class FileHelper {
 		return $data;
 	}
 
+	/**
+	 * 
+	 * @private 
+	 * @method getFilenames 
+	 * @param string $dir 
+	 * @return array
+	 */
+	public static function getFilenames($dir) {
+		opendir($dir);
+		if (!is_dir($dir)) {
+			var_dump('failed to open -> ' . $dir);
+			return array();
+		}
+		
+		// Open a known directory, and proceed to read its contents
+		// yes, the assignment below is deliberate.
+		if (!($dh = opendir($dir))) {
+			return array();
+		}
+		
+		$f = array();
+		while (($file = readdir($dh)) !== false) {
+			if ((filetype($dir . $file) == 'file') && (preg_match(Config::FileNamePattern, $file) === 1)){
+				$f[] = $file;
+			}
+		}
+		closedir($dh);
+		sort($f, SORT_STRING);
+		return $f;
+	}
+
+
 }

@@ -30,7 +30,7 @@ ukeGeeks.definitions.addInstrument("\
 {define: Bbsus4 frets 3 3 1 1 fingers 3 3 1 1}\
 {define: Bbaug frets 3 2 2 5 fingers 2 1 1 4 add: string 1 fret 2 finger 1 add: string 4 fret 2 finger 1}\
 {define: Bb9 frets 1 2 1 3 fingers 2 1 4 3}\
-{define: BbMaj7 frets 2 2 1 1 fingers 2 2 1 1}\
+{define: Bbmaj7 frets 2 2 1 1 fingers 2 2 1 1}\
 {define: Bbm7-5 frets 1 1 0 1 fingers 1 2 0 3}\
 # B\
 {define: B frets 4 3 2 2 fingers 3 2 1 1}\
@@ -115,7 +115,7 @@ ukeGeeks.definitions.addInstrument("\
 # F\
 {define: F frets 2 0 1 0 fingers 2 0 1 0}\
 {define: Fm frets 1 0 1 3 fingers 1 0 2 4}\
-{define: F7 frets 2 3 1 3 fingers 2 3 1 4}\
+{define: F7 frets 2 3 1 0 fingers 2 3 1 0}\
 {define: Fm6 frets 1 2 1 3 fingers 1 2 1 3 add: string 2 fret 1 finger 1 add: string 4 fret 1 finger 1}\
 {define: Fm7 frets 1 3 1 3 fingers 1 3 2 4}\
 {define: Fdim frets 1 2 1 2 fingers 1 3 2 4}\

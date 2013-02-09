@@ -180,7 +180,8 @@ ukeGeeks.settings = new function(){
 	 * @type JSON Object
 	 */
 	this.opts = {
-		columnsEnabled: true
+		columnsEnabled: true,
+		retainBrackets: true
 	};
 	
 	/**
@@ -381,6 +382,13 @@ ukeGeeks.data = new function(){
 	   * @type array
 	   */
 		this.defs= [];
+		
+		/**
+		 * array of chord names found in current song
+		 * @property chordNames
+	   * @type array(strings)
+	   */
+		this.chords= [];
 	};
 
 	/**
@@ -948,6 +956,9 @@ ukeGeeks.chordImport = new function(){
 		if (tone > 11){
 			tone = tone - 12;
 		}
+		else if (tone < 0){
+			tone = tone + 12;
+		}
 		// TODO: negative steps are allowed!!!
 		for(var key in tones){
 			if (tone == tones[key]){
@@ -959,8 +970,8 @@ ukeGeeks.chordImport = new function(){
 	
 	/**
 	 * 
-	 * @method NAME
-	 * @param NAME (TYPE) 
+	 * @method getTone
+	 * @param name (string) 
 	 * @return {TYPE}
 	 */
 	var getTone = function(name){
@@ -1010,6 +1021,14 @@ ukeGeeks.chordImport = new function(){
 			}
 		}
 		return s;
+	};
+	
+	this.shiftChords = function(chords, steps){
+		var newChords = [];
+		for(var i = 0; i < chords.length; i++){
+			newChords.push(this.shift(chords[i], steps));
+		}
+		return newChords;
 	};
 };
 ;/**
@@ -1205,7 +1224,7 @@ ukeGeeks.definitions = new function(){
 {define: Bbsus4 frets 3 3 1 1 fingers 3 3 1 1}\
 {define: Bbaug frets 3 2 2 5 fingers 2 1 1 4 add: string 1 fret 2 finger 1 add: string 4 fret 2 finger 1}\
 {define: Bb9 frets 1 2 1 3 fingers 2 1 4 3}\
-{define: BbMaj7 frets 2 2 1 1 fingers 2 2 1 1}\
+{define: Bbmaj7 frets 2 2 1 1 fingers 2 2 1 1}\
 {define: Bbm7-5 frets 1 1 0 1 fingers 1 2 0 3}\
 # B\
 {define: B frets 4 3 2 2 fingers 3 2 1 1}\
@@ -1290,7 +1309,7 @@ ukeGeeks.definitions = new function(){
 # F\
 {define: F frets 2 0 1 0 fingers 2 0 1 0}\
 {define: Fm frets 1 0 1 3 fingers 1 0 2 4}\
-{define: F7 frets 2 3 1 3 fingers 2 3 1 4}\
+{define: F7 frets 2 3 1 0 fingers 2 3 1 0}\
 {define: Fm6 frets 1 2 1 3 fingers 1 2 1 3 add: string 2 fret 1 finger 1 add: string 4 fret 1 finger 1}\
 {define: Fm7 frets 1 3 1 3 fingers 1 3 2 4}\
 {define: Fdim frets 1 2 1 2 fingers 1 3 2 4}\
@@ -1707,11 +1726,13 @@ ukeGeeks.chordParser.prototype = {
 	 * @return {string}
 	 */
 	_encloseChords: function(text, chords){
+		var openBracket = ukeGeeks.settings.opts.retainBrackets ? '[' : ' ';
+		var closeBracket = ukeGeeks.settings.opts.retainBrackets ? ']' : ' ';
 		for(var i in chords){
 			do {} 
 			while(text.length != (text = text.replace(
 				'[' + chords[i] + ']', 
-				'<code data-chordName="' + chords[i] + '"><strong>[<em>' + chords[i] + '</em>]</strong></code>')).length);
+				'<code data-chordName="' + chords[i] + '"><strong>' + openBracket + '<em>' + chords[i] + '</em>' + closeBracket + '</strong></code>')).length);
 		}
 		return text;
 		/*
@@ -2028,6 +2049,10 @@ ukeGeeks.cpmParser.prototype = {
 		var tmpBlk = null;
 		var isMarker; // block marker
 		for (var i in lines){
+			// strip comments
+			if ((lines[i].length > 0) && (lines[i][0] == '#')){
+				continue;
+			}
 			isMarker = this.regEx.blocks.test(lines[i]);
 			if (isMarker || tmpBlk == null){
 				// save last block, start new one...
@@ -2800,16 +2825,16 @@ ukeGeeks.scriptasaurus = new function(){
 		var chrdPrsr = new ukeGeeks.chordParser;
 		chrdPrsr.init();
 		handles.text.innerHTML = chrdPrsr.parse(song.body);
-		var chordsInUse = chrdPrsr.getChords();
+		song.chords = chrdPrsr.getChords();
 	
 		// Draw the Chord Diagrams:
 		var painter = new ukeGeeks.chordPainter;
 		painter.init(handles);
-		painter.show(chordsInUse);
+		painter.show(song.chords);
 		// Show chord diagrams inline with lyrics
 		if (ukeGeeks.settings.inlineDiagrams){
 			ukeGeeks.toolsLite.addClass(handles.wrap, 'ugsInlineDiagrams');
-			painter.showInline(chordsInUse);
+			painter.showInline(song.chords);
 		}
 	
 		// Do Tablature:
@@ -2844,7 +2869,7 @@ ukeGeeks.scriptasaurus = new function(){
 			return;
 		}
 		
-		console.log(typeof(errs[0]));
+		//console.log(typeof(errs[0]));
 		var s = '';
 		for(var i = 0; i < errs.length; i++){
 			s += (s.length > 0) ? ', ' : '';

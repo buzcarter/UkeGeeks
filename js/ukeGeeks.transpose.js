@@ -31,6 +31,9 @@ ukeGeeks.transpose = new function(){
 		if (tone > 11){
 			tone = tone - 12;
 		}
+		else if (tone < 0){
+			tone = tone + 12;
+		}
 		// TODO: negative steps are allowed!!!
 		for(var key in tones){
 			if (tone == tones[key]){
@@ -42,8 +45,8 @@ ukeGeeks.transpose = new function(){
 	
 	/**
 	 * 
-	 * @method NAME
-	 * @param NAME (TYPE) 
+	 * @method getTone
+	 * @param name (string) 
 	 * @return {TYPE}
 	 */
 	var getTone = function(name){
@@ -93,5 +96,13 @@ ukeGeeks.transpose = new function(){
 			}
 		}
 		return s;
+	};
+	
+	this.shiftChords = function(chords, steps){
+		var newChords = [];
+		for(var i = 0; i < chords.length; i++){
+			newChords.push(this.shift(chords[i], steps));
+		}
+		return newChords;
 	};
 };

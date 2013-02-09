@@ -4,6 +4,8 @@ class Config {
 	const PageTitleSuffix = ' | UkeGeek\'s Scriptasaurus';
 	const SongDirectory = 'cpm/';
 	const FileExtension = '.cpm.txt';
+	const FileNamePattern = '/(.*?)\.cpm\.txt$/';
+	
 	const MaxFileSize = 100000;
 	const NotFound_404File = 'error.txt';	
 	

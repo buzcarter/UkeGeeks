@@ -15,12 +15,12 @@ class Source_Vmb {
 		$fname = FileHelper::getFilename();
 		$data = FileHelper::getFile(Config::SongDirectory . $fname);
 
-		$modelView = new Source_Vm();
-		$modelView->PageTitle = 'Song Source for &quot;' . $fname . '&quot; ChordPro (CPM)/UkeGeeks File Format';
-		$modelView->Body = htmlspecialchars($data);
+		$viewModel = new Source_Vm();
+		$viewModel->PageTitle = 'Song Source for &quot;' . $fname . '&quot; ChordPro (CPM)/UkeGeeks File Format';
+		$viewModel->Body = htmlspecialchars($data);
 
 		header('X-Powered-By: ' . Config::PoweredBy);
-		return $modelView;
+		return $viewModel;
 	}
 
 }

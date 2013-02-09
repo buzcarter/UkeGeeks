@@ -8,42 +8,26 @@ include_once(Ugs::$config->ViewModelPath . 'SongList_Vm.php');
  */
 class SongList_Vmb {
 
-	// -----------------
-	private $_files = null;
-	private $pattern = '/(.*?)\.cpm\.txt$/';
-
 	// -----------------------------------------
 	// PUBLIC METHODS
 	// -----------------------------------------
 	public function Build() {
-		$this->_files = $this->getFilenames(Config::SongDirectory);
-		$view = new SongList_Vm();
-		$view->SongList = $this->listFiles();
-		header('X-Powered-By: ' . Config::PoweredBy);
-		return $view;
+		$files = FileHelper::getFilenames(Config::SongDirectory);
+		$viewModel = new SongList_Vm();
+
+		foreach ($files as $filename) {
+			// Parse the filename (to make a Title) and create URL.
+			$s = preg_replace(Config::FileNamePattern, '$1', $filename);
+			$viewModel->Add(
+				$this->getTitle($s), 
+				(Config::UseModRewrite) ? '/songbook/' . $s : '/song.php?song=' . $s
+			);
 	}
 
-	// -----------------------------------------
-	// PRIVATE METHODS
-	// -----------------------------------------
-	/**
-	 * Emits list of links to all songs in the directory.
-	 * @method listFiles
-	 * @return (song array)
-	 */
-	private function listFiles() {
-		// TODO: use config's FileExtension
+		$viewModel->Sort();
 
-		$list = array();
-		foreach ($this->_files as $f) {
-			$s = preg_replace($this->pattern, '$1', $f);
-			$title = $this->getTitle($s);
-			$song = new SongLink();
-			$song->Title = $title;
-			$song->Uri = (Config::UseModRewrite) ? '/songbook/' . $s : '/song.php?song=' . $s;
-			$list[] = $song;
-		}
-		return $this->sortSongs($list);
+		header('X-Powered-By: ' . Config::PoweredBy);
+		return $viewModel;
 	}
 
 	/**
@@ -59,58 +43,6 @@ class SongList_Vmb {
 			$title = substr($title, 4, strlen($title)) . ', The';
 		}
 		return $title;
-	}
-
-	/**
-	 * Sorts a Song List based on title
-	 * @method sortSongs
-	 * @param SongArray $songList
-	 * @return (song array)
-	 */
-	private function sortSongs($list) {
-		$temp = array();
-		$sortedTitles = array();
-		foreach ($list as $song) {
-			$sortedTitles[] = $song->Title;
-			$temp[$song->Title] = $song;
-		}
-
-		sort($sortedTitles);
-
-		$newList = array();
-		foreach ($sortedTitles as $title) {
-			$newList[] = $temp[$title];
-		}
-		return $newList;
-	}
-
-	/**
-	 * Emits list of links to all songs in the directory.
-	 * @private 
-	 * @method getFiles 
-	 * @param string $dir 
-	 * @return array
-	 */
-	private function getFilenames($dir) {
-		if (!is_dir($dir)) {
-			return array();
-		}
-		
-		// Open a known directory, and proceed to read its contents
-		// yes, the assignment below is deliberate.
-		if (!($dh = opendir($dir))) {
-			return array();
-		}
-		
-		$f = array();
-		while (($file = readdir($dh)) !== false) {
-			if ((filetype($dir . $file) == 'file') && (preg_match($this->pattern, $file) === 1)){
-				$f[] = $file;
-			}
-		}
-		closedir($dh);
-		sort($f, SORT_STRING);
-		return $f;
 	}
 
 }

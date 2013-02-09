@@ -85,16 +85,16 @@ ukeGeeks.scriptasaurus = new function(){
 		var chrdPrsr = new ukeGeeks.chordParser;
 		chrdPrsr.init();
 		handles.text.innerHTML = chrdPrsr.parse(song.body);
-		var chordsInUse = chrdPrsr.getChords();
+		song.chords = chrdPrsr.getChords();
 	
 		// Draw the Chord Diagrams:
 		var painter = new ukeGeeks.chordPainter;
 		painter.init(handles);
-		painter.show(chordsInUse);
+		painter.show(song.chords);
 		// Show chord diagrams inline with lyrics
 		if (ukeGeeks.settings.inlineDiagrams){
 			ukeGeeks.toolsLite.addClass(handles.wrap, 'ugsInlineDiagrams');
-			painter.showInline(chordsInUse);
+			painter.showInline(song.chords);
 		}
 	
 		// Do Tablature:
@@ -129,7 +129,7 @@ ukeGeeks.scriptasaurus = new function(){
 			return;
 		}
 		
-		console.log(typeof(errs[0]));
+		//console.log(typeof(errs[0]));
 		var s = '';
 		for(var i = 0; i < errs.length; i++){
 			s += (s.length > 0) ? ', ' : '';
