@@ -13,7 +13,7 @@ class SongListCacheManager {
 	// -----------------------------------------
 	function SongListCacheManager(){
 		$this->cache = new SimpleCache();
-		$this->cache->setCacheDir(Ugs::$config->CachePath);
+		$this->cache->setCacheDir(Config::$CachePath);
 	}
 
 	/**
@@ -21,7 +21,7 @@ class SongListCacheManager {
 	 * @return array song list
 	 */
 	public function Rebuild() {
-		$files = FileHelper::getFilenames(Config::SongDirectory);
+		$files = FileHelper::getFilenames(Config::$SongDirectory);
 		$songList = $this->buildFileList($files);
 
 		$this->cache->put(Config::SongCacheKey_FileName, serialize($songList));
@@ -57,13 +57,10 @@ class SongListCacheManager {
 		foreach ($files as $fname) {
 			$s = preg_replace(Config::FileNamePattern, '$1', $fname);
 
-			$content = FileHelper::getFile(Config::SongDirectory . $fname);
+			$content = FileHelper::getFile(Config::$SongDirectory . $fname);
 			$parsed = SongHelper::parseSong($content);
 
 			$song = new SongLinkPlus_Pvm();
-			/*
-			$song->Uri = '/song-editable.php?song=' . $s;
-			*/
 			$song->Uri = Ugs::MakeUri(Actions::Song, $s);
 			$song->HasInfo = (strlen($parsed->title) + strlen($parsed->artist)) > 0;
 			$song->Title = $this->fixLeadingArticle((strlen($parsed->title) > 0) ? $parsed->title : $this->filenameToTitle($s));

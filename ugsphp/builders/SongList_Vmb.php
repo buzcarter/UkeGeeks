@@ -11,7 +11,7 @@ class SongList_Vmb {
 	 * @return SongList_Vm
 	 */
 	public function Build() {
-		$files = FileHelper::getFilenames(Config::SongDirectory);
+		$files = FileHelper::getFilenames(Config::$SongDirectory);
 		$viewModel = new SongList_Vm();
 
 		foreach ($files as $filename) {

@@ -6,7 +6,6 @@
  * @namespace ugsPhp
  */
 class Ugs{
-	public static $config;
 
 	/**
 	 * Boostraps and runs the entire danged system!
@@ -37,7 +36,7 @@ class Ugs{
 	 */
 	private static function RenderView($model, $action){
 		header('X-Powered-By: ' . Config::PoweredBy);
-		include_once(self::$config->ViewsPath . self::GetViewName($action));
+		include_once(Config::$ViewsPath . self::GetViewName($action));
 	}
 
 	/**
@@ -123,7 +122,7 @@ class Ugs{
 		// make sure the base class is indlucded first...
 		include_once($appRoot . '/viewmodels/_base_Vm.php');
 
-		self::$config = new Config($appRoot);
+		Config::Init();
 
 		foreach (array('classes', 'viewmodels', 'builders') as $directory) {
 			foreach (glob($appRoot . '/' . $directory . '/*.php') as $filename) {
@@ -145,7 +144,7 @@ class Ugs{
 
 		if (!Config::UseModRewrite){
 			$actionParams = strlen($param) > 0 ? '&song=' . $param : '';
-			return 'music.php?action=' . $actionName . $actionParams;
+			return '/music.php?action=' . $actionName . $actionParams;
 		}
 
 		if (($action == Actions::Song) || ($action == Actions::SongList)) {

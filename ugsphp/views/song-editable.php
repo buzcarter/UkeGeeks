@@ -1,3 +1,9 @@
+<?php
+
+function GetDisplayStyle($value){
+	return (strlen($value) > 0) ? 'block' : 'none';
+}
+?>
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -21,17 +27,17 @@
 <section id="scalablePrintArea" class="scalablePrintArea">
 	<header>
 		<hgroup>
-			<h1 id="songTitle">Untitled</h1>
-			<h2 id="songSubtitle" style="display:none;"></h2>
-			<h2 id="songArtist" style="display:none;"></h2>
-			<h2 id="songAlbum" style="display:none;"></h2>
+			<h1 id="songTitle"><?php echo($model->SongTitle); ?></h1>
+			<h2 id="songSubtitle" style="display:<?php echo(GetDisplayStyle($model->Subtitle)); ?>;"><?php echo($model->Subtitle); ?></h2>
+			<h2 id="songArtist" style="display:<?php echo(GetDisplayStyle($model->Artist)); ?>;"><?php echo($model->Artist); ?></h2>
+			<h2 id="songAlbum" style="display:<?php echo(GetDisplayStyle($model->Album)); ?>;"><?php echo($model->Album); ?></h2>
 		</hgroup>
 	</header>
 	<div class="metaInfo" id="songMeta"> </div>
 	<article id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
 		<aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped"></aside>
 		<article id="ukeSongText" class="ugs-source-wrap">
-			<pre></pre>
+			<pre><?php echo($model->Body); ?></pre>
 		</article>
 	</article>
 	<footer>

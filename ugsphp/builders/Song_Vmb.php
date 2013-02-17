@@ -13,7 +13,7 @@ class Song_Vmb {
 	 */
 	public function Build() {
 		$filename = FileHelper::getFilename();
-		$fileContent = FileHelper::getFile(Config::SongDirectory . $filename);
+		$fileContent = FileHelper::getFile(Config::$SongDirectory . $filename);
 		$song = SongHelper::parseSong($fileContent);
 
 		$title = htmlspecialchars((($song->isOK) ? ($song->title . ((strlen($song->subtitle) > 0) ? (' | ' . $song->subtitle) : '')) : 'Not Found'));

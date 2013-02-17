@@ -7,7 +7,6 @@ class Config {
 	// --------------------------------------
 	// finding & reading your ChordPro files
 	// --------------------------------------
-	const SongDirectory = 'cpm/';
 	const FileExtension = '.cpm.txt';
 	const FileNamePattern = '/(.*?)\.cpm\.txt$/';
 
@@ -17,8 +16,9 @@ class Config {
 	// --------------------------------------
 	// file paths/directories (initialize with class)
 	// --------------------------------------
-	public $CachePath = '';
-	public $ViewsPath = '';
+	static public $SongDirectory = '';
+	static public $CachePath = '';
+	static public $ViewsPath = '';
 
 	// --------------------------------------
 	// Attribution & Site Credits
@@ -58,10 +58,12 @@ class Config {
 
 	/**
 	 * any dynamic setup happens here
-	 * @param string $appRoot where's the application running
 	 */
-	function Config($appRoot) {
-		$this->CachePath = $appRoot . '/cache/';
-		$this->ViewsPath = $appRoot . '/views/';
+	public static function Init() {
+		$appRoot = dirname(__FILE__);
+
+		self::$SongDirectory = getcwd() . '/cpm/';
+		self::$CachePath = $appRoot . '/cache/';
+		self::$ViewsPath = $appRoot . '/views/';
 	}
 }

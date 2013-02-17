@@ -12,8 +12,7 @@ class Source_Vmb {
 	 */
 	public function Build() {
 		$fname = FileHelper::getFilename();
-		$data = FileHelper::getFile(Config::SongDirectory . $fname);
-
+		$data = FileHelper::getFile(Config::$SongDirectory . $fname);
 		$viewModel = new Source_Vm();
 		$viewModel->PageTitle = 'Song Source for &quot;' . $fname . '&quot; ChordPro (CPM)/UkeGeeks File Format';
 		$viewModel->Body = htmlspecialchars($data);
