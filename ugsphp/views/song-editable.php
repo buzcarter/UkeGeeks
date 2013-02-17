@@ -52,18 +52,18 @@
 		<h3>Help</h3>
 	</hgroup>
 	<div class="normalHtml"> <a title="close this" href="#close" id="hideHelpBtn" class="closeBtn">Close</a>
-		<p><a href="../users-guide.htm" target="_blank" title="View the complete documentation including ChordPro tips">User Guide</a> topics:</p>
+		<p><a href="http://ukegeeks.com/users-guide.htm" target="_blank" title="View the complete documentation including ChordPro tips">User Guide</a> topics:</p>
 		<ul>
-			<li><a href="../users-guide.htm#how_do_i_markup" target="_blank">How Do I &quot;Mark-Up&quot; My Music?</a></li>
-			<li><a href="../users-guide.htm#chordNames" target="_blank">How Do I Name Chords?</a></li>
-			<li><a href="../users-guide.htm#chordpro_markup_reference" target="_blank">ChordPro Markup Reference</a></li>
-			<li><a href="../users-guide.htm#more_chord_definitions" target="_blank">Defining Alternate Chords</a></li>
-			<li><a href="../users-guide.htm#saveBtn" target="_blank">Where's the &quot;Save&quot; Button?</a></li>
-			<li><a href="../users-guide.htm#defined_chords" target="_blank">What Chords Are Already Defined?</a></li>
-			<li><a href="../users-guide.htm#more_chord_definitions" target="_blank">How Can I Use An Alternate Chord Fingering?</a></li>
-			<li><a href="../users-guide.htm#muted_strings" target="_blank">How Can I Indicate Muted Strings?</a></li>
-			<li><a href="../users-guide.htm#barre_chords" target="_blank">How Can I Make a Barre Chord?</a></li>
-			<li><a href="../users-guide.htm#formatter" target="_blank">What If My Song Has The Chords Above The Lyrics?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#how_do_i_markup" target="_blank">How Do I &quot;Mark-Up&quot; My Music?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#chordNames" target="_blank">How Do I Name Chords?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#chordpro_markup_reference" target="_blank">ChordPro Markup Reference</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#more_chord_definitions" target="_blank">Defining Alternate Chords</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#saveBtn" target="_blank">Where's the &quot;Save&quot; Button?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#defined_chords" target="_blank">What Chords Are Already Defined?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#more_chord_definitions" target="_blank">How Can I Use An Alternate Chord Fingering?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#muted_strings" target="_blank">How Can I Indicate Muted Strings?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#barre_chords" target="_blank">How Can I Make a Barre Chord?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#formatter" target="_blank">What If My Song Has The Chords Above The Lyrics?</a></li>
 		</ul>
 		<p>Updates coming shortly <strong style="font-weight: bold; color: #03C;">:D</strong></p>
 	</div>
