@@ -1,0 +1,43 @@
+{title: Snow}
+{artist: Irving Berlin}
+{subtitle:  Bing Crosby, Danny Kaye, Rosemary Clooney &amp; Trudy Stevens}
+{album: (1954) From the movie &quot;White Christmas&quot;}
+{ukegeeks-meta: For educational purposes ONLY -- sample, non-copyright infringing nonsense song}
+
+{c:Intro}
+[Dm] [Gm] [Dm] [Gm] [D7]
+
+{c: Verse 1}
+Topping [Dm]applicake [Am]gingerbread [Gm]wypas. 
+[Dm]Donut I love [Am]caramels donut 
+Chocolate [Dm]bar wafer [Am]bonbon lemon [Gm]drops. 
+Tootsie [Dm]roll carrot [Am]cake biscuit [Gm]cupcake. [F]
+
+{soc}
+{c:Chorus}
+[Dm7]Gummies chocolate cake macaroon.
+Muffin [C]halvah sweet gummi bears 
+[G7]Danish cupcake. 
+[Dm7]Sugar plum powder macaroon dragée 
+Pudding [C]pudding jelly marzipan. 
+[D7]Liquorice sugar [C]plum [F]
+{eoc}
+
+{c:Intro}
+[Dm] [Gm] [Dm] [Gm] [D7]
+
+{c: Verse 1}
+Topping [Dm]applicake [Am]gingerbread [Gm]wypas. 
+[Dm]Donut I love [Am]caramels donut 
+Chocolate [Dm]bar wafer [Am]bonbon lemon [Gm]drops. 
+Tootsie [Dm]roll carrot [Am]cake biscuit [Gm]cupcake. [F]
+
+{soc}
+{c:Chorus}
+[Dm7]Gummies chocolate cake macaroon.
+Muffin [C]halvah sweet gummi bears 
+[G7]Danish cupcake. 
+[Dm7]Sugar plum powder macaroon dragée 
+Pudding [C]pudding jelly marzipan. 
+[D7]Liquorice sugar [C]plum [F]
+{eoc}

@@ -29,7 +29,7 @@
 				<input type="submit" value="Login" name="loginBtn" />
 			</li>
 		</ul>
-		<p class="help">Problems or you need access? <a href="mailto:<?php echo($model->SupportEmail); ?>?subject=I humbly beseech thee, songbook access, please...">Drop a line.</a></p>
+		<p class="help">Problems or you need access? <a href="mailto:<?php echo($model->SuportEmail); ?>?subject=I humbly beseech thee, songbook access, please...">Drop a line.</a></p>
 	</form>
 </div>
 <script type="text/javascript">

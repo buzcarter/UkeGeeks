@@ -1,6 +1,6 @@
-{title:My Little Grass Shack in Kealakekua}
-{artist:Lyrics &amp; Music: Bill Cogswell, Tommy Harrison and Johnny Noble &copy; 1933}
-
+{title: Blue}
+{artist: The Jayhawks}
+{album: Tommorrow the Green Grass}
 {ukegeeks-meta: For educational purposes ONLY -- sample, non-copyright infringing nonsense song}
 
 {c:Intro}

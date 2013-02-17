@@ -1,6 +1,7 @@
-{title:My Little Grass Shack in Kealakekua}
-{artist:Lyrics &amp; Music: Bill Cogswell, Tommy Harrison and Johnny Noble &copy; 1933}
-
+{t:Theme Song from &quot;The Dick van Dyke Show&quot;}
+{artist: Lyrics by Morey Amesterdam}
+{album: Dick Van Dyke Show Theme}
+{ukegeeks-meta: Sung by Dick van Dyke on &quot;Wait, Wait Don't Tell Me!&quot; 10/23/2010}
 {ukegeeks-meta: For educational purposes ONLY -- sample, non-copyright infringing nonsense song}
 
 {c:Intro}

@@ -25,7 +25,7 @@ class Config {
 	// --------------------------------------
 	const PageTitleSuffix = ' | UkeGeek\'s Scriptasaurus';
 	const PoweredBy = 'UkeGeeks-Scriptasaurus-v1.11';
-	const SuportEmail = 'buz@yourdomain-notmine.com';
+	const SupportEmail = 'buz@your-domain-not-mine.com';
 
 	// --------------------------------------
 	// Boolean Options/Settings
