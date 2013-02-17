@@ -1,0 +1,118 @@
+@import url(yuiReset.css);
+
+/* Basic HTML
+ ------------------------------------------- */
+html, body {
+	height: 100%;
+}
+html {
+	background: url("/img/ugs/subpage-stripe-bg.png") repeat scroll;
+	font-family: Verdana,Geneva,sans-serif;
+	padding-bottom: 1px;
+}
+body{
+	border-top:solid 8px #70260C;
+	padding-top: 1em;
+}
+h1 {
+    color: #944615;
+    font-family: 'MEgalopolisExtraRegular',Verdana,Geneva,sans-serif;
+    font-size: 36px;
+    margin-bottom: 0.6em;
+}
+h2 {
+	color:#CE6A4C;
+    font-size: 1.3em;
+}
+a {
+	text-decoration: none;
+}
+/* Containers
+ ------------------------------------------- */
+.contentWrap {
+	min-height: 100%;
+	margin: 0 auto;
+	position: relative;
+	width: 960px;
+}
+.contentWrap a {
+	color: #FF6600;
+}
+.contentWrap {
+	color: #3D3D3D;
+}
+.contentWrap a {
+	color: #FF6600;
+}
+.contentWrap a:hover {
+	background-color: #FAF6C1;
+	color: #FF7E00;
+}
+
+/* Song List (songbook)
+ ------------------------------------------- */
+.songList {
+	margin: 10px 0 20px;
+}
+.songList li {
+	color: #A8A8A8;
+	font-size: 10px;
+	list-style: decimal outside none;
+	margin-bottom: 0.35em;
+	margin-left: 20px;
+	padding: 0.35em 0;
+}
+.songList li:hover {
+	background-color: #FFECC7;
+}
+.songList li a {
+	display:block;
+}
+.songList li strong {
+	font-size: 1.4em;
+}
+.songList li em {
+	color: #5D5639;
+	font-size: 1.1em;
+}
+
+/* login page's form
+ ------------------------------------------- */
+.loginPage .contentWrap{
+	text-align: center;
+}
+.loginPage form {
+	background-color: #fff;
+	border: solid 1px #444;
+	border-radius: 5px;
+	font-size: .9em;
+	margin: 20px auto;
+	padding: 15px;
+	text-align: left;
+	box-shadow: 1px 12px 12px rgba(0, 0, 0, 0.3);
+	width:20em;
+}
+.loginPage form li{
+	margin-bottom: .5em;
+}
+.loginPage form label{
+	display: inline-block;
+	width: 6em;
+	text-align: right;;
+}
+.errorMessage {
+	background-color: #FFE2EE;
+	border: 1px solid #FF96FF;
+	border-radius: 4px;
+	color: #702686;
+	margin-bottom: 0.8em;
+	padding: 0.3em 0.5em;
+ }
+.hint{
+	font-size: .9em;
+	color: #999;
+	text-align: center;
+}
+.help {
+	font-size: 86%;
+}

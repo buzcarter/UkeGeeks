@@ -1,15 +1,5 @@
 <?php 
 
-class SongLink {
-	public $Title = '';
-	public $Uri = '';
-
-	function SongLink($title, $uri){
-		$this->Title = $title;
-		$this->Uri = $uri;
-	}
-}
-
 class SongList_Vm extends _base_Vm {
 	public $SongList = array();
 
@@ -37,14 +27,14 @@ class SongList_Vm extends _base_Vm {
 	}
 
 	/**
-	 * Adds a new SongLink to list 
+	 * Adds a new SongLink_Pvm to list 
 	 * @method Add
 	 * @param string $title
 	 * @param string $url 
 	 * @return (none)
 	 */
 	public function Add($title, $url){
-		$this->SongList[] = new SongLink($title, $url);
+		$this->SongList[] = new SongLink_Pvm($title, $url);
 	}
 
 }

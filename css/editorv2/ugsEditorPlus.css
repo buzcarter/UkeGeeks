@@ -1,0 +1,515 @@
+/**
+ * Help on hiding the select scroll bars:
+ *  http://stackoverflow.com/questions/4531269/hide-vertical-scrollbar-in-select-element
+ * @import url(http://fonts.googleapis.com/css?family=Peralta);
+ *-------------- */
+.salt_2231ySp {
+	color:#0fo;
+}
+html, body {
+	margin: 0;
+	padding: 0;
+}
+body {
+	background-color:#EDECEA;
+	position:relative;
+	padding-top: 40px;
+}
+.scalablePrintArea {
+	-moz-transform-origin: 0 0;
+	-webkit-transform-origin: 0 0;
+	/* padding: 0.5em; */
+	background-color: #fff;
+	border-right:solid 1px #888;
+	font-size: inherit;
+	box-shadow: 3px 0 9px rgba(0, 0, 0, 0.4);
+	/* 11.5in; 
+	width: 8in; 
+	padding:0.2in;
+	min-height:10.5in;
+	*/
+}
+.scalablePrintArea hgroup{
+	padding-bottom: .15in;
+}
+/* LOGO
+ -------------------------------- */
+.ugsLogo {
+	color: #F2A848;
+	font-family: 'Peralta', cursive;
+	font-size: 16px;
+	font-weight: normal;
+	position: absolute;
+	right: 1em;
+	text-shadow: 1px 1px #332222;
+}
+ 
+/* STANDARD appearance HTML for Help Section
+ -------------------------------- */
+.helpDlg{
+	font-size:.9em;
+}
+.normalHtml p,
+.normalHtml ul, 
+.normalHtml ol {
+	margin-bottom:1em;
+}
+.normalHtml li {
+	list-style: disc outside none;
+	margin-left: 1em;
+	padding-bottom:.4em;
+}
+.normalHtml h3 {
+	font-size:1.2em;
+	font-weight:bold;
+}
+
+/*
+ -------------------------------- */
+.ugsAppMenuBar {
+	background: #933f17 url("../../img/editorv2/editorSprite.png") 0 -100px repeat-x;
+	-moz-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
+	-webkit-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
+	box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
+	border-top: 1px solid #84623c;
+	border-bottom: 1px solid #240e01;
+	font: 17px/38px Helvetica, Arial;
+	height: 40px;
+	min-width: 910px;
+	padding-left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 2;
+}
+.ugsAppMenuBar > ul {
+	margin-left: 10px;
+}
+.ugsAppMenuBar > ul > li {
+	float: left;
+	position: relative;
+}
+.ugsAppMenuBar > ul > li > a {
+	border: solid 1px transparent;
+	color: #f4e19f;
+	cursor: pointer;
+	display: block;
+	float: left;
+	height: 38px;
+	line-height: 38px;
+	outline: 0 none;
+	padding: 0 15px 0 5px;
+	text-decoration: none;
+	text-shadow: 1px 2px 0 rgba(86, 3, 5, 0.95);
+}
+.ugsAppMenuBar > ul > li > a:hover {
+	border-color: #600000;
+	background-color: #451212;
+	background: url("../../img/editorv2/editorSprite.png") 0 -145px repeat-x;
+	color: #fdda61;
+	text-shadow: none;
+}
+.ugsAppMenuBar > ul > .active > a {
+	background-color: #451212;
+	background: url("../../img/editorv2/editorSprite.png") 0 -145px repeat-x;
+	color: #fef5e3;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+.ugsAppMenuBar > ul > .active .subMenu {
+	display: block;
+}
+/* Dropdown Info/Menus
+ -------------------------------- */
+.subMenu {
+	-moz-box-shadow: 1px 5px 8px rgba(0, 0, 0, 0.65);
+	-webkit-box-shadow: 1px 5px 8px rgba(0, 0, 0, 0.65);
+	box-shadow: 1px 5px 8px rgba(0, 0, 0, 0.65);
+	-moz-border-radius: 0 0 6px 6px;
+	-webkit-border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;
+	background-color: #4E1F1D;
+	background-color: rgba(65, 15, 12, 0.93);
+	border: solid 1px #000;
+	border-width: 0 1px 1px;
+	display: none;
+	overflow: hidden;
+	position: absolute;
+	top: 41px;
+	width: 175px;
+	z-index: 2;
+}
+.subMenu a {
+	color: #dedede;
+	display: block;
+	line-height: 1.23;
+	padding: 8px 15px 8px 25px;
+	text-decoration: none;
+	text-shadow: 0 1px 1px rgba(96, 0, 0, 0.5);
+}
+.subMenu a:hover {
+	background-color: #000;
+	color: #fff;
+}
+.subMenu .checked a {
+	background: url("../../img/editorv2/checked.png") no-repeat scroll 10px center #2a2a2a;
+	color: #fff;
+}
+.noChecks .subMenu a {
+	padding-left: 10px;
+}
+.noChecks .subMenu .checked a {
+	background: none;
+}
+/*
+.navSong .subMenu,
+.navDiagrams .subMenu,
+.navInstruments .subMenu {
+	width: 300px;
+}
+.navLayout .subMenu {
+	width: 250px;
+}
+*/
+.subMenu em{
+	color:#ccc;
+	float:right;
+	font-size:.86em;
+}
+/* Icons/Sprits
+ -------------------------------- */
+.ugsAppMenuBar > ul > li > a span {
+	background-image: url("../../img/editorv2/editorSprite.png");
+	background-repeat: no-repeat;
+	float: left;
+	height: 25px;
+	margin-top: 7px;
+	width: 25px;
+}
+.navSong span {
+	background-position: -75px 0px;
+}
+.navSong.active span,
+.navSong a:hover span {
+	background-position: -75px -50px;
+}
+.navInstruments span {
+	background-position: -50px 0px;
+}
+.navInstruments.active span,
+.navInstruments a:hover span {
+	background-position: -50px -50px;
+}
+.navTranspose span {
+	background-position: -25px 0px;
+}
+.navTranspose.active span,
+.navTranspose a:hover span {
+	background-position: -25px -50px;
+}
+.navDiagrams span {
+	background-position: 0px 0px;
+}
+.navDiagrams.active span,
+.navDiagrams a:hover span {
+	background-position: 0px -50px;
+}
+.navLayout span {
+	background-position: -100px 0px;
+}
+.navLayout.active span,
+.navLayout a:hover span {
+	background-position: -100px -50px;
+}
+.navColors span {
+	background-position: -125px 0px;
+}
+.navColors.active span,
+.navColors a:hover span {
+	background-position: -125px -50px;
+}
+.navZoom span {
+	background-position: -150px 0px;
+}
+.navZoom.active span,
+.navZoom a:hover span {
+	background-position: -150px -50px;
+}
+.navEdit span {
+	background-position: -175px 0px;
+}
+.navEdit.active span,
+.navEdit a:hover span {
+	background-position: -175px -50px;
+}
+.navOptions span {
+	background-position: -200px 0px;
+}
+.navOptions.active span,
+.navOptions a:hover span {
+	background-position: -200px -50px;
+}
+/* Alternate Layouts: Hide Diagrams
+ -------------------------------- */
+html .ugsHideDiagrams .ugs-diagrams-wrap {
+	display:none;
+}
+html .ugsHideDiagrams .ugs-source-wrap {
+	margin-left: 0;
+}
+/* Alternate Layouts: Chord Diagrams On Top:
+ -------------------------------- */
+html .diagramsOnTop .ugs-diagrams-wrap {
+	float: none;
+	width: auto;
+}
+html .diagramsOnTop .ugs-source-wrap {
+	margin-left: 0;
+}
+/* Alternate Layouts: standard Two Column
+  ------------------------------ */
+.diagramsOnSide .ugs-diagrams-wrap {
+	float:left;
+	width:225px;
+}
+.diagramsOnSide .ugs-source-wrap {
+	margin-left:250px;
+}
+/* MOVED FROM PAGE: SECTION 1
+  ------------------------------ */
+/* FLOATIN EDITOR 
+ -------------------------------- */
+.overlay {
+	position:fixed;
+	top:45px;
+	right:20px;
+	background-color: #2B1100;
+	background-color: rgba(30, 11, 0, 0.75); /* rgba(43, 17, 0, 0.80); */
+	-moz-box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
+	-webkit-box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
+	box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
+	-moz-border-radius: 22px;
+	-webkit-border-radius: 22px;
+	border-radius: 22px;
+	padding: 10px;
+	z-index:0;
+}
+.overlay div {
+	background: url(../../img/editorv2/woodChip.png) repeat scroll 0 0 transparent;
+	border-radius: 0 0 13px 13px;
+	overflow: hidden;
+	padding: 10px;
+}
+.overlay textarea {
+	background-color: rgba(255, 255, 255, 0.7);
+	border: solid 1px #E1B166;
+	line-height: 1.25;
+	padding-left: .3em;
+	white-space: nowrap;
+	white-space:pre;
+	overflow:scroll;
+	height:525px;
+	width:450px;
+}
+.overlay textarea:hover {
+	background-color:rgba(255, 255, 200, 0.7);
+	-webkit-transition: background-color 500ms linear;
+	-moz-transition: background-color 500ms linear;
+	-o-transition: background-color 500ms linear;
+	-ms-transition: background-color 500ms linear;
+	transition: background-color 500ms linear;
+	border-color:#444;
+}
+.overlay textarea:focus {
+	background-color:rgba(255, 255, 255, 0.9);
+	border-color: #6C280C;
+	-moz-box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
+	-webkit-box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
+	box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
+}
+.overlay h3 {
+	/*
+  cursor: move;
+	*/
+	background: url(../../img/editorv2/editorSprite.png) repeat-x scroll 0 -100px #933f17;
+	border-bottom: 1px solid #240E01;
+	border-radius: 12px 12px 0 0;
+	border-top: 1px solid #84623C;
+	color: #FFF;
+	font-size: 22px;
+	font-weight: bold;
+	height: 37px;
+	line-height: 37px;
+	padding: 0 20px;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+}
+.overlay .closeBtn {
+	background: url(../../img/editorv2/closeBtn.png) no-repeat scroll 0 0 transparent;
+	display: block;
+	height: 30px;
+	outline: medium none;
+	position: absolute;
+	right: 10px;
+	text-indent: -5000em;
+	top: 14px;
+	width: 30px;
+}
+/* MOVED FROM PAGE: SECTION 2
+  ------------------------------ */
+/* "base button" is rounded & gray with white text */
+.baseBtn {
+	background-color: #999;
+	border: 1px solid #333;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	color: #FFF;
+	cursor: pointer;
+	font-weight: bold;
+	padding: 0.2em 1em;
+	text-align: center;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	/* Remove underline in case this is applied to a link */
+
+  text-decoration: none;
+}
+.baseBtn:hover {
+	background-color: #888;
+	/* Force colorin case this is applied to a link */
+
+  color: #fff;
+}
+.blueBtn {
+	background-color: #89b9e3;
+	background-image: -moz-linear-gradient(top, #89b9e3, #3d6bbb);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #89b9e3), color-stop(1, #3d6bbb));
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#89b9e3', endColorstr='#3d6bbb');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#89b9e3', EndColorStr='#3d6bbb')";
+	border-color: #3765B7;
+	text-shadow: #89b9e3 0px 1px 0, #3765b7 0 -1px 0;
+}
+.blueBtn:hover {
+	background-color: #4c85e8;
+	background-image: -moz-linear-gradient(top, #4c85e8, #2f5493);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #4c85e8), color-stop(1, #2f5493));
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4c85e8', endColorstr='#2f5493');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#4c85e8', EndColorStr='#2f5493')";
+	text-shadow: black 0px 1px 0, #3765b7 0 -1px 0;
+}
+.btnBar {
+	height: 30px;
+}
+.btnBar .baseBtn {
+	float: right;
+	font-size: 110%;
+	margin-bottom: 5px;
+}
+/* MOVED FROM PAGE: SECTION 3
+  ------------------------------ */
+html .helpDlg {
+	top:75px;
+	right:70px;
+	z-index:1;
+}
+html .optionsDlg {
+	top:100px;
+	right:210px;
+	z-index:2;
+}
+.optionsDlg div{
+	font-size:.91em;
+}
+.optionsDlg div li{
+	padding-bottom:.82em;
+}
+.liBtn, .liBtn * {
+	cursor: pointer;
+}
+/* Reformat Dialog
+  ------------------------------ */
+.reformatDlg{
+	right: 25%;
+	top: 100px;
+	z-index: 3;
+}
+.noThanks{
+	float:right;
+	line-height: 33px;
+	margin-right:2em;
+}
+.instructions {
+	width: 28em;
+	padding:0 0 .7em;
+	color:#563324;
+}
+.instructions.small {
+	clear:both;
+	font-size:.8em;
+	display:block;
+	width: 35em;
+}
+html .reformatDlg textarea{
+	height: 15em;
+}
+/* MOVED FROM PAGE: SECTION 4
+  ------------------------------ */
+.isHidden {
+	display:none;
+}
+/* page widths
+ -------------------------------- */
+.pageWidth_letter .scalablePrintArea {
+	width: 8in; 
+	padding:0.2in;
+	min-height:10.5in;
+}
+.pageWidth_a4 .scalablePrintArea {
+	width: 19cm; 
+	padding:1cm;
+	min-height:28cm;
+}
+.pageWidth_screen .scalablePrintArea {
+	padding:20px;
+}
+/* Alternate color schemes
+ -------------------------------- */
+.reversed {
+  background-color: #000;
+  color: #FFF;
+}
+.reversed .scalablePrintArea{
+	background-color: transparent;
+}
+.reversed pre {
+  color: #e9e9e9;
+}
+.reversed .ugsChords code {
+  color: #333;
+}
+.reversed .ugsChords code em {
+  color: #F42;
+}
+.reversed .ugsChorus {
+  border-left-color: #333;
+}
+.reversed h5, .reversed h6 {
+  border-left-color: #444;
+  color: #69F;
+}
+.reversed .subNav a:hover {
+  background-color: #888;
+  color: #000;
+}
+.reversed .overlay {
+  background-color: #4E1C07;
+  /*622105;*/
+
+  box-shadow: none;
+  color: #000;
+}
+/* redundant rule to allow JS hook
+ -------------------------------- */
+/* NOTE: this should be last set of rules in this file! */
+.scalablePrintArea .ugs-diagrams-wrap canvas{}
+.scalablePrintArea .ugs-diagrams-wrap{}
+.scalablePrintArea .ugs-source-wrap{}
+

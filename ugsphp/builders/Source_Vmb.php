@@ -1,6 +1,4 @@
-<?php 
-
-include_once(Ugs::$config->ViewModelPath .'Source_Vm.php');
+<?php
 
 /**
  * View Model Builder -- Creates a "Source" View Model
@@ -8,9 +6,10 @@ include_once(Ugs::$config->ViewModelPath .'Source_Vm.php');
  */
 class Source_Vmb {
 
-	// -----------------------------------------
-	// PUBLIC METHODS
-	// -----------------------------------------
+	/**
+	 * Populates Source View Model
+	 * @return Source_Vm
+	 */
 	public function Build() {
 		$fname = FileHelper::getFilename();
 		$data = FileHelper::getFile(Config::SongDirectory . $fname);
@@ -19,7 +18,6 @@ class Source_Vmb {
 		$viewModel->PageTitle = 'Song Source for &quot;' . $fname . '&quot; ChordPro (CPM)/UkeGeeks File Format';
 		$viewModel->Body = htmlspecialchars($data);
 
-		header('X-Powered-By: ' . Config::PoweredBy);
 		return $viewModel;
 	}
 

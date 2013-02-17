@@ -1,6 +1,5 @@
-<?php 
+<?php
 
-include_once(Ugs::$config->ViewModelPath .'Song_Vm.php');
 
 /**
  * View Model Builder -- Creates a "Song" View Model
@@ -8,38 +7,28 @@ include_once(Ugs::$config->ViewModelPath .'Song_Vm.php');
  */
 class Song_Vmb {
 
-	// -----------------------------------------
-	private $fname = '';
-	private $song = null;
-
-	// -----------------------------------------
-	// PUBLIC METHODS
-	// -----------------------------------------
-	
 	/**
 	 * Parses file (using URL query param) and attempts to load View Model
-	 * @return Song_Vm 
+	 * @return Song_Vm
 	 */
 	public function Build() {
-		$this->fname = FileHelper::getFilename();
-		$data = FileHelper::getFile(Config::SongDirectory . $this->fname);
-		$this->song = SongHelper::parseSong($data);
+		$filename = FileHelper::getFilename();
+		$fileContent = FileHelper::getFile(Config::SongDirectory . $filename);
+		$song = SongHelper::parseSong($fileContent);
 
-		$title = htmlspecialchars((($this->song->isOK) ? ($this->song->title . ((strlen($this->song->subtitle) > 0) ? (' | ' . $this->song->subtitle) : '')) : 'Not Found'));
-		
+		$title = htmlspecialchars((($song->isOK) ? ($song->title . ((strlen($song->subtitle) > 0) ? (' | ' . $song->subtitle) : '')) : 'Not Found'));
+
 		$viewModel = new Song_Vm();
-		$viewModel->PageTitle = ((strlen($title) > 0) ? $title : $this->fname) . ' ' . Config::PageTitleSuffix;
-		$viewModel->SongTitle = htmlspecialchars($this->song->title);
-		$viewModel->Subtitle = htmlspecialchars($this->song->subtitle);
-		$viewModel->Artist = $this->song->artist;
-		$viewModel->Album = $this->song->album; // htmlspecialchars();
-		$viewModel->Body = $this->song->body;
-		$viewModel->UgsMeta = $this->song->meta;
-		$viewModel->SourceUri = ((Config::UseModRewrite) ? '/source/' : '/song-source.php?song=' ) . $this->fname;
+		$viewModel->PageTitle = ((strlen($title) > 0) ? $title : $filename) . ' ' . Config::PageTitleSuffix;
+		$viewModel->SongTitle = htmlspecialchars($song->title);
+		$viewModel->Subtitle = htmlspecialchars($song->subtitle);
+		$viewModel->Artist = $song->artist;
+		$viewModel->Album = $song->album; // htmlspecialchars();
+		$viewModel->Body = $song->body;
+		$viewModel->UgsMeta = $song->meta;
+		$viewModel->SourceUri = Ugs::MakeUri(Actions::Source, $filename);
+		$viewModel->EditUri = Ugs::MakeUri(Actions::Edit, $filename);
 
-		header('X-Powered-By: ' . Config::PoweredBy);
 		return $viewModel;
 	}
-	
 }
-

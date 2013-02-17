@@ -1,0 +1,21 @@
+@media print{
+	body {
+		background-color: #fff;
+		padding: 1px 0 0 0;
+	}
+	.scalablePrintArea {
+		background-color: transparent;
+		border: none;
+		box-shadow: none;
+		padding:0; 
+		width:100%;
+		min-height:auto;
+	}
+	.ugsAppMenuBar {
+		display: none; 
+	}
+	.isHidden,
+	.overlay {
+		display: none; 
+	}
+}

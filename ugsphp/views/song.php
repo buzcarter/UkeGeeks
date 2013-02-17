@@ -1,16 +1,9 @@
-<?php
-
-include_once('ugsphp/Ugs.php');
-
-$builder = Ugs::GetBuilder(Actions::Song);
-$model = $builder->Build();
-
-?>
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <title><?php echo($model->PageTitle); ?> </title>
+<meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
 <script type="text/javascript">var isLegacyIe = false;</script>
 <!--[if lt IE 9]>
 <script type="text/javascript">
@@ -24,13 +17,20 @@ document.getElementsByTagName('html')[0].className = 'ie';
 <link rel="stylesheet" type="text/css" href="/css/basic-page-layout.css" media="all" />
 <link rel="stylesheet" type="text/css" href="/css/ukeGeeks.music.css" media="all" />
 <link rel="stylesheet" href="/css/ukeGeeks.musicPrint.css" media="print" />
-<meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
+<style>
+header aside a{
+	padding-left: 1em;
+}
+</style>
 </head>
 <body>
 <section>
 	<header>
 		<hgroup>
-			<aside><a href="<?php echo($model->SourceUri); ?>" target="_blank" title="view original song text">Source</a></aside>
+			<aside>
+				<a href="<?php echo($model->EditUri); ?>" title="switch to Edit/Customize view (great for Print!)">Customize</a>
+				<a href="<?php echo($model->SourceUri); ?>" target="_blank" title="view original song text">Source</a>
+			</aside>
 			<h1 class="ugsSongTitle"><?php echo($model->SongTitle); ?></h1>
 			<?php if (strlen($model->Artist) > 0): ?>
 				<h2 class="ugsArtist"><?php echo($model->Artist); ?></h2>
@@ -41,7 +41,7 @@ document.getElementsByTagName('html')[0].className = 'ie';
 			<?php endif; ?>
 		</hgroup>
 	</header>
-		<?php 
+		<?php
 		if ($model->UgsMeta){
 			echo('<div class="metaInfo">');
 			foreach($model->UgsMeta as $meta){

@@ -102,7 +102,7 @@ class SongHelper {
 	 */
 	private static function _matchRegEx($text, $patternIndex, $regEx){
 		preg_match_all($regEx, $text, $matches);
-		return (count($matches[$patternIndex]) < 1) ? '' : $matches[$patternIndex][0];
+		return trim((count($matches[$patternIndex]) < 1) ? '' : $matches[$patternIndex][0]);
 	}
 
 
