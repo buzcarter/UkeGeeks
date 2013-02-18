@@ -23,8 +23,8 @@ body {
 	border-right:solid 1px #888;
 	font-size: inherit;
 	box-shadow: 3px 0 9px rgba(0, 0, 0, 0.4);
-	/* 11.5in; 
-	width: 8in; 
+	/* 11.5in;
+	width: 8in;
 	padding:0.2in;
 	min-height:10.5in;
 	*/
@@ -43,14 +43,14 @@ body {
 	right: 1em;
 	text-shadow: 1px 1px #332222;
 }
- 
+
 /* STANDARD appearance HTML for Help Section
  -------------------------------- */
 .helpDlg{
 	font-size:.9em;
 }
 .normalHtml p,
-.normalHtml ul, 
+.normalHtml ul,
 .normalHtml ol {
 	margin-bottom:1em;
 }
@@ -276,7 +276,7 @@ html .diagramsOnTop .ugs-source-wrap {
 }
 /* MOVED FROM PAGE: SECTION 1
   ------------------------------ */
-/* FLOATIN EDITOR 
+/* FLOATIN EDITOR
  -------------------------------- */
 .overlay {
 	position:fixed;
@@ -302,6 +302,7 @@ html .diagramsOnTop .ugs-source-wrap {
 .overlay textarea {
 	background-color: rgba(255, 255, 255, 0.7);
 	border: solid 1px #E1B166;
+	font-family: Monaco, "Consolas", "Lucida Console", "Courier New", courier, monospace;
 	line-height: 1.25;
 	padding-left: .3em;
 	white-space: nowrap;
@@ -458,12 +459,12 @@ html .reformatDlg textarea{
 /* page widths
  -------------------------------- */
 .pageWidth_letter .scalablePrintArea {
-	width: 8in; 
+	width: 8in;
 	padding:0.2in;
 	min-height:10.5in;
 }
 .pageWidth_a4 .scalablePrintArea {
-	width: 19cm; 
+	width: 19cm;
 	padding:1cm;
 	min-height:28cm;
 }
