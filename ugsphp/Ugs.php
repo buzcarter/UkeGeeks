@@ -15,7 +15,7 @@ class Ugs{
 		$this->Bootstrap();
 
 		// Reads query param to pick appropriate Actions
-		$action = isset($_GET['action']) ? Actions::ToEnum($_GET['action']) : Actions::SongList;
+		$action = isset( $_GET['action'] ) ? Actions::ToEnum( $_GET['action'] ) : Actions::Songbook;
 
 		$user = $this->DoAuthenticate( $action );
 		if ( !$user->IsAllowAccess  ) {
@@ -95,12 +95,12 @@ class Ugs{
 			}
 
 			// successful login we redirect:
-			header('Location: ' . self::MakeUri(Actions::SongList));
+			header( 'Location: ' . self::MakeUri( Actions::Songbook ) );
 			return  $user;
 		}
 		elseif ($action == Actions::Login){
 			// if for some reason visitor is already logged in but attempting to view the Login page, redirect:
-			header('Location: ' . self::MakeUri(Actions::SongList));
+			header( 'Location: ' . self::MakeUri( Actions::Songbook ) );
 			return $user;
 		}
 
@@ -194,7 +194,7 @@ class Ugs{
 			return '/music.php?action=' . $actionName . $actionParams;
 		}
 
-		if (($action == Actions::Song) || ($action == Actions::SongList)) {
+		if ($action == Actions::Song ) {
 			$actionName = 'songbook';
 		}
 		return '/' . strtolower($actionName) . '/' . $param;

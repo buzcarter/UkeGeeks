@@ -6,7 +6,7 @@
  */
 final class Actions {
 	const Song = 0;
-	const SongList = 1;
+	const Songbook = 1;
 	const Source = 2;
 	const Reindex = 3;
 	const Login = 4;
@@ -32,7 +32,7 @@ final class Actions {
 		 	case 'ajaxnewsong': return self::AjaxNewSong;
 		 	case 'ajaxupdatesong': return self::AjaxUpdateSong;
 		 }
-		 return self::SongList;
+		 return self::Songbook;
 	}
 
 	/**
@@ -51,6 +51,6 @@ final class Actions {
 			case self::AjaxNewSong: return 'AjaxNewSong';
 			case self::AjaxUpdateSong: return 'AjaxUpdateSong';
 		}
-		return 'SongList';
+		return 'Songbook';
 	}
 }
