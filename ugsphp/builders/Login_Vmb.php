@@ -4,7 +4,7 @@
  * View Model Builder -- Creates a "Login" View Model
  * @class Login_Vmb
  */
-class Login_Vmb {
+class Login_Vmb extends _base_Vmb {
 
 	/**
 	 * Populates Login View Model

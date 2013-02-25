@@ -4,7 +4,7 @@
  * 
  * @class RebuildSongCache_Vmb
  */
-class RebuildSongCache_Vmb {
+class RebuildSongCache_Vmb extends _base_Vmb {
 
 	// -----------------------------------------
 	// PUBLIC METHODS

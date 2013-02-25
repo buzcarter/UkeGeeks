@@ -5,7 +5,7 @@
  * View Model Builder -- Creates a "Song" View Model
  * @class Song_Vmb
  */
-class Song_Vmb {
+class Song_Vmb extends _base_Vmb {
 
 	/**
 	 * Parses file (using URL query param) and attempts to load View Model
@@ -28,6 +28,9 @@ class Song_Vmb {
 		$viewModel->UgsMeta = $song->meta;
 		$viewModel->SourceUri = Ugs::MakeUri(Actions::Source, $filename);
 		$viewModel->EditUri = Ugs::MakeUri(Actions::Edit, $filename);
+
+		$viewModel->Id = $filename;
+		$viewModel->IsUpdateAllowed = $this->SiteUser->MayEdit && $this->SiteUser->IsAuthenticated;
 
 		return $viewModel;
 	}

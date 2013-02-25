@@ -78,41 +78,39 @@ a {
 
 /* login page's form
  ------------------------------------------- */
-.loginPage .contentWrap{
+.loginPage .overlay{
+	top:100px;
+	right:40%;
+	width: 17em;
+}
+.loginPage input[type=text],
+.loginPage input[type=password]{
+	width: 97%;
+}
+.loginPage .btnBar{
+	padding: .5em 0;
+}
+.loginPage .baseBtn{
+	font-size: 1.2em;
+}
+.loginPage .hint{
+	font-size: .9em;
+	color: #6B4900;
 	text-align: center;
 }
-.loginPage form {
-	background-color: #fff;
-	border: solid 1px #444;
-	border-radius: 5px;
-	font-size: .9em;
-	margin: 20px auto;
-	padding: 15px;
-	text-align: left;
-	box-shadow: 1px 12px 12px rgba(0, 0, 0, 0.3);
-	width:20em;
+.loginPage .help {
+	color: #6B4900;
+	font-size: 86%;
 }
-.loginPage form li{
-	margin-bottom: .5em;
-}
-.loginPage form label{
-	display: inline-block;
-	width: 6em;
-	text-align: right;;
-}
+
 .errorMessage {
-	background-color: #FFE2EE;
-	border: 1px solid #FF96FF;
-	border-radius: 4px;
-	color: #702686;
+	background-color: #F9C95A;
+	border: 3px solid #F7AD00;
+	border-radius: 4px 4px 4px 4px;
+	color: #4F3E14;
 	margin-bottom: 0.8em;
 	padding: 0.3em 0.5em;
  }
-.hint{
-	font-size: .9em;
-	color: #999;
-	text-align: center;
-}
-.help {
-	font-size: 86%;
+.errorMessage em{
+	font-size:.8em;
 }

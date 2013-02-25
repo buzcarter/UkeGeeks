@@ -3,17 +3,13 @@
 class SimpleLogin{
 	const SessionKey = 'user';
 
-	public $IsLoggedIn = false;
-	public $UserInfo = null;
+	private $_user = null;
 
 	// ----------------------------------------------------------------------
 	//  Public Methods
 	// ----------------------------------------------------------------------
 
-	/**
-	 * constructor
-	 */
-	function SimpleLogin() {
+	function __construct() {
 		$this->StartSession();
 		$this->Set($this->GetSession());
 	}
@@ -26,7 +22,7 @@ class SimpleLogin{
 		$username = strtolower(trim($username));
 		$password = trim($password);
 		$this->Set($this->ValidateUser($username, $password));
-		return $this->IsLoggedIn ? 'Success!' : 'invalid username/password';
+		return $this->_user->IsAllowAccess ? 'Success!' : 'invalid username/password';
 	}
 
 	/**
@@ -37,38 +33,44 @@ class SimpleLogin{
 		$this->UnsetSession();
 	}
 
+	public function GetUser(){
+		return ($this->_user == null) ? new SiteUser(): $this->_user;
+	}
+
 	// ----------------------------------------------------------------------
 	//  Helper Methods (wraps working with with member variables & misc)
 	// ----------------------------------------------------------------------
 
 	/**
 	 * sets class members and session info
-	 * @param [userObject] $userInfo
+	 * @param [SiteUser] $siteUser
 	 */
-	private function Set($userInfo){
-		$this->UserInfo = $userInfo;
-		$this->IsLoggedIn = $userInfo != null;
-		$this->SetSession($userInfo);
+	private function Set($siteUser){
+		$this->_user = ($siteUser == null) ? new SiteUser(): $siteUser;
+		$this->SetSession($siteUser);
 	}
 
 	/**
 	 * Returns info about user if found, null otherwise
 	 * @param [string] $username [description]
 	 * @param [string] $password [description]
+	 * @return SiteUser [description]
 	 */
 	private function ValidateUser($username, $password){
-		$userInfo = null;
+		$siteUser = new SiteUser();
 		foreach(Config::$Accounts as $account) {
 			if (($username == strtolower($account['user'])) && ($password == $account['pass'])) {
 				if ($account['isActive']) {
-					$userInfo = (object) array(
-						'name'=>$account['user']
-					);
+					$siteUser->Username = $account['user'];
+					$siteUser->MayEdit  = $account['mayEdit'];
+					$siteUser->DisplayName = $account['name'];
+					$siteUser->IsAllowAccess = true;
+					$siteUser->IsAuthenticated = true;
 				}
 				break;
 			}
 		}
-		return $userInfo;
+		return $siteUser;
 	}
 
 	// ----------------------------------------------------------------------
@@ -85,10 +87,10 @@ class SimpleLogin{
 
 	/**
 	 * Sets session info for current User.
-	 * @param [object] $userInfo
+	 * @param [SiteUser] $siteUser
 	 */
-	private function SetSession($userInfo){
-		$_SESSION[self::SessionKey] = $userInfo;
+	private function SetSession($siteUser){
+		$_SESSION[self::SessionKey] = $siteUser;
 	}
 
 	/**

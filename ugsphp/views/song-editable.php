@@ -3,6 +3,9 @@
 function GetDisplayStyle($value){
 	return (strlen($value) > 0) ? 'block' : 'none';
 }
+
+$editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
+
 ?>
 <!DOCTYPE HTML>
 <html lang="en">
@@ -23,7 +26,7 @@ function GetDisplayStyle($value){
 <link rel="stylesheet" href="/css/editorv2/ugsEditorPlus.css" title="ugsEditorCss" />
 <link rel="stylesheet" href="/css/editorv2/ugsEditorPlus.print.css" media="print" />
 </head>
-<body class="pageWidth_screen">
+<body class="editableSongPage pageWidth_screen">
 <section id="scalablePrintArea" class="scalablePrintArea">
 	<header>
 		<hgroup>
@@ -44,12 +47,21 @@ function GetDisplayStyle($value){
 		<p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by <a href="http://ukegeeks.com/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.com</small></p>
 	</footer>
 </section>
-<section id="songSourceDlg" class="overlay isHidden">
+<section id="songSourceDlg" class="overlay <?php echo($editDlgCssClassName); ?>">
 	<hgroup>
 		<h3>Song Source</h3>
 	</hgroup>
 	<div> <a title="close this" href="#close" id="hideSourceBtn" class="closeBtn">Close</a>
-		<p class="btnBar"><input type="button" id="updateBtn" class="baseBtn blueBtn" value="Update" title="Rebuild digarams and music" /></p>
+		<p class="btnBar">
+			<span id="sourceFeedback"></span>
+			<input type="button" id="updateBtn" class="baseBtn blueBtn" value="Update" title="Rebuild digarams and music" />
+			<?php if ($model->IsUpdateAllowed) {
+				?>
+				<input type="button" id="saveBtn" class="baseBtn orange" value="Save" title="Save" style="margin-right:1.6em;" />
+				<?php
+			}
+			?>
+		</p>
 		<textarea id="chordProSource" wrap="off"><?php echo($model->Body); ?></textarea>
 	</div>
 </section>
@@ -83,8 +95,8 @@ function GetDisplayStyle($value){
 		</li>
 		<li class="navLayout"> <a href="#layout" title="Choose where big chord diagrams appear"><span></span>Layout</a>
 			<ul class="subMenu">
-				<li><a href="#top" title="Diagrams at top">Top</a></a></li>
-				<li class="checked"><a href="#left" title="Diagrams on left side">Left</a></a></li>
+				<li><a href="#top" title="Diagrams at top">Top</a></li>
+				<li class="checked"><a href="#left" title="Diagrams on left side">Left</a></li>
 				<li><a href="#none" title="Don't show any chord diagrams">None</a></li>
 			</ul>
 		</li>
@@ -165,5 +177,15 @@ else{
 	window.onload = ugsEditorPlus.attach;
 }
 </script>
+<?php if ($model->IsUpdateAllowed) {
+	?>
+	<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="/js/ugsEditorPlus.updateSong.js"></script>
+	<script type="text/javascript">
+	ugsEditorPlus.updateSong.init("<?php echo($model->UpdateAjaxUri); ?>", "<?php echo($model->Id); ?>");
+	</script>
+	<?php
+	}
+?>
 </body>
 </html>

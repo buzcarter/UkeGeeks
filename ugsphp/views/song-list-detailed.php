@@ -36,10 +36,26 @@ function MakeRowHtml($song){
 	<meta charset="utf-8" />
 	<title>List All Songs</title>
 	<meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
+	<link rel="stylesheet" href="/css/editorv2/ugsEditorPlus.css" />
 	<link rel="stylesheet" href="/css/ugsphp.css" />
 </head>
 <body class="songListPage">
-<div class="contentWrap">
+	<section class="contentWrap">
+
+		<?php if ($model->SiteUser->IsAuthenticated) { ?>
+			<aside style="float:right;">
+				<em style="font-size:.8em; padding-right:1.5em; color:#BCB59C;">Howdy, <?php echo($model->SiteUser->DisplayName); ?>!
+					(<a href="<?php echo($model->LogoutUri); ?>">Logout</a>)
+				</em>
+
+				<?php if ($model->IsNewAllowed) {
+					?>
+					<input type="button" id="openNewDlgBtn" class="baseBtn blueBtn" value="New Song" title="Start editing a new song" />
+					<?php
+				}
+				?>
+			</aside>
+		<?php } ?>
 	<h2>Sample Styled Songbook &raquo;</h2>
 	<h1>The BIG UKE Book</h1>
 	<p><? echo(count($model->SongList)); ?> Songs</p>
@@ -50,6 +66,29 @@ function MakeRowHtml($song){
 		}
 		?>
 	</ol>
+	</section>
+	<?php if ($model->IsNewAllowed) {
+		?>
+		<section class="overlay" style="top:100px; right:40%; display:none;" id="newSongForm">
+			<hgroup>
+				<h3>Add Song</h3>
+			</hgroup>
+			<div><a title="close this" href="#close" id="hideNewSongBtn" class="closeBtn">Close</a>
+				<p class="errorMessage" style="display:none;"></p>
+				<label for="songTitle">Title</label>
+				<input type="text" name="songTitle" id="songTitle" value="" />
+				<label for="songArtist">Artist</label>
+				<input type="text" name="songArtist" id="songArtist" value="" />
+				<input type="button" id="newSongBtn" class="baseBtn blueBtn" value="Continue" title="Save &amp; continue editing" />
 </div>
+		</section>
+		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="/js/ugsEditorPlus.newSong.js"></script>
+		<script type="text/javascript">
+		ugsEditorPlus.newSong.init("<?php echo($model->EditAjaxUri); ?>");
+		</script>
+		<?php
+	}
+	?>
 </body>
 </html>

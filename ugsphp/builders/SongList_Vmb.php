@@ -4,7 +4,7 @@
  * View Model Builder -- Creates a "Song List" View Model
  * @class SongList_Vmb
  */
-class SongList_Vmb {
+class SongList_Vmb extends _base_Vmb {
 
 	/**
 	 * Populates SongList View Model by reading and parsing filenames in the source directory

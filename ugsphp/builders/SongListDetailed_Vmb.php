@@ -3,16 +3,17 @@
  * View Model Builder --
  * @class SongListDetailed_Vmb
  */
-class SongListDetailed_Vmb {
+class SongListDetailed_Vmb extends _base_Vmb {
 
 	/**
 	 * Populates SongList View Model using Cache Manager
 	 */
 	public function Build() {
-		$view = new SongList_Vm();
+		$viewModel = new SongList_Vm();
+		$viewModel->IsNewAllowed = $this->SiteUser->MayEdit && $this->SiteUser->IsAuthenticated;
 		$cache = new SongListCacheManager();
-		$view->SongList = $cache->Get();
-		return $view;
+		$viewModel->SongList = $cache->Get();
+		return $viewModel;
 	}
 
 }

@@ -1,7 +1,32 @@
 <?php 
 
+/**
+* wraps list of songs for both basic and "detailed" views
+*/
 class SongList_Vm extends _base_Vm {
 	public $SongList = array();
+
+	/**
+	 * URL where "New Song" AJAX is sent.
+	 * -- Only used if Editing is enabled and user has permission.
+	 * @var string
+	 */
+	public $EditAjaxUri = '';
+
+	/**
+	 * If TRUE View may show edit form
+	 * -- Only used if Editing is enabled and user has permission.
+	 * @var boolean
+	 */
+	public $IsNewAllowed = false;
+
+	public $LogoutUri = '';
+
+	function __construct()
+	{
+		$this->EditAjaxUri = Ugs::MakeUri( Actions::AjaxNewSong);
+		$this->LogoutUri = Ugs::MakeUri( Actions::Logout);
+	}
 
 	/**
 	 * Sorts songs based on title

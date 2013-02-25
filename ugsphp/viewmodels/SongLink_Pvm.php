@@ -4,7 +4,7 @@ class SongLink_Pvm {
 	public $Title = '';
 	public $Uri = '';
 
-	function SongLink_Pvm($title, $uri){
+	function __construct($title, $uri){
 		$this->Title = $title;
 		$this->Uri = $uri;
 	}

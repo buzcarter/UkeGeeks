@@ -21,6 +21,8 @@ class SongListCacheManager {
 	 * @return array song list
 	 */
 	public function Rebuild() {
+		// large song collections (1,000's of songs) might timeout, set max number of seconds for this task
+		set_time_limit(45);
 		$files = FileHelper::getFilenames(Config::$SongDirectory);
 		$songList = $this->buildFileList($files);
 

@@ -45,14 +45,25 @@ class Config {
 	// --------------------------------------
 	public static $Accounts = array(
 		array(
+			'user' => 'admin',
+			'pass' => '12345',
+			'name' => 'Almighty Admin',
+			'isActive' => true,
+			'mayEdit' => false
+		),
+		array(
 			'user' => 'guest',
 			'pass' => '12345',
-			'isActive' => true
+			'name' => 'Honored Guest',
+			'isActive' => true,
+			'mayEdit' => false
 		),
 		array(
 			'user' => 'jake',
 			'pass' => 'ukulelecake',
-			'isActive' => false
+			'name' => 'Jake S.',
+			'isActive' => false,
+			'mayEdit' => true
 		)
 	);
 

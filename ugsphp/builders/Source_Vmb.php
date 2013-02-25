@@ -4,7 +4,7 @@
  * View Model Builder -- Creates a "Source" View Model
  * @class Source_Vmb
  */
-class Source_Vmb {
+class Source_Vmb extends _base_Vmb {
 
 	/**
 	 * Populates Source View Model

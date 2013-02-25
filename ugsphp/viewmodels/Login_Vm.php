@@ -5,7 +5,7 @@ class Login_Vm extends _base_Vm {
 	public $Username = '';
 	public $FormPostUri = '';
 
-	function Login_Vm(){
+	function __construct(){
 		$this->FormPostUri = Ugs::MakeUri(Actions::Login);
 	}
 }

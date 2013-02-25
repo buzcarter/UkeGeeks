@@ -1,5 +1,8 @@
 <?php
 // requires View Model "Login_Vm"
+//
+$errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
+
 ?>
 <!DOCTYPE HTML>
 <html lang="en">
@@ -7,14 +10,19 @@
 	<meta charset="utf-8" />
 	<title><?php echo($model->PageTitle); ?></title>
 	<meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
+	<link rel="stylesheet" href="/css/editorv2/ugsEditorPlus.css" />
 	<link rel="stylesheet" href="/css/ugsphp.css" />
 </head>
 <body class="loginPage">
-<div class="contentWrap">
+<section class="contentWrap">
+</section>
+<section class="overlay">
+	<hgroup>
+		<h3>Login</h3>
+	</hgroup>
+	<div>
 	<form method="post" action="<?php echo($model->FormPostUri); ?>" id="loginForm">
-		<?php if (strlen($model->ErrorMessage)>0): ?>
-			<p class="errorMessage"><?php echo($model->ErrorMessage); ?></p>
-		<?php endif; ?>
+		<p class="errorMessage" id="loginErrorMessage" style="display: <?php echo($errCssstyle); ?>"><?php echo($model->ErrorMessage); ?></p>
 		<ul>
 			<li>
 				<label for="username">Username:</label>
@@ -25,13 +33,14 @@
 				<input type="password" name="password" id="password" size="20" />
 				<p class="hint">yo! this is cAsEsenSiTIvE.</p>
 			</li>
-			<li class="btn">
-				<input type="submit" value="Login" name="loginBtn" />
+			<li class="btnBar">
+				<input type="submit" value="Login" name="loginBtn" class="baseBtn blueBtn" />
 			</li>
 		</ul>
 		<p class="help">Problems or you need access? <a href="mailto:<?php echo($model->SupportEmail); ?>?subject=I humbly beseech thee, songbook access, please...">Drop a line.</a></p>
 	</form>
 </div>
+</section>
 <script type="text/javascript">
 ugsLogin = new function(){
 
@@ -52,10 +61,12 @@ ugsLogin = new function(){
 
 	var doSubmit = function(){
 		var ok = (document.getElementById('username').value.length > 3) && (document.getElementById('password').value.length > 3);
+		var err = document.getElementById('loginErrorMessage');
 		if (!ok){
-			alert('Check your username & password');
+			err.innerHTML = 'Check your username & password';
 			readyForm();
 		}
+		err.style.display = ok ? 'none' : 'block';
 		return ok;
 	};
 };
