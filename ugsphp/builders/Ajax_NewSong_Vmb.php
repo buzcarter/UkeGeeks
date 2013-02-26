@@ -13,9 +13,8 @@ class Ajax_NewSong_Vmb extends _base_Vmb{
 			return $viewModel;
 		}
 
-		$title = Ugs::GetParam('songTitle');
-		$artist = Ugs::GetParam('songArtist');
-		if ($this->CreateSongFile($title, $artist, $viewModel)){
+		$json = Ugs::GetJsonObject();
+		if ($this->CreateSongFile($json->songTitle, $json->songArtist, $viewModel)){
 			$cache = new SongListCacheManager();
 			$cache->Rebuild();
 		}

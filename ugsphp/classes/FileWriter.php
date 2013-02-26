@@ -102,7 +102,7 @@ class FileWriter {
 		$content .= '{artist: ' . ( strlen( $artist ) > 0 ? $artist : 'traditional' ) . "}\n";
 
 		return $content .
-			'
+'
 TYPE_YOUR_SONG_HERE
 ';
 	}

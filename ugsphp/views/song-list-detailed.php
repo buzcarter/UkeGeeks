@@ -15,11 +15,11 @@ function MakeRowHtml($song){
 	}
 
 	if (strlen($song->Subtitle) > 0){
-		$html .= '<p><em class="songSubtitle">' . $song->Subtitle . '</em><p>';
+		$html .= '<p><em class="songSubtitle">' . $song->Subtitle . '</em></p>';
 	}
 
 	if (strlen($song->Album) > 0){
-		$html .= '<p><em class="songAlbum">' . $song->Album . '</em><p>';
+		$html .= '<p><em class="songAlbum">' . $song->Album . '</em></p>';
 	}
 
 

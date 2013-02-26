@@ -200,14 +200,15 @@ class Ugs{
 		return '/' . strtolower($actionName) . '/' . $param;
 	}
 
+	/**
+	 * The rather quirky way to interface with jQuery.ajax with serialize,
+	 * returns a PHP Object version of the posted JSON.
+	 * @return Object
+	 */
 	public function GetJsonObject(){
 		$input = @file_get_contents('php://input');
 		$response = json_decode($input);
 		return $response;
-	}
-
-	public static function GetParam($name){
-		return  trim(isset($_POST[$name]) ? $_POST[$name] : '');
 	}
 
 	/**

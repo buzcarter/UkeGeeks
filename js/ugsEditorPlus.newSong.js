@@ -41,7 +41,7 @@ ugsEditorPlus.newSong = (function() {
 				url: _ajaxUri,
 				type: "POST",
 				dataType: 'json',
-				data: data,
+				data: JSON.stringify(data),
 				success: function(data) {
 					doAjaxOk(data);
 				}

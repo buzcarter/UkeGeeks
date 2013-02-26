@@ -49,7 +49,7 @@ class Config {
 			'pass' => '12345',
 			'name' => 'Almighty Admin',
 			'isActive' => true,
-			'mayEdit' => false
+			'mayEdit' => true
 		),
 		array(
 			'user' => 'guest',
