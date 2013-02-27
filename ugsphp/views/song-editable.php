@@ -53,6 +53,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 	</hgroup>
 	<div> <a title="close this" href="#close" id="hideSourceBtn" class="closeBtn">Close</a>
 		<p class="btnBar">
+			<span id="loadingSpinner"><img src="/img/ugs/busy.gif" /></span>
 			<span id="sourceFeedback"></span>
 			<input type="button" id="updateBtn" class="baseBtn blueBtn" value="Update" title="Rebuild digarams and music" />
 			<?php if ($model->IsUpdateAllowed) {

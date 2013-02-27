@@ -2,6 +2,11 @@ var ugsEditorPlus = window.ugsEditorPlus || {};
 
 ugsEditorPlus.newSong = (function() {
 	var _ajaxUri = '';
+	/**
+	 * lock-down the Submit (Update) button to avoid double posts;
+	 * @type {Boolean}
+	 */
+	var _isUpdating = false;
 
 	this.init = function(ajaxUri) {
 		_ajaxUri = ajaxUri;
@@ -20,6 +25,18 @@ ugsEditorPlus.newSong = (function() {
 		$('#hideNewSongBtn').click(function(e) {
 			$('#newSongForm').fadeOut();
 		});
+
+		$spinner = $( "#loadingSpinner" );
+		$spinner.hide();
+		$(document)
+			.ajaxStart(function() {
+				$spinner.show();
+				_isUpdating = true;
+			})
+			.ajaxStop(function() {
+				$spinner.hide();
+				_isUpdating = false;
+			});
 	};
 
 	var doAjaxOk = function(data) {
@@ -31,6 +48,10 @@ ugsEditorPlus.newSong = (function() {
 		};
 
 	var doPost = function() {
+			if (_isUpdating){
+				return;
+			}
+
 			var data = {
 				'handler': 'ugs_new',
 				'songTitle': $('#songTitle').val(),
@@ -49,11 +70,13 @@ ugsEditorPlus.newSong = (function() {
 		};
 
 	var doValidate = function() {
-			var title = $('#songTitle').val();
-			var ok = title.length > 0;
-			showErrors(!ok, 'Song\'s title is required<br/><em>(you may change it later)</em>');
-			return ok;
-		};
+		var $title = $('#songTitle');
+		var title = $title.val().trim();
+		$title.val(title);
+		var ok = title.length > 2;
+		showErrors(!ok, 'Song\'s title is required<br/><em>(you may change it later, must be at least 2 characters)</em>');
+		return ok;
+	};
 
 	var showErrors = function(hasErrors, message) {
 			var $err = $('#newSongForm .errorMessage');

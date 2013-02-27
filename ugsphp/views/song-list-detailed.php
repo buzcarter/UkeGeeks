@@ -41,13 +41,11 @@ function MakeRowHtml($song){
 </head>
 <body class="songListPage">
 	<section class="contentWrap">
-
 		<?php if ($model->SiteUser->IsAuthenticated) { ?>
 			<aside style="float:right;">
 				<em style="font-size:.8em; padding-right:1.5em; color:#BCB59C;">Howdy, <?php echo($model->SiteUser->DisplayName); ?>!
 					(<a href="<?php echo($model->LogoutUri); ?>">Logout</a>)
 				</em>
-
 				<?php if ($model->IsNewAllowed) {
 					?>
 					<input type="button" id="openNewDlgBtn" class="baseBtn blueBtn" value="New Song" title="Start editing a new song" />
@@ -74,13 +72,14 @@ function MakeRowHtml($song){
 				<h3>Add Song</h3>
 			</hgroup>
 			<div><a title="close this" href="#close" id="hideNewSongBtn" class="closeBtn">Close</a>
+				<p id="loadingSpinner"><img src="/img/ugs/busy.gif" /> Saving&hellip;</p>
 				<p class="errorMessage" style="display:none;"></p>
 				<label for="songTitle">Title</label>
 				<input type="text" name="songTitle" id="songTitle" value="" />
 				<label for="songArtist">Artist</label>
 				<input type="text" name="songArtist" id="songArtist" value="" />
 				<input type="button" id="newSongBtn" class="baseBtn blueBtn" value="Continue" title="Save &amp; continue editing" />
-</div>
+			</div>
 		</section>
 		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/js/ugsEditorPlus.newSong.js"></script>
