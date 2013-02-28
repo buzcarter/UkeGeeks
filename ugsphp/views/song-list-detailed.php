@@ -38,6 +38,7 @@ function MakeRowHtml($song){
 	<meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
 	<link rel="stylesheet" href="/css/editorv2/ugsEditorPlus.css" />
 	<link rel="stylesheet" href="/css/ugsphp.css" />
+	<link rel="stylesheet" href="/css/ugsEditorPlus.typeahead.css" />
 </head>
 <body class="songListPage">
 	<section class="contentWrap">
@@ -56,7 +57,8 @@ function MakeRowHtml($song){
 		<?php } ?>
 	<h2>Sample Styled Songbook &raquo;</h2>
 	<h1>The BIG UKE Book</h1>
-	<p><? echo(count($model->SongList)); ?> Songs</p>
+	<p><? echo(count($model->SongList)); ?> Songs.
+		<label for="quickSearch">Quick search:</label> <input class="quickSearch" id="quickSearch" autocomplete="off" type="text" /></p>
 	<ol class="songList">
 		<?php
 		foreach($model->SongList as $song){
@@ -89,5 +91,11 @@ function MakeRowHtml($song){
 		<?php
 	}
 	?>
+<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-typeahead.js"></script>
+<script type="text/javascript" src="/js/ugsEditorPlus.typeahead.js"></script>
+<script type="text/javascript">
+var qkSrch = ugsEditorPlus.typeahead();
+qkSrch.initialize();
+</script>
 </body>
 </html>
