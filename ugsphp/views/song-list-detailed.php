@@ -67,6 +67,7 @@ function MakeRowHtml($song){
 		?>
 	</ol>
 	</section>
+	<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 	<?php if ($model->IsNewAllowed) {
 		?>
 		<section class="overlay" style="top:100px; right:40%; display:none;" id="newSongForm">
@@ -83,7 +84,6 @@ function MakeRowHtml($song){
 				<input type="button" id="newSongBtn" class="baseBtn blueBtn" value="Continue" title="Save &amp; continue editing" />
 			</div>
 		</section>
-		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/js/ugsEditorPlus.newSong.js"></script>
 		<script type="text/javascript">
 		ugsEditorPlus.newSong.init("<?php echo($model->EditAjaxUri); ?>");
@@ -91,7 +91,8 @@ function MakeRowHtml($song){
 		<?php
 	}
 	?>
-<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-typeahead.js"></script>
+<!-- http://twitter.github.com/bootstrap/assets/js/bootstrap-typeahead.js -->
+<script type="text/javascript" src="/js/bootstrap-typeahead.min.js"></script>
 <script type="text/javascript" src="/js/ugsEditorPlus.typeahead.js"></script>
 <script type="text/javascript">
 var qkSrch = ugsEditorPlus.typeahead();
