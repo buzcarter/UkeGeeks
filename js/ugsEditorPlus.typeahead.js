@@ -1,13 +1,12 @@
+// Based on tutorial:
 // http://tatiyants.com/how-to-use-json-objects-with-twitter-bootstrap-typeahead/
-
+//
 var ugsEditorPlus = window.ugsEditorPlus || {};
 
 ugsEditorPlus.typeahead = function(){
 
 	// private
 	// ---------------------------
-	var _selectedValue = '';
-
 	var _keysList = [];
 	var _keysToDetailsDict = [];
 
@@ -50,7 +49,7 @@ ugsEditorPlus.typeahead = function(){
 	};
 
 	var _ta_updater = function (item) {
-		_selectedValue = item;
+		document.location.href = item;
 		return item;
 	};
 
@@ -62,7 +61,9 @@ ugsEditorPlus.typeahead = function(){
 	};
 
 	var _ta_sorter = function (items) {
-		return items.sort();
+		return items.sort(function(a, b) {
+			return (_keysToDetailsDict[a].searchText > _keysToDetailsDict[b].searchText);
+		});
 	};
 
 	var _ta_highligher = function (item) {
@@ -87,15 +88,14 @@ ugsEditorPlus.typeahead = function(){
 					updater: _ta_updater,
 					matcher: _ta_matcher,
 					sorter: _ta_sorter,
-					highlighter: _ta_highligher
+					highlighter: _ta_highligher,
+					minLength: 2,
+					items: 50
 				})
 				.val('')
 				.focus();
 		},
 
-		getSelected: function(){
-			return _selectedValue;
-		}
 	};
 };
 
