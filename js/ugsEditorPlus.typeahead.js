@@ -26,8 +26,8 @@ ugsEditorPlus.typeahead = function(){
 			var plainText = $this.text().replace(/\s\s+/g, ' ').trim();
 			plainText = plainText.toLowerCase();
 
-			var key = $this.children('a').attr('href');
-			key = key.toLowerCase();
+			var href = $this.children('a').attr('href');
+			var key = href.toLowerCase();
 
 			var html = $this.children('a').html();
 			html = html.replace('<strong class="', '<span class="bigger ').replace('</strong>', '</span>');
@@ -35,7 +35,8 @@ ugsEditorPlus.typeahead = function(){
 			_keysToDetailsDict[key] = {
 				html : html,
 				searchText : plainText,
-				code : key
+				code : key,
+				href : href
 			};
 			_keysList.push(key);
 		});
@@ -49,7 +50,7 @@ ugsEditorPlus.typeahead = function(){
 	};
 
 	var _ta_updater = function (item) {
-		document.location.href = item;
+		window.location = _keysToDetailsDict[item].href;
 		return item;
 	};
 
