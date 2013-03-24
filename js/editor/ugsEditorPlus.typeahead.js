@@ -11,10 +11,11 @@ ugsEditorPlus.typeahead = function(){
 	// private
 	// ---------------------------
 	var _keysList = [];
-	var _keysToDetailsDict = [];
+	var _keysToDetailsDict = {};
 
 	var _scrubbedQuery = '';
 	var _regex;
+	var _words = [];
 
 	/**
 	 * Scrapes HTML to build our list of
@@ -36,9 +37,13 @@ ugsEditorPlus.typeahead = function(){
 			html = html.replace('<strong class="', '<span class="bigger ').replace('</strong>', '</span>');
 
 			_keysToDetailsDict[key] = {
+				// content displayed in drop down list
 				html : html,
+				// what we'll match against
 				searchText : plainText,
+				// unique key/id
 				code : key,
+				// when a selection is made this is the location we'll launch
 				href : href
 			};
 			_keysList.push(key);
@@ -47,21 +52,32 @@ ugsEditorPlus.typeahead = function(){
 	};
 
 	var _ta_source = function (query, process) {
-		_scrubbedQuery = this.query.trim().toLowerCase();
-		_regex = new RegExp( '(' + this.query + ')', 'gi' );
+		_scrubbedQuery = query.trim().toLowerCase();
+		_words = _scrubbedQuery.split(' ');
+		var regGroup = '';
+		for (var i = 0; i < _words.length; i++) {
+			_words[i] = _words[i].trim();
+			if (_words[i].length > 0){
+				regGroup += (regGroup.length > 0 ? '|' : '') + _words[i];
+			}
+		};
+		_regex = new RegExp( '(' + regGroup + ')', 'gi');
 		process(_keysList);
 	};
 
 	var _ta_updater = function (item) {
 		window.location = _keysToDetailsDict[item].href;
-		return item;
+		return _keysToDetailsDict[item].searchText;
 	};
 
 	var _ta_matcher = function (item) {
 		var detailed = _keysToDetailsDict[item];
-		if (detailed.searchText.indexOf(_scrubbedQuery) != -1) {
-			return true;
+		for (var i = 0; i < _words.length; i++) {
+			if (detailed.searchText.indexOf(_words[i]) == -1) {
+				return false;
+			}
 		}
+		return true;
 	};
 
 	var _ta_sorter = function (items) {
