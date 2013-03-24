@@ -147,10 +147,12 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		<h3>Options</h3>
 	</hgroup>
 	<div class=""> <a title="close this" href="#close" id="hideOptionsBtn" class="closeBtn">Close</a>
-	<ul>
-		<li><label for="pageWidth">Paper:</label> <select id="pageWidth"><option value="letter">US Letter (8.5 x 11 in)</option><option value="a4">A4 (21 x 29.7 cm)</option><option value="screen" selected>None/full-screen</option></select></li>
-		<li><input type="checkbox" value="hideEnclosures" id="chkEnclosures" checked="checked"> <label for="chkEnclosures">Hide chord enclosures <br /><span style="font-size:.85em; padding-left: 2.5em;">don't put [ &amp; ] brackets around chord names</span></label></li>
-	</ul>
+		<ul>
+			<li><label for="pageWidth">Paper:</label> <select id="pageWidth"><option value="letter">US Letter (8.5 x 11 in)</option><option value="a4">A4 (21 x 29.7 cm)</option><option value="screen" selected>None/full-screen</option></select></li>
+			<li><input type="checkbox" value="true" id="chkEnclosures" checked="checked"> <label for="chkEnclosures">Hide chord enclosures <br /><span style="font-size:.85em; padding-left: 2.5em;">don't put [ &amp; ] brackets around chord names</span></label></li>
+			<li><input type="checkbox" value="true" id="chkIgnoreCommon" checked="checked"> <label for="chkIgnoreCommon">Ignore common chords <br /><span style="font-size:.85em; padding-left: 2.5em;">don't create master chord diagrams for these chords:</span></label>
+				<br /><input type="text" id="commonChordList" value="" /></li>
+		</ul>
 	</div>
 </section>
 <section id="reformatDlg" class="reformatDlg overlay isHidden">

@@ -1,18 +1,24 @@
 /**
- * Draws large chord diagram grid on canvas 
+ * Draws large chord diagram grid on canvas
  * @class chordPainter
  * @namespace ukeGeeks
- * @project UkeGeeks' Scriptasaurus 
+ * @project UkeGeeks' Scriptasaurus
  */
-ukeGeeks.chordPainter = function(){};
-ukeGeeks.chordPainter.prototype = {
+ukeGeeks.chordPainter = function(){
+
+	/**
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var publics = {};
+
 	/**
 	 * ukeGeeks.canvas object handle
 	 * @property brush
 	 * @type ukeGeeks.chordBrush instance handle
 	 * @private
 	 */
-	brush: null,
+	var brush = null;
 
 	/**
 	 * keep an array of missing chords (strings)
@@ -20,72 +26,108 @@ ukeGeeks.chordPainter.prototype = {
 	 * @type array
 	 * @private
 	 */
-	errors: [],
+	var errors = [];
 
-	handles: null,
-	
+	var handles = null;
+
 	/**
 	 * Again this is a constructor replacement
 	 * @method init
-	 * @param handles {ukeGeeks.data.htmlHandles} DOM Element object 
+	 * @param htmlHandles {ukeGeeks.data.htmlHandles} DOM Element object
 	 * @return {void}
 	 */
-	init: function(handles){
-		this.brush = new ukeGeeks.chordBrush;
-		this.brush.init();
-		this.handles = handles;
-	},
-	
+	publics.init = function(htmlHandles){
+		brush = new ukeGeeks.chordBrush;
+		brush.init();
+		handles = htmlHandles;
+	};
+
+	var	ignoreMatchList = [];
+
+		/**
+		 * Checks whether speicified chord (name) is on the ignore list.
+		 * @param  {string} chord Chord name
+		 * @return {boolean}	return TRUE if "chord" is on ignore list.
+		 */
+	var ignoreChord = function(chord){
+		for (var i = 0; i < ukeGeeks.settings.commonChords.length; i++) {
+			if (chord == ukeGeeks.settings.commonChords[i]){
+				return true;
+			}
+		};
+		return false;
+	};
+
 	/**
 	 * Plots the passed in chords (array of ) by adding canvas elements inside passed DOM element.
 	 * @method show
 	 * @param chords {array<expandedChord>} Array of chord objects to be plotted
 	 * @return {void}
 	 */
-	show: function(chords){
-		this.handles.diagrams.innerHTML = '';
-		this.errors = [];
+	publics.show = function(chords){
+		handles.diagrams.innerHTML = '';
+		errors = [];
+		ignoreMatchList = [];
 		for (var i=0; i < chords.length; i++){
-			var c = ukeGeeks.definitions.get(chords[i]);
-			if (!c){
-				this.errors.push(chords[i]);
+			if (ukeGeeks.settings.ignoreCommonChords && ignoreChord(chords[i])){
+				ignoreMatchList.push(chords[i]);
 				continue;
 			}
-			this.brush.plot(this.handles.diagrams,c,ukeGeeks.settings.fretBox);
+			var c = ukeGeeks.definitions.get(chords[i]);
+			if (!c){
+				errors.push(chords[i]);
+				continue;
+			}
+			brush.plot(handles.diagrams,c,ukeGeeks.settings.fretBox);
 		}
-	},
+		// console.log(ignoreMatchList);
+	};
 
 	/**
-	 * Plots chords "inline" with the lyrics. Searches for &lt;code data-chordName=&quot;Am7&quot;&gt;&lt;/code&gt;. 
+	 * Plots chords "inline" with the lyrics. Searches for &lt;code data-chordName=&quot;Am7&quot;&gt;&lt;/code&gt;.
 	 * When found adds canvas element and draws chord named in data-chordName attribute
 	 * @method showInline
 	 * @param chords {array<expandedChord>} Array of chord objects to be plotted
 	 * @return {void}
 	 */
-	showInline: function (chords){
-		var e = this.handles.text.getElementsByTagName('code');
+	publics.showInline = function (chords){
+		var e = handles.text.getElementsByTagName('code');
 		if (e.length < 1) return;
 		for (var i=0; i < chords.length; i++){
 			var c = ukeGeeks.definitions.get(chords[i]);
 			if (!c){
 				/* TODO: error reporting if not found */
-				// this.errors.push(chords[i]);
+				// errors.push(chords[i]);
 				continue;
 			}
 			for (var j=0; j < e.length; j++){
 				if (e[j].getAttribute('data-chordName') == c.name){
-					this.brush.plot(e[j],c,ukeGeeks.settings.inlineFretBox);
+					brush.plot(e[j],c,ukeGeeks.settings.inlineFretBox);
 				}
 			}
 		}
-	},
-	
+	};
+
 	/**
 	 * returns array of unknown chords
 	 * @method getErrors
 	 * @return {array}
 	 */
-	getErrors: function(){
-		return this.errors;
-	}
+	publics.getErrors = function(){
+		return errors;
+	};
+
+	/**
+	 * List of chords excluded from the master chord diagrams
+	 * @method getIgnoredChords
+	 * @return {array} array of strings
+	 */
+	publics.getIgnoredChords = function(){
+		return ignoreMatchList;
+	};
+
+	/* return our public interface
+	 *
+	 */
+	return publics;
 }

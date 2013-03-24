@@ -31,8 +31,8 @@ class Config {
 	// Boolean Options/Settings
 	// --------------------------------------
 	const UseModRewrite = false;
-	const UseDetailedLists = false;
-	const UseEditableSong = false;
+	const UseDetailedLists = true;
+	const UseEditableSong = true;
 	const IsLoginRequired = false;
 
 	// --------------------------------------

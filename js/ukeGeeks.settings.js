@@ -1,10 +1,10 @@
 /**
- * Customize your installation. This JSON object controls appearance and 
+ * Customize your installation. This JSON object controls appearance and
  * HTML element names. It's divided into four sections: graphics, ids, layout,
- * and "options". 
- * 
+ * and "options".
+ *
  * This is a SINGLETON class.
- * 
+ *
  * @class settings
  * @namespace ukeGeeks
  * @static
@@ -15,23 +15,23 @@ ukeGeeks.settings = new function(){
 	 * @property fonts
 	 * @type JSON Object
 	 */
-	this.fonts = { 
-		dot: '9pt Arial Black,Arial', 
-		text: 'bold 14pt Arial', 
-		fret: 'bold 13pt Arial' 
+	this.fonts = {
+		dot: '9pt Arial Black,Arial',
+		text: 'bold 14pt Arial',
+		fret: 'bold 13pt Arial'
 	};
 
 	/**
-	 * Chord Diagram Colors for fretboard's grid lines and text. Don't use shorthand (i.e. "#0ff") 
+	 * Chord Diagram Colors for fretboard's grid lines and text. Don't use shorthand (i.e. "#0ff")
 	 * as this might cause a problem with IE canvas.
 	 * @property colors
 	 * @type JSON Object
 	 */
 	this.colors= {
 		fretLines: '#003366',
-		dots: '#ff0000', 
-		dotText: '#ffffff', 
-		text: '#000000', 
+		dots: '#ff0000',
+		dotText: '#ffffff',
+		text: '#000000',
 		fretText: '#4a4a4a',
 		// a muted string's 'X' stroke color
 		xStroke: '#444444'
@@ -40,9 +40,9 @@ ukeGeeks.settings = new function(){
 	/* Standard Fretbox Options, these properties documented individually */
 	this.fretBox = {
 		/**
-		 * True if chord name and finger "number" are to be drawn on canvas. 
-		 * By default normal chord diagrams have text (TRUE) whereas inlineDiagrams 
-		 * (i.e. chord diagrams shown above lyrics) do NOT as they are too small 
+		 * True if chord name and finger "number" are to be drawn on canvas.
+		 * By default normal chord diagrams have text (TRUE) whereas inlineDiagrams
+		 * (i.e. chord diagrams shown above lyrics) do NOT as they are too small
 		 * (thus inlineFretbox.showText is FALSE)
 		 * @property settings.fretBox.showText
 		 * @type bool
@@ -65,7 +65,7 @@ ukeGeeks.settings = new function(){
 		 * @property settings.fretBox.fretSpace
 		 * @type int
 		 */
-		fretSpace: 20, 
+		fretSpace: 20,
 		/**
 		 * String Spacing -- horizontal distance between strings (pixels)
 		 * @property settings.fretBox.stringSpace
@@ -85,7 +85,7 @@ ukeGeeks.settings = new function(){
 		 */
 		lineWidth: 1.6,
 		/**
-		 * top-left position -- the offset for chord box. Doing this programatically 
+		 * top-left position -- the offset for chord box. Doing this programatically
 		 * had "issues", decided to make this adjustment manual.
 		 * @property settings.fretBox.topLeftPos
 		 * @type JSON
@@ -107,9 +107,9 @@ ukeGeeks.settings = new function(){
 		 */
 		xStroke: 1.6 * 1.6
 	};
-	
+
 	/**
-	 * Layout of Chord Digrams when inlineFredBoxes are being used. Identical in 
+	 * Layout of Chord Digrams when inlineFredBoxes are being used. Identical in
 	 * structure to "fretBox". See fretBox for properties.
 	 * @property layout
 	 * @type JSON Object
@@ -137,7 +137,7 @@ ukeGeeks.settings = new function(){
 	 */
 	this.ids = {
 		songText: 'ukeSongText', // element holding the song's text
-		canvas: 'ukeChordsCanvas', // canvas 
+		canvas: 'ukeChordsCanvas', // canvas
 		container: 'ukeSongContainer' // wraps BOTH Song Text and Chord Canvas
 	};
 
@@ -148,10 +148,10 @@ ukeGeeks.settings = new function(){
 	 */
 	this.wrapClasses = {
 		wrap: 'ugs-song-wrap', // wraps BOTH Song Text and Chord Canvas
-		diagrams: 'ugs-diagrams-wrap', // canvas 
+		diagrams: 'ugs-diagrams-wrap', // canvas
 		text: 'ugs-source-wrap' // element holding the song's text
 	};
-	
+
 	/**
 	 * Options (Features) you can turn on or off
 	 * @property opts
@@ -161,7 +161,7 @@ ukeGeeks.settings = new function(){
 		columnsEnabled: true,
 		retainBrackets: true
 	};
-	
+
 	/**
 	 * If TRUE the Chord Digram is drawn ABOVE lyrics
 	 * @property options.inlineDiagrams
@@ -190,10 +190,10 @@ ukeGeeks.settings = new function(){
 		lineWidth : 1, // pixels
 		lineColor: '#999999', // hex
 		labelWidth: 12, // pixels, how much room to allow for string names, eg, "G" or "A"
-		labelFont: '10pt Arial, Helvetica, Verdana, Geneva, sans-serif', 
+		labelFont: '10pt Arial, Helvetica, Verdana, Geneva, sans-serif',
 		dotColor: '#eaeaea', // hex
 		dotRadius: 10, // pixels, finger dot's radius
-		textFont: 'bold 12pt Arial, Helvetica, Verdana, Geneva, sans-serif', 
+		textFont: 'bold 12pt Arial, Helvetica, Verdana, Geneva, sans-serif',
 		textColor: '#000000',
 		bottomPadding: 10 // extra blank space added to bottom of diagram
 	};
@@ -207,6 +207,21 @@ ukeGeeks.settings = new function(){
 		 */
 		isIe : false
 	};
+
+
+	/**
+	 * List of common chords to be "ignored" (won't show master chord diagrams)
+	 * @type {Array}
+	 */
+	this.commonChords = ['A','B','C','D','E','F','G', 'Am'];
+
+	/**
+	 * if TRUE chords in the "commonChords" list will be ignored (excluded) from having thier
+	 * master chord diagram drawn
+	 * @property ignoreCommonChords
+	 * @type {Boolean}
+	 */
+	this.ignoreCommonChords = true;
 
 	/**
 	 * TODO: determine minimum value... 1?
@@ -228,9 +243,9 @@ ukeGeeks.settings = new function(){
 		}
 		return node;
 	};
-	
+
 	var sizeRe = /\b(\d+)(pt|px)\b/;
-	
+
 	/**
 	 * TODO: determine minimum font size... 5pt/px?
 	 * @method _scaleFont
@@ -247,7 +262,7 @@ ukeGeeks.settings = new function(){
 		var size = parseInt(bits[1]) * mulitplier;
 		return font.replace(sizeRe, size + bits[2]);
 	};
-	
+
 	/**
 	 * Scales the standard chord diagram's dimensions and font sizes by multiplying
 	 * all falues by passed in value. Note: this is currently a destructive change: no
@@ -260,13 +275,13 @@ ukeGeeks.settings = new function(){
 		if (mulitplier == 1.0){
 			return;
 		}
-		
+
 		for(var i in this.fonts){
 			this.fonts[i] = _scaleFont(this.fonts[i], mulitplier);
 		}
-		
+
 		// Note getting x/y scaled.
 		this.fretBox = _scaleNode(this.fretBox, mulitplier);
 	};
-	
+
 };
