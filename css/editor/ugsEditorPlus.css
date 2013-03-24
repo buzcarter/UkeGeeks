@@ -69,7 +69,7 @@ body {
 /*
  -------------------------------- */
 .ugsAppMenuBar {
-	background: #933f17 url("../../img/editorv2/editorSprite.png") 0 -100px repeat-x;
+	background: #933f17 url("../../img/editor/editorSprite.png") 0 -100px repeat-x;
 	-moz-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
 	-webkit-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
 	box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
@@ -107,13 +107,13 @@ body {
 .ugsAppMenuBar > ul > li > a:hover {
 	border-color: #600000;
 	background-color: #451212;
-	background: url("../../img/editorv2/editorSprite.png") 0 -145px repeat-x;
+	background: url("../../img/editor/editorSprite.png") 0 -145px repeat-x;
 	color: #fdda61;
 	text-shadow: none;
 }
 .ugsAppMenuBar > ul > .active > a {
 	background-color: #451212;
-	background: url("../../img/editorv2/editorSprite.png") 0 -145px repeat-x;
+	background: url("../../img/editor/editorSprite.png") 0 -145px repeat-x;
 	color: #fef5e3;
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
@@ -153,7 +153,7 @@ body {
 	color: #fff;
 }
 .subMenu .checked a {
-	background: url("../../img/editorv2/checked.png") no-repeat scroll 10px center #2a2a2a;
+	background: url("../../img/editor/checked.png") no-repeat scroll 10px center #2a2a2a;
 	color: #fff;
 }
 .noChecks .subMenu a {
@@ -180,7 +180,7 @@ body {
 /* Icons/Sprits
  -------------------------------- */
 .ugsAppMenuBar > ul > li > a span {
-	background-image: url("../../img/editorv2/editorSprite.png");
+	background-image: url("../../img/editor/editorSprite.png");
 	background-repeat: no-repeat;
 	float: left;
 	height: 25px;
@@ -296,7 +296,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	z-index:0;
 }
 .overlay div {
-	background: url(../../img/editorv2/woodChip.png) repeat scroll 0 0 transparent;
+	background: url(../../img/editor/woodChip.png) repeat scroll 0 0 transparent;
 	border-radius: 0 0 13px 13px;
 	overflow: hidden;
 	padding: 10px;
@@ -355,7 +355,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	/*
   cursor: move;
 	*/
-	background: url(../../img/editorv2/editorSprite.png) repeat-x scroll 0 -100px #933f17;
+	background: url(../../img/editor/editorSprite.png) repeat-x scroll 0 -100px #933f17;
 	border-bottom: 1px solid #240E01;
 	border-radius: 12px 12px 0 0;
 	border-top: 1px solid #84623C;
@@ -368,7 +368,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 .overlay .closeBtn {
-	background: url(../../img/editorv2/closeBtn.png) no-repeat scroll 0 0 transparent;
+	background: url(../../img/editor/closeBtn.png) no-repeat scroll 0 0 transparent;
 	display: block;
 	height: 30px;
 	outline: medium none;
