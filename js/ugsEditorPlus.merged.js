@@ -1,5 +1,5 @@
 /**
-  *
+  * This library implments the editor functions, bridging the page UI and scriptasaurus methods.
   * @module  UkeGeeksScriptasaurus Editor+
   * @namespace  ugsEditorPlus
   * @class ugsEditorPlus
@@ -388,7 +388,7 @@ ugsEditorPlus.songUi = new function(){
 		h.innerHTML = hasValue ? value : "";
 		h.style.display = hasValue ? 'block' : 'none';
 	};
-
+	
  /**
 	 * Update various HTML parts (H1 &amp; H2 etc.) using TEXT values of Song
 	 * @method updateUi
@@ -398,11 +398,11 @@ ugsEditorPlus.songUi = new function(){
 	this.update = function(song){
 		var h = document.getElementById('songTitle');
 		h.innerHTML = (song.title.length > 0) ? song.title : 'Untitled-Song';
-
+		
 		trySet('songArtist', song.artist);
 		trySet('songAlbum', song.album);
 		trySet('songSubtitle', song.st);
-
+		
 		h = document.getElementById('songMeta');
 		if (!song.ugsMeta || (song.ugsMeta.length < 1)){
 			h.style.display = 'none';
@@ -428,13 +428,13 @@ ugsEditorPlus.songUi = new function(){
 ugsEditorPlus.styles = new function(){
 	var _sheet = null;
 	this.Rules = null;
-
+	
 	this.getSheet = function(title){
 		_sheet = _getSheet(title);
 		this.Rules = getRules();
 		return this;
 	};
-
+	
 	var _getSheet = function(title){
 		for (var i = 0; i < document.styleSheets.length; i++){
 			if (document.styleSheets[i].title == title){
@@ -444,14 +444,14 @@ ugsEditorPlus.styles = new function(){
 		}
 		return null;
 	};
-
+	
 	var getRules = function(){
 		if (_sheet == null){
 			return [];
 		}
 		return _sheet.cssRules ? _sheet.cssRules : _sheet.rules;
 	};
-
+	
 	this.Find = function(selector){
 		selector = selector.toLowerCase();
 		for (var i = 0; i < this.Rules.length; i++) {
@@ -473,28 +473,37 @@ ugsEditorPlus.styles = new function(){
  * @namespace ugsEditorPlus
  */
 ugsEditorPlus.optionsDlg = new function(){
-	// borrow (a  property and method) from Actions class
+	// borrow the "run" method from Actions class
 	var run = null;
-	var _ele = null;
 
-	// DOM element handles
-	var _inputIgnoreList = null;
-	var _chkIgnore = null;
+	// DOM handles (mostly for options dialog elements only)
+	var _ele = {};
 
 	this.init = function(actionsController, elements){
 		run = actionsController.run;
-		_ele = elements;
 
-		document.getElementById('pageWidth').onchange = function(){doSetWidth(this.value); };
-		document.getElementById('chkEnclosures').onclick = function(){doSetEnclosure(!this.checked); };
+		_ele = {
+			docBody : elements.docBody,
+			inputIgnoreList : document.getElementById('commonChordList'),
+			chkIgnore : document.getElementById('chkIgnoreCommon'),
+			pageWidth : document.getElementById('pageWidth'),
+			chkEnclosures : document.getElementById('chkEnclosures')
+		};
 
-		_inputIgnoreList = document.getElementById('commonChordList');
+		restoreDefaults();
+
+		_ele.pageWidth.onchange = function(){doSetWidth(this.value); };
+		_ele.chkEnclosures.onclick = function(){doSetEnclosure(!this.checked); };
+		_ele.inputIgnoreList.onchange = function(){doSetCommon(); };
+		_ele.chkIgnore.onclick = function(){doIgnoreChkClk(this.checked); };
+	};
+
+	var restoreDefaults = function(){
 		// initialize the common list
-		_inputIgnoreList.value = ukeGeeks.settings.commonChords.join(", ");
-		_inputIgnoreList.onchange = function(){doSetCommon(); };
-
-		_chkIgnore = document.getElementById('chkIgnoreCommon');
-		_chkIgnore.onclick = function(){doIgnoreChkClk(); };
+		_ele.inputIgnoreList.value = ukeGeeks.settings.commonChords.join(", ");
+		_ele.pageWidth.value = 'letter';
+		_ele.chkIgnore.checked = ukeGeeks.settings.opts.ignoreCommonChords;
+		_ele.chkEnclosures.checked = !ukeGeeks.settings.opts.retainBrackets;
 	};
 
 	/**
@@ -525,10 +534,10 @@ ugsEditorPlus.optionsDlg = new function(){
 	/**
 	 * "Ignore Common" was checked, need to update master chord diagrams
 	 * @method doIgnoreChkClk
-	 * @return {void}
+	 * @param isIgnore {bool}
 	 */
-	var doIgnoreChkClk = function(){
-		ukeGeeks.settings.opts.ignoreCommonChords = _chkIgnore.checked;
+	var doIgnoreChkClk = function(isIgnore){
+		ukeGeeks.settings.opts.ignoreCommonChords = isIgnore;
 		run();
 	};
 
@@ -539,7 +548,7 @@ ugsEditorPlus.optionsDlg = new function(){
 	 * @return {void}
 	 */
 	var doSetCommon = function(){
-		var inputList = _inputIgnoreList.value.split(/[ ,]+/);
+		var inputList = _ele.inputIgnoreList.value.split(/[ ,]+/);
 		var chordList = [];
 		for (var i = 0; i < inputList.length; i++) {
 			var c = ukeGeeks.toolsLite.trim(inputList[i]);
@@ -550,7 +559,7 @@ ugsEditorPlus.optionsDlg = new function(){
 
 		ukeGeeks.settings.commonChords = chordList;
 
-		if (_chkIgnore.checked){
+		if (_ele.chkIgnore.checked){
 			run();
 		}
 	};
@@ -561,7 +570,7 @@ ugsEditorPlus.optionsDlg = new function(){
 ;var ugsEditorPlus = window.ugsEditorPlus || {};
 
 /**
- *
+ * 
  * @class reformat
  * @namespace ugsEditorPlus
  */
@@ -569,22 +578,22 @@ ugsEditorPlus.reformat = new function(){
 	var _this = this;
 
 	var _hasChords = false;
-
+	
 	/**
-	 *
+	 * 
 	 * @class enums
 	 */
 	var enums = {
 		lineTypes : {
-			blank : 0,
-			chords : 1,
+			blank : 0, 
+			chords : 1, 
 			lyrics : 2,
 			tabs : 3
 		}
 	}
-
+	
 	/**
-	 *
+	 * 
 	 * @class lineObj
 	 */
 	var lineObj = function(){
@@ -604,23 +613,23 @@ ugsEditorPlus.reformat = new function(){
 		chrdBlock : /\b(\S+\s*)/g,
 		tabs : /^\s*(\|{0,2}[A-Gb]?\|{0,2}[-x0-9|:]{4,})/
 	};
-
+	
 // Hal Leonard Uke Chord Finder:
 // + aug
 // o dim
 // -----------------
-// F Fm F+ Fdim
+// F Fm F+ Fdim 
 // F5 Fadd9 Fm(add9) Fsus4
 // Fsus2 F6 Fm6 Fmaj7
 // Fmaj9 Fm7 Fm(maj7) Fm7b5
 // Fm9 Fm11 F7 Fsus4
 // F+7 F7b5 F9 F7#9
-// F7b9 F11 F13 Fdim7
+// F7b9 F11 F13 Fdim7	
 
 	/**
 	 * Accepts a text block, returns "ChordPro" text block with chord lines merged into lyric lines with chords enclosed in square-brackets (i.e. [Cdim])
 	 * @method reformat
-	 * @param text {string} songstring
+	 * @param text {string} songstring 
 	 * @return {string} ChordPro format text block
 	 */
 	this.run = function(text){
@@ -628,7 +637,7 @@ ugsEditorPlus.reformat = new function(){
 		var lines = read(text);
 		return merge(lines);
 	};
-
+	
 	/**
 	 * TRUE if one or more chord lines detected
 	 * @method hasChords
@@ -637,7 +646,7 @@ ugsEditorPlus.reformat = new function(){
 	this.hasChords = function(){
 		return _hasChords;
 	};
-
+	
 	/**
 	 * Accepts a text block
 	 * @method read
@@ -666,36 +675,36 @@ ugsEditorPlus.reformat = new function(){
 		}
 		return lineAry;
 	};
-
+	
 	/**
 	 * Guesses as to the line's tyupe --
 	 * @method toLineType
-	 * @param line {line}
+	 * @param line {line} 
 	 * @return {enums.lineTypes}
 	 */
 	var toLineType = function(line){
 		if ((line.spaceCount + line.wordCount) < 1){
 			return enums.lineTypes.blank;
 		}
-
+		
 		var tabs = line.source.match(re.tabs);
 		if (tabs != null){
 			return enums.lineTypes.tabs;
 		}
-
+		
 		var t = enums.lineTypes.lyrics;
 		if ((line.chordCount > 0) && (line.wordCount == line.chordCount)){
 			t = enums.lineTypes.chords;
 			_hasChords = true;
 		}
-
+		
 		return t;
 	};
-
+	
 	/**
 	 * Looks for supported chords.
 	 * @method countChords
-	 * @param words {array of words}
+	 * @param words {array of words} 
 	 * @return [int] number found
 	 */
 	var countChords = function(words){
@@ -707,11 +716,11 @@ ugsEditorPlus.reformat = new function(){
 		}
 		return count;
 	};
-
+	
 	/**
 	 * Return merged song -- chords embedded within lyrics
 	 * @method merge
-	 * @param lines {array of Lines}
+	 * @param lines {array of Lines} 
 	 * @return [string]
 	 */
 	var merge = function(lines){
@@ -726,7 +735,7 @@ ugsEditorPlus.reformat = new function(){
 				s += thisLine.source + '\n';
 				continue;
 			}
-
+			
 			// OK, we've complicated things a bit by adding tabs, so we'll handle this in a helper...
 			if ((thisLine.lineType == enums.lineTypes.tabs) && isTabBlock(lines, i)){
 				s += '{start_of_tab}\n'
@@ -738,7 +747,7 @@ ugsEditorPlus.reformat = new function(){
 				i+= 3;
 				continue;
 			}
-
+			
 			// finally, look for a "mergable" pair: this line is chords and the next is lyrics -- if not this we'll just output the current line
 			if ((thisLine.lineType != enums.lineTypes.chords) || (nextLine.lineType != enums.lineTypes.lyrics)){
 				s += (thisLine.lineType == enums.lineTypes.chords)
@@ -746,18 +755,18 @@ ugsEditorPlus.reformat = new function(){
 					: thisLine.source + '\n';
 				continue;
 			}
-
+			
 			// OK, if you're here it's because the current line is chords and the next lyrics, meaning, we're gonna merge them!
 			i++;
 			s += mergeLines(thisLine.source, nextLine.source) + '\n';
 		}
 		return s;
 	};
-
+	 
 	/**
 	 * TRUE if we can make a Tab block using this and the following 3 linrd (we need a set of four tab lines followed by a non-tab line)
 	 * @method isTabBlock
-	 * @param lines {array of Lines}
+	 * @param lines {array of Lines} 
 	 * @param index {int} current line's index within line array
 	 * @return [bool]
 	 */
@@ -772,7 +781,7 @@ ugsEditorPlus.reformat = new function(){
 		}
 		return true;
 	};
-
+	
 	/**
 	 * Return a single line
 	 * @method mergeLines
@@ -801,12 +810,12 @@ ugsEditorPlus.reformat = new function(){
 		}
 		return s;
 	};
-
+	
 	/**
 	 * Wraps the words on the line within square brackets " C D " is returned as "[C] [D]"
 	 * @method wrapChords
 	 * @param chordLine {string} the line containing the chord names
-	 * @return [string] each word of input line gets bracketed
+	 * @return [string] each word of input line gets bracketed 
 	 */
 	var wrapChords = function(chordLine){
 		var chords = chordLine.replace(re.spaces, ' ').split(' ');
@@ -822,7 +831,7 @@ ugsEditorPlus.reformat = new function(){
 };
 
 ;/**
- *
+ * 
  * @class autoReformat
  * @namespace ugsEditorPlus
  */
@@ -831,7 +840,7 @@ ugsEditorPlus.autoReformat = new function(){
 	var _elements;
 	var _formatted;
 	var _isDisabled = false;
-
+	
 	this.run = function(elements){
 		if (_isDisabled){
 			return;
@@ -839,40 +848,40 @@ ugsEditorPlus.autoReformat = new function(){
 		_elements = elements;
 		_elements.reformatTextBox = document.getElementById('reformatSource');
 		_elements.reformatDlg = document.getElementById('reformatDlg');
-
+		
 		document.getElementById('reformatYesBtn').onclick = function(){ doOk(); return false; };
 		document.getElementById('reformatNoBtn').onclick = function(){ doClose(); return false; };
-
+	
 		// need to reset on reload
 		var chk = document.getElementById('reformatDisable');
 		chk.checked = false;
 		chk.onclick = function(){ doDisable(this.checked); };
-
+		
 		runNow();
 	};
-
+	
 	var doOk = function(){
 		_elements.cpmSource.value = _formatted;
 		doClose();
 		ugsEditorPlus.actions.run(true);
 	};
-
+	
 	var doClose = function(){
 		ukeGeeks.toolsLite.addClass(_elements.reformatDlg, 'isHidden');
 	};
-
+	
 	var doDisable = function(isDisabled){
 		_isDisabled = isDisabled;
 	};
-
+	
 	var runNow = function(){
 		_formatted = ugsEditorPlus.reformat.run(_elements.cpmSource.value);
 		_elements.reformatTextBox.innerHTML = _formatted;
-
+		
 		if (!ugsEditorPlus.reformat.hasChords()){
 			return;
 		}
-
+		
 		ukeGeeks.toolsLite.removeClass(_elements.reformatDlg, 'isHidden');
 	};
 }
@@ -899,7 +908,7 @@ ugsEditorPlus.menus = new function(){
 		'#transpose' : '#up_0',
 		'#colors' : '#normal'
 	};
-
+	
 	/**
 	 * DESCRIPTION
 	 * @method init
@@ -910,7 +919,7 @@ ugsEditorPlus.menus = new function(){
 		addSizeOptions();
 		attachClicks();
 	};
-
+	
 	/**
 	 * DESCRIPTION
 	 * @private
@@ -925,9 +934,9 @@ ugsEditorPlus.menus = new function(){
 				topBtn.onclick = function(){closeAll(); return false;};
 				continue;
 			}
-
+			
 			topBtn.onclick = function(){switchActiveMenu(this); return false;};
-
+			
 			var items = _menuItems[i].getElementsByTagName('li');
 			for(var j = 0; j < items.length; j++){
 				var subBtn = items[j].getElementsByTagName('a')[0];
@@ -935,12 +944,12 @@ ugsEditorPlus.menus = new function(){
 			}
 		}
 	};
-
+	
 	/**
 	 * DESCRIPTION
 	 * @private
 	 * @method switchActiveMenu
-	 * @param ele (DOM_element)
+	 * @param ele (DOM_element) 
 	 * @return {void}
 	 */
 	var switchActiveMenu = function(ele){
@@ -952,45 +961,45 @@ ugsEditorPlus.menus = new function(){
 		ukeGeeks.toolsLite.addClass(ele.parentNode, 'active');
 		_topBtnUl = ele.parentNode.getElementsByTagName('ul')[0];
 		_topBtnHref = getHref(ele);
-
+		
 	};
-
+	
 	/**
 	 * DESCRIPTION
 	 * @private
 	 * @method subBtnClick
-	 * @param ele (DOM_element)
+	 * @param ele (DOM_element) 
 	 * @return {void}
 	 */
 	var subBtnClick = function(ele){
 		closeAll();
 		_subBtnHref = getHref(ele);
-
+		
 		if (_prevValues[_topBtnHref] == _subBtnHref){
 			return;
 		}
-		// remove
+		// remove 
 		for (var i = 0; i < _topBtnUl.children.length; i++){
 			ukeGeeks.toolsLite.removeClass(_topBtnUl.children[i], 'checked');
 		}
 		// set checked item
 		ukeGeeks.toolsLite.addClass(ele.parentNode, 'checked');
-
+		
 		ugsEditorPlus.actions.doClick(_topBtnHref, _subBtnHref);
 		_prevValues[_topBtnHref] = _subBtnHref;
 	};
-
+	
 	/**
 	 * To support legacy IE need to cleanup the href's
 	 * @method getHref
 	 * @private
-	 * @param ele (DOM_element)
+	 * @param ele (DOM_element) 
 	 * @return {string}
 	 */
 	var getHref = function(ele){
 		return '#' + ele.getAttribute('href').split('#')[1];
 	};
-
+	
 	/**
 	 * DESCRIPTION
 	 * @method closeAll
@@ -1036,16 +1045,16 @@ ugsEditorPlus.menus = new function(){
 	};
 
 /**
-	 * Sets Transpose menu's selected value to "Original"; adds example chord names
+	 * Sets Transpose menu's selected value to "Original"; adds example chord names 
 	 * @method resetTranspose
-	 * @param chord {string}
+	 * @param chord {string} 
 	 */
 	this.resetTranspose = function(chord){
 		var ul = document.getElementById('transposeOptions');
 		var items = ul.getElementsByTagName('li');
 		var sample;
 		var steps = -6;
-
+		
 		_prevValues['#transpose'] = '#up_0';
 
 		for (i = 0; i < items.length; i++){
@@ -1057,6 +1066,288 @@ ugsEditorPlus.menus = new function(){
 			}
 			steps++;
 		}
+	};
+};
+
+
+;/**
+ * Creates a new song via AJAX.
+ * Dependencies: jQuery
+ * @class newSong
+ * @namespace ugsEditorPlus
+ */
+ugsEditorPlus.newSong = (function() {
+	var _ajaxUri = '';
+	/**
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var publics = {};
+
+	/**
+	 * lock-down the Submit (Update) button to avoid double posts;
+	 * @type {Boolean}
+	 */
+	var _isUpdating = false;
+
+	publics.init = function(ajaxUri) {
+		_ajaxUri = ajaxUri;
+
+		$('#newSongBtn').click(function(e) {
+			if(doValidate(this)) {
+				doPost();
+			}
+		});
+
+		$('#openNewDlgBtn').click(function(e) {
+			$('#newSongForm').fadeIn();
+			$('#songTitle').focus();
+		});
+
+		$('#hideNewSongBtn').click(function(e) {
+			$('#newSongForm').fadeOut();
+		});
+
+		$spinner = $( "#loadingSpinner" );
+		$spinner.hide();
+		$(document)
+			.ajaxStart(function() {
+				$spinner.show();
+				_isUpdating = true;
+			})
+			.ajaxStop(function() {
+				$spinner.hide();
+				_isUpdating = false;
+			});
+	};
+
+	var doAjaxOk = function(data) {
+			showErrors(data.HasErrors, data.Message);
+			if(data.HasErrors) {
+				return;
+			}
+			document.location.href = data.ContinueUri;
+		};
+
+	var doPost = function() {
+			if (_isUpdating){
+				return;
+			}
+
+			var data = {
+				'handler': 'ugs_new',
+				'songTitle': $('#songTitle').val(),
+				'songArtist': $('#songArtist').val()
+			};
+
+			$.ajax({
+				url: _ajaxUri,
+				type: "POST",
+				dataType: 'json',
+				data: JSON.stringify(data),
+				success: function(data) {
+					doAjaxOk(data);
+				}
+			});
+		};
+
+	var doValidate = function() {
+		var $title = $('#songTitle');
+		var title = $title.val().trim();
+		$title.val(title);
+		var ok = title.length > 2;
+		showErrors(!ok, 'Song\'s title is required<br/><em>(you may change it later, must be at least 2 characters)</em>');
+		return ok;
+	};
+
+	var showErrors = function(hasErrors, message) {
+			var $err = $('#newSongForm .errorMessage');
+			if(hasErrors) {
+				$err.show().html(message);
+				$('#songTitle').focus();
+			} else {
+				$err.hide();
+			}
+		};
+
+	return publics;
+})();
+;/**
+ * Updates an exising song via AJAX.
+ * Dependencies: jQuery
+ * @class updateSong
+ * @namespace ugsEditorPlus
+ */
+ugsEditorPlus.updateSong = (function() {
+	var _ajaxUri = '';
+	var _filename = '';
+	/**
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var publics = {};
+
+	/**
+	 * lock-down the Submit (Update) button to avoid double posts;
+	 * @type {Boolean}
+	 */
+	var _isUpdating = false;
+
+	publics.init = function(ajaxUri, filename) {
+		_ajaxUri = ajaxUri;
+		_filename = filename;
+
+		$('#saveBtn').click(function(event) {
+			doUpdate();
+			return false;
+		});
+
+		$spinner = $( "#loadingSpinner" );
+		$spinner.hide();
+		$(document)
+			.ajaxStart(function() {
+				$spinner.show();
+				_isUpdating = true;
+			})
+			.ajaxStop(function() {
+				$spinner.hide();
+				_isUpdating = false;
+			});
+	};
+
+	var doUpdate = function() {
+		if (_isUpdating){
+			return;
+		}
+
+		var data = {
+			'handler': 'ugs_update_81jr',
+			'filename': _filename,
+			'song': $('#chordProSource').val()
+		};
+
+		$.ajax({
+			url: _ajaxUri,
+			type: "POST",
+			dataType: 'json',
+			contentType:"application/json; charset=utf-8",
+			data: JSON.stringify(data),
+			success: function(data) {
+				doAjaxOk(data);
+			}
+		});
+	};
+
+	var doAjaxOk = function(data) {
+		//if (data.HasErrors)
+		//	console.log(data);
+		$('#sourceFeedback').html(data.Message);
+	};
+
+	return publics;
+})();
+;/**
+ * Search on the song list page for songs.
+ * Dependencies: jQuery and Twitter Bootstrap's typeahead plugin
+ * Based on tutorial:
+ * http://tatiyants.com/how-to-use-json-objects-with-twitter-bootstrap-typeahead/
+ * @class typeahead
+ * @namespace ugsEditorPlus
+ */
+ugsEditorPlus.typeahead = function(){
+
+	// private
+	// ---------------------------
+	var _keysList = [];
+	var _keysToDetailsDict = [];
+
+	var _scrubbedQuery = '';
+	var _regex;
+
+	/**
+	 * Scrapes HTML to build our list of
+	 * keys, searchable text, and display text
+	 * @return {[type]} [description]
+	 */
+	var listFromHtml = function(){
+
+		$( 'li' ).each(function( index ) {
+			var $this = $(this);
+
+			var plainText = $this.text().replace(/\s\s+/g, ' ').trim();
+			plainText = plainText.toLowerCase();
+
+			var href = $this.children('a').attr('href');
+			var key = href.toLowerCase();
+
+			var html = $this.children('a').html();
+			html = html.replace('<strong class="', '<span class="bigger ').replace('</strong>', '</span>');
+
+			_keysToDetailsDict[key] = {
+				html : html,
+				searchText : plainText,
+				code : key,
+				href : href
+			};
+			_keysList.push(key);
+		});
+
+	};
+
+	var _ta_source = function (query, process) {
+		_scrubbedQuery = this.query.trim().toLowerCase();
+		_regex = new RegExp( '(' + this.query + ')', 'gi' );
+		process(_keysList);
+	};
+
+	var _ta_updater = function (item) {
+		window.location = _keysToDetailsDict[item].href;
+		return item;
+	};
+
+	var _ta_matcher = function (item) {
+		var detailed = _keysToDetailsDict[item];
+		if (detailed.searchText.indexOf(_scrubbedQuery) != -1) {
+			return true;
+		}
+	};
+
+	var _ta_sorter = function (items) {
+		return items.sort(function(a, b) {
+			return (_keysToDetailsDict[a].searchText > _keysToDetailsDict[b].searchText);
+		});
+	};
+
+	var _ta_highligher = function (item) {
+		var $temp = $('<div/>').html(_keysToDetailsDict[item].html);
+
+		$('em, .bigger', $temp).each(function( index ){
+			var $ele = $(this);
+			var text = $ele.html();
+			$ele.html(text.replace( _regex, "<strong>$1</strong>" ))
+		});
+		return $temp.html();
+	};
+
+	return {
+
+		initialize: function(){
+			listFromHtml();
+
+			$('#quickSearch')
+				.typeahead({
+					source: _ta_source,
+					updater: _ta_updater,
+					matcher: _ta_matcher,
+					sorter: _ta_sorter,
+					highlighter: _ta_highligher,
+					minLength: 2,
+					items: 50
+				})
+				.val('')
+				.focus();
+		},
+
 	};
 };
 
