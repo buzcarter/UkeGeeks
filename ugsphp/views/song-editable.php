@@ -23,8 +23,8 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <link rel="stylesheet" href="/css/yuiReset.css" />
 <link rel="stylesheet" href="/css/basic-page-layout.css" />
 <link rel="stylesheet" href="/css/ukeGeeks.music.css" />
-<link rel="stylesheet" href="/css/editorv2/ugsEditorPlus.css" title="ugsEditorCss" />
-<link rel="stylesheet" href="/css/editorv2/ugsEditorPlus.print.css" media="print" />
+<link rel="stylesheet" href="/css/editor/ugsEditorPlus.css" title="ugsEditorCss" />
+<link rel="stylesheet" href="/css/editor/ugsEditorPlus.print.css" media="print" />
 </head>
 <body class="editableSongPage pageWidth_screen">
 <section id="scalablePrintArea" class="scalablePrintArea">
@@ -183,7 +183,6 @@ else{
 <?php if ($model->IsUpdateAllowed) {
 	?>
 	<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="/js/ugsEditorPlus.updateSong.js"></script>
 	<script type="text/javascript">
 	ugsEditorPlus.updateSong.init("<?php echo($model->UpdateAjaxUri); ?>", "<?php echo($model->Id); ?>");
 	</script>

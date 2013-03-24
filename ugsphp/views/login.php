@@ -10,7 +10,7 @@ $errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
 	<meta charset="utf-8" />
 	<title><?php echo($model->PageTitle); ?></title>
 	<meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
-	<link rel="stylesheet" href="/css/editorv2/ugsEditorPlus.css" />
+	<link rel="stylesheet" href="/css/editor/ugsEditorPlus.css" />
 	<link rel="stylesheet" href="/css/ugsphp.css" />
 </head>
 <body class="loginPage">

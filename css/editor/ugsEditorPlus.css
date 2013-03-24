@@ -303,6 +303,9 @@ html .diagramsOnTop .ugs-source-wrap {
 }
 /* Form inputs,
  ----------------------------------- */
+.overlay select{
+	font-size: 1.1em;
+ }
 .overlay input[type=text],
 .overlay input[type=password] {
 	display: block;
