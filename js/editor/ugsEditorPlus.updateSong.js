@@ -1,15 +1,25 @@
-var ugsEditorPlus = window.ugsEditorPlus || {};
+/**
+ * Updates an exising song via AJAX.
+ * Dependencies: jQuery
+ * @class updateSong
+ * @namespace ugsEditorPlus
+ */
 
 ugsEditorPlus.updateSong = (function() {
 	var _ajaxUri = '';
 	var _filename = '';
+	/**
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var publics = {};
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
 	 * @type {Boolean}
 	 */
 	var _isUpdating = false;
 
-	this.init = function(ajaxUri, filename) {
+	publics.init = function(ajaxUri, filename) {
 		_ajaxUri = ajaxUri;
 		_filename = filename;
 
@@ -60,5 +70,5 @@ var doAjaxOk = function(data) {
 		$('#sourceFeedback').html(data.Message);
 	};
 
-	return this;
+	return publics;
 })();

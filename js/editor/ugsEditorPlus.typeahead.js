@@ -1,8 +1,11 @@
-// Based on tutorial:
-// http://tatiyants.com/how-to-use-json-objects-with-twitter-bootstrap-typeahead/
-//
-var ugsEditorPlus = window.ugsEditorPlus || {};
-
+/**
+ * Search on the song list page for songs.
+ * Dependencies: jQuery and Twitter Bootstrap's typeahead plugin
+ * Based on tutorial:
+ * http://tatiyants.com/how-to-use-json-objects-with-twitter-bootstrap-typeahead/
+ * @class typeahead
+ * @namespace ugsEditorPlus
+ */
 ugsEditorPlus.typeahead = function(){
 
 	// private

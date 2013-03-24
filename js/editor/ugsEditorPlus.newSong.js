@@ -1,14 +1,24 @@
-var ugsEditorPlus = window.ugsEditorPlus || {};
+/**
+ * Creates a new song via AJAX.
+ * Dependencies: jQuery
+ * @class newSong
+ * @namespace ugsEditorPlus
+ */
 
 ugsEditorPlus.newSong = (function() {
 	var _ajaxUri = '';
+	/**
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var publics = {};
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
 	 * @type {Boolean}
 	 */
 	var _isUpdating = false;
 
-	this.init = function(ajaxUri) {
+	publics.init = function(ajaxUri) {
 		_ajaxUri = ajaxUri;
 
 		$('#newSongBtn').click(function(e) {
@@ -88,5 +98,5 @@ ugsEditorPlus.newSong = (function() {
 			}
 		};
 
-	return this;
+	return publics;
 })();

@@ -19,7 +19,6 @@ RewriteRule ^edit/(.*)$ /music.php?action=edit&song=$1 [L,QSA]
 RewriteRule ^reindex/?$ /music.php?action=reindex [L,QSA]
 RewriteRule ^login/?$ /music.php?action=login [L,QSA]
 RewriteRule ^logout/?$ /music.php?action=logout [L,QSA]
-
 RewriteRule ^ajaxnewsong/?$ /music.php?action=ajaxnewsong [L,QSA]
 RewriteRule ^ajaxupdatesong/?$ /music.php?action=ajaxupdatesong [L,QSA]
 
