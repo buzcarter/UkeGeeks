@@ -60,7 +60,7 @@ ugsEditorPlus.typeahead = function(){
 	var _ta_matcher = function (item) {
 		var detailed = _keysToDetailsDict[item];
 		if (detailed.searchText.indexOf(_scrubbedQuery) != -1) {
-		return true;
+			return true;
 		}
 	};
 
@@ -84,22 +84,22 @@ ugsEditorPlus.typeahead = function(){
 	return {
 
 		initialize: function(){
-		listFromHtml();
+			listFromHtml();
 
-		$('#quickSearch')
-			.typeahead({
-				source: _ta_source,
-				updater: _ta_updater,
-				matcher: _ta_matcher,
-				sorter: _ta_sorter,
-				highlighter: _ta_highligher,
-				minLength: 2,
-				items: 50
-			})
-			.val('')
-			.focus();
+			$('#quickSearch')
+				.typeahead({
+					source: _ta_source,
+					updater: _ta_updater,
+					matcher: _ta_matcher,
+					sorter: _ta_sorter,
+					highlighter: _ta_highligher,
+					minLength: 2,
+					items: 50
+				})
+				.val('')
+				.focus();
 		},
 
-};
+	};
 };
 

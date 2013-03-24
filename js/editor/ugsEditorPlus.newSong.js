@@ -4,7 +4,6 @@
  * @class newSong
  * @namespace ugsEditorPlus
  */
-
 ugsEditorPlus.newSong = (function() {
 	var _ajaxUri = '';
 	/**
@@ -12,6 +11,7 @@ ugsEditorPlus.newSong = (function() {
 	 * @type {Object}
 	 */
 	var publics = {};
+
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
 	 * @type {Boolean}
