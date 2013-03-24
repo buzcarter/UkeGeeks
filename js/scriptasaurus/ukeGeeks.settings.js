@@ -159,12 +159,25 @@ ukeGeeks.settings = new function(){
 	 */
 	this.opts = {
 		columnsEnabled: true,
-		retainBrackets: true
+		/**
+		 * the [ and ] surrounding chord names often looks bad in print (usually only good when inline)
+		 * set true to keep then, false to get rid of the buggers.
+		 * @property opts.retainBrackets
+		 * @type Boolean
+		 */
+		retainBrackets: true,
+		/**
+		 * if TRUE chords in the "commonChords" list will be ignored (excluded) from having thier
+		 * master chord diagram drawn
+		 * @property opts.ignoreCommonChords
+		 * @type Boolean
+		 */
+		ignoreCommonChords : false
 	};
 
 	/**
 	 * If TRUE the Chord Digram is drawn ABOVE lyrics
-	 * @property options.inlineDiagrams
+	 * @property inlineDiagrams
 	 * @type Bool
 	 */
 	this.inlineDiagrams = false;
@@ -177,6 +190,11 @@ ukeGeeks.settings = new function(){
 	 */
 	this.numFrets = 5;
 
+	/**
+	 * Array of string names, changes between baritone and soprano
+	 * @property tuning
+	 * @type string Array
+	 */
 	this.tuning = ['G','C','E','A'];
 
 	/**
@@ -211,17 +229,9 @@ ukeGeeks.settings = new function(){
 
 	/**
 	 * List of common chords to be "ignored" (won't show master chord diagrams)
-	 * @type {Array}
+	 * @type string Array
 	 */
 	this.commonChords = ['A','B','C','D','E','F','G', 'Am'];
-
-	/**
-	 * if TRUE chords in the "commonChords" list will be ignored (excluded) from having thier
-	 * master chord diagram drawn
-	 * @property ignoreCommonChords
-	 * @type {Boolean}
-	 */
-	this.ignoreCommonChords = true;
 
 	/**
 	 * TODO: determine minimum value... 1?
@@ -229,7 +239,7 @@ ukeGeeks.settings = new function(){
 	 * @private
 	 * @param node {datatype} Description
 	 * @param mulitplier {int} see scale method's parameter
-	 * @return {void}
+	 * @return mixed
 	 */
 	var _scaleNode = function(node, mulitplier){
 		if (typeof(node) == 'number'){

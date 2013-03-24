@@ -1,3 +1,13 @@
+/**
+ * Can shift a single chord or list of chords up/down by a series of steps. Hangles
+ * finding equivalent chord names (i.e. A# is same as Bb)
+ *
+ * This is a SINGLETON class.
+ *
+ * @class transpose
+ * @namespace ukeGeeks
+ * @static
+ */
 ukeGeeks.transpose = new function(){
 	var re = /^([A-G][#b]?)(.*)/;
 	var tones = {
@@ -20,7 +30,7 @@ ukeGeeks.transpose = new function(){
 	 * @method shift
 	 * @param name (string) chord name, should be in chord dictionary
 	 * @param steps (int) number of semitones to transpose
-	 * @return {areinf}
+	 * @return string
 	 */
 	this.shift = function(name, steps){
 		var t = getTone(name);
@@ -47,7 +57,7 @@ ukeGeeks.transpose = new function(){
 	 * 
 	 * @method getTone
 	 * @param name (string) 
-	 * @return {TYPE}
+	 * @return JSON
 	 */
 	var getTone = function(name){
 		var m = name.match(re);
@@ -63,10 +73,11 @@ ukeGeeks.transpose = new function(){
 
 
 	/**
-	 * DESCR
-	 * @method NAME
-	 * @param NAME (TYPE) 
-	 * @return {TYPE}
+	 * something's gone amiss here...
+	 * @method transpose
+	 * @param name (string)
+	 * @param steps (int)
+	 * @return {string}
 	 */
 	this.transpose = function(name, steps){
 		if (steps == 0){
@@ -98,6 +109,13 @@ ukeGeeks.transpose = new function(){
 		return s;
 	};
 	
+	/**
+	 * returns copy of input string array shifted by number of steps
+	 * @method shiftChords
+	 * @param  array<strings> chords chord names to be shifted
+	 * @param  int steps  number of semitone steps (up or down)
+	 * @return array<strings>
+	 */
 	this.shiftChords = function(chords, steps){
 		var newChords = [];
 		for(var i = 0; i < chords.length; i++){

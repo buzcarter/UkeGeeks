@@ -69,7 +69,7 @@ ukeGeeks.chordPainter = function(){
 		errors = [];
 		ignoreMatchList = [];
 		for (var i=0; i < chords.length; i++){
-			if (ukeGeeks.settings.ignoreCommonChords && ignoreChord(chords[i])){
+			if (ukeGeeks.settings.opts.ignoreCommonChords && ignoreChord(chords[i])){
 				ignoreMatchList.push(chords[i]);
 				continue;
 			}
@@ -80,7 +80,6 @@ ukeGeeks.chordPainter = function(){
 			}
 			brush.plot(handles.diagrams,c,ukeGeeks.settings.fretBox);
 		}
-		// console.log(ignoreMatchList);
 	};
 
 	/**
