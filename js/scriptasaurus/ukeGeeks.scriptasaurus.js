@@ -1,7 +1,7 @@
 /**
  * Finds page HTML elements & creates ukeGeek objects;
  * Reads song text, parses, draws choard diagrams.
- * 
+ *
  * @class scriptasaurus
  * @namespace ukeGeeks
  * @static
@@ -19,7 +19,7 @@ ukeGeeks.scriptasaurus = new function(){
 	};
 
 	/**
-	 * Runs all Scriptasaurus methods using the element Ids defined in the settings class. 
+	 * Runs all Scriptasaurus methods using the element Ids defined in the settings class.
 	 * This is your "Do All". See data.song for structure.
 	 * @method run
 	 * @return {songObject}
@@ -35,7 +35,7 @@ ukeGeeks.scriptasaurus = new function(){
 		showErrors(_errList[0]);
 		return song;
 	};
-	
+
 	/**
 	 * Same as "run" except runs using class names, this allows you to have multiple songs on a single page.
 	 * @method runByClasses
@@ -53,7 +53,7 @@ ukeGeeks.scriptasaurus = new function(){
 		}
 		return songs;
 	};
-	
+
 	/**
 	 * Is this really nececessary?
 	 * @method setTuningOffset
@@ -62,12 +62,12 @@ ukeGeeks.scriptasaurus = new function(){
 	this.setTuningOffset = function(offset){
 		ukeGeeks.definitions.useInstrument(offset);
 	};
-	
+
 	var _errList = [];
 	// song
-	
+
 	/**
-	 * 
+	 *
 	 * @method _runSong
 	 * @private
 	 * @param handles {ukeGeeks.data.htmlHandles}
@@ -75,18 +75,18 @@ ukeGeeks.scriptasaurus = new function(){
 	 */
 	var _runSong = function(handles){
 		// console.log('run Song');
-		
+
 		// read Music, find chords, generate HTML version of song:
 		var cpm = new ukeGeeks.cpmParser;
 		cpm.init();
 		var song = cpm.parse(handles.text.innerHTML);
 		ukeGeeks.definitions.replace(song.defs);
-	
+
 		var chrdPrsr = new ukeGeeks.chordParser;
 		chrdPrsr.init();
 		handles.text.innerHTML = chrdPrsr.parse(song.body);
 		song.chords = chrdPrsr.getChords();
-	
+
 		// Draw the Chord Diagrams:
 		var painter = new ukeGeeks.chordPainter;
 		painter.init(handles);
@@ -96,15 +96,15 @@ ukeGeeks.scriptasaurus = new function(){
 			ukeGeeks.toolsLite.addClass(handles.wrap, 'ugsInlineDiagrams');
 			painter.showInline(song.chords);
 		}
-	
+
 		// Do Tablature:
 		var tabs = new ukeGeeks.tabs;
 		tabs.init();
 		tabs.replace(handles.text);
-		
+
 		// error reporting:
 		_errList.push(painter.getErrors());
-		
+
 		var container = handles.wrap;
 		if (container){
 			if (!song.hasChords){
@@ -113,6 +113,10 @@ ukeGeeks.scriptasaurus = new function(){
 			else{
 				ukeGeeks.toolsLite.removeClass(container, 'ugsNoChords');
 			}
+		}
+
+		if (ukeGeeks.settings.opts.autoFixOverlaps){
+			ukeGeeks.overlapFixer.Fix(handles.text);
 		}
 
 		// done!
@@ -128,7 +132,7 @@ ukeGeeks.scriptasaurus = new function(){
 		if (errs.length < 1) {
 			return;
 		}
-		
+
 		//console.log(typeof(errs[0]));
 		var s = '';
 		for(var i = 0; i < errs.length; i++){
@@ -137,13 +141,13 @@ ukeGeeks.scriptasaurus = new function(){
 		}
 		alert('Forgive me, but I don\'t know the following chords: ' + s);
 	};
-	
+
 	/**
-	 * 
+	 *
 	 * @method _getHandlesFromClass
 	 * @private
-	 * @param wrap {domElement} 
-	 * @retuns {ukeGeeks.data.htmlHandles} 
+	 * @param wrap {domElement}
+	 * @retuns {ukeGeeks.data.htmlHandles}
 	 */
 	var _getHandlesFromClass = function(wrap){
 		var diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
@@ -155,10 +159,10 @@ ukeGeeks.scriptasaurus = new function(){
 	};
 
 	/**
-	 * 
+	 *
 	 * @method _getHandlesFromId
 	 * @private
-	 * @retuns {ukeGeeks.data.htmlHandles} 
+	 * @retuns {ukeGeeks.data.htmlHandles}
 	 */
 	var _getHandlesFromId = function(){
 		return new ukeGeeks.data.htmlHandles(
@@ -167,5 +171,5 @@ ukeGeeks.scriptasaurus = new function(){
 			document.getElementById(ukeGeeks.settings.ids.songText)
 		);
 	};
-	
+
 }

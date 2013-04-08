@@ -18,7 +18,9 @@ ugsEditorPlus.actions = new function(){
 	var _sourceOriginal = null;
 	var _originalChords = [];
 	// prior placement
-	var _priorValue = '#above';
+	var _priorValues = {
+		placement : '#above'
+	};
 
 	var re = {
 		safe: /^([A-G][#b]?)(m|m6|7|m7|dim|maj7|6|sus2|sus4|aug|9)?$/,
@@ -138,7 +140,7 @@ ugsEditorPlus.actions = new function(){
 	};
 
 	/**
-	 * DESCR
+	 * Chord Name placement (&amp; "Mini-chord diagrams")
 	 * @method doPlacement
 	 * @private
 	 * @param subMenu {string} value of the clicked submenu item (href value)
@@ -153,12 +155,18 @@ ugsEditorPlus.actions = new function(){
 			ukeGeeks.toolsLite.removeClass(_ele.songContainer, 'ugsInlineDiagrams');
 		}
 
-		if (isMiniDiagrams || (_priorValue == '#miniDiagrams')){
+		if (isMiniDiagrams || (_priorValues.placement == '#miniDiagrams')){
 			ukeGeeks.settings.inlineDiagrams = isMiniDiagrams;
 			_this.run();
 		}
+		else if (!isMiniDiagrams && (_priorValues.placement != '#miniDiagrams')) {
+			// we're jumping between "above" and "inline", either way we need to
+			// manually fix the overlaps
+			ukeGeeks.overlapFixer.Fix(_ele.songText);
+		}
 
-		_priorValue = subMenu;
+
+		_priorValues.placement = subMenu;
 	};
 
 	/**

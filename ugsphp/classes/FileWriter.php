@@ -62,9 +62,9 @@ class FileWriter {
 
 	/**
 	 * Generates a unique filename (within a given directory)
-	 *
-	 * @param [string] $title  [description]
-	 * @param [string] $artist [description]
+	 * If name is omitted uses "untitled".
+	 * @param [string] $title
+	 * @param [string] $artist
 	 * @return string [description]
 	 */
 	public function MakeFile( $title, $artist ) {

@@ -172,7 +172,14 @@ ukeGeeks.settings = new function(){
 		 * @property opts.ignoreCommonChords
 		 * @type Boolean
 		 */
-		ignoreCommonChords : false
+		ignoreCommonChords : false,
+		/**
+		 * if TRUE chords that overlap each other (in the music area) will have their spacing adjuste
+		 * to prevent overlapping.
+		 * @property opts.autoFixOverlaps
+		 * @type Boolean
+		 */
+		autoFixOverlaps : true
 	};
 
 	/**

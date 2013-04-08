@@ -166,7 +166,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			<a id="reformatNoBtn" href="#noThanks" class="noThanks">No, Thanks!</a>
 		</p>
 		<textarea id="reformatSource" wrap="off"></textarea>
-		<p class="instructions small">Want to make more adjustments? Click &ldquo;No Thanks&rdquo; and try the <a href="/tools" target="_blank" title="open the reformat tool in a new window">Reformater Tool</a> instead.</p>
+		<p class="instructions small">Want to make more adjustments? Click &ldquo;No Thanks&rdquo; and try the <a href="http://ukegeeks.com/tools" target="_blank" title="open the reformat tool in a new window">Reformater Tool</a> instead.</p>
 		<p class="instructions small"><input type="checkbox" value="true" id="reformatDisable" /> <label for="reformatDisable">Don't perform this check again.</label></p>
 	</div>
 </section>
