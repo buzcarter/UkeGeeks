@@ -205,6 +205,13 @@ ukeGeeks.settings = new function(){
 	this.tuning = ['G','C','E','A'];
 
 	/**
+	 * The initial tuning when page first loads, used in scriptasaurus.init.
+	 * @property defaultInstrument
+	 * @type {enum_int}
+	 */
+	this.defaultInstrument = ukeGeeks.definitions.instrument.sopranoUke;
+
+	/**
 	 * TODO: Clean-up Tab Options!!
 	 * @property tabs
 	 * @type JSON Object

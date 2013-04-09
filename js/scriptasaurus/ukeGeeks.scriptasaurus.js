@@ -15,7 +15,11 @@ ukeGeeks.scriptasaurus = new function(){
 	 */
 	this.init = function(isIeFamily){
 		ukeGeeks.settings.environment.isIe = isIeFamily;
+		// TODO: known problem -- need to preload Sorprano chord libarary then we can retune if needed
 		ukeGeeks.definitions.useInstrument(ukeGeeks.definitions.instrument.sopranoUke);
+		if (ukeGeeks.settings.defaultInstrument != ukeGeeks.definitions.instrument.sopranoUke){
+			ukeGeeks.definitions.useInstrument(ukeGeeks.settings.defaultInstrument);
+		}
 	};
 
 	/**

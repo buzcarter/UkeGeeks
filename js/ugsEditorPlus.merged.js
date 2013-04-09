@@ -617,7 +617,7 @@ ugsEditorPlus.reformat = new function(){
 		words : /\b(\S+)\b/gi,
 		spaces : /(\s+)/g,
 		leadingSpace : /(^\s+)/,
-		chordNames : /\b[A-G][#b]?(m|m6|m7|m9|dim|dim7|maj7|sus2|sus4|aug|6|7|9|add9)?\b/,
+		chordNames : /\b[A-G][#b]?(m|m6|m7|m9|dim|dim7|maj7|sus2|sus4|aug|6|7|9|add9|7sus4)?\b/,
 		chrdBlock : /\b(\S+\s*)/g,
 		tabs : /^\s*(\|{0,2}[A-Gb]?\|{0,2}[-x0-9|:]{4,})/
 	};

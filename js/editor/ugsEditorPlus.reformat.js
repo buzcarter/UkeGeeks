@@ -1,7 +1,7 @@
 var ugsEditorPlus = window.ugsEditorPlus || {};
 
 /**
- * 
+ *
  * @class reformat
  * @namespace ugsEditorPlus
  */
@@ -9,22 +9,22 @@ ugsEditorPlus.reformat = new function(){
 	var _this = this;
 
 	var _hasChords = false;
-	
+
 	/**
-	 * 
+	 *
 	 * @class enums
 	 */
 	var enums = {
 		lineTypes : {
-			blank : 0, 
-			chords : 1, 
+			blank : 0,
+			chords : 1,
 			lyrics : 2,
 			tabs : 3
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @class lineObj
 	 */
 	var lineObj = function(){
@@ -40,27 +40,27 @@ ugsEditorPlus.reformat = new function(){
 		words : /\b(\S+)\b/gi,
 		spaces : /(\s+)/g,
 		leadingSpace : /(^\s+)/,
-		chordNames : /\b[A-G][#b]?(m|m6|m7|m9|dim|dim7|maj7|sus2|sus4|aug|6|7|9|add9)?\b/,
+		chordNames : /\b[A-G][#b]?(m|m6|m7|m9|dim|dim7|maj7|sus2|sus4|aug|6|7|9|add9|7sus4)?\b/,
 		chrdBlock : /\b(\S+\s*)/g,
 		tabs : /^\s*(\|{0,2}[A-Gb]?\|{0,2}[-x0-9|:]{4,})/
 	};
-	
+
 // Hal Leonard Uke Chord Finder:
 // + aug
 // o dim
 // -----------------
-// F Fm F+ Fdim 
+// F Fm F+ Fdim
 // F5 Fadd9 Fm(add9) Fsus4
 // Fsus2 F6 Fm6 Fmaj7
 // Fmaj9 Fm7 Fm(maj7) Fm7b5
 // Fm9 Fm11 F7 Fsus4
 // F+7 F7b5 F9 F7#9
-// F7b9 F11 F13 Fdim7	
+// F7b9 F11 F13 Fdim7
 
 	/**
 	 * Accepts a text block, returns "ChordPro" text block with chord lines merged into lyric lines with chords enclosed in square-brackets (i.e. [Cdim])
 	 * @method reformat
-	 * @param text {string} songstring 
+	 * @param text {string} songstring
 	 * @return {string} ChordPro format text block
 	 */
 	this.run = function(text){
@@ -68,7 +68,7 @@ ugsEditorPlus.reformat = new function(){
 		var lines = read(text);
 		return merge(lines);
 	};
-	
+
 	/**
 	 * TRUE if one or more chord lines detected
 	 * @method hasChords
@@ -77,7 +77,7 @@ ugsEditorPlus.reformat = new function(){
 	this.hasChords = function(){
 		return _hasChords;
 	};
-	
+
 	/**
 	 * Accepts a text block
 	 * @method read
@@ -106,36 +106,36 @@ ugsEditorPlus.reformat = new function(){
 		}
 		return lineAry;
 	};
-	
+
 	/**
 	 * Guesses as to the line's tyupe --
 	 * @method toLineType
-	 * @param line {line} 
+	 * @param line {line}
 	 * @return {enums.lineTypes}
 	 */
 	var toLineType = function(line){
 		if ((line.spaceCount + line.wordCount) < 1){
 			return enums.lineTypes.blank;
 		}
-		
+
 		var tabs = line.source.match(re.tabs);
 		if (tabs != null){
 			return enums.lineTypes.tabs;
 		}
-		
+
 		var t = enums.lineTypes.lyrics;
 		if ((line.chordCount > 0) && (line.wordCount == line.chordCount)){
 			t = enums.lineTypes.chords;
 			_hasChords = true;
 		}
-		
+
 		return t;
 	};
-	
+
 	/**
 	 * Looks for supported chords.
 	 * @method countChords
-	 * @param words {array of words} 
+	 * @param words {array of words}
 	 * @return [int] number found
 	 */
 	var countChords = function(words){
@@ -147,11 +147,11 @@ ugsEditorPlus.reformat = new function(){
 		}
 		return count;
 	};
-	
+
 	/**
 	 * Return merged song -- chords embedded within lyrics
 	 * @method merge
-	 * @param lines {array of Lines} 
+	 * @param lines {array of Lines}
 	 * @return [string]
 	 */
 	var merge = function(lines){
@@ -166,7 +166,7 @@ ugsEditorPlus.reformat = new function(){
 				s += thisLine.source + '\n';
 				continue;
 			}
-			
+
 			// OK, we've complicated things a bit by adding tabs, so we'll handle this in a helper...
 			if ((thisLine.lineType == enums.lineTypes.tabs) && isTabBlock(lines, i)){
 				s += '{start_of_tab}\n'
@@ -178,7 +178,7 @@ ugsEditorPlus.reformat = new function(){
 				i+= 3;
 				continue;
 			}
-			
+
 			// finally, look for a "mergable" pair: this line is chords and the next is lyrics -- if not this we'll just output the current line
 			if ((thisLine.lineType != enums.lineTypes.chords) || (nextLine.lineType != enums.lineTypes.lyrics)){
 				s += (thisLine.lineType == enums.lineTypes.chords)
@@ -186,18 +186,18 @@ ugsEditorPlus.reformat = new function(){
 					: thisLine.source + '\n';
 				continue;
 			}
-			
+
 			// OK, if you're here it's because the current line is chords and the next lyrics, meaning, we're gonna merge them!
 			i++;
 			s += mergeLines(thisLine.source, nextLine.source) + '\n';
 		}
 		return s;
 	};
-	 
+
 	/**
 	 * TRUE if we can make a Tab block using this and the following 3 linrd (we need a set of four tab lines followed by a non-tab line)
 	 * @method isTabBlock
-	 * @param lines {array of Lines} 
+	 * @param lines {array of Lines}
 	 * @param index {int} current line's index within line array
 	 * @return [bool]
 	 */
@@ -212,7 +212,7 @@ ugsEditorPlus.reformat = new function(){
 		}
 		return true;
 	};
-	
+
 	/**
 	 * Return a single line
 	 * @method mergeLines
@@ -241,12 +241,12 @@ ugsEditorPlus.reformat = new function(){
 		}
 		return s;
 	};
-	
+
 	/**
 	 * Wraps the words on the line within square brackets " C D " is returned as "[C] [D]"
 	 * @method wrapChords
 	 * @param chordLine {string} the line containing the chord names
-	 * @return [string] each word of input line gets bracketed 
+	 * @return [string] each word of input line gets bracketed
 	 */
 	var wrapChords = function(chordLine){
 		var chords = chordLine.replace(re.spaces, ' ').split(' ');
