@@ -2860,13 +2860,20 @@ ukeGeeks.overlapFixer = (function() {
 	var _publics = {};
 
 	/**
-	 * returns TRUE if Box A overlaps Box B (horizontally only)
+	 * returns TRUE if Box A overlaps Box B. Detailed horizontal check, we "cheat" the
+	 * vertical check by assuming that tops must be equal to collide (a simplification
+	 * over a full height check.)
 	 * @method checkOverlap
 	 * @param  {object} "a" box
 	 * @param  {object} "b" box
 	 * @return {boolean}
 	 */
 	var checkOverlap = function(a, b) {
+		// "cheat" vertical check
+		if (a.top != b.top) {
+			return false;
+		}
+
 		if ((b.left > a.right) || (b.right < a.left)) {
 			//overlap not possible
 			return false;
@@ -2888,12 +2895,9 @@ ukeGeeks.overlapFixer = (function() {
 	 * @return {object}
 	 */
 	var getBox = function(ele){
-		var box =
-		{
-			width: getWidth(ele),
-			left: getLeftOffset(ele),
-			right: 0
-		};
+		var box = getOffsets(ele);
+		box.width = getWidth(ele);
+
 		// due to how CSS & HTML is defined it's possible that the <em> wrapping the
 		// chord name is actually wider than the <strong>, let's check.
 		// BTW: this will happen on the "mini-chord diagram" option
@@ -2927,18 +2931,29 @@ ukeGeeks.overlapFixer = (function() {
 	};
 
 	/**
+	 * Returns JSON with left, right, top, and width properties. ONLY left and top are calculate,
+	 * width & right need to be added later.
 	 * source: http://stackoverflow.com/questions/442404/dynamically-retrieve-the-position-x-y-of-an-html-element
-	 * @method getLeftOffset
+	 * @method getOffsets
 	 * @param  {DOM_element} element to be measured
-	 * @return {int}
+	 * @return {JSON}
 	 */
-	var getLeftOffset = function(ele) {
-		var left = 0;
-		while( ele && !isNaN( ele.offsetLeft )) {
-			left += ele.offsetLeft - ele.scrollLeft;
+	var getOffsets = function(ele) {
+		var box =
+		{
+			top: 0,
+			left: 0,
+			right: 0,
+			width: 0
+		};
+
+		while( ele && !isNaN( ele.offsetLeft ) && !isNaN( ele.offsetTop ) ) {
+			box.left += ele.offsetLeft - ele.scrollLeft;
+			box.top += ele.offsetTop - ele.scrollTop;
 			ele = ele.offsetParent;
 		}
-		return left;
+
+		return box;
 	};
 
 
