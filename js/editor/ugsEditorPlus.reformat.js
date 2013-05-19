@@ -12,9 +12,9 @@ ugsEditorPlus.reformat = new function(){
 
 	/**
 	 *
-	 * @class enums
+	 * @class _enums
 	 */
-	var enums = {
+	var _enums = {
 		lineTypes : {
 			blank : 0,
 			chords : 1,
@@ -24,7 +24,7 @@ ugsEditorPlus.reformat = new function(){
 	}
 
 	/**
-	 *
+	 * Line Object Class Definition (sets defaults)
 	 * @class lineObj
 	 */
 	var lineObj = function(){
@@ -33,10 +33,10 @@ ugsEditorPlus.reformat = new function(){
 		this.spaceCount = 0;
 		this.words = [];
 		this.chordCount = 0;
-		this.lineType = enums.lineTypes.blank;
+		this.lineType = _enums.lineTypes.blank;
 	};
 
-	var re = {
+	var _re = {
 		words : /\b(\S+)\b/gi,
 		spaces : /(\s+)/g,
 		leadingSpace : /(^\s+)/,
@@ -89,7 +89,7 @@ ugsEditorPlus.reformat = new function(){
 		text = text.replace('	', '    ');
 		var lines = text.split('\n');
 		for (var i = 0; i < lines.length; i++) {
-			var words = lines[i].match(re.words);
+			var words = lines[i].match(_re.words);
 			var l = new lineObj;
 			l.source = lines[i];
 			if ((words != null) && (words.length > 0)){
@@ -97,7 +97,7 @@ ugsEditorPlus.reformat = new function(){
 				l.words = words;
 				l.chordCount = countChords(words);
 			}
-			var spaces = lines[i].match(re.spaces);
+			var spaces = lines[i].match(_re.spaces);
 			if ((spaces != null) && (spaces.length > 0)){
 				l.spaceCount = spaces.length;
 			}
@@ -111,21 +111,21 @@ ugsEditorPlus.reformat = new function(){
 	 * Guesses as to the line's tyupe --
 	 * @method toLineType
 	 * @param line {line}
-	 * @return {enums.lineTypes}
+	 * @return {_enums.lineTypes}
 	 */
 	var toLineType = function(line){
 		if ((line.spaceCount + line.wordCount) < 1){
-			return enums.lineTypes.blank;
+			return _enums.lineTypes.blank;
 		}
 
-		var tabs = line.source.match(re.tabs);
+		var tabs = line.source.match(_re.tabs);
 		if (tabs != null){
-			return enums.lineTypes.tabs;
+			return _enums.lineTypes.tabs;
 		}
 
-		var t = enums.lineTypes.lyrics;
+		var t = _enums.lineTypes.lyrics;
 		if ((line.chordCount > 0) && (line.wordCount == line.chordCount)){
-			t = enums.lineTypes.chords;
+			t = _enums.lineTypes.chords;
 			_hasChords = true;
 		}
 
@@ -141,7 +141,7 @@ ugsEditorPlus.reformat = new function(){
 	var countChords = function(words){
 		var count = 0;
 		for (var i = 0; i < words.length; i++) {
-			if (words[i].match(re.chordNames)) {
+			if (words[i].match(_re.chordNames)) {
 				count++;
 			}
 		}
@@ -162,26 +162,26 @@ ugsEditorPlus.reformat = new function(){
 			nextLine = lines[i+1];
 			i++;
 			// If this line's blank or its the last line...
-			if (!nextLine || (thisLine.lineType == enums.lineTypes.blank)){
+			if (!nextLine || (thisLine.lineType == _enums.lineTypes.blank)){
 				s += thisLine.source + '\n';
 				continue;
 			}
 
 			// OK, we've complicated things a bit by adding tabs, so we'll handle this in a helper...
-			if ((thisLine.lineType == enums.lineTypes.tabs) && isTabBlock(lines, i)){
+			if ((thisLine.lineType == _enums.lineTypes.tabs) && isTabBlock(lines, i)){
 				s += '{start_of_tab}\n'
-					+ thisLine.source.replace(re.leadingSpace, '') + '\n'
-					+ nextLine.source.replace(re.leadingSpace, '') + '\n'
-					+ lines[i+1].source.replace(re.leadingSpace, '') + '\n'
-					+ lines[i+2].source.replace(re.leadingSpace, '') + '\n'
+					+ thisLine.source.replace(_re.leadingSpace, '') + '\n'
+					+ nextLine.source.replace(_re.leadingSpace, '') + '\n'
+					+ lines[i+1].source.replace(_re.leadingSpace, '') + '\n'
+					+ lines[i+2].source.replace(_re.leadingSpace, '') + '\n'
 					+ '{end_of_tab}\n';
 				i+= 3;
 				continue;
 			}
 
 			// finally, look for a "mergable" pair: this line is chords and the next is lyrics -- if not this we'll just output the current line
-			if ((thisLine.lineType != enums.lineTypes.chords) || (nextLine.lineType != enums.lineTypes.lyrics)){
-				s += (thisLine.lineType == enums.lineTypes.chords)
+			if ((thisLine.lineType != _enums.lineTypes.chords) || (nextLine.lineType != _enums.lineTypes.lyrics)){
+				s += (thisLine.lineType == _enums.lineTypes.chords)
 					? wrapChords(thisLine.source) + '\n'
 					: thisLine.source + '\n';
 				continue;
@@ -206,7 +206,7 @@ ugsEditorPlus.reformat = new function(){
 			return false;
 		}
 		for (var i = index; i < index + 3; i++){
-			if (lines[i].lineType != enums.lineTypes.tabs){
+			if (lines[i].lineType != _enums.lineTypes.tabs){
 				return false;
 			}
 		}
@@ -225,15 +225,15 @@ ugsEditorPlus.reformat = new function(){
 			lyricsLine += ' ';
 		}
 		var s = '';
-		var blocks = chordLine.match(re.chrdBlock);
-		var lead = chordLine.match(re.leadingSpace);
+		var blocks = chordLine.match(_re.chrdBlock);
+		var lead = chordLine.match(_re.leadingSpace);
 		var offset = 0;
 		if (lead){
 			s += lyricsLine.substr(offset, lead[0].length);
 			offset = lead[0].length;
 		}
 		for (var j = 0; j < blocks.length; j++) {
-			s += '[' + blocks[j].replace(re.spaces, '') + ']' + lyricsLine.substr(offset, blocks[j].length);
+			s += '[' + blocks[j].replace(_re.spaces, '') + ']' + lyricsLine.substr(offset, blocks[j].length);
 			offset += blocks[j].length;
 		}
 		if (offset < lyricsLine.length){
@@ -249,7 +249,7 @@ ugsEditorPlus.reformat = new function(){
 	 * @return [string] each word of input line gets bracketed
 	 */
 	var wrapChords = function(chordLine){
-		var chords = chordLine.replace(re.spaces, ' ').split(' ');
+		var chords = chordLine.replace(_re.spaces, ' ').split(' ');
 		var s = '';
 		for (var i = 0; i < chords.length; i++) {
 			if (chords[i].length > 0){

@@ -5,12 +5,11 @@
  * @namespace ugsEditorPlus
  */
 ugsEditorPlus.newSong = (function() {
-	var _ajaxUri = '';
 	/**
 	 * attach public members to this object
 	 * @type {Object}
 	 */
-	var publics = {};
+	var _public = {};
 
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
@@ -18,7 +17,9 @@ ugsEditorPlus.newSong = (function() {
 	 */
 	var _isUpdating = false;
 
-	publics.init = function(ajaxUri) {
+	var _ajaxUri = '';
+
+	_public.init = function(ajaxUri) {
 		_ajaxUri = ajaxUri;
 
 		$('#newSongBtn').click(function(e) {
@@ -28,13 +29,15 @@ ugsEditorPlus.newSong = (function() {
 		});
 
 		$('#openNewDlgBtn').click(function(e) {
+			resetFields();
 			$('#newSongForm').fadeIn();
 			$('#songTitle').focus();
 		});
 
-		$('#hideNewSongBtn').click(function(e) {
-			$('#newSongForm').fadeOut();
-		});
+		$('#hideNewSongBtn').click(closeDlg);
+
+		// handle escape key
+		$('#newSongForm').bind('keydown', onEscape);
 
 		$spinner = $( "#loadingSpinner" );
 		$spinner.hide();
@@ -98,5 +101,22 @@ ugsEditorPlus.newSong = (function() {
 			}
 		};
 
-	return publics;
+	var closeDlg = function(e) {
+		$('#newSongForm').fadeOut();
+	};
+
+	var resetFields = function(){
+		$('#songTitle, #songArtist').val('');
+	};
+
+	var onEscape = function(e){
+		if (e.which == 27) {
+			closeDlg();
+		}
+	};
+
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
 })();

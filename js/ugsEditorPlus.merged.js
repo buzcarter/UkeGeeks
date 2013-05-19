@@ -4,7 +4,14 @@
   * @namespace  ugsEditorPlus
   * @class ugsEditorPlus
   */
-var ugsEditorPlus = new function(){
+var ugsEditorPlus = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * attaches event handlers, preps variables, and runs UGS
 	 * @method init
@@ -17,8 +24,11 @@ var ugsEditorPlus = new function(){
 
 		ukeGeeks.scriptasaurus.init(isLegacyIe);
 
-		ugsEditorPlus.menus.init();
 		ugsEditorPlus.actions.init(isLegacyIe);
+		ugsEditorPlus.topMenus.init();
+		ugsEditorPlus.submenuUi.init(ugsEditorPlus.actions.doAction);
+		ugsEditorPlus.optionsDlg.init(ugsEditorPlus.actions.doAction);
+
 		ugsEditorPlus.actions.run();
 	};
 
@@ -27,7 +37,7 @@ var ugsEditorPlus = new function(){
 	 * @method attach
 	 * @public
 	 */
-	this.attach = function(){
+	_public.attach = function(){
 		init(false);
 	};
 
@@ -36,24 +46,41 @@ var ugsEditorPlus = new function(){
 	 * @method attach
 	 * @public
 	 */
-	this.attachIe = function(){
+	_public.attachIe = function(){
 		init(true);
 	};
 
-};
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
+
+}()
+);
 
 ;/**
- * Does the work; adjust CSS classes on page, runs Scriptasaurus
+ * Does the work by providing "doAction" method to respond to events (does not
+ * attach event handlers); Modifes some page elements -- adjust CSS classes on page,
+ * runs Scriptasaurus, etc.
  * @class actions
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.actions = new function(){
-	var _this = this;
+ugsEditorPlus.actions = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
 
 	// legacy IE flag
 	var _isCrap = false;
 
-	// handles to key/frequently accessed DOM Elements (see init()
+	/**
+	 * associative array/JSON handles to key/frequently accessed DOM Elements (see init()
+	 * @property _ele
+	 * @type {JSON}
+	 */
 	var _ele = {};
 
 	// misc
@@ -61,176 +88,231 @@ ugsEditorPlus.actions = new function(){
 	//
 	var _sourceOriginal = null;
 	var _originalChords = [];
-	// prior placement
-	var _priorValues = {
-		placement : '#above'
+
+	var _re = {
+		safe: /^([A-G][#b]?)(m|m6|7|m7|dim|maj7|6|sus2|sus4|aug|9)?$/
 	};
 
-	var re = {
-		safe: /^([A-G][#b]?)(m|m6|7|m7|dim|maj7|6|sus2|sus4|aug|9)?$/,
+	/**
+	 * associative array/JSON of last click value used; intended to be used to prevent
+	 * rerunning more expensize operations unnecessailry (when the value didn't actually change)
+	 * @property _prevValues
+	 * @type {JSON}
+	 */
+	var _prevValues = {
+		//'colors' : 'normal',
+		//'layout' : 'left',
+		//'tuning' : 'soprano',
+		'placement' : 'above',
+		'transpose' : 'up_0'
 	};
 
 	/**
 	 * Sets up this class; modifies form elements; attaches event handlers, etc
 	 * @method init
 	 * @public
-	 * @param NAME {type} DECR
+	 * @param isLegacyIe {bool} true if using pre-Internet Explorer v8 or 9 (sorry, I've forgotten or don't care)
 	 */
-	this.init = function(isLegacyIe){
+	_public.init = function(isLegacyIe){
 		_isCrap = isLegacyIe;
 
 		_ele = {
-			docBody : document.getElementsByTagName('body')[0],
 			songText : document.getElementById('ukeSongText'),
 			songContainer : document.getElementById('ukeSongContainer'),
 			cpmSource : document.getElementById('chordProSource'),
 			scalableArea : document.getElementById('scalablePrintArea')
 		};
 
-		// button clicks
-		document.getElementById('updateBtn').onclick = function(){doUpdate(); return false;};
-
-		// show/hide dialogs
-		var eSourceDlg = document.getElementById('songSourceDlg');
-		document.getElementById('hideSourceBtn').onclick = function(){return doShowDlg(eSourceDlg, false); };
-		document.getElementById('showSourceBtn').onclick = function(){return doShowDlg(eSourceDlg, true); };
-
-		var eHelpDlg = document.getElementById('helpDlg');
-		document.getElementById('hideHelpBtn').onclick = function(){return doShowDlg(eHelpDlg, false); };
-		document.getElementById('showHelpBtn').onclick = function(){return doShowDlg(eHelpDlg, true); };
-
-		var eOptionsDlg = document.getElementById('optionsDlg');
-		document.getElementById('hideOptionsBtn').onclick = function(){return doShowDlg(eOptionsDlg, false); };
-		document.getElementById('showOptionsBtn').onclick = function(){return doShowDlg(eOptionsDlg, true); };
-
-		// Options/settings
-		ugsEditorPlus.optionsDlg.init(this, _ele);
 	};
 
+	/* ----------------------------------------------------------------------------------- *|
+	|* Common "All Powerful" Helper Methods
+	|* ----------------------------------------------------------------------------------- */
+
 	/**
-	 * DESCR
-	 * @method doClick
+	 * Executes the requested Action using passed in Value
+	 * @method doAction
 	 * @public
-	 * @param NAME {type} DECR
+	 * @param action {string} Action's name; must match one of those defined in the switch below
+	 * @param value {string} Value used by Action (OK, a couple methods assume this is boolean/falsy)
 	 */
-	this.doClick = function(mainMenu, subMenu){
-		switch (mainMenu){
-			case '#zoom':
-				doZoom(subMenu);
+	_public.doAction = function(action, value){
+		switch (action){
+			case 'zoomFonts':
+				zoomFonts(value);
 				break;
-			case '#layout':
-				doLayout(subMenu);
+			case 'zoomDiagrams':
+				zoomDiagrams(value);
 				break;
-			case '#placement':
-				doPlacement(subMenu);
+			case 'layout':
+				doLayout(value);
 				break;
-			case '#tuning':
-				doTuning(subMenu);
+			case 'placement':
+				doPlacement(value);
 				break;
-			case '#colors':
-				doColors(subMenu);
+			case 'tuning':
+				doTuning(value);
 				break;
-			case '#transpose':
-				doTranspose(subMenu);
+			case 'colors':
+				doColors(value);
+				break;
+			case 'transpose':
+				doTranspose(value);
+				break;
+			case 'paper':
+				doSetPageWidth(value);
+				break;
+			case 'showEnclosures':
+				setEnclosureVisible(value);
+				break;
+			case 'hideCommonChords':
+				setIgnoreCommon(value);
+				break;
+			case 'setCommonChords':
+				setetCommonChordsList(value);
+				break;
+			case 'update':
+				doUpdate();
 				break;
 			default:
-				console.log('Unrecognized ' + mainMenu + ' > ' + subMenu);
+				console.log('Unrecognized ' + action + ' > ' + value);
 		}
 	};
 
 	/**
-	 * DESCR
+	 * Rerun for new song text; updates UI
 	 * @method doUpdate
 	 * @private
 	 */
 	var doUpdate = function(){
-		_this.run(true);
+		_public.run(true);
 	};
 
 	/**
-	 * DESCR
-	 * @method doZoom
-	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * Rebuilds song, info, chord diagrams using current settings.
+	 * @method run
+	 * @param isDoBackup {bool} true forces backup; optional, default false.
 	 */
-	var doZoom = function(subMenu){
-		var prct = (parseInt(subMenu.substr(6), 10) / 100);
+	_public.run = function(isDoBackup){
+		isDoBackup = (arguments.length > 0) && isDoBackup;
+		_ele.songText.innerHTML = '<pre>' + _ele.cpmSource.value + '</pre>';
+		_song = ukeGeeks.scriptasaurus.run();
 
-		var width = Math.round(prct * 225);
+		if (_song.chords.length < 1){
+			ugsEditorPlus.autoReformat.run(_ele);
+		}
 
-		_ele.scalableArea.style.fontSize = (prct * 12) + 'pt';
+		if (_song){
+			ugsEditorPlus.songUi.update(_song);
+
+			// maintains last copy of USER edited song -- used for transpose etc
+			if (isDoBackup || (_sourceOriginal == null)){
+				_sourceOriginal = _ele.cpmSource.value;
+				_originalChords = _song.chords;
+				resetTranspose(_song.chords.length < 1 ? '' : _song.chords[0]);
+			}
+		}
+	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* Zoom Methods
+	|* ----------------------------------------------------------------------------------- */
+
+	/**
+	 * Zooms (scales) fonts
+	 * @method zoomFonts
+	 * @private
+	 * @param value {string} point-size; value of the clicked value item
+	 */
+	var zoomFonts = function(value){
+		var pt = parseInt(value, 10);
+		_ele.scalableArea.style.fontSize = pt + 'pt';
+	};
+
+	/**
+	 * Zooms (scales) chord diagrams
+	 * @method zoomDiagrams
+	 * @private
+	 * @param value {string} percentage, integer between 0 and, well, 100?; value of the clicked value item
+	 */
+	var zoomDiagrams = function(value){
+		var prct = parseInt(value, 10) / 100;
+		// apologies for the magic number...
+		var columnWidth = Math.round(prct * 225);
 
 		var s = ugsEditorPlus.styles.getSheet('ugsEditorCss');
 		var m = s.Find('.scalablePrintArea .ugs-diagrams-wrap canvas');
-		m.style.width = Math.round(prct * 100) +'px';
+		m.style.width = Math.round(prct * ukeGeeks.settings.fretBox.width) +'px';
+		m.style.height = Math.round(prct * ukeGeeks.settings.fretBox.height) +'px';
 
 		m = s.Find('.scalablePrintArea .ugs-diagrams-wrap');
-		m.style.width = width +'px';
+		m.style.width = columnWidth +'px';
 
 		m = s.Find('.scalablePrintArea .ugs-source-wrap');
-		m.style.marginLeft = (25 + width) +'px';
+		m.style.marginLeft = (25 + columnWidth) +'px';
 	};
 
+	/* ----------------------------------------------------------------------------------- *|
+	|* Layout (Reference Diagram Position) Methods
+	|* ----------------------------------------------------------------------------------- */
+
 	/**
-	 * DESCR
+	 * Changes positions for Reference Chord Diagrams -- handled entirely via CSS classes
 	 * @method doLayout
 	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * @param value {string} value of the clicked value item
 	 */
-	var doLayout = function(subMenu){
-		ukeGeeks.toolsLite.setClass(_ele.docBody, 'diagramsOnTop', (subMenu == '#top'));
-		ukeGeeks.toolsLite.setClass(_ele.docBody, 'diagramsOnSide', (subMenu == '#left'));
-		ukeGeeks.toolsLite.setClass(_ele.docBody, 'ugsHideDiagrams', (subMenu == '#none'));
+	var doLayout = function(value){
+		$('body')
+			.toggleClass('diagramsOnTop', value == 'top')
+			.toggleClass('diagramsOnSide', value == 'left')
+			.toggleClass('ugsHideDiagrams', value == 'none');
 	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* Chord Name Placement Methods
+	|* ----------------------------------------------------------------------------------- */
 
 	/**
 	 * Chord Name placement (&amp; "Mini-chord diagrams")
 	 * @method doPlacement
 	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * @param value {string} value of the clicked value item
 	 */
-	var doPlacement = function(subMenu){
-		ukeGeeks.toolsLite.setClass(_ele.songContainer, 'ugsInline', (subMenu == '#inline'));
+	var doPlacement = function(value){
+		ukeGeeks.toolsLite.setClass(_ele.songContainer, 'ugsInline', (value == 'inline'));
 
 		// NOTE: ugs already adds the "chord diagrams above" class based on setting,
 		// BUT does NOT remove it!!!!
-		var isMiniDiagrams = (subMenu == '#miniDiagrams');
+		var isMiniDiagrams = (value == 'miniDiagrams');
 		if (!isMiniDiagrams){
 			ukeGeeks.toolsLite.removeClass(_ele.songContainer, 'ugsInlineDiagrams');
 		}
 
-		if (isMiniDiagrams || (_priorValues.placement == '#miniDiagrams')){
+		if (isMiniDiagrams || (_prevValues.placement == 'miniDiagrams')){
 			ukeGeeks.settings.inlineDiagrams = isMiniDiagrams;
-			_this.run();
+			_public.run();
 		}
-		else if (!isMiniDiagrams && (_priorValues.placement != '#miniDiagrams')) {
+		else if (!isMiniDiagrams && (_prevValues.placement != 'miniDiagrams')) {
 			// we're jumping between "above" and "inline", either way we need to
 			// manually fix the overlaps
 			ukeGeeks.overlapFixer.Fix(_ele.songText);
 		}
 
-
-		_priorValues.placement = subMenu;
+		_prevValues.placement = value;
 	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* Color Methods
+	|* ----------------------------------------------------------------------------------- */
 
 	/**
-	 * DESCR
-	 * @method doTuning
-	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * available color schemes
+	 * @property _colorSchemes
+	 * @type {JSON-Object}
 	 */
-	var doTuning = function(subMenu){
-		var tuning = (subMenu == '#baritone')
-			? ukeGeeks.definitions.instrument.baritoneUke
-			: ukeGeeks.definitions.instrument.sopranoUke;
-
-		ukeGeeks.scriptasaurus.setTuningOffset(tuning);
-		_this.run();
-	};
-
-	// available color schemes
 	var _colorSchemes = {
-		'#reversed' : {
+		'reversed' : {
 			song: {
 				fretLines: '#365F70',
 				dots: '#FDD96F',
@@ -245,7 +327,7 @@ ugsEditorPlus.actions = new function(){
 			}
 		},
 
-		'#normal' : {
+		'normal' : {
 			song: {
 				fretLines: '#003366',
 				dots: '#ff0000',
@@ -262,72 +344,71 @@ ugsEditorPlus.actions = new function(){
 	};
 
 	/**
-	 * DESCR
+	 * Change the color scheme -- requires changing CSS Class and reruning (to regenerate reference chord diagrams)
 	 * @method doColors
 	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * @param value {string} value of the clicked value item
 	 */
-	var doColors = function(subMenu){
-		ukeGeeks.toolsLite.setClass(_ele.docBody, 'reversed', subMenu == '#reversed');
+	var doColors = function(value){
+		$('body').toggleClass('reversed', value == 'reversed');
 
-		var c = _colorSchemes[subMenu];
+		var c = _colorSchemes[value];
 		ukeGeeks.settings.colors = c.song;
 		ukeGeeks.settings.tabs.lineColor = c.tabs.lines;
 		ukeGeeks.settings.tabs.dotColor = c.tabs.dots;
 		ukeGeeks.settings.tabs.textColor = c.tabs.text;
 
-		_this.run();
+		_public.run();
+	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* Page Width Methods
+	|* ----------------------------------------------------------------------------------- */
+
+	/**
+	 * (option dialog) changes body class, moving the right page edge
+	 * @method doSetPageWidth
+	 * @private
+	 * @param value {string} currently selected option value
+	 */
+	var doSetPageWidth = function(value){
+		var opts = ['letter', 'a4', 'screen'];
+		var $body = $('body');
+		for(var i = 0; i < opts.length; i++){
+			$body.removeClass('pageWidth_' + opts[i]);
+		}
+		$body.addClass('pageWidth_' + value);
+	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* Instrument & Tuning Methods
+	|* ----------------------------------------------------------------------------------- */
+
+	/**
+	 * Change the instrument (tuning)
+	 * @method doTuning
+	 * @private
+	 * @param value {string} value of the clicked value item
+	 */
+	var doTuning = function(value){
+		var tuning = (value == 'baritone')
+			? ukeGeeks.definitions.instrument.baritoneUke
+			: ukeGeeks.definitions.instrument.sopranoUke;
+
+		ukeGeeks.scriptasaurus.setTuningOffset(tuning);
+		_public.run();
 	};
 
 	/**
-	 * DESCR
+	 * Parses Value to decide number of steps "up" or "down", then fires off transpose
 	 * @method doTranspose
 	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * @param value {string} value of the clicked value item
 	 */
-	var doTranspose = function(subMenu){
-		var sign = subMenu[1] == 'u' ? 1 : -1;
-		var steps = parseInt(subMenu[subMenu.length - 1], 10);
+	var doTranspose = function(value){
+		var sign = value[0] == 'u' ? 1 : -1;
+		var steps = parseInt(value[value.length - 1], 10);
 		transpose(sign * steps);
-		// _this.
-	};
-
-	/**
-	 * DESCR
-	 * @method doShowDlg
-	 * @private
-	 * @param element {DOM} handle to overlay to show/hide
-	 * @param isActive {bool} TRUE means show the overlay
-	 */
-	var doShowDlg = function(element, isActive){
-		ukeGeeks.toolsLite.setClass(element, 'isHidden', !isActive);
-		return false;
-	};
-
-	/**
-	 * Rebuilds song, info, chord diagrams using current settings.
-	 * @method run
-	 * @param isDoBackup {bool} true forces backup; optional, default false.
-	 */
-	this.run = function(isDoBackup){
-		isDoBackup = (arguments.length > 0) && isDoBackup;
-		_ele.songText.innerHTML = '<pre>' + _ele.cpmSource.value + '</pre>';
-		_song = ukeGeeks.scriptasaurus.run();
-
-		if (_song.chords.length < 1){
-			ugsEditorPlus.autoReformat.run(_ele);
-		}
-
-		if (_song){
-			ugsEditorPlus.songUi.update(_song);
-
-			// maintains last copy of USER edited song -- used for transpose etc
-			if (isDoBackup || (_sourceOriginal == null)){
-				_sourceOriginal = _ele.cpmSource.value;
-				_originalChords = _song.chords;
-				ugsEditorPlus.menus.resetTranspose(_song.chords.length < 1 ? '' : _song.chords[0]);
-			}
-		}
 	};
 
 	/**
@@ -339,7 +420,7 @@ ugsEditorPlus.actions = new function(){
 		var safeChords = [];
 		var bad = '';
 		for(var i = 0; i < _originalChords.length; i++){
-			if (re.safe.test(_originalChords[i])){
+			if (_re.safe.test(_originalChords[i])){
 				safeChords.push(_originalChords[i]);
 			}
 			else {
@@ -368,18 +449,111 @@ ugsEditorPlus.actions = new function(){
 		}
 
 		_ele.cpmSource.value = s;
-		_this.run();
+		_public.run();
 
 	};
 
-};
+ /**
+	 * Sets Transpose menu's selected value to "Original"; adds example chord names
+	 * @method resetTranspose
+	 * @private
+	 * @param chord {string}
+	 */
+	var resetTranspose = function(chord){
+		var ul = document.getElementById('transposeOptions');
+		var items = ul.getElementsByTagName('li');
+		var sample;
+		var steps = -6;
+
+		_prevValues['transpose'] = 'up_0';
+
+		ugsEditorPlus.submenuUi.resetTransposeLabel();
+
+		for (i = 0; i < items.length; i++){
+			ukeGeeks.toolsLite.removeClass(items[i], 'checked');
+			sample = (chord.length < 1) ? '' : ukeGeeks.transpose.shift(chord, steps);
+			items[i].getElementsByTagName('em')[0].innerHTML = sample;
+			if (steps == 0){
+				ukeGeeks.toolsLite.addClass(items[i], 'checked');
+			}
+			steps++;
+		}
+	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* "Other Options" Methods
+	|* ----------------------------------------------------------------------------------- */
+	// a grab bag of single, odd switches... mea culpa
+
+	/**
+	 * (option dialog) change whether to show/hide the bracket characters
+	 * @method setEnclosureVisible
+	 * @private
+	 * @param isVisible {bool}
+	 */
+	var setEnclosureVisible = function(isVisible){
+		ukeGeeks.settings.opts.retainBrackets = isVisible;
+		_public.run();
+	};
+
+	/**
+	 * "Ignore Common" was checked, need to update master chord diagrams
+	 * @method setIgnoreCommon
+	 * @private
+	 * @param isIgnore {bool}
+	 */
+	var setIgnoreCommon = function(isIgnore){
+		ukeGeeks.settings.opts.ignoreCommonChords = isIgnore;
+		_public.run();
+	};
+
+	/**
+	 * the list of common chords has been change; update UGS setting
+	 * and _possible_ rerun
+	 * @method setetCommonChordsList
+	 * @private
+	 * @param chordCsvList {string} comma seperated values list of chord names
+	 * @return {void}
+	 */
+	var setetCommonChordsList = function(chordCsvList){
+		var inputList = chordCsvList.split(/[ ,]+/);
+		var cleanList = [];
+
+		for (var i = 0; i < inputList.length; i++) {
+			var c = ukeGeeks.toolsLite.trim(inputList[i]);
+			if (c.length > 0){
+				cleanList.push(c);
+			}
+		};
+
+		ukeGeeks.settings.commonChords = cleanList;
+
+		if (ukeGeeks.settings.opts.ignoreCommonChords){
+			_public.run();
+		}
+	};
+
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
+
+}()
+);
 
 ;/**
  * Handles transfering the easy text bits of a Song -- title, artist, etc -- to the page.
  * @class songUi
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.songUi = new function(){
+ugsEditorPlus.songUi = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * Sets an element's Inner HTML and sets visibility based on whether the value is empty (or not)
 	 * @method trySet
@@ -403,7 +577,7 @@ ugsEditorPlus.songUi = new function(){
 	 * @private
 	 * @param song {Song(Object)}
 	 */
-	this.update = function(song){
+	_public.update = function(song){
 		var h = document.getElementById('songTitle');
 		h.innerHTML = (song.title.length > 0) ? song.title : 'Untitled-Song';
 
@@ -425,8 +599,13 @@ ugsEditorPlus.songUi = new function(){
 		}
 	};
 
-};
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
 
+}()
+);
 
 ;/**
  * from: http://www.javascriptkit.com/dhtmltutors/externalcss.shtml
@@ -476,104 +655,114 @@ ugsEditorPlus.styles = new function(){
 };
 
 ;/**
- * Mechanics of the Optiones/Settings dialog
+ * UI mechanics of the Other Options dialog
  * @class options
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.optionsDlg = new function(){
-	// borrow the "run" method from Actions class
-	var run = null;
+ugsEditorPlus.optionsDlg = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
+	/**
+	 * borrow the "doAction" method from Actions class
+	 * @property _doAction
+	 * @type {function}
+	 */
+	var _doAction = null;
 
 	// DOM handles (mostly for options dialog elements only)
 	var _ele = {};
 
-	this.init = function(actionsController, elements){
-		run = actionsController.run;
+	/**
+	 * Sets up this class by attaching event handlers to form elements;
+	 * @method init
+	 * @public
+	 * @param doAction {function} handle to method to actually DO the job
+	 */
+	_public.init = function(doAction){
+		_doAction = doAction;
 
 		_ele = {
-			docBody : elements.docBody,
 			inputIgnoreList : document.getElementById('commonChordList'),
 			chkIgnore : document.getElementById('chkIgnoreCommon'),
-			pageWidth : document.getElementById('pageWidth'),
+			//pageWidth : document.getElementById('pageWidth'),
 			chkEnclosures : document.getElementById('chkEnclosures')
 		};
 
 		restoreDefaults();
 
-		_ele.pageWidth.onchange = function(){doSetWidth(this.value); };
-		_ele.chkEnclosures.onclick = function(){doSetEnclosure(!this.checked); };
-		_ele.inputIgnoreList.onchange = function(){doSetCommon(); };
-		_ele.chkIgnore.onclick = function(){doIgnoreChkClk(this.checked); };
+		// button clicks
+		document.getElementById('updateBtn').onclick = function(){onUpdateBtnClick(); return false;};
+
+		//_ele.pageWidth.onchange = function(){doSetWidth(this.value); };
+		_ele.chkEnclosures.onclick = function(){onSetEnclosureClick(!this.checked); };
+		_ele.inputIgnoreList.onchange = function(){onCommonChordFieldChange(); };
+		_ele.chkIgnore.onclick = function(){onIgnoreCommonClick(this.checked); };
+
+		// ugh! Event bubbling!
+		$('.checkboxBlock label, input[type=checkbox]').click(function(e){e.stopPropagation();});
+		//$('#helpDlg a').click(function(e){console.log('anchor click');});
+
+		$('.overlay').draggable({
+			handle : 'hgroup',
+			//containParent: true
+    });
 	};
 
 	var restoreDefaults = function(){
 		// initialize the common list
 		_ele.inputIgnoreList.value = ukeGeeks.settings.commonChords.join(", ");
-		_ele.pageWidth.value = 'letter';
+		//_ele.pageWidth.value = 'letter';
 		_ele.chkIgnore.checked = ukeGeeks.settings.opts.ignoreCommonChords;
 		_ele.chkEnclosures.checked = !ukeGeeks.settings.opts.retainBrackets;
 	};
 
-	/**
-	 * (option dialog) changes body class, moving the right page edge
-	 * @method doSetWidth
-	 * @private
-	 * @param value {string} currently selected option value
-	 */
-	var doSetWidth = function(value){
-		var opts = ['letter', 'a4', 'screen'];
-		for(var i = 0; i < opts.length; i++){
-			ukeGeeks.toolsLite.removeClass(_ele.docBody, 'pageWidth_' + opts[i]);
-		}
-		ukeGeeks.toolsLite.addClass(_ele.docBody, 'pageWidth_' + value);
+	var onUpdateBtnClick = function(){
+		_doAction( 'update', null);
 	};
 
 	/**
 	 * (option dialog) change whether to show/hide the bracket characters
-	 * @method doSetEnclosure
+	 * @method onSetEnclosureClick
 	 * @private
 	 * @param isVisible {bool}
 	 */
-	var doSetEnclosure = function(isVisible){
-		ukeGeeks.settings.opts.retainBrackets = isVisible;
-		run();
+	var onSetEnclosureClick = function(isVisible){
+		_doAction( 'showEnclosures', isVisible);
 	};
 
 	/**
 	 * "Ignore Common" was checked, need to update master chord diagrams
-	 * @method doIgnoreChkClk
+	 * @method onIgnoreCommonClick
+	 * @private
 	 * @param isIgnore {bool}
 	 */
-	var doIgnoreChkClk = function(isIgnore){
-		ukeGeeks.settings.opts.ignoreCommonChords = isIgnore;
-		run();
+	var onIgnoreCommonClick = function(isIgnore){
+		_doAction( 'hideCommonChords', isIgnore);
 	};
 
 	/**
 	 * the list of common chords has been change; update UGS setting
 	 * and _possible_ rerun
-	 * @method doSetCommon
+	 * @method onCommonChordFieldChange
+	 * @private
 	 * @return {void}
 	 */
-	var doSetCommon = function(){
-		var inputList = _ele.inputIgnoreList.value.split(/[ ,]+/);
-		var chordList = [];
-		for (var i = 0; i < inputList.length; i++) {
-			var c = ukeGeeks.toolsLite.trim(inputList[i]);
-			if (c.length > 0){
-				chordList.push(c);
-			}
-		};
-
-		ukeGeeks.settings.commonChords = chordList;
-
-		if (_ele.chkIgnore.checked){
-			run();
-		}
+	var onCommonChordFieldChange = function(){
+		_doAction( 'setCommonChords', _ele.inputIgnoreList.value);
 	};
 
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
 
-};
+}()
+);
 
 ;var ugsEditorPlus = window.ugsEditorPlus || {};
 
@@ -589,9 +778,9 @@ ugsEditorPlus.reformat = new function(){
 
 	/**
 	 *
-	 * @class enums
+	 * @class _enums
 	 */
-	var enums = {
+	var _enums = {
 		lineTypes : {
 			blank : 0,
 			chords : 1,
@@ -601,7 +790,7 @@ ugsEditorPlus.reformat = new function(){
 	}
 
 	/**
-	 *
+	 * Line Object Class Definition (sets defaults)
 	 * @class lineObj
 	 */
 	var lineObj = function(){
@@ -610,10 +799,10 @@ ugsEditorPlus.reformat = new function(){
 		this.spaceCount = 0;
 		this.words = [];
 		this.chordCount = 0;
-		this.lineType = enums.lineTypes.blank;
+		this.lineType = _enums.lineTypes.blank;
 	};
 
-	var re = {
+	var _re = {
 		words : /\b(\S+)\b/gi,
 		spaces : /(\s+)/g,
 		leadingSpace : /(^\s+)/,
@@ -666,7 +855,7 @@ ugsEditorPlus.reformat = new function(){
 		text = text.replace('	', '    ');
 		var lines = text.split('\n');
 		for (var i = 0; i < lines.length; i++) {
-			var words = lines[i].match(re.words);
+			var words = lines[i].match(_re.words);
 			var l = new lineObj;
 			l.source = lines[i];
 			if ((words != null) && (words.length > 0)){
@@ -674,7 +863,7 @@ ugsEditorPlus.reformat = new function(){
 				l.words = words;
 				l.chordCount = countChords(words);
 			}
-			var spaces = lines[i].match(re.spaces);
+			var spaces = lines[i].match(_re.spaces);
 			if ((spaces != null) && (spaces.length > 0)){
 				l.spaceCount = spaces.length;
 			}
@@ -688,21 +877,21 @@ ugsEditorPlus.reformat = new function(){
 	 * Guesses as to the line's tyupe --
 	 * @method toLineType
 	 * @param line {line}
-	 * @return {enums.lineTypes}
+	 * @return {_enums.lineTypes}
 	 */
 	var toLineType = function(line){
 		if ((line.spaceCount + line.wordCount) < 1){
-			return enums.lineTypes.blank;
+			return _enums.lineTypes.blank;
 		}
 
-		var tabs = line.source.match(re.tabs);
+		var tabs = line.source.match(_re.tabs);
 		if (tabs != null){
-			return enums.lineTypes.tabs;
+			return _enums.lineTypes.tabs;
 		}
 
-		var t = enums.lineTypes.lyrics;
+		var t = _enums.lineTypes.lyrics;
 		if ((line.chordCount > 0) && (line.wordCount == line.chordCount)){
-			t = enums.lineTypes.chords;
+			t = _enums.lineTypes.chords;
 			_hasChords = true;
 		}
 
@@ -718,7 +907,7 @@ ugsEditorPlus.reformat = new function(){
 	var countChords = function(words){
 		var count = 0;
 		for (var i = 0; i < words.length; i++) {
-			if (words[i].match(re.chordNames)) {
+			if (words[i].match(_re.chordNames)) {
 				count++;
 			}
 		}
@@ -739,26 +928,26 @@ ugsEditorPlus.reformat = new function(){
 			nextLine = lines[i+1];
 			i++;
 			// If this line's blank or its the last line...
-			if (!nextLine || (thisLine.lineType == enums.lineTypes.blank)){
+			if (!nextLine || (thisLine.lineType == _enums.lineTypes.blank)){
 				s += thisLine.source + '\n';
 				continue;
 			}
 
 			// OK, we've complicated things a bit by adding tabs, so we'll handle this in a helper...
-			if ((thisLine.lineType == enums.lineTypes.tabs) && isTabBlock(lines, i)){
+			if ((thisLine.lineType == _enums.lineTypes.tabs) && isTabBlock(lines, i)){
 				s += '{start_of_tab}\n'
-					+ thisLine.source.replace(re.leadingSpace, '') + '\n'
-					+ nextLine.source.replace(re.leadingSpace, '') + '\n'
-					+ lines[i+1].source.replace(re.leadingSpace, '') + '\n'
-					+ lines[i+2].source.replace(re.leadingSpace, '') + '\n'
+					+ thisLine.source.replace(_re.leadingSpace, '') + '\n'
+					+ nextLine.source.replace(_re.leadingSpace, '') + '\n'
+					+ lines[i+1].source.replace(_re.leadingSpace, '') + '\n'
+					+ lines[i+2].source.replace(_re.leadingSpace, '') + '\n'
 					+ '{end_of_tab}\n';
 				i+= 3;
 				continue;
 			}
 
 			// finally, look for a "mergable" pair: this line is chords and the next is lyrics -- if not this we'll just output the current line
-			if ((thisLine.lineType != enums.lineTypes.chords) || (nextLine.lineType != enums.lineTypes.lyrics)){
-				s += (thisLine.lineType == enums.lineTypes.chords)
+			if ((thisLine.lineType != _enums.lineTypes.chords) || (nextLine.lineType != _enums.lineTypes.lyrics)){
+				s += (thisLine.lineType == _enums.lineTypes.chords)
 					? wrapChords(thisLine.source) + '\n'
 					: thisLine.source + '\n';
 				continue;
@@ -783,7 +972,7 @@ ugsEditorPlus.reformat = new function(){
 			return false;
 		}
 		for (var i = index; i < index + 3; i++){
-			if (lines[i].lineType != enums.lineTypes.tabs){
+			if (lines[i].lineType != _enums.lineTypes.tabs){
 				return false;
 			}
 		}
@@ -802,15 +991,15 @@ ugsEditorPlus.reformat = new function(){
 			lyricsLine += ' ';
 		}
 		var s = '';
-		var blocks = chordLine.match(re.chrdBlock);
-		var lead = chordLine.match(re.leadingSpace);
+		var blocks = chordLine.match(_re.chrdBlock);
+		var lead = chordLine.match(_re.leadingSpace);
 		var offset = 0;
 		if (lead){
 			s += lyricsLine.substr(offset, lead[0].length);
 			offset = lead[0].length;
 		}
 		for (var j = 0; j < blocks.length; j++) {
-			s += '[' + blocks[j].replace(re.spaces, '') + ']' + lyricsLine.substr(offset, blocks[j].length);
+			s += '[' + blocks[j].replace(_re.spaces, '') + ']' + lyricsLine.substr(offset, blocks[j].length);
 			offset += blocks[j].length;
 		}
 		if (offset < lyricsLine.length){
@@ -826,7 +1015,7 @@ ugsEditorPlus.reformat = new function(){
 	 * @return [string] each word of input line gets bracketed
 	 */
 	var wrapChords = function(chordLine){
-		var chords = chordLine.replace(re.spaces, ' ').split(' ');
+		var chords = chordLine.replace(_re.spaces, ' ').split(' ');
 		var s = '';
 		for (var i = 0; i < chords.length; i++) {
 			if (chords[i].length > 0){
@@ -843,19 +1032,31 @@ ugsEditorPlus.reformat = new function(){
  * @class autoReformat
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.autoReformat = new function(){
-	var _this = this;
-	var _elements;
+ugsEditorPlus.autoReformat = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
+	/**
+	 * associative array/JSON handles to key/frequently accessed DOM Elements (see init()
+	 * @property _ele
+	 * @type {JSON}
+	 */
+	var _ele = {};
+
 	var _formatted;
 	var _isDisabled = false;
 
-	this.run = function(elements){
+	_public.run = function(elements){
 		if (_isDisabled){
 			return;
 		}
-		_elements = elements;
-		_elements.reformatTextBox = document.getElementById('reformatSource');
-		_elements.reformatDlg = document.getElementById('reformatDlg');
+		_ele = elements;
+		_ele.reformatTextBox = document.getElementById('reformatSource');
+		_ele.reformatDlg = document.getElementById('reformatDlg');
 
 		document.getElementById('reformatYesBtn').onclick = function(){ doOk(); return false; };
 		document.getElementById('reformatNoBtn').onclick = function(){ doClose(); return false; };
@@ -869,13 +1070,13 @@ ugsEditorPlus.autoReformat = new function(){
 	};
 
 	var doOk = function(){
-		_elements.cpmSource.value = _formatted;
+		_ele.cpmSource.value = _formatted;
 		doClose();
 		ugsEditorPlus.actions.run(true);
 	};
 
 	var doClose = function(){
-		ukeGeeks.toolsLite.addClass(_elements.reformatDlg, 'isHidden');
+		ukeGeeks.toolsLite.addClass(_ele.reformatDlg, 'isHidden');
 	};
 
 	var doDisable = function(isDisabled){
@@ -883,201 +1084,351 @@ ugsEditorPlus.autoReformat = new function(){
 	};
 
 	var runNow = function(){
-		_formatted = ugsEditorPlus.reformat.run(_elements.cpmSource.value);
-		_elements.reformatTextBox.innerHTML = _formatted;
+		_formatted = ugsEditorPlus.reformat.run(_ele.cpmSource.value);
+		_ele.reformatTextBox.innerHTML = _formatted;
 
 		if (!ugsEditorPlus.reformat.hasChords()){
 			return;
 		}
 
-		ukeGeeks.toolsLite.removeClass(_elements.reformatDlg, 'isHidden');
-	};
-}
-;
-/**
- * Handles Menu UI - show/hide, set checked state, calls actions
- * @class menus
- * @namespace ugsEditorPlus
- */
-ugsEditorPlus.menus = new function(){
-	// top level LI (list items)
-	var _menuItems;
-	// currently selected top menu href ('#top')
-	var _topBtnUl = null;
-	var _topBtnHref = '';
-	// currently selected sub-menu item's href ('#sub')
-	var _subBtnHref = '';
-	// associative array/JSON of last click event
-	var _prevValues = {
-		'#layout' : '#left',
-		'#placement' : '#above',
-		'#tuning' : '#soprano',
-		'#zoom' : '#prct_100',
-		'#transpose' : '#up_0',
-		'#colors' : '#normal'
+		ukeGeeks.toolsLite.removeClass(_ele.reformatDlg, 'isHidden');
 	};
 
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
+
+}()
+);
+;
+/**
+ * Handles Top Menu UI -- includes the show/hide dialogs (why? cuz they're attached to top menu buttons)
+ * Shows (a) dialongs (such as Edit) and (b) those tool-tippy options thingies.
+ * @class topMenus
+ * @namespace ugsEditorPlus
+ */
+ugsEditorPlus.topMenus = (function(){
 	/**
-	 * DESCRIPTION
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var _public = {};
+
+	/**
+	 * attaches events...
 	 * @method init
 	 * @return {void}
 	 */
-	this.init = function(){
-		_menuItems = document.getElementById('ugsAppToolbar').getElementsByTagName('ul')[0].children;
-		addSizeOptions();
-		attachClicks();
-	};
+	_public.init = function(){
+		// $('#ugsAppToolbar > ul a')
+		$('#ugsAppToolbar > ul  li').not('[data-dialog]').children('a').click(onMenuItemClick);
+  	$('.showOptionsBox a').click(onShowOptionsClick);
+
+		$('#ugsAppToolbar > ul  li[data-dialog]').click(onShowDlgBtnClick);
+		$('.closeBtn').click(onCloseBtnClick);
+ 	};
 
 	/**
 	 * DESCRIPTION
 	 * @private
-	 * @method attachClicks
+	 * @method onMenuItemClick
 	 * @return {void}
 	 */
-	var attachClicks = function() {
-		for (var i = 0; i < _menuItems.length; i++){
-			var topBtn = _menuItems[i].getElementsByTagName('a')[0];
-			var ul = _menuItems[i].getElementsByTagName('ul');
-			if (ul.length < 1){
-				topBtn.onclick = function(){closeAll(); return false;};
-				continue;
-			}
-
-			topBtn.onclick = function(){switchActiveMenu(this); return false;};
-
-			var items = _menuItems[i].getElementsByTagName('li');
-			for(var j = 0; j < items.length; j++){
-				var subBtn = items[j].getElementsByTagName('a')[0];
-				subBtn.onclick = function(){subBtnClick(this); return false;};
-			}
-		}
-	};
-
-	/**
-	 * DESCRIPTION
-	 * @private
-	 * @method switchActiveMenu
-	 * @param ele (DOM_element)
-	 * @return {void}
-	 */
-	var switchActiveMenu = function(ele){
-		var isOpen = ukeGeeks.toolsLite.hasClass(ele.parentNode, 'active');
-		closeAll();
+	var onMenuItemClick = function(){
+		// the clicked anchor tag
+		var $parent = $(this).parent();
+		var isOpen = $parent.hasClass('active');
+		_makeAllInactive();
 		if (isOpen) {
 			return;
 		}
-		ukeGeeks.toolsLite.addClass(ele.parentNode, 'active');
-		_topBtnUl = ele.parentNode.getElementsByTagName('ul')[0];
-		_topBtnHref = getHref(ele);
-
+		$parent.addClass('active');
 	};
 
 	/**
 	 * DESCRIPTION
+	 * @method _makeAllInactive
 	 * @private
-	 * @method subBtnClick
-	 * @param ele (DOM_element)
 	 * @return {void}
 	 */
-	var subBtnClick = function(ele){
-		closeAll();
-		_subBtnHref = getHref(ele);
+	var _makeAllInactive = function(){
+		$('#ugsAppToolbar > ul > li').removeClass('active');
+	};
 
-		if (_prevValues[_topBtnHref] == _subBtnHref){
+	/**
+	 * handles nav menu/toolbar click event. The data-dialog="X" attribute
+	 * on the element assocaites the menu item with the dialog box (the
+	 * box's id)
+	 * @method onShowDlgBtnClick
+	 * @private
+	 * @param e {event}
+	 * @return {bool} false to kill event bubbling
+	 */
+	var onShowDlgBtnClick = function(e){
+		var id = $(this).data('dialog');
+		$('#' + id).fadeIn();
+		// prevent event bubbling
+		return false;
+	};
+
+	/**
+	 * dialog box's close button's click handler. Hides the first parent
+	 * with class.
+	 * @method onCloseBtnClick
+	 * @private
+	 * @param e {event}
+	 * @return {bool} false to kill event bubbling
+	 */
+	var onCloseBtnClick = function(e){
+		$(this).parents('.overlay').fadeOut();
+		// prevent event bubbling
+		return false;
+	};
+
+	/**
+	 * display a "tooltip" options dialog
+	 * @method onShowOptionsClick
+	 * @param  {[type]} e [description]
+	 * @return {bool} false to kill event bubbling
+	 */
+	var onShowOptionsClick = function(e){
+		var id = $(this).attr('href');
+		$('.arrowBox').not(id).hide();
+		var $dlg = $(id);
+		$dlg.find('dd').hide();
+		$dlg.fadeToggle();
+
+		ugsEditorPlus.submenuUi.reset($dlg);
+
+		// prevent event bubbling
+		return false;
+	};
+
+	_public.makeAllInactive = _makeAllInactive;
+
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
+
+}()
+);
+;
+/**
+ * Wires up all the "pseudo-selects" (aka "dropdownlists") on a Tooltip-Dialog boxes on
+ * the page; assumes consistent HTML (hello, jQuery)
+ * TODO: Refactor -- quite brittle!
+ * @class submenuUi
+ * @namespace ugsEditorPlus
+ */
+ugsEditorPlus.submenuUi = (function(){
+	/**
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var _public = {};
+
+	var _open = null;
+
+	/**
+	 * borrow the "doAction" method from Actions class
+	 * @property _doAction
+	 * @type {function}
+	 */
+	var _doAction = null;
+
+	/**
+	 * attaches event handlers
+	 * @method init
+	 * @return {[type]} [description]
+	 */
+	_public.init = function(doAction){
+		_doAction = doAction;
+
+		$('.enablePseudoSelects label').click(onLabelClick);
+		$('.pseudoSelect li').click(onOptionClick);
+		$('body').bind('click', closeAll);
+		$('.arrowBox').click(doCollapseAllLists);
+	};
+
+	/**
+	 * a list item has been clicked
+	 * @param  {event} e
+	 * @return {bool} false to kill event bubbling
+	 */
+	var onOptionClick = function(e){
+		var $optionItem = $(this);
+		var hrefValue = stripHash($optionItem.children().attr('href'));
+
+		// the element holding the "pseudo-select"
+		var $select = $optionItem.parents('dd');
+		var id = $select.attr('id');
+		var actionName = $select.data('action');
+
+		// a selection's been made so we reset ("uncheck" all items) and hide the select list
+		$('#'+id)
+			.hide()
+			.find('li').removeClass('checked');
+
+		// check ("highlight") this selected item
+		$optionItem.addClass('checked');
+
+		onListActive(this, false);
+		_open = null;
+
+		// now bubble out the info -- update display to show selected value ...
+		$('label[for=' + id + '] span').text(getLabelText(actionName, hrefValue, $optionItem));
+		$('label[for=' + id + ']').parents('dt').removeClass('active');
+
+		// lastly, execute the action
+		_doAction(actionName, hrefValue);
+
+		// prevent event bubbling
+		return false;
+	};
+
+	/**
+	 * Label has been clicked, show associated options dialog box.
+	 * Watch for 2-clicks on same label (should hide on second click)
+	 * @param  {event} e
+	 * @return {bool} false to kill event bubbling
+	 */
+	var onLabelClick = function(e){
+		var $thisLabel = $(this);
+		var id = $thisLabel.attr('for');
+		setActiveLabel($thisLabel);
+		$('#'+id).show();
+		onListActive(this, true);
+		if (_open != null){
+			$('#' + _open.id).hide();
+		}
+		if (_open != null && _open.id == id){
+			_open = null;
+		}
+		else
+		{
+		 _open = { "id" : id };
+		}
+
+		// prevent event bubbling
+		return false;
+	};
+
+	_public.reset = function($dlg){
+		$dlg.find('dt').removeClass('active');
+		$dlg.find('.event-userSelecting').removeClass('event-userSelecting');
+	};
+
+	var clearActiveLabels = function($parent){
+		$parent.closest('dl').children('dt').removeClass('active');
+	};
+
+	var setActiveLabel = function($label){
+		$label.closest('dl').children('dt').removeClass('active');
+		$label.closest('dt').addClass('active');
+	};
+
+	/**
+	 * trying prevent the options not being set from being too distractive --
+	 * (trying and clearly failing)
+	 * @method onListActive
+	 * @param  {DOM-elemnt}  ele     [description]
+	 * @param  {Boolean} isInUse [description]
+	 * @return void
+	 */
+	var onListActive = function(ele, isInUse){
+		$(ele).parents('.enablePseudoSelects').toggleClass('event-userSelecting', isInUse);
+	};
+
+	/**
+	 * @method  doCollapseAllLists
+	 * @param  {event} e
+	 * @return bool
+	 */
+	var doCollapseAllLists = function(e){
+		if ($(e.target).is('a')){
 			return;
 		}
-		// remove
-		for (var i = 0; i < _topBtnUl.children.length; i++){
-			ukeGeeks.toolsLite.removeClass(_topBtnUl.children[i], 'checked');
-		}
-		// set checked item
-		ukeGeeks.toolsLite.addClass(ele.parentNode, 'checked');
+		//console.log('doCollapseAllLists');
+		//console.log();
+		$(this).find('dd').hide();
+		_open = null;
+		return false;
+	};
 
-		ugsEditorPlus.actions.doClick(_topBtnHref, _subBtnHref);
-		_prevValues[_topBtnHref] = _subBtnHref;
+
+	/**
+	 * user clicked off the current dialog -- close 'em all
+	 * @medhod closeAll
+	 * @param  {event} e
+	 */
+	var closeAll = function(e){
+		$('.arrowBox').fadeOut(270);
+		ugsEditorPlus.topMenus.makeAllInactive();
+	};
+
+	var stripHash = function(value){
+		return (value[0] == '#') ? value.substr(1) : value;
+	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* Display Text Methods
+	|* ----------------------------------------------------------------------------------- */
+
+	/**
+	 * used to construct the descriptions for current values
+	 * @private
+	 * @type {JSON}
+	 */
+	var _desriptions = {
+		'zoomDiagrams' : ['Tiny', 'Small', 'Medium', 'Large', 'Stupid Large'],
+		'layout' : ['Reference diagrams on left', 'Reference diagrams at top', 'No reference diagrams'],
+		'placement' : ['Chord names inline with lyrics', 'Chord names above lyrics', 'Names & diagrams above lyrics'],
+		'colors' : ['Normal colors (white paper)', 'Reversed colors (for projectors)'],
+		'tuning' : ['Soprano (GCEA) tuning', 'Baritone (DBEA) tuning']
 	};
 
 	/**
-	 * To support legacy IE need to cleanup the href's
-	 * @method getHref
-	 * @private
-	 * @param ele (DOM_element)
-	 * @return {string}
+	 * Builds a descriptor string of the current values for the pseudo-select labels
+	 * @medhod getLabelText
+	 * @param  {string} action
+	 * @param  {string} value
+	 * @param  {jQueryElement} $ele jQuery element that ...
+	 * @return string
 	 */
-	var getHref = function(ele){
-		return '#' + ele.getAttribute('href').split('#')[1];
-	};
+	var getLabelText = function(action, value, $ele){
+		var index = $ele.index();
 
-	/**
-	 * DESCRIPTION
-	 * @method closeAll
-	 * @private
-	 * @return {void}
-	 */
-	var closeAll = function(){
-		for (var i = 0; i < _menuItems.length; i++){
-			ukeGeeks.toolsLite.removeClass(_menuItems[i], 'active');
+		switch (action){
+			case 'paper':
+				return 'Width ' + $ele.text();
+			case 'zoomFonts':
+				return 'Font size ' + value + 'pt';
+			case 'zoomDiagrams':
+				return _desriptions.zoomDiagrams[index] + ' diagrams';
+			case 'transpose':
+				if (value == 'up_0'){
+					return 'Original key';
+				}
+				var txt = $ele.text();
+				return txt.replace(' ', ' steps - "') + '"';
+			default:
+			 return _desriptions[action][index];
 		}
 	};
 
-	/**
-	 * DESCR
-	 * @method addSizeOptions
-	 * @private
-	 * @param element {DOM_element} handle to HTML Select tag that was clicked
-	 */
-	var addSizeOptions = function(){
-		var s = '';
-		var size = 0;
-		for(var i = 50; i < 120; i += 5){
-			size++;
-			var selected =  (i == 100) ? 'class="checked"' : '';
-			var pt = '';
-			switch (i){
-				case 50:
-				case 60:
-				case 75:
-				case 85:
-				case 90:
-				case 100:
-				case 115:
-					pt = '<em>' + Math.round((i / 100) * 12) + 'pt</em>'; //'DW bug
-					break;
-			}
-			//pt = ' &nbsp;&nbsp;&nbsp;' + Math.round(10 * (i / 100) * 12) + 'pt';
-			s += '<li ' + selected + '><a href="#prct_' + i + '">' + i + '%' + pt + '</a></li>';
-		}
-		var element = document.getElementById('printScale');
-		element.innerHTML = s;
-		// element.size = size;
+	_public.resetTransposeLabel = function(){
+		$('label[for=transposePicker] span').text('Original key');
 	};
 
-/**
-	 * Sets Transpose menu's selected value to "Original"; adds example chord names
-	 * @method resetTranspose
-	 * @param chord {string}
-	 */
-	this.resetTranspose = function(chord){
-		var ul = document.getElementById('transposeOptions');
-		var items = ul.getElementsByTagName('li');
-		var sample;
-		var steps = -6;
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
 
-		_prevValues['#transpose'] = '#up_0';
-
-		for (i = 0; i < items.length; i++){
-			ukeGeeks.toolsLite.removeClass(items[i], 'checked');
-			sample = (chord.length < 1) ? '' : ukeGeeks.transpose.shift(chord, steps);
-			items[i].getElementsByTagName('em')[0].innerHTML = sample;
-			if (steps == 0){
-				ukeGeeks.toolsLite.addClass(items[i], 'checked');
-			}
-			steps++;
-		}
-	};
-};
-
-
+}()
+);
 ;/**
  * Creates a new song via AJAX.
  * Dependencies: jQuery
@@ -1085,12 +1436,11 @@ ugsEditorPlus.menus = new function(){
  * @namespace ugsEditorPlus
  */
 ugsEditorPlus.newSong = (function() {
-	var _ajaxUri = '';
 	/**
 	 * attach public members to this object
 	 * @type {Object}
 	 */
-	var publics = {};
+	var _public = {};
 
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
@@ -1098,7 +1448,9 @@ ugsEditorPlus.newSong = (function() {
 	 */
 	var _isUpdating = false;
 
-	publics.init = function(ajaxUri) {
+	var _ajaxUri = '';
+
+	_public.init = function(ajaxUri) {
 		_ajaxUri = ajaxUri;
 
 		$('#newSongBtn').click(function(e) {
@@ -1108,13 +1460,15 @@ ugsEditorPlus.newSong = (function() {
 		});
 
 		$('#openNewDlgBtn').click(function(e) {
+			resetFields();
 			$('#newSongForm').fadeIn();
 			$('#songTitle').focus();
 		});
 
-		$('#hideNewSongBtn').click(function(e) {
-			$('#newSongForm').fadeOut();
-		});
+		$('#hideNewSongBtn').click(closeDlg);
+
+		// handle escape key
+		$('#newSongForm').bind('keydown', onEscape);
 
 		$spinner = $( "#loadingSpinner" );
 		$spinner.hide();
@@ -1178,7 +1532,24 @@ ugsEditorPlus.newSong = (function() {
 			}
 		};
 
-	return publics;
+	var closeDlg = function(e) {
+		$('#newSongForm').fadeOut();
+	};
+
+	var resetFields = function(){
+		$('#songTitle, #songArtist').val('');
+	};
+
+	var onEscape = function(e){
+		if (e.which == 27) {
+			closeDlg();
+		}
+	};
+
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
 })();
 ;/**
  * Updates an exising song via AJAX.
@@ -1187,13 +1558,26 @@ ugsEditorPlus.newSong = (function() {
  * @namespace ugsEditorPlus
  */
 ugsEditorPlus.updateSong = (function() {
-	var _ajaxUri = '';
-	var _filename = '';
 	/**
 	 * attach public members to this object
 	 * @type {Object}
 	 */
-	var publics = {};
+	var _public = {};
+
+	var _ajaxUri = '';
+	var _filename = '';
+
+	/**
+	 * Name / Value pairs for jQuery selectors of HTML elements to be manipulated
+	 * @type {JSON}
+	 */
+	var _selectors = {
+		messageBox : '#messageBox',
+		message : '#sourceFeedback',
+		button : '#saveBtn',
+		spinner : '#loadingSpinner',
+		song : '#chordProSource'
+	};
 
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
@@ -1201,26 +1585,40 @@ ugsEditorPlus.updateSong = (function() {
 	 */
 	var _isUpdating = false;
 
-	publics.init = function(ajaxUri, filename) {
+	_public.init = function(ajaxUri, filename) {
 		_ajaxUri = ajaxUri;
 		_filename = filename;
 
-		$('#saveBtn').click(function(event) {
+		$(_selectors.button).click(function(event) {
 			doUpdate();
 			return false;
 		});
 
-		$spinner = $( "#loadingSpinner" );
-		$spinner.hide();
+		$(_selectors.messageBox).hide();
 		$(document)
 			.ajaxStart(function() {
-				$spinner.show();
+				showBusy();
 				_isUpdating = true;
 			})
 			.ajaxStop(function() {
-				$spinner.hide();
+				hideMessage();
 				_isUpdating = false;
 			});
+	};
+
+	var showBusy = function(){
+		$(_selectors.message).hide().html();
+		$(_selectors.messageBox).slideDown('fast');
+		$(_selectors.spinner).show();
+	};
+
+	var showMessage = function(message){
+		$(_selectors.spinner).hide();
+		$(_selectors.message).show().html(message);
+	};
+
+	var hideMessage = function(){
+		$(_selectors.messageBox).delay(3000).fadeOut('slow');
 	};
 
 	var doUpdate = function() {
@@ -1228,15 +1626,17 @@ ugsEditorPlus.updateSong = (function() {
 			return;
 		}
 
+		$(_selectors.message).show();
+
 		var data = {
 			'handler': 'ugs_update_81jr',
 			'filename': _filename,
-			'song': $('#chordProSource').val()
+			'song': $(_selectors.song).val()
 		};
 
 		$.ajax({
 			url: _ajaxUri,
-			type: "POST",
+			type: 'POST',
 			dataType: 'json',
 			contentType:"application/json; charset=utf-8",
 			data: JSON.stringify(data),
@@ -1248,11 +1648,13 @@ ugsEditorPlus.updateSong = (function() {
 
 	var doAjaxOk = function(data) {
 		//if (data.HasErrors)
-		//	console.log(data);
-		$('#sourceFeedback').html(data.Message);
+		showMessage(data.Message);
 	};
 
-	return publics;
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
 })();
 ;/**
  * Search on the song list page for songs.
@@ -1263,6 +1665,11 @@ ugsEditorPlus.updateSong = (function() {
  * @namespace ugsEditorPlus
  */
 ugsEditorPlus.typeahead = function(){
+	/**
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var _public = {};
 
 	// private
 	// ---------------------------
@@ -1272,6 +1679,14 @@ ugsEditorPlus.typeahead = function(){
 	var _scrubbedQuery = '';
 	var _regex;
 	var _words = [];
+
+	var _re = {
+		space: /\s{2,}/g,
+		// everything except for alphanumeric gets nuked
+		common: /([^a-z0-9]+)/gi,
+		//treat quotes as invisible
+		noise: /['`’-]/g
+	};
 
 	/**
 	 * Scrapes HTML to build our list of
@@ -1283,7 +1698,7 @@ ugsEditorPlus.typeahead = function(){
 		$( 'li' ).each(function( index ) {
 			var $this = $(this);
 
-			var plainText = $this.text().replace(/\s\s+/g, ' ').trim();
+			var plainText = crushText($this.text());
 			plainText = plainText.toLowerCase();
 
 			var href = $this.children('a').attr('href');
@@ -1307,8 +1722,17 @@ ugsEditorPlus.typeahead = function(){
 
 	};
 
+	var crushText = function(value){
+		return value
+			.toLowerCase()
+    	.replace(_re.noise, '')
+    	.replace(_re.common, ' ')
+    	.replace(_re.space, ' ')
+    	.trim();
+	}
+
 	var _ta_source = function (query, process) {
-		_scrubbedQuery = query.trim().toLowerCase();
+		_scrubbedQuery = crushText(query);
 		_words = _scrubbedQuery.split(' ');
 		var regGroup = '';
 		for (var i = 0; i < _words.length; i++) {
@@ -1353,25 +1777,25 @@ ugsEditorPlus.typeahead = function(){
 		return $temp.html();
 	};
 
-	return {
+	_public.initialize = function(){
+		listFromHtml();
 
-		initialize: function(){
-			listFromHtml();
-
-			$('#quickSearch')
-				.typeahead({
-					source: _ta_source,
-					updater: _ta_updater,
-					matcher: _ta_matcher,
-					sorter: _ta_sorter,
-					highlighter: _ta_highligher,
-					minLength: 2,
-					items: 50
-				})
-				.val('')
-				.focus();
-		},
-
+		$('#quickSearch')
+			.typeahead({
+				source: _ta_source,
+				updater: _ta_updater,
+				matcher: _ta_matcher,
+				sorter: _ta_sorter,
+				highlighter: _ta_highligher,
+				minLength: 2,
+				items: 50
+			})
+			.val('')
+			.focus();
 	};
-};
 
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
+};

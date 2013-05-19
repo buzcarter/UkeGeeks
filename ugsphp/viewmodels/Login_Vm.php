@@ -6,6 +6,7 @@ class Login_Vm extends _base_Vm {
 	public $FormPostUri = '';
 
 	function __construct(){
+		parent::__construct();
 		$this->FormPostUri = Ugs::MakeUri(Actions::Login);
 	}
 }

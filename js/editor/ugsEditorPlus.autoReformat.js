@@ -1,55 +1,74 @@
 /**
- * 
+ *
  * @class autoReformat
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.autoReformat = new function(){
-	var _this = this;
-	var _elements;
+ugsEditorPlus.autoReformat = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
+	/**
+	 * associative array/JSON handles to key/frequently accessed DOM Elements (see init()
+	 * @property _ele
+	 * @type {JSON}
+	 */
+	var _ele = {};
+
 	var _formatted;
 	var _isDisabled = false;
-	
-	this.run = function(elements){
+
+	_public.run = function(elements){
 		if (_isDisabled){
 			return;
 		}
-		_elements = elements;
-		_elements.reformatTextBox = document.getElementById('reformatSource');
-		_elements.reformatDlg = document.getElementById('reformatDlg');
-		
+		_ele = elements;
+		_ele.reformatTextBox = document.getElementById('reformatSource');
+		_ele.reformatDlg = document.getElementById('reformatDlg');
+
 		document.getElementById('reformatYesBtn').onclick = function(){ doOk(); return false; };
 		document.getElementById('reformatNoBtn').onclick = function(){ doClose(); return false; };
-	
+
 		// need to reset on reload
 		var chk = document.getElementById('reformatDisable');
 		chk.checked = false;
 		chk.onclick = function(){ doDisable(this.checked); };
-		
+
 		runNow();
 	};
-	
+
 	var doOk = function(){
-		_elements.cpmSource.value = _formatted;
+		_ele.cpmSource.value = _formatted;
 		doClose();
 		ugsEditorPlus.actions.run(true);
 	};
-	
+
 	var doClose = function(){
-		ukeGeeks.toolsLite.addClass(_elements.reformatDlg, 'isHidden');
+		ukeGeeks.toolsLite.addClass(_ele.reformatDlg, 'isHidden');
 	};
-	
+
 	var doDisable = function(isDisabled){
 		_isDisabled = isDisabled;
 	};
-	
+
 	var runNow = function(){
-		_formatted = ugsEditorPlus.reformat.run(_elements.cpmSource.value);
-		_elements.reformatTextBox.innerHTML = _formatted;
-		
+		_formatted = ugsEditorPlus.reformat.run(_ele.cpmSource.value);
+		_ele.reformatTextBox.innerHTML = _formatted;
+
 		if (!ugsEditorPlus.reformat.hasChords()){
 			return;
 		}
-		
-		ukeGeeks.toolsLite.removeClass(_elements.reformatDlg, 'isHidden');
+
+		ukeGeeks.toolsLite.removeClass(_ele.reformatDlg, 'isHidden');
 	};
-}
+
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
+
+}()
+);

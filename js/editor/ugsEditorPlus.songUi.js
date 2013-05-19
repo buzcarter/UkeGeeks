@@ -3,7 +3,14 @@
  * @class songUi
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.songUi = new function(){
+ugsEditorPlus.songUi = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * Sets an element's Inner HTML and sets visibility based on whether the value is empty (or not)
 	 * @method trySet
@@ -20,21 +27,21 @@ ugsEditorPlus.songUi = new function(){
 		h.innerHTML = hasValue ? value : "";
 		h.style.display = hasValue ? 'block' : 'none';
 	};
-	
+
  /**
 	 * Update various HTML parts (H1 &amp; H2 etc.) using TEXT values of Song
 	 * @method updateUi
 	 * @private
 	 * @param song {Song(Object)}
 	 */
-	this.update = function(song){
+	_public.update = function(song){
 		var h = document.getElementById('songTitle');
 		h.innerHTML = (song.title.length > 0) ? song.title : 'Untitled-Song';
-		
+
 		trySet('songArtist', song.artist);
 		trySet('songAlbum', song.album);
 		trySet('songSubtitle', song.st);
-		
+
 		h = document.getElementById('songMeta');
 		if (!song.ugsMeta || (song.ugsMeta.length < 1)){
 			h.style.display = 'none';
@@ -49,5 +56,10 @@ ugsEditorPlus.songUi = new function(){
 		}
 	};
 
-};
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
 
+}()
+);

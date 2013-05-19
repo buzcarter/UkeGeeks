@@ -11,7 +11,7 @@
 ukeGeeks.transpose = new function(){
 	var re = /^([A-G][#b]?)(.*)/;
 	var tones = {
-		'A' : 0, 
+		'A' : 0,
 		'A#' : 1, 'Bb' : 1,
 		'B' : 2,
 		'C' : 3,
@@ -52,11 +52,11 @@ ukeGeeks.transpose = new function(){
 		}
 		return null;
 	};
-	
+
 	/**
-	 * 
+	 *
 	 * @method getTone
-	 * @param name (string) 
+	 * @param name (string)
 	 * @return JSON
 	 */
 	var getTone = function(name){
@@ -85,7 +85,7 @@ ukeGeeks.transpose = new function(){
 		}
 		return '';
 	};
-	
+
 	/**
 	 * Returns a mapping -- an array of JSON with "original" chord name and "transposed" chord names.
 	 * @method retune
@@ -108,7 +108,7 @@ ukeGeeks.transpose = new function(){
 		}
 		return s;
 	};
-	
+
 	/**
 	 * returns copy of input string array shifted by number of steps
 	 * @method shiftChords

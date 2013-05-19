@@ -1,15 +1,26 @@
 /**
- * Does the work; adjust CSS classes on page, runs Scriptasaurus
+ * Does the work by providing "doAction" method to respond to events (does not
+ * attach event handlers); Modifes some page elements -- adjust CSS classes on page,
+ * runs Scriptasaurus, etc.
  * @class actions
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.actions = new function(){
-	var _this = this;
+ugsEditorPlus.actions = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
 
 	// legacy IE flag
 	var _isCrap = false;
 
-	// handles to key/frequently accessed DOM Elements (see init()
+	/**
+	 * associative array/JSON handles to key/frequently accessed DOM Elements (see init()
+	 * @property _ele
+	 * @type {JSON}
+	 */
 	var _ele = {};
 
 	// misc
@@ -17,176 +28,231 @@ ugsEditorPlus.actions = new function(){
 	//
 	var _sourceOriginal = null;
 	var _originalChords = [];
-	// prior placement
-	var _priorValues = {
-		placement : '#above'
+
+	var _re = {
+		safe: /^([A-G][#b]?)(m|m6|7|m7|dim|maj7|6|sus2|sus4|aug|9)?$/
 	};
 
-	var re = {
-		safe: /^([A-G][#b]?)(m|m6|7|m7|dim|maj7|6|sus2|sus4|aug|9)?$/,
+	/**
+	 * associative array/JSON of last click value used; intended to be used to prevent
+	 * rerunning more expensize operations unnecessailry (when the value didn't actually change)
+	 * @property _prevValues
+	 * @type {JSON}
+	 */
+	var _prevValues = {
+		//'colors' : 'normal',
+		//'layout' : 'left',
+		//'tuning' : 'soprano',
+		'placement' : 'above',
+		'transpose' : 'up_0'
 	};
 
 	/**
 	 * Sets up this class; modifies form elements; attaches event handlers, etc
 	 * @method init
 	 * @public
-	 * @param NAME {type} DECR
+	 * @param isLegacyIe {bool} true if using pre-Internet Explorer v8 or 9 (sorry, I've forgotten or don't care)
 	 */
-	this.init = function(isLegacyIe){
+	_public.init = function(isLegacyIe){
 		_isCrap = isLegacyIe;
 
 		_ele = {
-			docBody : document.getElementsByTagName('body')[0],
 			songText : document.getElementById('ukeSongText'),
 			songContainer : document.getElementById('ukeSongContainer'),
 			cpmSource : document.getElementById('chordProSource'),
 			scalableArea : document.getElementById('scalablePrintArea')
 		};
 
-		// button clicks
-		document.getElementById('updateBtn').onclick = function(){doUpdate(); return false;};
-
-		// show/hide dialogs
-		var eSourceDlg = document.getElementById('songSourceDlg');
-		document.getElementById('hideSourceBtn').onclick = function(){return doShowDlg(eSourceDlg, false); };
-		document.getElementById('showSourceBtn').onclick = function(){return doShowDlg(eSourceDlg, true); };
-
-		var eHelpDlg = document.getElementById('helpDlg');
-		document.getElementById('hideHelpBtn').onclick = function(){return doShowDlg(eHelpDlg, false); };
-		document.getElementById('showHelpBtn').onclick = function(){return doShowDlg(eHelpDlg, true); };
-
-		var eOptionsDlg = document.getElementById('optionsDlg');
-		document.getElementById('hideOptionsBtn').onclick = function(){return doShowDlg(eOptionsDlg, false); };
-		document.getElementById('showOptionsBtn').onclick = function(){return doShowDlg(eOptionsDlg, true); };
-
-		// Options/settings
-		ugsEditorPlus.optionsDlg.init(this, _ele);
 	};
 
+	/* ----------------------------------------------------------------------------------- *|
+	|* Common "All Powerful" Helper Methods
+	|* ----------------------------------------------------------------------------------- */
+
 	/**
-	 * DESCR
-	 * @method doClick
+	 * Executes the requested Action using passed in Value
+	 * @method doAction
 	 * @public
-	 * @param NAME {type} DECR
+	 * @param action {string} Action's name; must match one of those defined in the switch below
+	 * @param value {string} Value used by Action (OK, a couple methods assume this is boolean/falsy)
 	 */
-	this.doClick = function(mainMenu, subMenu){
-		switch (mainMenu){
-			case '#zoom':
-				doZoom(subMenu);
+	_public.doAction = function(action, value){
+		switch (action){
+			case 'zoomFonts':
+				zoomFonts(value);
 				break;
-			case '#layout':
-				doLayout(subMenu);
+			case 'zoomDiagrams':
+				zoomDiagrams(value);
 				break;
-			case '#placement':
-				doPlacement(subMenu);
+			case 'layout':
+				doLayout(value);
 				break;
-			case '#tuning':
-				doTuning(subMenu);
+			case 'placement':
+				doPlacement(value);
 				break;
-			case '#colors':
-				doColors(subMenu);
+			case 'tuning':
+				doTuning(value);
 				break;
-			case '#transpose':
-				doTranspose(subMenu);
+			case 'colors':
+				doColors(value);
+				break;
+			case 'transpose':
+				doTranspose(value);
+				break;
+			case 'paper':
+				doSetPageWidth(value);
+				break;
+			case 'showEnclosures':
+				setEnclosureVisible(value);
+				break;
+			case 'hideCommonChords':
+				setIgnoreCommon(value);
+				break;
+			case 'setCommonChords':
+				setetCommonChordsList(value);
+				break;
+			case 'update':
+				doUpdate();
 				break;
 			default:
-				console.log('Unrecognized ' + mainMenu + ' > ' + subMenu);
+				console.log('Unrecognized ' + action + ' > ' + value);
 		}
 	};
 
 	/**
-	 * DESCR
+	 * Rerun for new song text; updates UI
 	 * @method doUpdate
 	 * @private
 	 */
 	var doUpdate = function(){
-		_this.run(true);
+		_public.run(true);
 	};
 
 	/**
-	 * DESCR
-	 * @method doZoom
-	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * Rebuilds song, info, chord diagrams using current settings.
+	 * @method run
+	 * @param isDoBackup {bool} true forces backup; optional, default false.
 	 */
-	var doZoom = function(subMenu){
-		var prct = (parseInt(subMenu.substr(6), 10) / 100);
+	_public.run = function(isDoBackup){
+		isDoBackup = (arguments.length > 0) && isDoBackup;
+		_ele.songText.innerHTML = '<pre>' + _ele.cpmSource.value + '</pre>';
+		_song = ukeGeeks.scriptasaurus.run();
 
-		var width = Math.round(prct * 225);
+		if (_song.chords.length < 1){
+			ugsEditorPlus.autoReformat.run(_ele);
+		}
 
-		_ele.scalableArea.style.fontSize = (prct * 12) + 'pt';
+		if (_song){
+			ugsEditorPlus.songUi.update(_song);
+
+			// maintains last copy of USER edited song -- used for transpose etc
+			if (isDoBackup || (_sourceOriginal == null)){
+				_sourceOriginal = _ele.cpmSource.value;
+				_originalChords = _song.chords;
+				resetTranspose(_song.chords.length < 1 ? '' : _song.chords[0]);
+			}
+		}
+	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* Zoom Methods
+	|* ----------------------------------------------------------------------------------- */
+
+	/**
+	 * Zooms (scales) fonts
+	 * @method zoomFonts
+	 * @private
+	 * @param value {string} point-size; value of the clicked value item
+	 */
+	var zoomFonts = function(value){
+		var pt = parseInt(value, 10);
+		_ele.scalableArea.style.fontSize = pt + 'pt';
+	};
+
+	/**
+	 * Zooms (scales) chord diagrams
+	 * @method zoomDiagrams
+	 * @private
+	 * @param value {string} percentage, integer between 0 and, well, 100?; value of the clicked value item
+	 */
+	var zoomDiagrams = function(value){
+		var prct = parseInt(value, 10) / 100;
+		// apologies for the magic number...
+		var columnWidth = Math.round(prct * 225);
 
 		var s = ugsEditorPlus.styles.getSheet('ugsEditorCss');
 		var m = s.Find('.scalablePrintArea .ugs-diagrams-wrap canvas');
-		m.style.width = Math.round(prct * 100) +'px';
+		m.style.width = Math.round(prct * ukeGeeks.settings.fretBox.width) +'px';
+		m.style.height = Math.round(prct * ukeGeeks.settings.fretBox.height) +'px';
 
 		m = s.Find('.scalablePrintArea .ugs-diagrams-wrap');
-		m.style.width = width +'px';
+		m.style.width = columnWidth +'px';
 
 		m = s.Find('.scalablePrintArea .ugs-source-wrap');
-		m.style.marginLeft = (25 + width) +'px';
+		m.style.marginLeft = (25 + columnWidth) +'px';
 	};
 
+	/* ----------------------------------------------------------------------------------- *|
+	|* Layout (Reference Diagram Position) Methods
+	|* ----------------------------------------------------------------------------------- */
+
 	/**
-	 * DESCR
+	 * Changes positions for Reference Chord Diagrams -- handled entirely via CSS classes
 	 * @method doLayout
 	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * @param value {string} value of the clicked value item
 	 */
-	var doLayout = function(subMenu){
-		ukeGeeks.toolsLite.setClass(_ele.docBody, 'diagramsOnTop', (subMenu == '#top'));
-		ukeGeeks.toolsLite.setClass(_ele.docBody, 'diagramsOnSide', (subMenu == '#left'));
-		ukeGeeks.toolsLite.setClass(_ele.docBody, 'ugsHideDiagrams', (subMenu == '#none'));
+	var doLayout = function(value){
+		$('body')
+			.toggleClass('diagramsOnTop', value == 'top')
+			.toggleClass('diagramsOnSide', value == 'left')
+			.toggleClass('ugsHideDiagrams', value == 'none');
 	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* Chord Name Placement Methods
+	|* ----------------------------------------------------------------------------------- */
 
 	/**
 	 * Chord Name placement (&amp; "Mini-chord diagrams")
 	 * @method doPlacement
 	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * @param value {string} value of the clicked value item
 	 */
-	var doPlacement = function(subMenu){
-		ukeGeeks.toolsLite.setClass(_ele.songContainer, 'ugsInline', (subMenu == '#inline'));
+	var doPlacement = function(value){
+		ukeGeeks.toolsLite.setClass(_ele.songContainer, 'ugsInline', (value == 'inline'));
 
 		// NOTE: ugs already adds the "chord diagrams above" class based on setting,
 		// BUT does NOT remove it!!!!
-		var isMiniDiagrams = (subMenu == '#miniDiagrams');
+		var isMiniDiagrams = (value == 'miniDiagrams');
 		if (!isMiniDiagrams){
 			ukeGeeks.toolsLite.removeClass(_ele.songContainer, 'ugsInlineDiagrams');
 		}
 
-		if (isMiniDiagrams || (_priorValues.placement == '#miniDiagrams')){
+		if (isMiniDiagrams || (_prevValues.placement == 'miniDiagrams')){
 			ukeGeeks.settings.inlineDiagrams = isMiniDiagrams;
-			_this.run();
+			_public.run();
 		}
-		else if (!isMiniDiagrams && (_priorValues.placement != '#miniDiagrams')) {
+		else if (!isMiniDiagrams && (_prevValues.placement != 'miniDiagrams')) {
 			// we're jumping between "above" and "inline", either way we need to
 			// manually fix the overlaps
 			ukeGeeks.overlapFixer.Fix(_ele.songText);
 		}
 
-
-		_priorValues.placement = subMenu;
+		_prevValues.placement = value;
 	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* Color Methods
+	|* ----------------------------------------------------------------------------------- */
 
 	/**
-	 * DESCR
-	 * @method doTuning
-	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * available color schemes
+	 * @property _colorSchemes
+	 * @type {JSON-Object}
 	 */
-	var doTuning = function(subMenu){
-		var tuning = (subMenu == '#baritone')
-			? ukeGeeks.definitions.instrument.baritoneUke
-			: ukeGeeks.definitions.instrument.sopranoUke;
-
-		ukeGeeks.scriptasaurus.setTuningOffset(tuning);
-		_this.run();
-	};
-
-	// available color schemes
 	var _colorSchemes = {
-		'#reversed' : {
+		'reversed' : {
 			song: {
 				fretLines: '#365F70',
 				dots: '#FDD96F',
@@ -201,7 +267,7 @@ ugsEditorPlus.actions = new function(){
 			}
 		},
 
-		'#normal' : {
+		'normal' : {
 			song: {
 				fretLines: '#003366',
 				dots: '#ff0000',
@@ -218,72 +284,71 @@ ugsEditorPlus.actions = new function(){
 	};
 
 	/**
-	 * DESCR
+	 * Change the color scheme -- requires changing CSS Class and reruning (to regenerate reference chord diagrams)
 	 * @method doColors
 	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * @param value {string} value of the clicked value item
 	 */
-	var doColors = function(subMenu){
-		ukeGeeks.toolsLite.setClass(_ele.docBody, 'reversed', subMenu == '#reversed');
+	var doColors = function(value){
+		$('body').toggleClass('reversed', value == 'reversed');
 
-		var c = _colorSchemes[subMenu];
+		var c = _colorSchemes[value];
 		ukeGeeks.settings.colors = c.song;
 		ukeGeeks.settings.tabs.lineColor = c.tabs.lines;
 		ukeGeeks.settings.tabs.dotColor = c.tabs.dots;
 		ukeGeeks.settings.tabs.textColor = c.tabs.text;
 
-		_this.run();
+		_public.run();
+	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* Page Width Methods
+	|* ----------------------------------------------------------------------------------- */
+
+	/**
+	 * (option dialog) changes body class, moving the right page edge
+	 * @method doSetPageWidth
+	 * @private
+	 * @param value {string} currently selected option value
+	 */
+	var doSetPageWidth = function(value){
+		var opts = ['letter', 'a4', 'screen'];
+		var $body = $('body');
+		for(var i = 0; i < opts.length; i++){
+			$body.removeClass('pageWidth_' + opts[i]);
+		}
+		$body.addClass('pageWidth_' + value);
+	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* Instrument & Tuning Methods
+	|* ----------------------------------------------------------------------------------- */
+
+	/**
+	 * Change the instrument (tuning)
+	 * @method doTuning
+	 * @private
+	 * @param value {string} value of the clicked value item
+	 */
+	var doTuning = function(value){
+		var tuning = (value == 'baritone')
+			? ukeGeeks.definitions.instrument.baritoneUke
+			: ukeGeeks.definitions.instrument.sopranoUke;
+
+		ukeGeeks.scriptasaurus.setTuningOffset(tuning);
+		_public.run();
 	};
 
 	/**
-	 * DESCR
+	 * Parses Value to decide number of steps "up" or "down", then fires off transpose
 	 * @method doTranspose
 	 * @private
-	 * @param subMenu {string} value of the clicked submenu item (href value)
+	 * @param value {string} value of the clicked value item
 	 */
-	var doTranspose = function(subMenu){
-		var sign = subMenu[1] == 'u' ? 1 : -1;
-		var steps = parseInt(subMenu[subMenu.length - 1], 10);
+	var doTranspose = function(value){
+		var sign = value[0] == 'u' ? 1 : -1;
+		var steps = parseInt(value[value.length - 1], 10);
 		transpose(sign * steps);
-		// _this.
-	};
-
-	/**
-	 * DESCR
-	 * @method doShowDlg
-	 * @private
-	 * @param element {DOM} handle to overlay to show/hide
-	 * @param isActive {bool} TRUE means show the overlay
-	 */
-	var doShowDlg = function(element, isActive){
-		ukeGeeks.toolsLite.setClass(element, 'isHidden', !isActive);
-		return false;
-	};
-
-	/**
-	 * Rebuilds song, info, chord diagrams using current settings.
-	 * @method run
-	 * @param isDoBackup {bool} true forces backup; optional, default false.
-	 */
-	this.run = function(isDoBackup){
-		isDoBackup = (arguments.length > 0) && isDoBackup;
-		_ele.songText.innerHTML = '<pre>' + _ele.cpmSource.value + '</pre>';
-		_song = ukeGeeks.scriptasaurus.run();
-
-		if (_song.chords.length < 1){
-			ugsEditorPlus.autoReformat.run(_ele);
-		}
-
-		if (_song){
-			ugsEditorPlus.songUi.update(_song);
-
-			// maintains last copy of USER edited song -- used for transpose etc
-			if (isDoBackup || (_sourceOriginal == null)){
-				_sourceOriginal = _ele.cpmSource.value;
-				_originalChords = _song.chords;
-				ugsEditorPlus.menus.resetTranspose(_song.chords.length < 1 ? '' : _song.chords[0]);
-			}
-		}
 	};
 
 	/**
@@ -295,7 +360,7 @@ ugsEditorPlus.actions = new function(){
 		var safeChords = [];
 		var bad = '';
 		for(var i = 0; i < _originalChords.length; i++){
-			if (re.safe.test(_originalChords[i])){
+			if (_re.safe.test(_originalChords[i])){
 				safeChords.push(_originalChords[i]);
 			}
 			else {
@@ -324,8 +389,94 @@ ugsEditorPlus.actions = new function(){
 		}
 
 		_ele.cpmSource.value = s;
-		_this.run();
+		_public.run();
 
 	};
 
-};
+ /**
+	 * Sets Transpose menu's selected value to "Original"; adds example chord names
+	 * @method resetTranspose
+	 * @private
+	 * @param chord {string}
+	 */
+	var resetTranspose = function(chord){
+		var ul = document.getElementById('transposeOptions');
+		var items = ul.getElementsByTagName('li');
+		var sample;
+		var steps = -6;
+
+		_prevValues['transpose'] = 'up_0';
+
+		ugsEditorPlus.submenuUi.resetTransposeLabel();
+
+		for (i = 0; i < items.length; i++){
+			ukeGeeks.toolsLite.removeClass(items[i], 'checked');
+			sample = (chord.length < 1) ? '' : ukeGeeks.transpose.shift(chord, steps);
+			items[i].getElementsByTagName('em')[0].innerHTML = sample;
+			if (steps == 0){
+				ukeGeeks.toolsLite.addClass(items[i], 'checked');
+			}
+			steps++;
+		}
+	};
+
+	/* ----------------------------------------------------------------------------------- *|
+	|* "Other Options" Methods
+	|* ----------------------------------------------------------------------------------- */
+	// a grab bag of single, odd switches... mea culpa
+
+	/**
+	 * (option dialog) change whether to show/hide the bracket characters
+	 * @method setEnclosureVisible
+	 * @private
+	 * @param isVisible {bool}
+	 */
+	var setEnclosureVisible = function(isVisible){
+		ukeGeeks.settings.opts.retainBrackets = isVisible;
+		_public.run();
+	};
+
+	/**
+	 * "Ignore Common" was checked, need to update master chord diagrams
+	 * @method setIgnoreCommon
+	 * @private
+	 * @param isIgnore {bool}
+	 */
+	var setIgnoreCommon = function(isIgnore){
+		ukeGeeks.settings.opts.ignoreCommonChords = isIgnore;
+		_public.run();
+	};
+
+	/**
+	 * the list of common chords has been change; update UGS setting
+	 * and _possible_ rerun
+	 * @method setetCommonChordsList
+	 * @private
+	 * @param chordCsvList {string} comma seperated values list of chord names
+	 * @return {void}
+	 */
+	var setetCommonChordsList = function(chordCsvList){
+		var inputList = chordCsvList.split(/[ ,]+/);
+		var cleanList = [];
+
+		for (var i = 0; i < inputList.length; i++) {
+			var c = ukeGeeks.toolsLite.trim(inputList[i]);
+			if (c.length > 0){
+				cleanList.push(c);
+			}
+		};
+
+		ukeGeeks.settings.commonChords = cleanList;
+
+		if (ukeGeeks.settings.opts.ignoreCommonChords){
+			_public.run();
+		}
+	};
+
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
+
+}()
+);

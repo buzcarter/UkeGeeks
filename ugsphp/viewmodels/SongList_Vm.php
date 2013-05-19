@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
 * wraps list of songs for both basic and "detailed" views
@@ -22,10 +22,19 @@ class SongList_Vm extends _base_Vm {
 
 	public $LogoutUri = '';
 
+	public $Headline = '';
+	public $SubHeadline = '';
+
 	function __construct()
 	{
+		parent::__construct();
+		$title = defined(Config::SongbookHeadline) ? Config::SongbookHeadline : 'The BIG UKE Book';
+
 		$this->EditAjaxUri = Ugs::MakeUri( Actions::AjaxNewSong);
 		$this->LogoutUri = Ugs::MakeUri( Actions::Logout);
+		$this->Headline = $title;
+		$this->SubHeadline = defined(Config::SongbookSubHeadline) ? Config::SongbookSubHeadline : 'Sample Styled Songbook &raquo;';
+		$this->PageTitle = $title . ' ' . Config::PageTitleSuffix;
 	}
 
 	/**
@@ -52,10 +61,10 @@ class SongList_Vm extends _base_Vm {
 	}
 
 	/**
-	 * Adds a new SongLink_Pvm to list 
+	 * Adds a new SongLink_Pvm to list
 	 * @method Add
 	 * @param string $title
-	 * @param string $url 
+	 * @param string $url
 	 * @return (none)
 	 */
 	public function Add($title, $url){

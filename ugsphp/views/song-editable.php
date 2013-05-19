@@ -17,14 +17,14 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <script type="text/javascript">isLegacyIe = true;document.getElementsByTagName('html')[0].className='legacyIe';</script>
 <script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <script type="text/javascript" src="//explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>
-<link rel="stylesheet" href="/css/editorv2/ugsEditorPlus.legacyIe.css" />
+<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/editorv2/ugsEditorPlus.legacyIe.css" />
 <![endif]-->
 <link href='http://fonts.googleapis.com/css?family=Peralta' rel='stylesheet' type='text/css' />
-<link rel="stylesheet" href="/css/yuiReset.css" />
-<link rel="stylesheet" href="/css/basic-page-layout.css" />
-<link rel="stylesheet" href="/css/ukeGeeks.music.css" />
-<link rel="stylesheet" href="/css/editor/ugsEditorPlus.css" title="ugsEditorCss" />
-<link rel="stylesheet" href="/css/editor/ugsEditorPlus.print.css" media="print" />
+<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/yuiReset.css" />
+<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/basic-page-layout.css" />
+<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ukeGeeks.music.css" />
+<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/editor/ugsEditorPlus.css" title="ugsEditorCss" />
+<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/editor/ugsEditorPlus.print.css" media="print" />
 </head>
 <body class="editableSongPage pageWidth_screen">
 <section id="scalablePrintArea" class="scalablePrintArea">
@@ -47,14 +47,19 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		<p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by <a href="http://ukegeeks.com/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.com</small></p>
 	</footer>
 </section>
+<!-- EDIT SONG (DIALOG) -->
 <section id="songSourceDlg" class="overlay <?php echo($editDlgCssClassName); ?>">
 	<hgroup>
-		<h3>Song Source</h3>
+		<h3>Edit Song</h3>
 	</hgroup>
-	<div> <a title="close this" href="#close" id="hideSourceBtn" class="closeBtn">Close</a>
+	<div> <a title="close this" href="#close" class="closeBtn">Close</a>
 		<p class="btnBar">
-			<span id="loadingSpinner" style="display:none;"><img src="/img/ugs/busy.gif" /></span>
-			<span id="sourceFeedback"></span>
+			<span id="messageBox" class="updateMessage">
+				<em>
+					<img src="/img/ugs/busy.gif" id="loadingSpinner" style="display:none;" />
+					<span id="sourceFeedback"></span>
+				</em>
+			</span>
 			<input type="button" id="updateBtn" class="baseBtn blueBtn" value="Update" title="Rebuild digarams and music" />
 			<?php if ($model->IsUpdateAllowed) {
 				?>
@@ -66,95 +71,156 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		<textarea id="chordProSource" wrap="off"><?php echo($model->Body); ?></textarea>
 	</div>
 </section>
-<section id="helpDlg" class="helpDlg overlay isHidden">
-	<hgroup>
-		<h3>Help</h3>
-	</hgroup>
-	<div class="normalHtml"> <a title="close this" href="#close" id="hideHelpBtn" class="closeBtn">Close</a>
-		<p><a href="http://ukegeeks.com/users-guide.htm" target="_blank" title="View the complete documentation including ChordPro tips">User Guide</a> topics:</p>
-		<ul>
-			<li><a href="http://ukegeeks.com/users-guide.htm#how_do_i_markup" target="_blank">How Do I &quot;Mark-Up&quot; My Music?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#chordNames" target="_blank">How Do I Name Chords?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#chordpro_markup_reference" target="_blank">ChordPro Markup Reference</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#more_chord_definitions" target="_blank">Defining Alternate Chords</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#saveBtn" target="_blank">Where's the &quot;Save&quot; Button?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#defined_chords" target="_blank">What Chords Are Already Defined?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#more_chord_definitions" target="_blank">How Can I Use An Alternate Chord Fingering?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#muted_strings" target="_blank">How Can I Indicate Muted Strings?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#barre_chords" target="_blank">How Can I Make a Barre Chord?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#formatter" target="_blank">What If My Song Has The Chords Above The Lyrics?</a></li>
-		</ul>
-		<p>Updates coming shortly <strong style="font-weight: bold; color: #03C;">:D</strong></p>
-	</div>
-</section>
+<!-- APP TOOLBAR -->
 <section id="ugsAppToolbar" class="ugsAppMenuBar">
 	<ul>
-		<li class="navEdit" id="showSourceBtn"> <a href="#songSourceDlg" title="edit/view song source"><span></span>Edit</a> </li>
-		<li class="navZoom" id="zoomBtn"> <a href="#zoom" title="Resize to better fit on your printed page"><span></span>Zoom</a>
-			<ul class="subMenu" id="printScale">
-			</ul>
-		</li>
-		<li class="navLayout"> <a href="#layout" title="Choose where big chord diagrams appear"><span></span>Layout</a>
-			<ul class="subMenu">
-				<li><a href="#top" title="Diagrams at top">Top</a></li>
-				<li class="checked"><a href="#left" title="Diagrams on left side">Left</a></li>
-				<li><a href="#none" title="Don't show any chord diagrams">None</a></li>
-			</ul>
-		</li>
-		<li class="navDiagrams"> <a href="#placement" title="Choose how chords appear within the lyrics"><span></span>Chords</a>
-			<ul class="subMenu">
-				<li class="checked"><a href="#above">Names above</a></li>
-				<li><a href="#inline">Names inline</a></li>
-				<li><a href="#miniDiagrams">Diagrams above</a></li>
-			</ul>
-		</li>
-		<li class="navInstruments"> <a href="#tuning" title="Choose your prefered ukulele tuning"><span></span>Tuning</a>
-			<ul class="subMenu">
-				<li class="checked"><a href="#soprano">Soprano</a></li>
-				<li><a href="#baritone">Baritone</a></li>
-			</ul>
-		</li>
-		<li class="navTranspose"> <a href="#transpose" title="Shift chords up/down by semitone steps"><span></span>Transpose</a>
-			<ul class="subMenu" id="transposeOptions">
-				<li><a href="#down_6">-6 <em></em></a></li>
-				<li><a href="#down_5">-5 <em></em></a></li>
-				<li><a href="#down_4">-4 <em></em></a></li>
-				<li><a href="#down_3">-3 <em></em></a></li>
-				<li><a href="#down_2">-2 <em></em></a></li>
-				<li><a href="#down_1">-1 <em></em></a></li>
-				<li class="checked"><a href="#up_0">Original <em></em></a></li>
-				<li><a href="#up_1">+1 <em></em></a></li>
-				<li><a href="#up_2">+2 <em></em></a></li>
-				<li><a href="#up_3">+3 <em></em></a></li>
-				<li><a href="#up_4">+4 <em></em></a></li>
-				<li><a href="#up_5">+5 <em></em></a></li>
-				<li><a href="#up_6">+6 <em></em></a></li>
-			</ul>
-		</li>
-		<li class="navColors"><a href="#colors" title="Set your color scheme for optimal reading"><span></span>Colors</a>
-			<ul class="subMenu">
-				<li class="checked"><a href="#normal">Normal</a></li>
-				<li><a href="#reversed">Reversed</a></li>
-			</ul>
-		</li>
-		<li class="navOptions" id="showOptionsBtn"> <a href="#optionsDlg" title="advanced options &amp; settings"><span></span>Options</a> </li>
-		<li id="showHelpBtn"> <a href="#helpDlg" title="Help &amp; Quick Tips on formatting your song">?</a> </li>
+		<li class="navEdit" data-dialog="songSourceDlg"> <a href="#songSourceDlg" title="View &amp; edit the song source"><span></span>Edit</a> </li>
+		<li class="navLayout showOptionsBox"> <a href="#layoutOptions" title="Resize fonts &amp; chord diagrams. Customize layout &amp; colors."><span></span>Appearance</a></li>
+		<li class="navInstruments showOptionsBox"> <a href="#tuningOptions" title="Transpose song's key &amp; choose your prefered ukulele tuning"><span></span>Transpose</a></li>
+		<li class="navOptions showOptionsBox"> <a href="#optionsDlg" title="Advanced options &amp; settings"><span></span>Options</a> </li>
+		<li class="showDlgBtn showOptionsBox"> <a href="#helpDlg" title="Help &amp; Quick tips on formatting your song">?</a> </li>
 	</ul>
 	<h2 class="ugsLogo">Uke Geeks Song-a-Matic</h2>
 </section>
-<section id="optionsDlg" class="optionsDlg overlay isHidden">
-	<hgroup>
-		<h3>Options</h3>
-	</hgroup>
-	<div class=""> <a title="close this" href="#close" id="hideOptionsBtn" class="closeBtn">Close</a>
+<!-- LAYOUT OPTIONS -->
+<aside class="arrowBox layoutOptions" id="layoutOptions">
+	<fieldset class="arrowBoxContent enablePseudoSelects">
+		<dl>
+			<dt><label for="fontSizePicker"><span>Font size 12pt</span> <em>&#9658;</em></label></dt>
+			<dd id="fontSizePicker" data-action="zoomFonts">
+				<ul class="pseudoSelect">
+					<li><a href="#6">6 pt </a></li>
+					<li><a href="#6.5">6.5 pt </a></li>
+					<li><a href="#7">7 pt </a></li>
+					<li><a href="#7.5">7.5 pt </a></li>
+					<li><a href="#8">8 pt </a></li>
+					<li><a href="#8.5">8.5 pt </a></li>
+					<li><a href="#9">9 pt </a></li>
+					<li><a href="#9.5">9.5 pt </a></li>
+					<li><a href="#10">10 pt </a></li>
+					<li><a href="#11">11 pt </a></li>
+					<li class="checked"><a href="#12">12 pt </a></li>
+					<li><a href="#13">13 pt </a></li>
+					<li><a href="#14">14 pt </a></li>
+				</ul>
+			</dd>
+			<dt><label for="diagramSizePicker"><span>Stupid Large diagrams</span> <em>&#9658;</em></label></dt>
+			<dd id="diagramSizePicker" data-action="zoomDiagrams">
+				<ul class="pseudoSelect">
+					<li><a href="#40">Tiny </a></li>
+					<li><a href="#65">Small </a></li>
+					<li><a href="#80">Medium </a></li>
+					<li><a href="#90">Large </a></li>
+					<li class="checked"><a href="#100">Stupid Large </a></li>
+				</ul>
+			</dd>
+			<dt><label for="diagramPositionPicker"><span>Reference diagrams on left</span> <em>&#9658;</em></label></dt>
+			<dd id="diagramPositionPicker" data-action="layout">
+				<ul class="pseudoSelect">
+					<li class="checked"><a href="#left">On left side</a></li>
+					<li><a href="#top">At the top</a></li>
+					<li><a href="#none">Don't show</a></li>
+				</ul>
+			</dd>
+			<dt><label for="lyricChordsPicker"><span>Chord names above lyrics</span> <em>&#9658;</em></label></dt>
+			<dd id="lyricChordsPicker" data-action="placement">
+				<ul class="pseudoSelect">
+					<li><a href="#inline">Chord names inline </a></li>
+					<li class="checked"><a href="#above">Chord names above </a></li>
+					<li><a href="#miniDiagrams">Names &amp; diagrams above </a></li>
+				</ul>
+			</dd>
+			<dt><label for="colorPicker"><span>Normal colors (white paper) </span><em>&#9658;</em></label></dt>
+			<dd id="colorPicker" data-action="colors">
+				<ul class="pseudoSelect">
+					<li class="checked"><a href="#normal">Normal (white paper)</a></li>
+					<li><a href="#reversed">Reversed for projectors</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</fieldset>
+</aside>
+<!-- TUNING OPTIONS -->
+<aside class="arrowBox tuningOptions" id="tuningOptions">
+	<fieldset class="arrowBoxContent enablePseudoSelects">
+		<dl>
+			<dt><label for="transposePicker"><span>Original key</span> <em>&#9658;</em></label></dt>
+			<dd id="transposePicker" data-action="transpose">
+				<ul class="pseudoSelect" id="transposeOptions">
+					<li><a href="#down_6">-6 <em>F#</em></a></li>
+					<li><a href="#down_5">-5 <em>G</em></a></li>
+					<li><a href="#down_4">-4 <em>G#</em></a></li>
+					<li><a href="#down_3">-3 <em>A</em></a></li>
+					<li><a href="#down_2">-2 <em>A#</em></a></li>
+					<li><a href="#down_1">-1 <em>B</em></a></li>
+					<li class="checked"><a href="#up_0">Original <em>C</em></a></li>
+					<li><a href="#up_1">+1 <em>C#</em></a></li>
+					<li><a href="#up_2">+2 <em>D</em></a></li>
+					<li><a href="#up_3">+3 <em>D#</em></a></li>
+					<li><a href="#up_4">+4 <em>E</em></a></li>
+					<li><a href="#up_5">+5 <em>F</em></a></li>
+					<li><a href="#up_6">+6 <em>F#</em></a></li>
+				</ul>
+			</dd>
+			<dt><label for="tuningPicker"><span>Soprano ukulele tuning</span> <em>&#9658;</em></label></dt>
+			<dd id="tuningPicker" data-action="tuning">
+				<ul class="pseudoSelect">
+					<li class="checked"><a href="#soprano">Soprano</a></li>
+					<li><a href="#baritone">Baritone</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</fieldset>
+</aside>
+<!-- OTHER OPTIONS -->
+<aside class="arrowBox otherOptions" id="optionsDlg">
+	<fieldset class="arrowBoxContent">
+		<dl class="enablePseudoSelects">
+			<dt><label for="pagePicker"><span>Paper</span> <em>&#9658;</em></label></dt>
+			<dd id="pagePicker" data-action="paper">
+				<ul class="pseudoSelect" id="pageWidth">
+					<li class="checked"><a href="#letter">US Letter (8.5 x 11 in)</a></li>
+					<li><a href="#a4">A4 (21 x 29.7 cm)</a></li>
+					<li><a href="#screen">full screen</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</fieldset>
+	<fieldset class="arrowBoxContent">
+		<p class="checkboxBlock">
+			<input type="checkbox" value="true" id="chkEnclosures" checked="checked" />
+			<label for="chkEnclosures">Hide chord enclosures
+				<span class="checkBoxFinePrint">don't put [brackets] around chord names</span>
+			</label>
+		</p>
+		<p class="checkboxBlock">
+			<input type="checkbox" value="true" id="chkIgnoreCommon" checked="checked" />
+			<label for="chkIgnoreCommon">Ignore common chords
+				<span class="checkBoxFinePrint">don't create master chord diagrams for these chords:</span>
+			</label>
+			<input type="text" id="commonChordList" value="" />
+		</p>
+	</fieldset>
+</aside>
+<!-- HELP (DIALOG) -->
+<aside class="arrowBox helpOptions" id="helpDlg">
+	<fieldset class="arrowBoxContent linksList">
 		<ul>
-			<li><label for="pageWidth">Paper:</label> <select id="pageWidth"><option value="letter">US Letter (8.5 x 11 in)</option><option value="a4">A4 (21 x 29.7 cm)</option><option value="screen" selected>None/full-screen</option></select></li>
-			<li><input type="checkbox" value="true" id="chkEnclosures" checked="checked"> <label for="chkEnclosures">Hide chord enclosures <br /><span style="font-size:.85em; padding-left: 2.5em;">don't put [ &amp; ] brackets around chord names</span></label></li>
-			<li><input type="checkbox" value="true" id="chkIgnoreCommon" checked="checked"> <label for="chkIgnoreCommon">Ignore common chords <br /><span style="font-size:.85em; padding-left: 2.5em;">don't create master chord diagrams for these chords:</span></label>
-				<br /><input type="text" id="commonChordList" value="" /></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm" target="_blank" title="View the complete documentation including ChordPro tips">User Guide</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#how_do_i_markup" target="_blank">How do I &quot;mark-up&quot; my music?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#chordNames" target="_blank">How do I name chords?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#chordpro_markup_reference" target="_blank">ChordPro markup reference</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#saveBtn" target="_blank">Where's the &quot;Save&quot; button?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#defined_chords" target="_blank">What chords are already defined?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#more_chord_definitions" target="_blank">How can I use an alternate chord fingering?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#muted_strings" target="_blank">How can I indicate muted strings?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#barre_chords" target="_blank">How can I make a barre chord?</a></li>
+			<li><a href="http://ukegeeks.com/users-guide.htm#formatter" target="_blank">What if my song has the chords above the lyrics?</a></li>
 		</ul>
-	</div>
-</section>
+	</fieldset>
+</aside>
+
+<!-- REFORMAT (DIALOG) -->
 <section id="reformatDlg" class="reformatDlg overlay isHidden">
 	<hgroup>
 		<h3>Use Auto-Formated Version?</h3>
@@ -170,8 +236,12 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		<p class="instructions small"><input type="checkbox" value="true" id="reformatDisable" /> <label for="reformatDisable">Don't perform this check again.</label></p>
 	</div>
 </section>
-<script type="text/javascript" src="/js/ukeGeeks.scriptasaurus.merged.js"></script>
-<script type="text/javascript" src="/js/ugsEditorPlus.merged.js"></script>
+
+<!-- SCRIPTS -->
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery.draggable.js"></script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ukeGeeks.scriptasaurus.merged.js"></script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.merged.js"></script>
 <script type="text/javascript">
 if (isLegacyIe){
 	window.attachEvent('onload', ugsEditorPlus.attachIe);
@@ -182,7 +252,6 @@ else{
 </script>
 <?php if ($model->IsUpdateAllowed) {
 	?>
-	<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript">
 	ugsEditorPlus.updateSong.init("<?php echo($model->UpdateAjaxUri); ?>", "<?php echo($model->Id); ?>");
 	</script>

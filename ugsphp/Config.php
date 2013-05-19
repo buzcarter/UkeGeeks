@@ -20,12 +20,20 @@ class Config {
 	static public $CachePath = '';
 	static public $ViewsPath = '';
 
+	const StaticsPrefix = '/';
+
 	// --------------------------------------
 	// Attribution & Site Credits
 	// --------------------------------------
 	const PageTitleSuffix = ' | UkeGeek\'s Scriptasaurus';
 	const PoweredBy = 'UkeGeeks-Scriptasaurus-v1.11';
 	const SupportEmail = 'buz@your-domain-not-mine.com';
+
+	// --------------------------------------
+	// Page Headings & Titles
+	// --------------------------------------
+	const SongbookHeadline  = 'The BIG UKE Book';
+	const SongbookSubHeadline = 'Sample Styled Songbook &raquo;';
 
 	// --------------------------------------
 	// Boolean Options/Settings

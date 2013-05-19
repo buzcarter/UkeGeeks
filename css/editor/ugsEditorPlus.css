@@ -3,39 +3,33 @@
  *  http://stackoverflow.com/questions/4531269/hide-vertical-scrollbar-in-select-element
  * @import url(http://fonts.googleapis.com/css?family=Peralta);
  *-------------- */
-.salt_2231ySp {
-	color:#0fo;
-}
-html, body {
-	margin: 0;
-	padding: 0;
-}
-body {
-	position:relative;
-	padding-top: 40px;
-}
-.editableSongPage{
-	background-color:#EDECEA;
-}
-.scalablePrintArea {
-	-moz-transform-origin: 0 0;
-	-webkit-transform-origin: 0 0;
-	/* padding: 0.5em; */
-	background-color: #fff;
-	border-right:solid 1px #888;
-	font-size: inherit;
-	box-shadow: 3px 0 9px rgba(0, 0, 0, 0.4);
-	/* 11.5in;
-	width: 8in;
-	padding:0.2in;
-	min-height:10.5in;
-	*/
-}
-.scalablePrintArea hgroup{
-	padding-bottom: .15in;
-}
+ .salt_2231ySp {
+ 	color:#0f0;
+ }
+ html, body {
+ 	margin: 0;
+ 	padding: 0;
+ }
+ body {
+ 	position:relative;
+ 	padding-top: 40px;
+ }
+ .editableSongPage{
+ 	background-color:#EDECEA;
+ }
+ .scalablePrintArea {
+ 	-moz-transform-origin: 0 0;
+ 	-webkit-transform-origin: 0 0;
+ 	background-color: #fff;
+ 	border-right:solid 1px #888;
+ 	font-size: inherit;
+ 	box-shadow: 3px 0 9px rgba(0, 0, 0, 0.4);
+ }
+ .scalablePrintArea hgroup{
+ 	padding-bottom: .15in;
+ }
 /* LOGO
- -------------------------------- */
+-------------------------------- */
 .ugsLogo {
 	color: #F2A848;
 	font-family: 'Peralta', cursive;
@@ -47,7 +41,7 @@ body {
 }
 
 /* STANDARD appearance HTML for Help Section
- -------------------------------- */
+-------------------------------- */
 .helpDlg{
 	font-size:.9em;
 }
@@ -67,7 +61,7 @@ body {
 }
 
 /*
- -------------------------------- */
+-------------------------------- */
 .ugsAppMenuBar {
 	background: #933f17 url("../../img/editor/editorSprite.png") 0 -100px repeat-x;
 	-moz-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
@@ -117,68 +111,8 @@ body {
 	color: #fef5e3;
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
-.ugsAppMenuBar > ul > .active .subMenu {
-	display: block;
-}
-/* Dropdown Info/Menus
- -------------------------------- */
-.subMenu {
-	-moz-box-shadow: 1px 5px 8px rgba(0, 0, 0, 0.65);
-	-webkit-box-shadow: 1px 5px 8px rgba(0, 0, 0, 0.65);
-	box-shadow: 1px 5px 8px rgba(0, 0, 0, 0.65);
-	-moz-border-radius: 0 0 6px 6px;
-	-webkit-border-radius: 0 0 6px 6px;
-	border-radius: 0 0 6px 6px;
-	background-color: #4E1F1D;
-	background-color: rgba(65, 15, 12, 0.93);
-	border: solid 1px #000;
-	border-width: 0 1px 1px;
-	display: none;
-	overflow: hidden;
-	position: absolute;
-	top: 41px;
-	width: 175px;
-	z-index: 2;
-}
-.subMenu a {
-	color: #dedede;
-	display: block;
-	line-height: 1.23;
-	padding: 8px 15px 8px 25px;
-	text-decoration: none;
-	text-shadow: 0 1px 1px rgba(96, 0, 0, 0.5);
-}
-.subMenu a:hover {
-	background-color: #000;
-	color: #fff;
-}
-.subMenu .checked a {
-	background: url("../../img/editor/checked.png") no-repeat scroll 10px center #2a2a2a;
-	color: #fff;
-}
-.noChecks .subMenu a {
-	padding-left: 10px;
-}
-.noChecks .subMenu .checked a {
-	background: none;
-}
-/*
-.navSong .subMenu,
-.navDiagrams .subMenu,
-.navInstruments .subMenu {
-	width: 300px;
-}
-.navLayout .subMenu {
-	width: 250px;
-}
-*/
-.subMenu em{
-	color:#ccc;
-	float:right;
-	font-size:.86em;
-}
 /* Icons/Sprits
- -------------------------------- */
+-------------------------------- */
 .ugsAppMenuBar > ul > li > a span {
 	background-image: url("../../img/editor/editorSprite.png");
 	background-repeat: no-repeat;
@@ -251,7 +185,7 @@ body {
 	background-position: -200px -50px;
 }
 /* Alternate Layouts: Hide Diagrams
- -------------------------------- */
+-------------------------------- */
 html .ugsHideDiagrams .ugs-diagrams-wrap {
 	display:none;
 }
@@ -259,7 +193,7 @@ html .ugsHideDiagrams .ugs-source-wrap {
 	margin-left: 0;
 }
 /* Alternate Layouts: Chord Diagrams On Top:
- -------------------------------- */
+-------------------------------- */
 html .diagramsOnTop .ugs-diagrams-wrap {
 	float: none;
 	width: auto;
@@ -268,7 +202,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	margin-left: 0;
 }
 /* Alternate Layouts: standard Two Column
-  ------------------------------ */
+------------------------------ */
 .diagramsOnSide .ugs-diagrams-wrap {
 	float:left;
 	width:225px;
@@ -277,9 +211,9 @@ html .diagramsOnTop .ugs-source-wrap {
 	margin-left:250px;
 }
 /* MOVED FROM PAGE: SECTION 1
-  ------------------------------ */
+------------------------------ */
 /* FLOATIN EDITOR
- -------------------------------- */
+-------------------------------- */
 .overlay {
 	position:fixed;
 	top:45px;
@@ -293,6 +227,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	-webkit-border-radius: 22px;
 	border-radius: 22px;
 	padding: 10px;
+	width: 490px;
 	z-index:0;
 }
 .overlay div {
@@ -302,17 +237,17 @@ html .diagramsOnTop .ugs-source-wrap {
 	padding: 10px;
 }
 /* Form inputs,
- ----------------------------------- */
+----------------------------------- */
 .overlay select{
 	font-size: 1.1em;
- }
+}
 .overlay input[type=text],
 .overlay input[type=password] {
 	display: block;
 	font-size: 1.2em;
 	margin-bottom: .4em;
 	padding: 0.1em;
-	width: 20em;
+	width: 98%;
 }
 .overlay textarea {
 	font-family: Monaco, "Consolas", "Lucida Console", "Courier New", courier, monospace;
@@ -323,7 +258,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	white-space:pre;
 	overflow:scroll;
 	height:525px;
-	width:450px;
+	width: 98%;
 }
 .overlay input[type=text],
 .overlay input[type=password],
@@ -354,18 +289,18 @@ html .diagramsOnTop .ugs-source-wrap {
 .overlay h3 {
 	/*
   cursor: move;
-	*/
-	background: url(../../img/editor/editorSprite.png) repeat-x scroll 0 -100px #933f17;
-	border-bottom: 1px solid #240E01;
-	border-radius: 12px 12px 0 0;
-	border-top: 1px solid #84623C;
-	color: #FFF;
-	font-size: 22px;
-	font-weight: bold;
-	height: 37px;
-	line-height: 37px;
-	padding: 0 20px;
-	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  */
+  background: url(../../img/editor/editorSprite.png) repeat-x scroll 0 -100px #933f17;
+  border-bottom: 1px solid #240E01;
+  border-radius: 12px 12px 0 0;
+  border-top: 1px solid #84623C;
+  color: #F4E19F;
+  font-size: 22px;
+  /*font-weight: bold;*/
+  height: 37px;
+  line-height: 37px;
+  padding: 0 20px;
+  text-shadow: 1px 2px 0 #592108;
 }
 .overlay .closeBtn {
 	background: url(../../img/editor/closeBtn.png) no-repeat scroll 0 0 transparent;
@@ -379,7 +314,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	width: 30px;
 }
 /* MOVED FROM PAGE: SECTION 2
-  ------------------------------ */
+------------------------------ */
 /* "base button" is rounded & gray with white text */
 .baseBtn {
 	background-color: #999;
@@ -389,25 +324,26 @@ html .diagramsOnTop .ugs-source-wrap {
 	border-radius: 4px;
 	color: #FFF;
 	cursor: pointer;
+	font-size: inherit;
 	font-weight: bold;
 	padding: 0.2em 1em;
 	text-align: center;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 	/* Remove underline in case this is applied to a link */
 
-  text-decoration: none;
+	text-decoration: none;
 }
 .baseBtn:hover {
 	background-color: #888;
 	/* Force colorin case this is applied to a link */
 
-  color: #fff;
+	color: #fff;
 }
 .blueBtn {
 	background-color: #89b9e3;
 	background-image: -moz-linear-gradient(top, #89b9e3, #3d6bbb);
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #89b9e3), color-stop(1, #3d6bbb));
- filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#89b9e3', endColorstr='#3d6bbb');
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#89b9e3', endColorstr='#3d6bbb');
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#89b9e3', EndColorStr='#3d6bbb')";
 	border-color: #3765B7;
 	text-shadow: #89b9e3 0px 1px 0, #3765b7 0 -1px 0;
@@ -416,7 +352,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	background-color: #4c85e8;
 	background-image: -moz-linear-gradient(top, #4c85e8, #2f5493);
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #4c85e8), color-stop(1, #2f5493));
- filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4c85e8', endColorstr='#2f5493');
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4c85e8', endColorstr='#2f5493');
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#4c85e8', EndColorStr='#2f5493')";
 	text-shadow: black 0px 1px 0, #3765b7 0 -1px 0;
 }
@@ -454,15 +390,17 @@ html .diagramsOnTop .ugs-source-wrap {
 	margin-bottom: 5px;
 }
 /* MOVED FROM PAGE: SECTION 3
-  ------------------------------ */
+------------------------------ */
 html .helpDlg {
 	top:75px;
 	right:70px;
+	width: 300px;
 	z-index:1;
 }
 html .optionsDlg {
 	top:100px;
 	right:210px;
+	width: 380px;
 	z-index:2;
 }
 .optionsDlg div{
@@ -475,10 +413,11 @@ html .optionsDlg {
 	cursor: pointer;
 }
 /* Reformat Dialog
-  ------------------------------ */
+------------------------------ */
 .reformatDlg{
 	right: 25%;
 	top: 100px;
+	width: 480px;
 	z-index: 3;
 }
 .noThanks{
@@ -501,12 +440,13 @@ html .reformatDlg textarea{
 	height: 15em;
 }
 /* MOVED FROM PAGE: SECTION 4
-  ------------------------------ */
+------------------------------ */
 .isHidden {
 	display:none;
 }
+
 /* page widths
- -------------------------------- */
+-------------------------------- */
 .pageWidth_letter .scalablePrintArea {
 	width: 8in;
 	padding:0.2in;
@@ -521,43 +461,273 @@ html .reformatDlg textarea{
 	padding:20px;
 }
 /* Alternate color schemes
- -------------------------------- */
+-------------------------------- */
 .reversed {
-  background-color: #000;
-  color: #FFF;
+	background-color: #000;
+	color: #FFF;
 }
 .reversed .scalablePrintArea{
 	background-color: transparent;
 }
 .reversed pre {
-  color: #e9e9e9;
+	color: #e9e9e9;
 }
 .reversed .ugsChords code {
-  color: #333;
+	color: #333;
 }
 .reversed .ugsChords code em {
-  color: #F42;
+	color: #F42;
 }
 .reversed .ugsChorus {
-  border-left-color: #333;
+	border-left-color: #333;
 }
 .reversed h5, .reversed h6 {
-  border-left-color: #444;
-  color: #69F;
+	border-left-color: #444;
+	color: #69F;
 }
 .reversed .subNav a:hover {
-  background-color: #888;
-  color: #000;
+	background-color: #888;
+	color: #000;
 }
 .reversed .overlay {
-  background-color: #4E1C07;
-  /*622105;*/
+	background-color: #4E1C07;
+	/*622105;*/
 
-  box-shadow: none;
-  color: #000;
+	box-shadow: none;
+	color: #000;
+}
+/* "Arrow Box"
+ * Thanks to: cssarrowplease.com
+-------------------------------- */
+.arrowBox {
+	background-color: rgba(0, 0, 0, 0.81);
+	border: 2px solid #fff;
+	border-radius: 10px;
+	color:#b3b3b3;
+	display: none;
+	position: fixed;
+	top: 60px;
+	width: 310px;
+	-moz-box-shadow: 3px 13px 9px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 3px 13px 9px rgba(0, 0, 0, 0.5);
+	box-shadow: 3px 13px 9px rgba(0, 0, 0, 0.5);
+	z-index: 5;
+}
+.arrowBox:after,
+.arrowBox:before {
+	bottom: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+.arrowBox:after {
+	border-color: rgba(0, 0, 0, 0);
+	border-bottom-color: #000;
+	border-width: 20px;
+	left: 50%;
+	margin-left: -20px;
+}
+.arrowBox:before {
+	border-color: rgba(255, 255, 255, 0);
+	border-bottom-color: #ffffff;
+	border-width: 23px;
+	left: 50%;
+	margin-left: -23px;
+}
+.arrowBoxContent{
+	padding: 1em .6em .4em;
+}
+.arrowBoxContent + .arrowBoxContent{
+	padding-top:0;
+}
+/*
+-------------------------------------- */
+.layoutOptions{
+	left: 50px;
+}
+.layoutOptions:after,
+.layoutOptions:before {
+	left:22%;
+}
+
+.tuningOptions{
+	left:150px;
+}
+#transposeOptions em {
+    color: #CCCCCC;
+    float: right;
+    font-size: 0.86em;
+}
+.otherOptions {
+    left: 250px;
+}
+.helpOptions {
+    left: 320px;
+}
+/*
+-------------------------------------- */
+.enablePseudoSelects dt,
+.enablePseudoSelects dd {
+	height: 3em;
+	line-height: 1;
+	margin: 0;
+	padding: 0;
+}
+.enablePseudoSelects dd {
+	display:none;
+	left: 16.1em;
+	position: relative;
+	top: -3.1em;
+	height: 0px;
+}
+.enablePseudoSelects label{
+	color: #E4E4E4;
+	display: block;
+	cursor: pointer;
+	border: solid 1px transparent;
+	border-radius: 7px;
+	padding: 0.5em;
+}
+.enablePseudoSelects label em{
+	color: #898989;
+	float: right;
+	font-family: Arial;
+}
+.enablePseudoSelects label:hover{
+	color:#fff;
+	background-color: #2A2A2A;
+	border-color: #555;
+	box-shadow: 2px 2px 2px #000;
+
+}
+.enablePseudoSelects label:hover em{
+	color:#E4E4E4;
+}
+.event-userSelecting label{
+	color:#B9B9B9;
+}
+.event-userSelecting label em{
+	color:#3a3a3a;
+}
+html .active label{
+	background-color: #000;
+	color: #fff;
+}
+/*
+-------------------------------------- */
+.pseudoSelect {
+	position: absolute;
+	background-color: #3C3C3C;
+	border: solid 1px #555;
+	border-radius: 7px;
+	box-shadow: 2px 6px 6px rgba(0, 0, 0, 0.53);
+	color: #EFEFEF;
+	cursor: pointer;
+	width: 17em;
+}
+.pseudoSelect li {
+	display: block;
+	padding: 0.1em;
+}
+.pseudoSelect a{
+	border: 2px solid transparent;
+	border-radius: 10px;
+	color: inherit;
+	display: block;
+	padding: 0.5em 0.5em 0.5em 30px;
+	text-decoration: none;
+}
+.pseudoSelect li:hover{
+	color: #fff;
+}
+.pseudoSelect li:hover a{
+	background-color: #000;
+	border-color: #676767;
+}
+/* undo */
+.pseudoSelect li {
+	float: none;
+	margin: 0;
+	text-align: inherit;
+}
+.pseudoSelect .checked a {
+	background: url("../../img/editor/checked.png") no-repeat scroll 10px center #2A2A2A;
+	border-color: #C5C5C5;
+	color: #FFFFFF;
+	text-shadow:1px 2px 1px #000;
+}
+
+/* our Checkboxes are a problem...
+-------------------------------- */
+.checkboxBlock {
+	border-top: 1px solid #575757;
+	box-shadow: 0 -1px 0 #000;
+	font-size: 0.81em;
+	padding: 0.75em 0;
+}
+.checkboxBlock label{
+	padding-left: 0.5em;
+}
+.checkBoxFinePrint{
+	display: block;
+	font-size:.85em;
+	padding: 0.3em 0 0.5em 3.1em;
+}
+#commonChordList {
+	display: block;
+	font-size: 1.2em;
+	margin-left: 1.5em;
+	width: 15em;
+}
+
+/* list of links (duh)
+ * ...undoing some spill-over styles, when will I learn
+-------------------------------- */
+.linksList{ font-size: .85em;}
+.linksList li {
+    margin: 0;
+    padding: 0.1em;
+    text-align: left;
+    float: none;
+}
+.linksList a {
+    border-radius: 8px;
+    color: #B9B9B9;
+    display: block;
+    padding: 0.6em;
+    text-decoration: none;
+}
+.linksList a:hover{
+	background-color: #000;
+	color:#fff;
+}
+/* Feedback message -- on UPDATE
+-------------------------------- */
+.updateMessage {
+	background-color: #BAE5A7;
+	border: 1px solid #44A819;
+	border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 0 4px rgba(255, 190, 40, 0.8);
+	color: #43772D;
+	display: none;
+	position: absolute;
+	text-align: center;
+	text-shadow: 0 -1px rgba(255, 190, 40, 0.3);
+	width: 10em;
+}
+.updateMessage em{
+	border: 1px solid #66D836;
+	border-radius: 3px 3px 3px 3px;
+	box-shadow: 0 0 3px #559277 inset;
+	display: block;
+	height: 100%;
+	padding: 0.2em;
 }
 /* redundant rule to allow JS hook
- -------------------------------- */
+-------------------------------- */
 /* NOTE: this should be last set of rules in this file! */
 .scalablePrintArea .ugs-diagrams-wrap canvas{}
 .scalablePrintArea .ugs-diagrams-wrap{}

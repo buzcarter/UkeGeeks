@@ -1,6 +1,6 @@
 /**
  * Reads a text block and returns an object containing whatever ChordPro elements it recognizes.
- * 
+ *
  * A cleaned, HTML version of song is included.
  *
  * @class cpmParser
@@ -11,29 +11,29 @@ ukeGeeks.cpmParser.prototype = {
 	/**
 	* While debugging this prevents run-away (infinite) loops. Pseudo-constant.
 	* @property runaway
-  * @private 
+  * @private
 	* @type int
 	*/
 	runaway: 30,
-	
+
 	/**
 	* Number of columns defined
 	* @property columnCount
-  * @private 
+  * @private
 	* @type int
 	*/
 	columnCount: 1,
-	
+
 	/**
-	* Under development, bool indicating whether any chords were found within the lyrics. 
+	* Under development, bool indicating whether any chords were found within the lyrics.
 	* Helpful for tablature-only arrangements.
 	* TODO: do not rely on this!!!
 	* @property hasChords
-  * @private 
+  * @private
 	* @type bool
 	*/
-	hasChords: false, // TODO: 
-	
+	hasChords: false, // TODO:
+
 	/**
 	 * Again this is a constructor replacement. Just here for consistency. Does nothing.
 	 * @method init
@@ -43,7 +43,7 @@ ukeGeeks.cpmParser.prototype = {
 	},
 
 	/**
-	 * Accepts CPM text, returning HTML marked-up text 
+	 * Accepts CPM text, returning HTML marked-up text
 	 * @method parse
 	 * @param text {string} string RAW song
 	 * @return {songObject}
@@ -57,7 +57,7 @@ ukeGeeks.cpmParser.prototype = {
 		songDom = this._markChordLines(songDom);
 		song.body = this._export(songDom);
 		if (this.columnCount > 1){
-			song.body = '<div class="' + this.classNames.ColumnWrap + ' ' + this.classNames.ColumnCount + this.columnCount + '">' 
+			song.body = '<div class="' + this.classNames.ColumnWrap + ' ' + this.classNames.ColumnCount + this.columnCount + '">'
 			+ '<div class="' + this.classNames.Column + '">'
 			+ song.body
 			+ '</div>'
@@ -102,7 +102,7 @@ ukeGeeks.cpmParser.prototype = {
 		}
 		return song;
 	},
-	
+
 	/*
 		TODO: add ukeGeeks Meta support:
 		$regEx = "/{(ukegeeks-meta|meta)\s*:\s*(.+?)}/i";
@@ -117,7 +117,7 @@ ukeGeeks.cpmParser.prototype = {
 	* All of the CSS classnames used by UkeGeeks JavaScript
 	* @property classNames
 	* @private
-	* @type JSON 
+	* @type JSON
 	*/
 	classNames : {
 		Comment: 'ugsComment',
@@ -128,14 +128,15 @@ ukeGeeks.cpmParser.prototype = {
 		NoLyrics: 'ugsNoLyrics', // preformated, chords ONLY -- no lyrics (text) between 'em
 		ColumnWrap: 'ugsWrap',
 		ColumnCount: 'ugsColumnCount',
-		Column: 'ugsColumn'
+		Column: 'ugsColumn',
+		NewPage: 'ugsNewPage'
 	},
-	
+
 	/**
 	* Enumeration defining the types of nodes used within this class to parse CPM
 	* @property blockTypeEnum
 	* @private
-	* @type JSON-enum 
+	* @type JSON-enum
 	*/
 	blockTypeEnum: {
 		// Multiline Nodes
@@ -151,20 +152,21 @@ ukeGeeks.cpmParser.prototype = {
 		UkeGeeksMeta: 106,
 		ColumnBreak: 107, // Defining this as an instruction instead of a node since I'm not requiring a Begin/End syntax and it simplifies processing
 		Artist: 108,
+		NewPage: 109,
 		// Text Types
 		ChordText: 201,
 		PlainText: 202,
-		ChordOnlyText: 203, // 
+		ChordOnlyText: 203, //
 		// Undefined
 		Undefined: 666
 	},
-	
+
 	/**
-	 * Retuns the block type (blockTypeEnum) of passed in line. 
+	 * Retuns the block type (blockTypeEnum) of passed in line.
 	 * @method _getBlockType
 	 * @private
-	 * @param line {songNode} 
-	 * @return {blockTypeEnum} 
+	 * @param line {songNode}
+	 * @return {blockTypeEnum}
 	 */
 	_getBlockType: function(line){
 		// TODO: verify line's type in documentation
@@ -176,13 +178,13 @@ ukeGeeks.cpmParser.prototype = {
 		}
 		return this.blockTypeEnum.TextBlock;
 	},
-	
+
 	/**
 	 * Convert passed in song to HTML block
 	 * @method _export
 	 * @private
-	 * @param song {songNodeArray} 
-	 * @return {strings} 
+	 * @param song {songNodeArray}
+	 * @return {strings}
 	 */
 	_export: function(song){
 		var nl = "\n";
@@ -201,10 +203,13 @@ ukeGeeks.cpmParser.prototype = {
 			else if (song[i].type == this.blockTypeEnum.UkeGeeksMeta){
 				html += '<h3>' + song[i].lines[0] + '</h3>' + nl;
 			}
-			else 
+			else
 			*/
 			if (song[i].type == this.blockTypeEnum.Comment){
 				html += '<h6 class="' + this.classNames.Comment + '">' + song[i].lines[0] + '</h6>' + nl;
+			}
+			else if (song[i].type == this.blockTypeEnum.NewPage){
+				html += '<hr class="' + this.classNames.NewPage + '" />' + nl;
 			}
 			else if ((song[i].type == this.blockTypeEnum.ChordText) || (song[i].type == this.blockTypeEnum.PlainText ) || (song[i].type == this.blockTypeEnum.ChordOnlyText)){
 				// TODO: beware undefined's!!!
@@ -240,7 +245,7 @@ ukeGeeks.cpmParser.prototype = {
 				html += '</div><div class="' + this.classNames.Column + '">' ;
 			}
 			else{
-		}
+			}
 		}
 		return html;
 	},
@@ -249,8 +254,8 @@ ukeGeeks.cpmParser.prototype = {
 	 * Debugging tool for Firebug. Echos the song's structure.
 	 * @method _echo
 	 * @private
-	 * @param song {songNodeArray} 
-	 * @return {void} 
+	 * @param song {songNodeArray}
+	 * @return {void}
 	 */
 	_echo: function(song){
 		for (var i in song){
@@ -260,13 +265,13 @@ ukeGeeks.cpmParser.prototype = {
 			}
 		}
 	},
-		
+
 	/**
 	 * Explodes passed in text block into an array of songNodes ready for further parsing.
 	 * @method _domParse
 	 * @private
-	 * @param text {string} 
-	 * @return {songNodeArray} 
+	 * @param text {string}
+	 * @return {songNodeArray}
 	 */
 	_domParse: function(text){
 		// var ezBlock = function(){};
@@ -308,17 +313,17 @@ ukeGeeks.cpmParser.prototype = {
 	},
 
 	/**
-	 * Goes through songNodes, those nodes that are "instructions" are exploded and 
-	 * a "the resulting "songDomElement" built, this songDomElement then replaces the 
-	 * original line. 
-	 * 
-	 * The regular expression look for instructions with this format: 
+	 * Goes through songNodes, those nodes that are "instructions" are exploded and
+	 * a "the resulting "songDomElement" built, this songDomElement then replaces the
+	 * original line.
+	 *
+	 * The regular expression look for instructions with this format:
 	 * {commandVerb: commandArguments}
-	 * 
+	 *
 	 * @method _parseInstr
 	 * @private
-	 * @param song {songNodeArray} 
-	 * @return {songNodeArray} 
+	 * @param song {songNodeArray}
+	 * @return {songNodeArray}
 	 */
 	_parseInstr: function(song){
 		var regEx = {
@@ -372,26 +377,39 @@ ukeGeeks.cpmParser.prototype = {
 		}
 		return song;
 	},
-	
+
 	/**
 	 * A "Simple Instruction" is one that accepts no arguments. Presently this only handles Column Breaks.
 	 * @method _parseSimpleInstr
 	 * @private
-	 * @param song {songNodeArray} 
-	 * @return {songNodeArray} 
+	 * @param song {songNodeArray}
+	 * @return {songNodeArray}
 	 */
 	_parseSimpleInstr: function(song){
 		var regEx = {
-			columnBreak : /\s*{\s*(column_break|colb)\s*}\s*/im
+			columnBreak : /\s*{\s*(column_break|colb|np|new_page)\s*}\s*/im
 		};
 		for (var i in song){
 			for (var j in song[i].lines){
 				if (regEx.columnBreak.test(song[i].lines[j])){
-					this.columnCount++;
-					song[i].lines[j] = {
-						type: this.blockTypeEnum.ColumnBreak,
-						lines : []
-					};
+					var verb = song[i].lines[j].replace(regEx.columnBreak,'$1').toLowerCase();
+					switch(verb){
+						case 'column_break':
+						case 'colb':
+							this.columnCount++;
+							song[i].lines[j] = {
+								type: this.blockTypeEnum.ColumnBreak,
+								lines : []
+							};
+							break;
+						case 'new_page':
+						case 'np':
+							song[i].lines[j] = {
+								type: this.blockTypeEnum.NewPage,
+								lines : []
+							};
+							break;
+					}
 				}
 			}
 		}
@@ -399,19 +417,19 @@ ukeGeeks.cpmParser.prototype = {
 	},
 
 	/**
-	 * Runs through songNodes and if the line contains at least one chord it's type is et to 
+	 * Runs through songNodes and if the line contains at least one chord it's type is et to
 	 * ChordText, otherwise it's marked as "PlainText", meaning straight lyrics
 	 * @method _markChordLines
 	 * @private
-	 * @param song {songNodeArray} 
-	 * @return {songNodeArray} 
+	 * @param song {songNodeArray}
+	 * @return {songNodeArray}
 	 */
 	_markChordLines: function(song){
 		var regEx = {
 			chord : /\[(.+?)]/i,
 			allChords : /\[(.+?)]/img
 		};
-		
+
 		var hasChrd;
 		var isChrdOnly;
 		var line;
@@ -426,7 +444,7 @@ ukeGeeks.cpmParser.prototype = {
 						// need to find
 						song[i].lines[j] = {
 							type: (isChrdOnly ? this.blockTypeEnum.ChordOnlyText
-								: (hasChrd ? this.blockTypeEnum.ChordText : this.blockTypeEnum.PlainText)), 
+								: (hasChrd ? this.blockTypeEnum.ChordText : this.blockTypeEnum.PlainText)),
 							lines : [line]
 						};
 					}
@@ -435,14 +453,14 @@ ukeGeeks.cpmParser.prototype = {
 		}
 		return song;
 	},
-	
+
 	/**
 	 * Searches the songNodes for the specified block type, retunrs all matching node line (text) values.
 	 * @method _getInfo
 	 * @private
-	 * @param song {songNodeArray} 
-	 * @param type {blockTypeEnum} 
-	 * @return {array} 
+	 * @param song {songNodeArray}
+	 * @param type {blockTypeEnum}
+	 * @return {array}
 	 */
 	_getInfo: function(song, type){
 		var rtn = [];
@@ -460,13 +478,13 @@ ukeGeeks.cpmParser.prototype = {
 		}
 		return rtn;
 	},
-	
+
 	/**
 	 * Removes HTML "pre" tags and comments.
 	 * @method _stripHtml
 	 * @private
-	 * @param text {string} 
-	 * @return {string} 
+	 * @param text {string}
+	 * @return {string}
 	 */
 	_stripHtml: function(text){
 		var regEx = {

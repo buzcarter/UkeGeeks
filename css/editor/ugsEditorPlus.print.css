@@ -7,15 +7,14 @@
 		background-color: transparent;
 		border: none;
 		box-shadow: none;
-		padding:0; 
+		padding:0;
 		width:100%;
 		min-height:auto;
 	}
-	.ugsAppMenuBar {
-		display: none; 
-	}
+	.ugsAppMenuBar,
+	.arrowBox,
 	.isHidden,
 	.overlay {
-		display: none; 
+		display: none !important;
 	}
 }

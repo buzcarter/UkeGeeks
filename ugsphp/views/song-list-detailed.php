@@ -1,5 +1,10 @@
 <?php
 
+function SayHello(){
+	$greetings = array('Aloha', 'Bonjour', 'Ciao', 'Greetin\'s', 'Guten Tag', 'Hallo', '¡Hola', 'Howdy', 'Hej', 'Konnichiwa', 'Mabuhay', 'Nǐ hǎo', 'Whassup', 'Yo');
+	return $greetings[rand(0, count($greetings) - 1)];
+}
+
 /**
  * Convert a Song object to custom HTML
  */
@@ -34,17 +39,17 @@ function MakeRowHtml($song){
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>List All Songs</title>
+	<title><?php echo($model->PageTitle); ?></title>
 	<meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
-	<link rel="stylesheet" href="/css/editor/ugsEditorPlus.css" />
-	<link rel="stylesheet" href="/css/ugsphp.css" />
-	<link rel="stylesheet" href="/css/ugsEditorPlus.typeahead.css" />
+	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/editor/ugsEditorPlus.css" />
+	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsphp.css" />
+	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.typeahead.css" />
 </head>
 <body class="songListPage">
 	<section class="contentWrap">
 		<?php if ($model->SiteUser->IsAuthenticated) { ?>
 			<aside style="float:right;">
-				<em style="font-size:.8em; padding-right:1.5em; color:#BCB59C;">Howdy, <?php echo($model->SiteUser->DisplayName); ?>!
+				<em style="font-size:.8em; padding-right:1.5em; color:#BCB59C;"><?php echo(SayHello() . ', '. $model->SiteUser->DisplayName); ?>!
 					(<a href="<?php echo($model->LogoutUri); ?>">Logout</a>)
 				</em>
 				<?php if ($model->IsNewAllowed) {
@@ -55,8 +60,8 @@ function MakeRowHtml($song){
 				?>
 			</aside>
 		<?php } ?>
-	<h2>Sample Styled Songbook &raquo;</h2>
-	<h1>The BIG UKE Book</h1>
+	<h2><?php echo($model->SubHeadline); ?></h2>
+	<h1><?php echo($model->Headline); ?></h1>
 	<p><? echo(count($model->SongList)); ?> Songs.
 		<label for="quickSearch">Quick search:</label> <input class="quickSearch" id="quickSearch" autocomplete="off" type="text" /></p>
 	<ol class="songList">
@@ -67,8 +72,8 @@ function MakeRowHtml($song){
 		?>
 	</ol>
 	</section>
-	<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="/js/ugsEditorPlus.merged.js"></script>
+	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.merged.js"></script>
 	<?php if ($model->IsNewAllowed) {
 		?>
 		<section class="overlay" style="top:100px; right:40%; display:none;" id="newSongForm">
@@ -91,7 +96,7 @@ function MakeRowHtml($song){
 		<?php
 	}
 	?>
-<script type="text/javascript" src="/js/bootstrap-typeahead.min.js"></script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/bootstrap-typeahead.min.js"></script>
 <script type="text/javascript">
 var qkSrch = ugsEditorPlus.typeahead();
 qkSrch.initialize();

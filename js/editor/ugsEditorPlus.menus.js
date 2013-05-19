@@ -1,184 +1,113 @@
 
 /**
- * Handles Menu UI - show/hide, set checked state, calls actions
- * @class menus
+ * Handles Top Menu UI -- includes the show/hide dialogs (why? cuz they're attached to top menu buttons)
+ * Shows (a) dialongs (such as Edit) and (b) those tool-tippy options thingies.
+ * @class topMenus
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.menus = new function(){
-	// top level LI (list items)
-	var _menuItems;
-	// currently selected top menu href ('#top')
-	var _topBtnUl = null;
-	var _topBtnHref = '';
-	// currently selected sub-menu item's href ('#sub')
-	var _subBtnHref = '';
-	// associative array/JSON of last click event
-	var _prevValues = {
-		'#layout' : '#left',
-		'#placement' : '#above',
-		'#tuning' : '#soprano',
-		'#zoom' : '#prct_100',
-		'#transpose' : '#up_0',
-		'#colors' : '#normal'
-	};
-	
+ugsEditorPlus.topMenus = (function(){
 	/**
-	 * DESCRIPTION
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var _public = {};
+
+	/**
+	 * attaches events...
 	 * @method init
 	 * @return {void}
 	 */
-	this.init = function(){
-		_menuItems = document.getElementById('ugsAppToolbar').getElementsByTagName('ul')[0].children;
-		addSizeOptions();
-		attachClicks();
-	};
-	
+	_public.init = function(){
+		// $('#ugsAppToolbar > ul a')
+		$('#ugsAppToolbar > ul  li').not('[data-dialog]').children('a').click(onMenuItemClick);
+  	$('.showOptionsBox a').click(onShowOptionsClick);
+
+		$('#ugsAppToolbar > ul  li[data-dialog]').click(onShowDlgBtnClick);
+		$('.closeBtn').click(onCloseBtnClick);
+ 	};
+
 	/**
 	 * DESCRIPTION
 	 * @private
-	 * @method attachClicks
+	 * @method onMenuItemClick
 	 * @return {void}
 	 */
-	var attachClicks = function() {
-		for (var i = 0; i < _menuItems.length; i++){
-			var topBtn = _menuItems[i].getElementsByTagName('a')[0];
-			var ul = _menuItems[i].getElementsByTagName('ul');
-			if (ul.length < 1){
-				topBtn.onclick = function(){closeAll(); return false;};
-				continue;
-			}
-			
-			topBtn.onclick = function(){switchActiveMenu(this); return false;};
-			
-			var items = _menuItems[i].getElementsByTagName('li');
-			for(var j = 0; j < items.length; j++){
-				var subBtn = items[j].getElementsByTagName('a')[0];
-				subBtn.onclick = function(){subBtnClick(this); return false;};
-			}
-		}
-	};
-	
-	/**
-	 * DESCRIPTION
-	 * @private
-	 * @method switchActiveMenu
-	 * @param ele (DOM_element) 
-	 * @return {void}
-	 */
-	var switchActiveMenu = function(ele){
-		var isOpen = ukeGeeks.toolsLite.hasClass(ele.parentNode, 'active');
-		closeAll();
+	var onMenuItemClick = function(){
+		// the clicked anchor tag
+		var $parent = $(this).parent();
+		var isOpen = $parent.hasClass('active');
+		_makeAllInactive();
 		if (isOpen) {
 			return;
 		}
-		ukeGeeks.toolsLite.addClass(ele.parentNode, 'active');
-		_topBtnUl = ele.parentNode.getElementsByTagName('ul')[0];
-		_topBtnHref = getHref(ele);
-		
+		$parent.addClass('active');
 	};
-	
+
 	/**
 	 * DESCRIPTION
-	 * @private
-	 * @method subBtnClick
-	 * @param ele (DOM_element) 
-	 * @return {void}
-	 */
-	var subBtnClick = function(ele){
-		closeAll();
-		_subBtnHref = getHref(ele);
-		
-		if (_prevValues[_topBtnHref] == _subBtnHref){
-			return;
-		}
-		// remove 
-		for (var i = 0; i < _topBtnUl.children.length; i++){
-			ukeGeeks.toolsLite.removeClass(_topBtnUl.children[i], 'checked');
-		}
-		// set checked item
-		ukeGeeks.toolsLite.addClass(ele.parentNode, 'checked');
-		
-		ugsEditorPlus.actions.doClick(_topBtnHref, _subBtnHref);
-		_prevValues[_topBtnHref] = _subBtnHref;
-	};
-	
-	/**
-	 * To support legacy IE need to cleanup the href's
-	 * @method getHref
-	 * @private
-	 * @param ele (DOM_element) 
-	 * @return {string}
-	 */
-	var getHref = function(ele){
-		return '#' + ele.getAttribute('href').split('#')[1];
-	};
-	
-	/**
-	 * DESCRIPTION
-	 * @method closeAll
+	 * @method _makeAllInactive
 	 * @private
 	 * @return {void}
 	 */
-	var closeAll = function(){
-		for (var i = 0; i < _menuItems.length; i++){
-			ukeGeeks.toolsLite.removeClass(_menuItems[i], 'active');
-		}
+	var _makeAllInactive = function(){
+		$('#ugsAppToolbar > ul > li').removeClass('active');
 	};
 
 	/**
-	 * DESCR
-	 * @method addSizeOptions
+	 * handles nav menu/toolbar click event. The data-dialog="X" attribute
+	 * on the element assocaites the menu item with the dialog box (the
+	 * box's id)
+	 * @method onShowDlgBtnClick
 	 * @private
-	 * @param element {DOM_element} handle to HTML Select tag that was clicked
+	 * @param e {event}
+	 * @return {bool} false to kill event bubbling
 	 */
-	var addSizeOptions = function(){
-		var s = '';
-		var size = 0;
-		for(var i = 50; i < 120; i += 5){
-			size++;
-			var selected =  (i == 100) ? 'class="checked"' : '';
-			var pt = '';
-			switch (i){
-				case 50:
-				case 60:
-				case 75:
-				case 85:
-				case 90:
-				case 100:
-				case 115:
-					pt = '<em>' + Math.round((i / 100) * 12) + 'pt</em>'; //'DW bug
-					break;
-			}
-			//pt = ' &nbsp;&nbsp;&nbsp;' + Math.round(10 * (i / 100) * 12) + 'pt';
-			s += '<li ' + selected + '><a href="#prct_' + i + '">' + i + '%' + pt + '</a></li>';
-		}
-		var element = document.getElementById('printScale');
-		element.innerHTML = s;
-		// element.size = size;
+	var onShowDlgBtnClick = function(e){
+		var id = $(this).data('dialog');
+		$('#' + id).fadeIn();
+		// prevent event bubbling
+		return false;
 	};
 
-/**
-	 * Sets Transpose menu's selected value to "Original"; adds example chord names 
-	 * @method resetTranspose
-	 * @param chord {string} 
+	/**
+	 * dialog box's close button's click handler. Hides the first parent
+	 * with class.
+	 * @method onCloseBtnClick
+	 * @private
+	 * @param e {event}
+	 * @return {bool} false to kill event bubbling
 	 */
-	this.resetTranspose = function(chord){
-		var ul = document.getElementById('transposeOptions');
-		var items = ul.getElementsByTagName('li');
-		var sample;
-		var steps = -6;
-		
-		_prevValues['#transpose'] = '#up_0';
-
-		for (i = 0; i < items.length; i++){
-			ukeGeeks.toolsLite.removeClass(items[i], 'checked');
-			sample = (chord.length < 1) ? '' : ukeGeeks.transpose.shift(chord, steps);
-			items[i].getElementsByTagName('em')[0].innerHTML = sample;
-			if (steps == 0){
-				ukeGeeks.toolsLite.addClass(items[i], 'checked');
-			}
-			steps++;
-		}
+	var onCloseBtnClick = function(e){
+		$(this).parents('.overlay').fadeOut();
+		// prevent event bubbling
+		return false;
 	};
-};
 
+	/**
+	 * display a "tooltip" options dialog
+	 * @method onShowOptionsClick
+	 * @param  {[type]} e [description]
+	 * @return {bool} false to kill event bubbling
+	 */
+	var onShowOptionsClick = function(e){
+		var id = $(this).attr('href');
+		$('.arrowBox').not(id).hide();
+		var $dlg = $(id);
+		$dlg.find('dd').hide();
+		$dlg.fadeToggle();
+
+		ugsEditorPlus.submenuUi.reset($dlg);
+
+		// prevent event bubbling
+		return false;
+	};
+
+	_public.makeAllInactive = _makeAllInactive;
+
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
+
+}()
+);

@@ -4,7 +4,14 @@
   * @namespace  ugsEditorPlus
   * @class ugsEditorPlus
   */
-var ugsEditorPlus = new function(){
+var ugsEditorPlus = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * attaches event handlers, preps variables, and runs UGS
 	 * @method init
@@ -17,8 +24,11 @@ var ugsEditorPlus = new function(){
 
 		ukeGeeks.scriptasaurus.init(isLegacyIe);
 
-		ugsEditorPlus.menus.init();
 		ugsEditorPlus.actions.init(isLegacyIe);
+		ugsEditorPlus.topMenus.init();
+		ugsEditorPlus.submenuUi.init(ugsEditorPlus.actions.doAction);
+		ugsEditorPlus.optionsDlg.init(ugsEditorPlus.actions.doAction);
+
 		ugsEditorPlus.actions.run();
 	};
 
@@ -27,7 +37,7 @@ var ugsEditorPlus = new function(){
 	 * @method attach
 	 * @public
 	 */
-	this.attach = function(){
+	_public.attach = function(){
 		init(false);
 	};
 
@@ -36,8 +46,14 @@ var ugsEditorPlus = new function(){
 	 * @method attach
 	 * @public
 	 */
-	this.attachIe = function(){
+	_public.attachIe = function(){
 		init(true);
 	};
 
-};
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
+
+}()
+);

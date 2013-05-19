@@ -14,7 +14,17 @@ Ongoing discussions and "How To" videos posted at [blog.ukegeeks.com](http://blo
 
 * [Buz Carter](http://pizzabytheslice.com) (buz@ukegeeks.com)
 
-## What's New In V1.12
+## What's New...
+
+#### V1.13
+* Song-a-matic Editor
+  * mostly converted to use jQuery
+  * revamped, slightly iPad-friendlier UI
+  * scale text independently from chord diagrams
+* Scriptasaurus Core
+  * option to ignore common chords
+
+#### V1.12
 
 * Includes "Song-a-matic" editor for easy printing & transposing
   * Reads both "plain text" or ChordPro markup
@@ -38,12 +48,17 @@ Ongoing discussions and "How To" videos posted at [blog.ukegeeks.com](http://blo
 
 ### What's Missing
 - [x] Password protection
-- [ ] Chord overlap, aka "crash" detection
-- [ ] Mini-diagrams above 5th fret
-- [ ] Add-in chord libraries (augment built-in library)
-- [ ] Hide common chords option (end editable lists)
-- [ ] Per-user preferences (hello, cookie!)
-- [ ] CSS scrub -- tighten vertical spaces between blocks
+- [x] Chord overlap, aka "crash" detection
+- [_] Mini-diagrams above 5th fret are misdrawn
+- [_] Add-in chord libraries (augment built-in library)
+- [x] Hide common chords option (end editable lists)
+- [_] Per-user preferences (hello, cookie!)
+- [_] CSS scrub -- tighten vertical spaces between blocks
+
+-----------------------------------
+## More Files Than You Need
+
+In the JavaScript directory you'll find "merged" and "min" (minified) versions of the libraries. These are all you need to start using the applications. However, if you want to tinker or see under the hoods then you'll find the individual JS class libraries under the subdirectories helpful.
 
 -----------------------------------
 ## Getting Started With PHP Site
@@ -77,6 +92,18 @@ You'll need to make sure that the Apache/PHP group has the correct write permiss
 ```
 chgrp -R _www /httpdocs/ukegeeks/ugsphp/cache
 chmod -R u+r+w+x,g+r+w+x,o+r-w+x /httpdocs/ukegeeks/ugsphp/cache
+```
+
+You probably will need to "sudo" to have these commands work (run -- or "do" -- the command as "super user", thus "sudo"):
+
+```
+$ sudo chgrp -R _www /httpdocs/ukegeeks/ugsphp/cache
+$ sudo chmod -R u+r+w+x,g+r+w+x,o+r-w+x /httpdocs/ukegeeks/ugsphp/cache
+```
+And, of course, restart apache
+
+```
+$ sudo /usr/sbin/apachectl restart
 ```
 
 ## License

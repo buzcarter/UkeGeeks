@@ -1,4 +1,4 @@
-/* 
+/*
 	Document   : ukeGeeks.music
 	Created on : May, 2010
 	Author     : Buz
@@ -11,12 +11,12 @@
 .ugs-song-wrap {
 	font-size: 100%;
 }
-.ugs-song-wrap, 
-.ugs-song-wrap h5, 
-.ugs-song-wrap h6, 
-.ugs-song-wrap pre, 
-.ugs-song-wrap code, 
-.ugs-song-wrap strong, 
+.ugs-song-wrap,
+.ugs-song-wrap h5,
+.ugs-song-wrap h6,
+.ugs-song-wrap pre,
+.ugs-song-wrap code,
+.ugs-song-wrap strong,
 .ugs-song-wrap em {
 	font-family:inherit;
 	font-weight:normal;
@@ -71,9 +71,9 @@
 	float:left;
 	margin-right:5px;
 }
-/* 
+/*
   ------------------------------ */
-.ugs-source-wrap h5, 
+.ugs-source-wrap h5,
 .ugs-source-wrap h6 {
 	border-left:solid .5em #CCC;
 	color:#036;
@@ -112,7 +112,7 @@
 .ugsChorus pre {
 	margin-left:1em;
 }
-.ie .ugsChorus h6, 
+.ie .ugsChorus h6,
 .ugsChorus > h6 {
 	font-size:1.2em;
 	text-indent:.4em;
@@ -162,7 +162,7 @@
 .ie .ugsChords {
 	line-height:2.6;
 }
-.ie code strong, 
+.ie code strong,
 .ie code em {
 	font-weight:normal;
 	font-style:normal;
@@ -267,3 +267,12 @@
 .ugsColumnCount4 .ugsColumn {
 	width: 24.5%;
 }
+/* Pagebreaks
+  ------------------------------ */
+.ugsNewPage{
+	border-width: 0;
+	border-top:solid 1px #f2f2f2;
+	margin: 0;
+	page-break-before:always;
+}
+

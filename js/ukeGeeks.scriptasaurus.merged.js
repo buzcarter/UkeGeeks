@@ -1970,7 +1970,8 @@ ukeGeeks.cpmParser.prototype = {
 		NoLyrics: 'ugsNoLyrics', // preformated, chords ONLY -- no lyrics (text) between 'em
 		ColumnWrap: 'ugsWrap',
 		ColumnCount: 'ugsColumnCount',
-		Column: 'ugsColumn'
+		Column: 'ugsColumn',
+		NewPage: 'ugsNewPage'
 	},
 
 	/**
@@ -1993,6 +1994,7 @@ ukeGeeks.cpmParser.prototype = {
 		UkeGeeksMeta: 106,
 		ColumnBreak: 107, // Defining this as an instruction instead of a node since I'm not requiring a Begin/End syntax and it simplifies processing
 		Artist: 108,
+		NewPage: 109,
 		// Text Types
 		ChordText: 201,
 		PlainText: 202,
@@ -2048,6 +2050,9 @@ ukeGeeks.cpmParser.prototype = {
 			if (song[i].type == this.blockTypeEnum.Comment){
 				html += '<h6 class="' + this.classNames.Comment + '">' + song[i].lines[0] + '</h6>' + nl;
 			}
+			else if (song[i].type == this.blockTypeEnum.NewPage){
+				html += '<hr class="' + this.classNames.NewPage + '" />' + nl;
+			}
 			else if ((song[i].type == this.blockTypeEnum.ChordText) || (song[i].type == this.blockTypeEnum.PlainText ) || (song[i].type == this.blockTypeEnum.ChordOnlyText)){
 				// TODO: beware undefined's!!!
 				// Repack the text, only open/close <pre> tags when type changes
@@ -2082,7 +2087,7 @@ ukeGeeks.cpmParser.prototype = {
 				html += '</div><div class="' + this.classNames.Column + '">' ;
 			}
 			else{
-		}
+			}
 		}
 		return html;
 	},
@@ -2224,16 +2229,29 @@ ukeGeeks.cpmParser.prototype = {
 	 */
 	_parseSimpleInstr: function(song){
 		var regEx = {
-			columnBreak : /\s*{\s*(column_break|colb)\s*}\s*/im
+			columnBreak : /\s*{\s*(column_break|colb|np|new_page)\s*}\s*/im
 		};
 		for (var i in song){
 			for (var j in song[i].lines){
 				if (regEx.columnBreak.test(song[i].lines[j])){
-					this.columnCount++;
-					song[i].lines[j] = {
-						type: this.blockTypeEnum.ColumnBreak,
-						lines : []
-					};
+					var verb = song[i].lines[j].replace(regEx.columnBreak,'$1').toLowerCase();
+					switch(verb){
+						case 'column_break':
+						case 'colb':
+							this.columnCount++;
+							song[i].lines[j] = {
+								type: this.blockTypeEnum.ColumnBreak,
+								lines : []
+							};
+							break;
+						case 'new_page':
+						case 'np':
+							song[i].lines[j] = {
+								type: this.blockTypeEnum.NewPage,
+								lines : []
+							};
+							break;
+					}
 				}
 			}
 		}

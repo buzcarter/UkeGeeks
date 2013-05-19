@@ -1,99 +1,109 @@
 /**
- * Mechanics of the Optiones/Settings dialog
+ * UI mechanics of the Other Options dialog
  * @class options
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.optionsDlg = new function(){
-	// borrow the "run" method from Actions class
-	var run = null;
+ugsEditorPlus.optionsDlg = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
+	/**
+	 * borrow the "doAction" method from Actions class
+	 * @property _doAction
+	 * @type {function}
+	 */
+	var _doAction = null;
 
 	// DOM handles (mostly for options dialog elements only)
 	var _ele = {};
 
-	this.init = function(actionsController, elements){
-		run = actionsController.run;
+	/**
+	 * Sets up this class by attaching event handlers to form elements;
+	 * @method init
+	 * @public
+	 * @param doAction {function} handle to method to actually DO the job
+	 */
+	_public.init = function(doAction){
+		_doAction = doAction;
 
 		_ele = {
-			docBody : elements.docBody,
 			inputIgnoreList : document.getElementById('commonChordList'),
 			chkIgnore : document.getElementById('chkIgnoreCommon'),
-			pageWidth : document.getElementById('pageWidth'),
+			//pageWidth : document.getElementById('pageWidth'),
 			chkEnclosures : document.getElementById('chkEnclosures')
 		};
 
 		restoreDefaults();
 
-		_ele.pageWidth.onchange = function(){doSetWidth(this.value); };
-		_ele.chkEnclosures.onclick = function(){doSetEnclosure(!this.checked); };
-		_ele.inputIgnoreList.onchange = function(){doSetCommon(); };
-		_ele.chkIgnore.onclick = function(){doIgnoreChkClk(this.checked); };
+		// button clicks
+		document.getElementById('updateBtn').onclick = function(){onUpdateBtnClick(); return false;};
+
+		//_ele.pageWidth.onchange = function(){doSetWidth(this.value); };
+		_ele.chkEnclosures.onclick = function(){onSetEnclosureClick(!this.checked); };
+		_ele.inputIgnoreList.onchange = function(){onCommonChordFieldChange(); };
+		_ele.chkIgnore.onclick = function(){onIgnoreCommonClick(this.checked); };
+
+		// ugh! Event bubbling!
+		$('.checkboxBlock label, input[type=checkbox]').click(function(e){e.stopPropagation();});
+		//$('#helpDlg a').click(function(e){console.log('anchor click');});
+
+		$('.overlay').draggable({
+			handle : 'hgroup',
+			//containParent: true
+    });
 	};
 
 	var restoreDefaults = function(){
 		// initialize the common list
 		_ele.inputIgnoreList.value = ukeGeeks.settings.commonChords.join(", ");
-		_ele.pageWidth.value = 'letter';
+		//_ele.pageWidth.value = 'letter';
 		_ele.chkIgnore.checked = ukeGeeks.settings.opts.ignoreCommonChords;
 		_ele.chkEnclosures.checked = !ukeGeeks.settings.opts.retainBrackets;
 	};
 
-	/**
-	 * (option dialog) changes body class, moving the right page edge
-	 * @method doSetWidth
-	 * @private
-	 * @param value {string} currently selected option value
-	 */
-	var doSetWidth = function(value){
-		var opts = ['letter', 'a4', 'screen'];
-		for(var i = 0; i < opts.length; i++){
-			ukeGeeks.toolsLite.removeClass(_ele.docBody, 'pageWidth_' + opts[i]);
-		}
-		ukeGeeks.toolsLite.addClass(_ele.docBody, 'pageWidth_' + value);
+	var onUpdateBtnClick = function(){
+		_doAction( 'update', null);
 	};
 
 	/**
 	 * (option dialog) change whether to show/hide the bracket characters
-	 * @method doSetEnclosure
+	 * @method onSetEnclosureClick
 	 * @private
 	 * @param isVisible {bool}
 	 */
-	var doSetEnclosure = function(isVisible){
-		ukeGeeks.settings.opts.retainBrackets = isVisible;
-		run();
+	var onSetEnclosureClick = function(isVisible){
+		_doAction( 'showEnclosures', isVisible);
 	};
 
 	/**
 	 * "Ignore Common" was checked, need to update master chord diagrams
-	 * @method doIgnoreChkClk
+	 * @method onIgnoreCommonClick
+	 * @private
 	 * @param isIgnore {bool}
 	 */
-	var doIgnoreChkClk = function(isIgnore){
-		ukeGeeks.settings.opts.ignoreCommonChords = isIgnore;
-		run();
+	var onIgnoreCommonClick = function(isIgnore){
+		_doAction( 'hideCommonChords', isIgnore);
 	};
 
 	/**
 	 * the list of common chords has been change; update UGS setting
 	 * and _possible_ rerun
-	 * @method doSetCommon
+	 * @method onCommonChordFieldChange
+	 * @private
 	 * @return {void}
 	 */
-	var doSetCommon = function(){
-		var inputList = _ele.inputIgnoreList.value.split(/[ ,]+/);
-		var chordList = [];
-		for (var i = 0; i < inputList.length; i++) {
-			var c = ukeGeeks.toolsLite.trim(inputList[i]);
-			if (c.length > 0){
-				chordList.push(c);
-			}
-		};
-
-		ukeGeeks.settings.commonChords = chordList;
-
-		if (_ele.chkIgnore.checked){
-			run();
-		}
+	var onCommonChordFieldChange = function(){
+		_doAction( 'setCommonChords', _ele.inputIgnoreList.value);
 	};
 
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
 
-};
+}()
+);

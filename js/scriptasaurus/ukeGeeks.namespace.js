@@ -9,7 +9,7 @@
   * <li>Copyright: Copyright 2010-2013 Buz Carter.</li>
   * <li>License GNU General Public License (http://www.gnu.org/licenses/gpl.html)</li>
   * <ul>
-  * 	
+  *
   * <p>== Overview
   * <p>Reads marked-up music (lyrics + chords) extracting all of the chords used;
   * Generates a chord diagrams using HTML5 &lt;canvas&gt; and rewrites the music with
@@ -18,4 +18,4 @@
   * @module  scriptasaurus
   * @namespace  ukeGeeks
   */
-var ukeGeeks = window.ukeGeeks||{};
+var ukeGeeks = window.ukeGeeks || {};

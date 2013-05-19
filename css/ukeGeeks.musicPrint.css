@@ -6,3 +6,10 @@ body {
 header hgroup aside{
 	display:none;
 }
+/* Pagebreaks
+  ------------------------------ */
+.ugsNewPage{
+	border-width:0;
+	page-break-before:always;
+}
+

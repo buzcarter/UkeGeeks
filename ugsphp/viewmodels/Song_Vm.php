@@ -28,6 +28,7 @@ class Song_Vm extends _base_Vm {
 
 	function __construct()
 	{
+		parent::__construct();
 		$this->UpdateAjaxUri = Ugs::MakeUri( Actions::AjaxUpdateSong);
 	}
 

@@ -7,6 +7,11 @@
  * @namespace ugsEditorPlus
  */
 ugsEditorPlus.typeahead = function(){
+	/**
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var _public = {};
 
 	// private
 	// ---------------------------
@@ -16,6 +21,14 @@ ugsEditorPlus.typeahead = function(){
 	var _scrubbedQuery = '';
 	var _regex;
 	var _words = [];
+
+	var _re = {
+		space: /\s{2,}/g,
+		// everything except for alphanumeric gets nuked
+		common: /([^a-z0-9]+)/gi,
+		//treat quotes as invisible
+		noise: /['`’-]/g
+	};
 
 	/**
 	 * Scrapes HTML to build our list of
@@ -27,7 +40,7 @@ ugsEditorPlus.typeahead = function(){
 		$( 'li' ).each(function( index ) {
 			var $this = $(this);
 
-			var plainText = $this.text().replace(/\s\s+/g, ' ').trim();
+			var plainText = crushText($this.text());
 			plainText = plainText.toLowerCase();
 
 			var href = $this.children('a').attr('href');
@@ -51,8 +64,17 @@ ugsEditorPlus.typeahead = function(){
 
 	};
 
+	var crushText = function(value){
+		return value
+			.toLowerCase()
+    	.replace(_re.noise, '')
+    	.replace(_re.common, ' ')
+    	.replace(_re.space, ' ')
+    	.trim();
+	}
+
 	var _ta_source = function (query, process) {
-		_scrubbedQuery = query.trim().toLowerCase();
+		_scrubbedQuery = crushText(query);
 		_words = _scrubbedQuery.split(' ');
 		var regGroup = '';
 		for (var i = 0; i < _words.length; i++) {
@@ -97,25 +119,25 @@ ugsEditorPlus.typeahead = function(){
 		return $temp.html();
 	};
 
-	return {
+	_public.initialize = function(){
+		listFromHtml();
 
-		initialize: function(){
-			listFromHtml();
-
-			$('#quickSearch')
-				.typeahead({
-					source: _ta_source,
-					updater: _ta_updater,
-					matcher: _ta_matcher,
-					sorter: _ta_sorter,
-					highlighter: _ta_highligher,
-					minLength: 2,
-					items: 50
-				})
-				.val('')
-				.focus();
-		},
-
+		$('#quickSearch')
+			.typeahead({
+				source: _ta_source,
+				updater: _ta_updater,
+				matcher: _ta_matcher,
+				sorter: _ta_sorter,
+				highlighter: _ta_highligher,
+				minLength: 2,
+				items: 50
+			})
+			.val('')
+			.focus();
 	};
-};
 
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
+};
