@@ -165,7 +165,7 @@ ugsEditorPlus.actions = (function() {
 	 * @param value {string} point-size; value of the clicked value item
 	 */
 	var zoomFonts = function(value){
-		var pt = parseInt(value, 10);
+		var pt = parseFloat(value, 10);
 		_ele.scalableArea.style.fontSize = pt + 'pt';
 	};
 
