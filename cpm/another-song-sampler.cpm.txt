@@ -1,0 +1,28 @@
+{title: The Song Title!}
+{album: Album Title (1974)}
+{artist: Artist, Band, Lyricist, and/or Performer Name(s)}
+{subtitle: Subtitle (context such as where & when first performed or ChordPro source)}
+
+# -------------------------------------
+# here's a song sampler...
+# -------------------------------------
+
+# You don't need to mix chords and lyrics:
+{c:Comment}
+[Dm] [G7] [D7] [G7] [D7]
+
+{c: Another Comment}
+Topping [Dm]apple cake [Am]gingerbread [G7]wypas. 
+[Dm]Donut I love [Am]caramels donut 
+Chocolate [Dm]bar wafer [Am]bonbon lemon [G7]drops. 
+Tootsie [Dm]roll carrot [Am]cake biscuit [G7]cupcake. [F]
+
+{soc}
+{c: Comments Can Be Nested Inside Chorus-Blocks!}
+[Dm]Gummies chocolate cake macaroon.
+Muffin [C]halvah sweet gummi bears 
+[G7]Danish cupcake. 
+[Dm]Sugar plum pudding with whipped cream
+Pudding [C]pudding jelly marzipan. 
+[D7]Liquorice sugar [C]plum [F]
+{eoc}

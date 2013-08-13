@@ -1,0 +1,36 @@
+# ------------------------------------------------------
+# these hidden comments may be placed anywhere!
+# more info here: http://ukegeeks.com/users-guide.htm#chordpro_markup_reference
+# ------------------------------------------------------
+# "title" or just "t" 
+{t: ChordPro Song Markup, Part 2: Shorthand}
+
+# "subtitle" can just be "s"
+{st: Being brief... using ChordPro tag abbreviations}
+
+# these two, "album" and "artist", have NO shorthand:
+{album: ChordPro Syntax}
+{artist: Buz}
+
+# Not surprisingly, {comment} can be {c}
+{c:Intro}
+[Dm] [Gm] [Dm] [Gm] [D7]
+
+{c: Verse 1}
+Topping [Dm]applicake [Am]gingerbread [Gm]wypas. 
+[Dm]Donut I love [Am]caramels donut 
+Chocolate [Dm]bar wafer [Am]bonbon lemon [Gm]drops. 
+Tootsie [Dm]roll carrot [Am]cake biscuit [Gm]cupcake. [F]
+
+# ------------------------------------------------------
+# My favorite shorthand...
+# replace "start_of_chorus" with soc
+# and that bulky "end_of_chorus" with eoc
+# ------------------------------------------------------
+{soc}
+{c:Chorus}
+[Dm7]Gummies chocolate cake macaroon.
+Muffin [C]halvah sweet gummi bears 
+[G7]Danish cupcake. 
+[Dm7]Sugar plum powder macaroon
+{eoc}

@@ -1,0 +1,29 @@
+{title: ChordPro Song Markup, Part 1: Basics}
+{artist: Cap'n Happy Uke}
+{album : The Capitol Collectors Series}
+{subtitle: Or How I Learned To Stop Worry And Play With Aplomb}
+
+# This line is a hidden note to yourself
+# Lines beginning with # are not rendered... 
+
+All parts of the song are optional, HOWEVER...
+The minimum markup _should_ include a TITLE!
+
+{comment:Intro}
+[Am] [Dm] [Am] [Dm] [A7]
+
+{comment: Verse 1}
+Topping [Am]applicake [Em]gingerbread [Dm]wypas.
+[Am]Donut I love [Em]caramels donut
+Chocolate [Am]bar wafer [Em]bonbon lemon [Dm]drops.
+Tootsie [Am]roll carrot [Em]cake biscuit [Dm]cupcake. [C]
+
+{start_of_chorus}
+{c:Chorus}
+[Am7]Gummies chocolate cake macaroon.
+Muffin [G]halvah sweet gummi bears
+[D7]Danish cupcake.
+[Am7]Sugar plum powder macaroon drage
+Pudding [G]pudding jelly marzipan.
+[A7]Liquorice sugar [G]plum [C]
+{end_of_chorus}

@@ -1,0 +1,47 @@
+{title: Making It Fit: Columns}
+{artist: Buz C.}
+{subtitle: A "coloring inside the lines" exercise}
+
+{c:Intro}
+[Dm] [Gm] [Dm] [Gm] [D7]
+
+{c:The Goal}
+Frequently [Dm]you'll get
+A [Am]song
+That's written out
+Like [Dm]Poetry
+Very wordy...
+And [Am]lengthy..
+[F]How to make it [C]fit
+Onto
+The single page?
+
+{soc}
+{c:Chorus}
+[Dm7]Gummies chocolate cake macaroon.
+Muffin [C]halvah sweet gummi bears 
+[G7]Danish cupcake. 
+[Dm7]Sugar plum powder 
+Pudding [C]pudding jelly marzipan. 
+[D7]Liquorice sugar [C]plum [F]
+{eoc}
+
+{column_break}
+
+{c: Verse 2}
+Topping [Dm]applicake [Am]gingerbread [Gm]wypas. 
+[Dm]Donut I love [Am]caramels donut 
+Chocolate [Dm]bar wafer [Am]bonbon lemon [Gm]drops. 
+Tootsie [Dm]roll carrot [Am]cake biscuit [Gm]cupcake. [F]
+
+{c: Repeat CHORUS}
+
+{c: Verse 3}
+So, how
+How [Dm]did this turn out?
+[Am]Does it fit your [Dm]page
+[F]Or [Am]screen?
+[C]Excel[F]lent!
+
+{c: Outro}
+[Dm] [Gm] [D7]

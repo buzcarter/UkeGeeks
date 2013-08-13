@@ -1,0 +1,40 @@
+{title: Auto-convert "Plain Text" to ChordPro}
+{artist: Mr.Automatic}
+{subtitle: Lyrics and Chords on Separate Lines}
+
+# ------------------------------------------------------
+# What happens if the chords aren't enclosed in square
+# brackets? It attempts to convert the song to ChordPro
+# format.
+#
+# If you didn't choose "OK" when this page loaded, click
+# "Update" button to rerun the import... and this time 
+# click OK to see what happens.
+#
+# All chords on a line must be recognizable, "common"
+# ones or the line is skipped.
+# ------------------------------------------------------
+
+{c:Intro}
+Em Gaug Em6 Gaug A9
+
+{c: Verse 1: OK}
+Gaug   Em6  B7
+Summer-time
+Em6     B7        Em6  B7 Em6
+an' the livin' is easy-y
+B7   Em6 Am      C Am7     C      Gdim B    F7 B
+Fish are jumpin'   an' the cotton is   high.
+
+{c: Verse 2: Unrecognized Chords}
+Gaug   Gm7b5  B7
+Summer-time (whoops! didn't recognize those chords!)
+C            B/F
+What happens when 
+D/G     C
+Not all slash-chords work
+
+{c: Verse 3: Chord Blocks}
+C   F   G  B7
+D  G    C  
+B  B7

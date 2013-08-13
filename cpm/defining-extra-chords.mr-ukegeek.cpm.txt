@@ -1,0 +1,40 @@
+{title: Defining Extra Chords}
+{artist: Buz Carter}
+{album: Even More ChordPro Tips (2012)}
+
+# here's my custom chords:
+{define: Gm7b5 frets 0111 fingers 0211}
+
+# alternate "Voicings" (note spaces aren't required, but are recommended)
+{define: C-2pos frets 9 7 8 7}
+
+# redefine a common chords
+{define: C-alt frets 5 4 3 3 fingers 3 2 1 1}
+
+# any name!
+{define: Ice frets 3 1 1 1 fingers 3 1 1 1 add: string 1 fret 1 finger 1}
+{define: Cream frets 5 1 2 2 fingers 4 1 3 2}
+{define: Pie frets 2 1 1 4 fingers 2 1 1 4 add: string 1 fret 1 finger 1 add: string 4 fret 1 finger 1}
+
+# include fingers to be helpful!
+{define: G-alt frets 4 2 3 2 fingers 3 1 2 1 add: string 1 fret 2 finger 1 add: string 3 fret 2 finger 1}
+
+{comment:Intro/Overview}
+UkeGeeks "knows" only basic chords (hey, it has more than
+160, which is a bunch more than I know), so how do you 
+teach it new chords? 
+
+Easy! Use [Gm7b5]the "define" tag
+
+{comment: Same Chord, Different Voicings}
+Sometimes [C]you want to show
+[C-2pos]Second postion chord diagrams...
+And other times [C-alt]recommend an alternate fingering
+
+{c:...And Did You Know}
+You can [Ice]name your [Cream]chords [Pie]anything!
+
+{c:Optional}
+[G-alt]You don't have to include the "extra" fingers,
+Such as barre chords...
+(but it helps)

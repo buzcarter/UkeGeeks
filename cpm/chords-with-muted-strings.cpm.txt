@@ -1,0 +1,14 @@
+{title: Chords with Muted Strings}
+{artist: Power Rocker Bob}
+{subtitle: How to define a chord with muted (unplayed) strings}
+
+# Just use an X instead place of a fret number:
+{define: D5 frets 2 2 X X fingers 1 1 2 2}
+{define: F5 frets 5 5 X X fingers 1 1 2 2}
+
+{c:View Song Source}
+Sometimes a [D5]chord only [F5]requires two or three notes. 
+So we need a notation 
+That'll allow us to show 
+Those strings that should played,
+And those that should not
