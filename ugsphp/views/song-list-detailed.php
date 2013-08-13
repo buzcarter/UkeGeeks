@@ -62,7 +62,7 @@ function MakeRowHtml($song){
 		<?php } ?>
 	<h2><?php echo($model->SubHeadline); ?></h2>
 	<h1><?php echo($model->Headline); ?></h1>
-	<p><? echo(count($model->SongList)); ?> Songs.
+	<p><?php echo(count($model->SongList)); ?> Songs.
 		<label for="quickSearch">Quick search:</label> <input class="quickSearch" id="quickSearch" autocomplete="off" type="text" /></p>
 	<ol class="songList">
 		<?php
