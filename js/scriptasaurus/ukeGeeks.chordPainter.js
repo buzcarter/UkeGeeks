@@ -101,7 +101,7 @@ ukeGeeks.chordPainter = function(){
 			}
 			for (var j=0; j < e.length; j++){
 				if (e[j].getAttribute('data-chordName') == c.name){
-					brush.plot(e[j],c,ukeGeeks.settings.inlineFretBox);
+					brush.plot(e[j], c, ukeGeeks.settings.inlineFretBox, ukeGeeks.settings.inlineFretBox.fonts);
 				}
 			}
 		}

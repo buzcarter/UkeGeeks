@@ -127,7 +127,7 @@ ukeGeeks.definitions.addInstrument("\
 {define: Fm6 frets 1 2 1 3 fingers 1 2 1 3 add: string 2 fret 1 finger 1 add: string 4 fret 1 finger 1}\
 {define: Fm7 frets 1 3 1 3 fingers 1 3 2 4}\
 {define: Fdim frets 1 2 1 2 fingers 1 3 2 4}\
-{define: Fmaj7 frets 2 4 1 3 fingers 2 4 1 3}\
+{define: Fmaj7 frets 5 5 0 0 fingers 1 2 0 0}\
 {define: F6 frets 2 2 1 3 fingers 2 2 1 4}\
 {define: Fsus2 frets 0 0 1 3 fingers 0 0 1 3}\
 {define: Fsus4 frets 3 0 1 3 fingers 3 0 1 4}\

@@ -29,11 +29,11 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <body class="editableSongPage pageWidth_screen">
 <section id="scalablePrintArea" class="scalablePrintArea">
 	<header>
-		<hgroup>
-			<h1 id="songTitle"><?php echo($model->SongTitle); ?></h1>
-			<h2 id="songSubtitle" style="display:<?php echo(GetDisplayStyle($model->Subtitle)); ?>;"><?php echo($model->Subtitle); ?></h2>
-			<h2 id="songArtist" style="display:<?php echo(GetDisplayStyle($model->Artist)); ?>;"><?php echo($model->Artist); ?></h2>
-			<h2 id="songAlbum" style="display:<?php echo(GetDisplayStyle($model->Album)); ?>;"><?php echo($model->Album); ?></h2>
+		<hgroup class="ugs-songInfo">
+			<h1 id="songTitle" class="ugs-songTitle"><?php echo($model->SongTitle); ?></h1>
+			<h2 id="songSubtitle" class="ugs-songSubtitle" style="display:<?php echo(GetDisplayStyle($model->Subtitle)); ?>;"><?php echo($model->Subtitle); ?></h2>
+			<h2 id="songArtist" class="ugs-songArtist" style="display:<?php echo(GetDisplayStyle($model->Artist)); ?>;"><?php echo($model->Artist); ?></h2>
+			<h2 id="songAlbum" class="ugs-songAlbum" style="display:<?php echo(GetDisplayStyle($model->Album)); ?>;"><?php echo($model->Album); ?></h2>
 		</hgroup>
 	</header>
 	<div class="metaInfo" id="songMeta"> </div>
@@ -52,7 +52,9 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 	<hgroup>
 		<h3>Edit Song</h3>
 	</hgroup>
-	<div> <a title="close this" href="#close" class="closeBtn">Close</a>
+	<div>
+		<a title="close this" href="#close" class="closeBtn">Close</a>
+		<a title="resize this" href="#resize" class="resizeBtn">Resize</a>
 		<p class="btnBar">
 			<span id="messageBox" class="updateMessage">
 				<em>
@@ -226,6 +228,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		<h3>Use Auto-Formated Version?</h3>
 	</hgroup>
 	<div>
+		<a title="resize this" href="#resize" class="resizeBtn">Resize</a>
 		<p class="instructions">Whoa! I didn't find any chords in your song -- it's probably not in ChordPro format. Here's the converted version&hellip;</p>
 		<p class="btnBar">
 			<input type="button" id="reformatYesBtn" class="baseBtn blueBtn" value="OK, Use This!" />

@@ -290,7 +290,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	/*
   cursor: move;
   */
-  background: url(../../img/editor/editorSprite.png) repeat-x scroll 0 -100px #933f17;
+  background: url(../../img/editor/editorSprite.png) repeat-x 0 -100px #933f17;
   border-bottom: 1px solid #240E01;
   border-radius: 12px 12px 0 0;
   border-top: 1px solid #84623C;
@@ -303,15 +303,26 @@ html .diagramsOnTop .ugs-source-wrap {
   text-shadow: 1px 2px 0 #592108;
 }
 .overlay .closeBtn {
-	background: url(../../img/editor/closeBtn.png) no-repeat scroll 0 0 transparent;
+	background: url(../../img/editor/closeBtn.png) no-repeat 0 0 transparent;
 	display: block;
 	height: 30px;
-	outline: medium none;
+	outline: none;
 	position: absolute;
 	right: 10px;
 	text-indent: -5000em;
 	top: 14px;
 	width: 30px;
+}
+.overlay .resizeBtn {
+	background: url(../../img/editor/resizeBtn.png) no-repeat 0 0 transparent;
+	display: block;
+	height: 20px;
+	outline: none;
+	position: absolute;
+	right: 55px;
+	text-indent: -5000em;
+	top: 18px;
+	width: 20px;
 }
 /* MOVED FROM PAGE: SECTION 2
 ------------------------------ */

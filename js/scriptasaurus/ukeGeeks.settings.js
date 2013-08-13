@@ -123,11 +123,16 @@ ukeGeeks.settings = new function(){
 		dotRadius: 3,
 		lineWidth: 1,
 		topLeftPos: {
-			x:3,
+			x: 10,
 			y:2
 		},
 		xWidth: 0.7 * 7,
-		xStroke: 1.4 * 1
+		xStroke: 1.4 * 1,
+		fonts : {
+			dot: '8pt Arial',
+			text: '8pt Arial',
+			fret: '8pt Arial'
+		}
 	};
 
 	/**

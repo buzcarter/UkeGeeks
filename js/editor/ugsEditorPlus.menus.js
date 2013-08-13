@@ -24,6 +24,8 @@ ugsEditorPlus.topMenus = (function(){
 
 		$('#ugsAppToolbar > ul  li[data-dialog]').click(onShowDlgBtnClick);
 		$('.closeBtn').click(onCloseBtnClick);
+		$('.resizeBtn').click(onResizeBtnClick);
+
  	};
 
 	/**
@@ -80,6 +82,12 @@ ugsEditorPlus.topMenus = (function(){
 	var onCloseBtnClick = function(e){
 		$(this).parents('.overlay').fadeOut();
 		// prevent event bubbling
+		return false;
+	};
+
+	var onResizeBtnClick = function(e){
+		var dlg = $(this).parents('.overlay');
+		ugsEditorPlus.resize.toggle(dlg);
 		return false;
 	};
 
