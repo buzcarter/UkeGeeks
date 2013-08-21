@@ -306,11 +306,16 @@ ukeGeeks.settings = new function(){
 		dotRadius: 3,
 		lineWidth: 1,
 		topLeftPos: {
-			x:3,
-			y:2
+			x: 10,
+			y: 2
 		},
 		xWidth: 0.7 * 7,
-		xStroke: 1.4 * 1
+		xStroke: 1.4 * 1,
+		fonts : {
+			dot: '8pt Arial',
+			text: '8pt Arial',
+			fret: '8pt Arial'
+		}
 	};
 
 	/**
@@ -1378,7 +1383,7 @@ ukeGeeks.transpose = new function(){
 {define: Fm6 frets 1 2 1 3 fingers 1 2 1 3 add: string 2 fret 1 finger 1 add: string 4 fret 1 finger 1}\
 {define: Fm7 frets 1 3 1 3 fingers 1 3 2 4}\
 {define: Fdim frets 1 2 1 2 fingers 1 3 2 4}\
-{define: Fmaj7 frets 2 4 1 3 fingers 2 4 1 3}\
+{define: Fmaj7 frets 5 5 0 0 fingers 1 2 0 0}\
 {define: F6 frets 2 2 1 3 fingers 2 2 1 4}\
 {define: Fsus2 frets 0 0 1 3 fingers 0 0 1 3}\
 {define: Fsus4 frets 3 0 1 3 fingers 3 0 1 4}\
@@ -1418,7 +1423,7 @@ ukeGeeks.transpose = new function(){
 {define: Gsus4 frets 0 2 3 3}\
 {define: G9 frets 2 2 1 2}\
 # G#\
-{define: G# frets 5 3 4 3 fingers 3 1 2 1 add: string 2 fret 3 finger 1 add: string 4 fret 3 finger 1}\
+{define: G# frets 5 3 4 3 fingers 3 1 2 1 add: string 1 fret 3 finger 1 add: string 3 fret 3 finger 1}\
 {define: G#m frets 1 3 4 2 fingers 1 3 4 2}\
 {define: G#7 frets 1 3 2 3 fingers 1 3 2 4}\
 {define: G#7sus4 frets 1 3 2 4 fingers 1 3 2 4}\
@@ -1520,18 +1525,26 @@ ukeGeeks.canvasTools = new function(){
  * @class chordBrush
  * @namespace ukeGeeks
  */
-ukeGeeks.chordBrush = function(){};
-ukeGeeks.chordBrush.prototype = {
+ukeGeeks.chordBrush = function() {
 
-	/* PUBLIC METHODS
-	  ---------------------------------------------- */
+	/**
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var publics = {};
+
+	/////////////////////////////////////////////////////////////////////////////
+	//
+	// PUBLIC methods
+	//
+	/////////////////////////////////////////////////////////////////////////////
+
 	/**
 	 * Again this is a constructor replacement
 	 * @method init
 	 * @return {void}
 	 */
-	init: function(){
-	},
+	publics.init = function() {};
 
 	/**
 	 * Puts a new Canvas within ChordBox and draws the chord diagram on it.
@@ -1541,68 +1554,88 @@ ukeGeeks.chordBrush.prototype = {
 	 * @param fretBox {JSON} Appropriate ukeGeeks.settings.fretBox -- either "fretBox" or "inlineFretBox"
 	 * @return {void}
 	 */
-	plot: function(chordBox, chord, fretBox){
+	publics.plot = function(chordBox, chord, fretBox, fontSettings) {
 		var ctx = ukeGeeks.canvasTools.addCanvas(chordBox, fretBox.width, fretBox.height);
-		if (ctx == null){
+		if (ctx == null) {
 			return;
 		}
+
+		if (!fontSettings) {
+			fontSettings = ukeGeeks.settings.fonts;
+		}
+
 		// starting top-left position for chord diagram
 		var pos = {
-			x : fretBox.topLeftPos.x,
-			y : fretBox.topLeftPos.y
+			x: fretBox.topLeftPos.x,
+			y: fretBox.topLeftPos.y
 		};
-		this._drawFretboard(ctx, pos, fretBox);
+		_drawFretboard(ctx, pos, fretBox);
 		// find where the circle centers should be:
 		var centers = {
 			x: pos.x,
 			y: (pos.y + fretBox.dotRadius)
 		};
+
 		// find the vertical shift by dividing the freespace between top and bottom (freespace is the row height less circle diameter)
 		var fudgeY = (fretBox.fretSpace - 2 * fretBox.dotRadius) / 2;
-		var firstFret = this._getFirstFret(chord.dots);
-		for (var i=0; i < chord.dots.length; i++){
+		var fretRange = _getFretRange(chord.dots);
+		var firstFret = (fretRange.last <= 5) ? 1 : fretRange.last - 4;
+
+		// now add Dots (with finger numbers, if present)
+		for (var i = 0; i < chord.dots.length; i++) {
 			var s = chord.dots[i].string;
 			var p = {
 				x: (centers.x + s * fretBox.stringSpace),
-				y: (fudgeY + centers.y + (chord.dots[i].fret-firstFret) * fretBox.fretSpace)
+				y: (fudgeY + centers.y + (chord.dots[i].fret - firstFret) * fretBox.fretSpace)
 			};
 			ukeGeeks.canvasTools.drawDot(ctx, p, fretBox.dotRadius, ukeGeeks.settings.colors.dots);
 			// check that the dot's radius isn't stupidly small
-			if (chord.dots[i].finger > 0 && fretBox.showText && fretBox.dotRadius > 4){
+			if (chord.dots[i].finger > 0 && fretBox.showText && fretBox.dotRadius > 4) {
 				ukeGeeks.canvasTools.drawText(ctx, {
-					x : p.x,
-					y : (p.y + 5)
-				}, chord.dots[i].finger, ukeGeeks.settings.fonts.dot, ukeGeeks.settings.colors.dotText)
+					x: p.x,
+					y: (p.y + 5)
+				}, chord.dots[i].finger, fontSettings.dot, ukeGeeks.settings.colors.dotText)
 			}
 		}
-		// Text, first dots
-		if (firstFret != 1){
+
+		// If the chord is above the normal first 5 frets we need to add labels for the first and last frets
+		if (firstFret != 1) {
 			// Label the starting and ending frets (0-12). It's assumed that the fretboard covers frets 1-5.
-			// If insted the top fret is 6, say, well, this is the method called to the label "6".
-			ukeGeeks.canvasTools.drawText(ctx, {
-				x : 0,
-				y : pos.y + (0.8 * fretBox.fretSpace)
-			}, firstFret, ukeGeeks.settings.fonts.fret, ukeGeeks.settings.colors.fretText, 'left');
-			ukeGeeks.canvasTools.drawText(ctx, {
-				x : 0,
-				y : pos.y + (4.8 * fretBox.fretSpace)
-			}, (firstFret + 4), ukeGeeks.settings.fonts.fret, ukeGeeks.settings.colors.fretText, 'left');
+			// If instead the top fret is 6, say, well, this is the method called to add that "6".
+			// The Y position calculation is a bit klunky. How big of a fret range is present in the chord?
+			var txtPos = {
+				x: 0,
+				y: pos.y + fretBox.fretSpace * (0.96 * (5.0 - (fretRange.last - fretRange.first)))
+				// Old Y caculcation: pos.y + (0.8 * fretBox.fretSpace)
+			};
+			ukeGeeks.canvasTools.drawText(ctx, txtPos, fretRange.first, fontSettings.fret, ukeGeeks.settings.colors.fretText, 'left');
+
+			// no point in double plotting a fret (i.e. barred 8th fret) so only add second label if
+			// first and last frets are different. Also, it's odd to see both 8 & 9, so only show if there's
+			// at least one fret between first and last (i.e. 8 & 10)
+			if ((fretRange.last - fretRange.first) > 1) {
+				txtPos.y = pos.y + (4.8 * fretBox.fretSpace);
+				ukeGeeks.canvasTools.drawText(ctx, txtPos, fretRange.last, fontSettings.fret, ukeGeeks.settings.colors.fretText, 'left');
+			}
 		}
+
 		// TODO: top offset
-		if (fretBox.showText){
+		if (fretBox.showText) {
 			ukeGeeks.canvasTools.drawText(ctx, {
-				x : (pos.x + 1.5 * fretBox.stringSpace),
-				y : (pos.y - 5)
-			}, chord.name, ukeGeeks.settings.fonts.text, ukeGeeks.settings.colors.text);
+				x: (pos.x + 1.5 * fretBox.stringSpace),
+				y: (pos.y - 5)
+			}, chord.name, fontSettings.text, ukeGeeks.settings.colors.text);
 		}
-		this._mutedStrings(ctx, fretBox, chord.muted);
-	},
+
+		_mutedStrings(ctx, fretBox, chord.muted);
+	};
 
 	/////////////////////////////////////////////////////////////////////////////
 	//
 	// PRIVATE methods
 	//
 	/////////////////////////////////////////////////////////////////////////////
+
 	/**
 	 * @method _drawFretboard
 	 * @private
@@ -1611,7 +1644,7 @@ ukeGeeks.chordBrush.prototype = {
 	 * @param fretBox {settings}
 	 * @return {void}
 	 */
-	_drawFretboard: function(ctx, pos, fretBox){
+	var _drawFretboard = function(ctx, pos, fretBox) {
 		// width offset, a "subpixel" adjustment
 		var offset = fretBox.lineWidth / 2;
 		// locals
@@ -1620,25 +1653,25 @@ ukeGeeks.chordBrush.prototype = {
 		// build shape
 		ctx.beginPath();
 		// add "C" & "E" strings
-		for (var i=1; i < 3; i++){
+		for (var i = 1; i < 3; i++) {
 			var x = pos.x + i * fretBox.stringSpace + offset;
 			ctx.moveTo(x, pos.y + offset);
 			ctx.lineTo(x, pos.y + stringHeight + offset);
 		}
 		// add frets
-		for (var i=1; i < ukeGeeks.settings.numFrets; i++){
+		for (var i = 1; i < ukeGeeks.settings.numFrets; i++) {
 			var y = pos.y + i * fretBox.fretSpace + offset;
 			ctx.moveTo(pos.x + offset, y);
 			ctx.lineTo(pos.x + fretWidth + offset, y);
 		}
 		//
-		ctx.rect( pos.x + offset, pos.y + offset, fretWidth, stringHeight);
+		ctx.rect(pos.x + offset, pos.y + offset, fretWidth, stringHeight);
 		// stroke shape
 		ctx.strokeStyle = ukeGeeks.settings.colors.fretLines;
 		ctx.lineWidth = fretBox.lineWidth;
 		ctx.stroke();
 		ctx.closePath();
-	},
+	};
 
 	/**
 	 * TODO: Loop over the muted array, dropping X's whenever a string position is TRUE
@@ -1647,15 +1680,18 @@ ukeGeeks.chordBrush.prototype = {
 	 * @param
 	 * @return {void}
 	 */
-	_mutedStrings: function(ctx, fretBox, muted){
+	var _mutedStrings = function(ctx, fretBox, muted) {
 		var x = fretBox.topLeftPos.x + fretBox.lineWidth / 2;
 		var y = fretBox.topLeftPos.y + fretBox.lineWidth / 4;
-		for(var i = 0; i < muted.length; i++){
-			if (muted[i]){
-				this._drawX(ctx, {x: x + i * fretBox.stringSpace, y: y}, fretBox);
+		for (var i = 0; i < muted.length; i++) {
+			if (muted[i]) {
+				_drawX(ctx, {
+					x: x + i * fretBox.stringSpace,
+					y: y
+				}, fretBox);
 			}
 		}
-	},
+	};
 
 	/**
 	 * Plots an "X" centered at POSITION
@@ -1664,7 +1700,7 @@ ukeGeeks.chordBrush.prototype = {
 	 * @param
 	 * @return {void}
 	 */
-	_drawX: function(ctx, pos, fretBox){
+	var _drawX = function(ctx, pos, fretBox) {
 		pos.x -= fretBox.xWidth / 2;
 		pos.y -= fretBox.xWidth / 2;
 
@@ -1679,24 +1715,38 @@ ukeGeeks.chordBrush.prototype = {
 		ctx.lineWidth = fretBox.xStroke;
 		ctx.stroke();
 		ctx.closePath();
-	},
+	};
 
 	/**
-	 * @method _getFirstFret
+	 * Returns first & last frets, 0 if none found.
+	 * @method _getFretRange
 	 * @private
 	 * @param dots {array<data.dot>} Array of ukeGeeks.data.dot objects
-	 * @return {void}
+	 * @return {JSON}
 	 */
-	_getFirstFret: function(dots){
-		var maxF = 5;
-		for (var i=0; i < dots.length; i++){
-			if (dots[i].fret > maxF)
-				maxF = dots[i].fret;
-		}
-		return maxF-4;
-	}
+	var _getFretRange = function(dots) {
+		var max = -1;
+		var min = 300;
 
-}
+		for (var i = 0; i < dots.length; i++) {
+			if (dots[i].fret > max) {
+				max = dots[i].fret;
+			}
+			if (dots[i].fret < min) {
+				min = dots[i].fret;
+			}
+		}
+		return {
+			first: (min < 300) ? min : 0,
+			last: (max > 0) ? max : 0
+		};
+	};
+
+	/* return our public interface
+	 */
+	return publics;
+
+};
 ;/**
  * Reads an HTML (text) block looking for chords in format: [Emaj7]
  * Returns the HTML block with wrapped chords: &lt;code&gt;&lt;strong&gt;&lt;em&gt;
@@ -2441,7 +2491,7 @@ ukeGeeks.chordPainter = function(){
 			}
 			for (var j=0; j < e.length; j++){
 				if (e[j].getAttribute('data-chordName') == c.name){
-					brush.plot(e[j],c,ukeGeeks.settings.inlineFretBox);
+					brush.plot(e[j], c, ukeGeeks.settings.inlineFretBox, ukeGeeks.settings.inlineFretBox.fonts);
 				}
 			}
 		}
