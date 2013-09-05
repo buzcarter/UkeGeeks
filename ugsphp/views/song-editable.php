@@ -17,15 +17,14 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <script type="text/javascript">isLegacyIe = true;document.getElementsByTagName('html')[0].className='legacyIe';</script>
 <script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <script type="text/javascript" src="//explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>
-<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/editorv2/ugsEditorPlus.legacyIe.css" />
+<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.legacyIe.css" />
 <![endif]-->
 <link href='http://fonts.googleapis.com/css?family=Peralta' rel='stylesheet' type='text/css' />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/yuiReset.css" />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/basic-page-layout.css" />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ukeGeeks.music.css" />
-<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/editor/ugsEditorPlus.css" title="ugsEditorCss" />
-<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/editor/ugsEditorPlus.print.css" media="print" />
-<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/editor/ugsChordBuilder.css" />
+<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.merged.css" title="ugsEditorCss" />
+<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.print.css" media="print" />
 </head>
 <body class="editableSongPage pageWidth_screen">
 <section id="scalablePrintArea" class="scalablePrintArea">

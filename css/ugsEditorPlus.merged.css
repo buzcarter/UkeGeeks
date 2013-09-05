@@ -1,0 +1,1120 @@
+/*
+	Document   : ugsEditorPlus
+	Created on : July 2013
+	Author     : Buz
+	Description: Classes used by UkeGeeks "Song-a-Matic" Editor.
+*/
+
+/**
+ * Help on hiding the select scroll bars:
+ *  http://stackoverflow.com/questions/4531269/hide-vertical-scrollbar-in-select-element
+ * @import url(http://fonts.googleapis.com/css?family=Peralta);
+ *-------------- */
+ .salt_8873ySp {
+ 	color:#0f0;
+ }
+ html, body {
+ 	margin: 0;
+ 	padding: 0;
+ }
+ body {
+ 	position:relative;
+ 	padding-top: 40px;
+ }
+ .editableSongPage{
+ 	background-color:#EDECEA;
+ }
+ .scalablePrintArea {
+ 	-moz-transform-origin: 0 0;
+ 	-webkit-transform-origin: 0 0;
+ 	background-color: #fff;
+ 	border-right:solid 1px #888;
+ 	font-size: inherit;
+ 	box-shadow: 3px 0 9px rgba(0, 0, 0, 0.4);
+ }
+ .scalablePrintArea hgroup{
+ 	padding-bottom: .15in;
+ }
+/* LOGO
+-------------------------------- */
+.ugsLogo {
+	color: #F2A848;
+	font-family: 'Peralta', cursive;
+	font-size: 16px;
+	font-weight: normal;
+	position: absolute;
+	right: 1em;
+	text-shadow: 1px 1px #332222;
+}
+
+/* STANDARD appearance HTML for Help Section
+-------------------------------- */
+.helpDlg{
+	font-size:.9em;
+}
+.normalHtml p,
+.normalHtml ul,
+.normalHtml ol {
+	margin-bottom:1em;
+}
+.normalHtml li {
+	list-style: disc outside none;
+	margin-left: 1em;
+	padding-bottom:.4em;
+}
+.normalHtml h3 {
+	font-size:1.2em;
+	font-weight:bold;
+}
+
+/*
+-------------------------------- */
+.ugsAppMenuBar {
+	background: #933f17 url("../../img/editor/editorSprite.png") 0 -100px repeat-x;
+	-moz-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
+	-webkit-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
+	box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
+	border-top: 1px solid #84623c;
+	border-bottom: 1px solid #240e01;
+	font: 17px/38px Helvetica, Arial;
+	height: 40px;
+	min-width: 910px;
+	padding-left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 2;
+}
+.ugsAppMenuBar > ul {
+	margin-left: 10px;
+}
+.ugsAppMenuBar > ul > li {
+	float: left;
+	position: relative;
+}
+.ugsAppMenuBar > ul > li > a {
+	border: solid 1px transparent;
+	color: #f4e19f;
+	cursor: pointer;
+	display: block;
+	float: left;
+	height: 38px;
+	line-height: 38px;
+	outline: 0 none;
+	padding: 0 15px 0 5px;
+	text-decoration: none;
+	text-shadow: 1px 2px 0 rgba(86, 3, 5, 0.95);
+}
+.ugsAppMenuBar > ul > li > a:hover {
+	border-color: #600000;
+	background-color: #451212;
+	background: url("../../img/editor/editorSprite.png") 0 -145px repeat-x;
+	color: #fdda61;
+	text-shadow: none;
+}
+.ugsAppMenuBar > ul > .active > a {
+	background-color: #451212;
+	background: url("../../img/editor/editorSprite.png") 0 -145px repeat-x;
+	color: #fef5e3;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+/* Icons/Sprits
+-------------------------------- */
+.ugsAppMenuBar > ul > li > a span {
+	background-image: url("../../img/editor/editorSprite.png");
+	background-repeat: no-repeat;
+	float: left;
+	height: 25px;
+	margin-top: 7px;
+	width: 25px;
+}
+.navSong span {
+	background-position: -75px 0px;
+}
+.navSong.active span,
+.navSong a:hover span {
+	background-position: -75px -50px;
+}
+.navInstruments span {
+	background-position: -50px 0px;
+}
+.navInstruments.active span,
+.navInstruments a:hover span {
+	background-position: -50px -50px;
+}
+.navTranspose span {
+	background-position: -25px 0px;
+}
+.navTranspose.active span,
+.navTranspose a:hover span {
+	background-position: -25px -50px;
+}
+.navDiagrams span {
+	background-position: 0px 0px;
+}
+.navDiagrams.active span,
+.navDiagrams a:hover span {
+	background-position: 0px -50px;
+}
+.navLayout span {
+	background-position: -100px 0px;
+}
+.navLayout.active span,
+.navLayout a:hover span {
+	background-position: -100px -50px;
+}
+.navColors span {
+	background-position: -125px 0px;
+}
+.navColors.active span,
+.navColors a:hover span {
+	background-position: -125px -50px;
+}
+.navZoom span {
+	background-position: -150px 0px;
+}
+.navZoom.active span,
+.navZoom a:hover span {
+	background-position: -150px -50px;
+}
+.navEdit span {
+	background-position: -175px 0px;
+}
+.navEdit.active span,
+.navEdit a:hover span {
+	background-position: -175px -50px;
+}
+.navOptions span {
+	background-position: -200px 0px;
+}
+.navOptions.active span,
+.navOptions a:hover span {
+	background-position: -200px -50px;
+}
+/* Alternate Layouts: Hide Diagrams
+-------------------------------- */
+html .ugsHideDiagrams .ugs-diagrams-wrap {
+	display:none;
+}
+html .ugsHideDiagrams .ugs-source-wrap {
+	margin-left: 0;
+}
+/* Alternate Layouts: Chord Diagrams On Top:
+-------------------------------- */
+html .diagramsOnTop .ugs-diagrams-wrap {
+	float: none;
+	width: auto;
+}
+html .diagramsOnTop .ugs-source-wrap {
+	margin-left: 0;
+}
+/* Alternate Layouts: standard Two Column
+------------------------------ */
+.diagramsOnSide .ugs-diagrams-wrap {
+	float:left;
+	width:225px;
+}
+.diagramsOnSide .ugs-source-wrap {
+	margin-left:250px;
+}
+/* MOVED FROM PAGE: SECTION 1
+------------------------------ */
+/* FLOATIN EDITOR
+-------------------------------- */
+.overlay {
+	position:fixed;
+	top:45px;
+	right:20px;
+	background-color: #2B1100;
+	background-color: rgba(30, 11, 0, 0.75); /* rgba(43, 17, 0, 0.80); */
+	-moz-box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
+	-webkit-box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
+	box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
+	-moz-border-radius: 22px;
+	-webkit-border-radius: 22px;
+	border-radius: 22px;
+	padding: 10px;
+	width: 490px;
+	z-index:0;
+}
+.overlay > div {
+	background: url(../../img/editor/woodChip.png) repeat scroll 0 0 transparent;
+	border-radius: 0 0 13px 13px;
+	overflow: hidden;
+	padding: 10px;
+}
+/*
+.overlay div div{
+	background-image: none;
+	border-radius:0;
+	padding: 0;
+}
+*/
+/* Form inputs,
+----------------------------------- */
+.overlay select{
+	font-size: 1.1em;
+}
+.overlay input[type=text],
+.overlay input[type=password] {
+	display: block;
+	font-size: 1.2em;
+	margin-bottom: .4em;
+	padding: 0.1em;
+	width: 98%;
+}
+.overlay textarea {
+	font-family: Monaco, "Consolas", "Lucida Console", "Courier New", courier, monospace;
+	font-size: 10pt;
+	line-height: 1.25;
+	padding-left: .3em;
+	white-space: nowrap;
+	white-space:pre;
+	overflow:scroll;
+	height:525px;
+	width: 98%;
+}
+.overlay input[type=text],
+.overlay input[type=password],
+.overlay textarea {
+	background-color: rgba(255, 255, 255, 0.7);
+	border: solid 1px #E1B166;
+	-webkit-transition: background-color 500ms linear;
+	-moz-transition: background-color 500ms linear;
+	-o-transition: background-color 500ms linear;
+	-ms-transition: background-color 500ms linear;
+	transition: background-color 500ms linear;
+}
+.overlay input[type=text]:hover,
+.overlay input[type=password]:hover,
+.overlay textarea:hover {
+	background-color:rgba(255, 255, 200, 0.7);
+	border-color:#444;
+}
+.overlay input[type=text]:focus,
+.overlay input[type=password]:focus,
+.overlay textarea:focus {
+	background-color:rgba(255, 255, 255, 0.9);
+	border-color: #6C280C;
+	-moz-box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
+	-webkit-box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
+	box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
+}
+.overlay h3 {
+	/*
+	cursor: move;
+	*/
+	background: url(../../img/editor/editorSprite.png) repeat-x 0 -100px #933f17;
+	border-bottom: 1px solid #240E01;
+	border-radius: 12px 12px 0 0;
+	border-top: 1px solid #84623C;
+	color: #F4E19F;
+	font-size: 22px;
+	/*font-weight: bold;*/
+	height: 37px;
+	line-height: 37px;
+	padding: 0 20px;
+	text-shadow: 1px 2px 0 #592108;
+}
+.overlay .closeBtn {
+	background: url(../../img/editor/closeBtn.png) no-repeat 0 0 transparent;
+	display: block;
+	height: 30px;
+	outline: none;
+	position: absolute;
+	right: 10px;
+	text-indent: -5000em;
+	top: 14px;
+	width: 30px;
+}
+.overlay .resizeBtn {
+	background: url(../../img/editor/resizeBtn.png) no-repeat 0 0 transparent;
+	display: block;
+	height: 20px;
+	outline: none;
+	position: absolute;
+	right: 55px;
+	text-indent: -5000em;
+	top: 18px;
+	width: 20px;
+}
+/* MOVED FROM PAGE: SECTION 2
+------------------------------ */
+/* "base button" is rounded & gray with white text */
+.baseBtn {
+	background-color: #999;
+	border: 1px solid #333;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	color: #FFF;
+	cursor: pointer;
+	font-size: inherit;
+	font-weight: bold;
+	padding: 0.2em 1em;
+	text-align: center;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	/* Remove underline in case this is applied to a link */
+
+	text-decoration: none;
+}
+.baseBtn:hover {
+	background-color: #888;
+	/* Force colorin case this is applied to a link */
+
+	color: #fff;
+}
+.blueBtn {
+	background-color: #89b9e3;
+	background-image: -moz-linear-gradient(top, #89b9e3, #3d6bbb);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #89b9e3), color-stop(1, #3d6bbb));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#89b9e3', endColorstr='#3d6bbb');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#89b9e3', EndColorStr='#3d6bbb')";
+	border-color: #3765B7;
+	text-shadow: #89b9e3 0px 1px 0, #3765b7 0 -1px 0;
+}
+.blueBtn:hover {
+	background-color: #4c85e8;
+	background-image: -moz-linear-gradient(top, #4c85e8, #2f5493);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #4c85e8), color-stop(1, #2f5493));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4c85e8', endColorstr='#2f5493');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#4c85e8', EndColorStr='#2f5493')";
+	text-shadow: black 0px 1px 0, #3765b7 0 -1px 0;
+}
+
+/* orange */
+.orange {
+	color: #fef4e9;
+	border: solid 1px #da7c0c;
+	background: #f78d1d;
+	background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
+	background: -moz-linear-gradient(top,  #faa51a,  #f47a20);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+	text-shadow: #da7c0c 0px 1px 0, #faa51a 0 -1px 0;
+}
+.orange:hover {
+	background: #f47c20;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015));
+	background: -moz-linear-gradient(top,  #f88e11,  #f06015);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
+	text-shadow: #f47c20 0px 1px 0, #f88e11 0 -1px 0;
+}
+.orange:active {
+	color: #fcd3a5;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
+	background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
+}
+
+.btnBar {
+	height: 30px;
+}
+.btnBar .baseBtn {
+	float: right;
+	font-size: 110%;
+	margin-bottom: 5px;
+}
+/* MOVED FROM PAGE: SECTION 3
+------------------------------ */
+html .helpDlg {
+	top:75px;
+	right:70px;
+	width: 300px;
+	z-index:1;
+}
+html .optionsDlg {
+	top:100px;
+	right:210px;
+	width: 380px;
+	z-index:2;
+}
+.optionsDlg div{
+	font-size:.91em;
+}
+.optionsDlg div li{
+	padding-bottom:.82em;
+}
+.liBtn, .liBtn * {
+	cursor: pointer;
+}
+/* Reformat Dialog
+------------------------------ */
+.reformatDlg{
+	right: 25%;
+	top: 100px;
+	width: 480px;
+	z-index: 3;
+}
+.instructions {
+	width: 28em;
+	padding:0 0 .7em;
+	color:#563324;
+}
+.instructions.small {
+	clear:both;
+	font-size:.8em;
+	display:block;
+	width: 35em;
+}
+html .reformatDlg textarea{
+	height: 15em;
+}
+/* "Cancel"/"No Thanks" (subtle, alternate) buttons
+------------------------------ */
+.alternateBtn,
+.noThanks {
+	color: #3965B0;
+	float: right;
+	line-height: 33px;
+	margin-right: 1.5em;
+	text-decoration: none;
+}
+.alternateBtn:hover,
+.noThanks:hover {
+	color:#0646AD;
+}
+.noThanks {
+	background-color: #EFD292;
+	border-radius: 6px;
+	padding: 0 0.4em;
+	/* backwards transition support */
+	-webkit-transition: background-color 0.4s ease;
+	-moz-transition: background-color 0.4s ease;
+	-ms-transition: background-color 0.4s ease;
+	-o-transition: background-color 0.4s ease;
+	transition: background-color 0.4s ease;
+}
+.noThanks:hover {
+	background-color: #F2E2C1;
+}
+.alternateBtn{
+
+}
+/* MOVED FROM PAGE: SECTION 4
+------------------------------ */
+.isHidden {
+	display:none;
+}
+
+/* page widths
+-------------------------------- */
+.pageWidth_letter .scalablePrintArea {
+	width: 8in;
+	padding:0.2in;
+	min-height:10.5in;
+}
+.pageWidth_a4 .scalablePrintArea {
+	width: 19cm;
+	padding:1cm;
+	min-height:28cm;
+}
+.pageWidth_screen .scalablePrintArea {
+	padding:20px;
+}
+/* Alternate color schemes
+-------------------------------- */
+.reversed {
+	background-color: #000;
+	color: #FFF;
+}
+.reversed .scalablePrintArea{
+	background-color: transparent;
+}
+.reversed pre {
+	color: #e9e9e9;
+}
+.reversed .ugsChords code {
+	color: #333;
+}
+.reversed .ugsChords code em {
+	color: #F42;
+}
+.reversed .ugsChorus {
+	border-left-color: #333;
+}
+.reversed h5, .reversed h6 {
+	border-left-color: #444;
+	color: #69F;
+}
+.reversed .subNav a:hover {
+	background-color: #888;
+	color: #000;
+}
+.reversed .overlay {
+	background-color: #4E1C07;
+	/*622105;*/
+
+	box-shadow: none;
+	color: #000;
+}
+/* "Arrow Box"
+ * Thanks to: cssarrowplease.com
+ -------------------------------- */
+ .arrowBox {
+ 	background-color: rgba(0, 0, 0, 0.81);
+ 	border: 2px solid #fff;
+ 	border-radius: 10px;
+ 	color:#b3b3b3;
+ 	display: none;
+ 	position: fixed;
+ 	top: 60px;
+ 	width: 310px;
+ 	-moz-box-shadow: 3px 13px 9px rgba(0, 0, 0, 0.5);
+ 	-webkit-box-shadow: 3px 13px 9px rgba(0, 0, 0, 0.5);
+ 	box-shadow: 3px 13px 9px rgba(0, 0, 0, 0.5);
+ 	z-index: 5;
+ }
+ .arrowBox:after,
+ .arrowBox:before {
+ 	bottom: 100%;
+ 	border: solid transparent;
+ 	content: " ";
+ 	height: 0;
+ 	width: 0;
+ 	position: absolute;
+ 	pointer-events: none;
+ }
+ .arrowBox:after {
+ 	border-color: rgba(0, 0, 0, 0);
+ 	border-bottom-color: #000;
+ 	border-width: 20px;
+ 	left: 50%;
+ 	margin-left: -20px;
+ }
+ .arrowBox:before {
+ 	border-color: rgba(255, 255, 255, 0);
+ 	border-bottom-color: #ffffff;
+ 	border-width: 23px;
+ 	left: 50%;
+ 	margin-left: -23px;
+ }
+ .arrowBoxContent{
+ 	padding: 1em .6em .4em;
+ }
+ .arrowBoxContent + .arrowBoxContent{
+ 	padding-top:0;
+ }
+/*
+-------------------------------------- */
+.layoutOptions{
+	left: 50px;
+}
+.layoutOptions:after,
+.layoutOptions:before {
+	left:22%;
+}
+
+.tuningOptions{
+	left:150px;
+}
+#transposeOptions em {
+	color: #CCCCCC;
+	float: right;
+	font-size: 0.86em;
+}
+.otherOptions {
+	left: 250px;
+}
+.helpOptions {
+	left: 320px;
+}
+/*
+-------------------------------------- */
+.enablePseudoSelects dt,
+.enablePseudoSelects dd {
+	height: 3em;
+	line-height: 1;
+	margin: 0;
+	padding: 0;
+}
+.enablePseudoSelects dd {
+	display:none;
+	left: 16.1em;
+	position: relative;
+	top: -3.1em;
+	height: 0px;
+}
+.enablePseudoSelects label{
+	color: #E4E4E4;
+	display: block;
+	cursor: pointer;
+	border: solid 1px transparent;
+	border-radius: 7px;
+	padding: 0.5em;
+}
+.enablePseudoSelects label em{
+	color: #898989;
+	float: right;
+	font-family: Arial;
+}
+.enablePseudoSelects label:hover{
+	color:#fff;
+	background-color: #2A2A2A;
+	border-color: #555;
+	box-shadow: 2px 2px 2px #000;
+
+}
+.enablePseudoSelects label:hover em{
+	color:#E4E4E4;
+}
+.event-userSelecting label{
+	color:#B9B9B9;
+}
+.event-userSelecting label em{
+	color:#3a3a3a;
+}
+html .active label{
+	background-color: #000;
+	color: #fff;
+}
+/*
+-------------------------------------- */
+.pseudoSelect {
+	position: absolute;
+	background-color: #3C3C3C;
+	border: solid 1px #555;
+	border-radius: 7px;
+	box-shadow: 2px 6px 6px rgba(0, 0, 0, 0.53);
+	color: #EFEFEF;
+	cursor: pointer;
+	width: 17em;
+}
+.pseudoSelect li {
+	display: block;
+	padding: 0.1em;
+}
+.pseudoSelect a{
+	border: 2px solid transparent;
+	border-radius: 10px;
+	color: inherit;
+	display: block;
+	padding: 0.5em 0.5em 0.5em 30px;
+	text-decoration: none;
+}
+.pseudoSelect li:hover{
+	color: #fff;
+}
+.pseudoSelect li:hover a{
+	background-color: #000;
+	border-color: #676767;
+}
+/* undo */
+.pseudoSelect li {
+	float: none;
+	margin: 0;
+	text-align: inherit;
+}
+.pseudoSelect .checked a {
+	background: url("../../img/editor/checked.png") no-repeat scroll 10px center #2A2A2A;
+	border-color: #C5C5C5;
+	color: #FFFFFF;
+	text-shadow:1px 2px 1px #000;
+}
+
+/* our Checkboxes are a problem...
+-------------------------------- */
+.checkboxBlock {
+	border-top: 1px solid #575757;
+	box-shadow: 0 -1px 0 #000;
+	font-size: 0.81em;
+	padding: 0.75em 0;
+}
+.checkboxBlock label{
+	padding-left: 0.5em;
+}
+.checkBoxFinePrint{
+	display: block;
+	font-size:.85em;
+	padding: 0.3em 0 0.5em 3.1em;
+}
+#commonChordList {
+	display: block;
+	font-size: 1.2em;
+	margin-left: 1.5em;
+	width: 15em;
+}
+
+/* list of links (duh)
+ * ...undoing some spill-over styles, when will I learn
+ -------------------------------- */
+ .linksList{ font-size: .85em;}
+ .linksList li {
+ 	margin: 0;
+ 	padding: 0.1em;
+ 	text-align: left;
+ 	float: none;
+ }
+ .linksList a {
+ 	border-radius: 8px;
+ 	color: #B9B9B9;
+ 	display: block;
+ 	padding: 0.6em;
+ 	text-decoration: none;
+ }
+ .linksList a:hover{
+ 	background-color: #000;
+ 	color:#fff;
+ }
+/* Feedback message -- on UPDATE
+-------------------------------- */
+.updateMessage {
+	background-color: #BAE5A7;
+	border: 1px solid #44A819;
+	border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 0 4px rgba(255, 190, 40, 0.8);
+	color: #43772D;
+	display: none;
+	position: absolute;
+	text-align: center;
+	text-shadow: 0 -1px rgba(255, 190, 40, 0.3);
+	width: 10em;
+}
+.updateMessage em{
+	border: 1px solid #66D836;
+	border-radius: 3px 3px 3px 3px;
+	box-shadow: 0 0 3px #559277 inset;
+	display: block;
+	height: 100%;
+	padding: 0.2em;
+}
+/* redundant rule to allow JS hook
+-------------------------------- */
+/* NOTE: this should be last set of rules in this file! */
+.scalablePrintArea .ugs-diagrams-wrap canvas{}
+.scalablePrintArea .ugs-diagrams-wrap{}
+.scalablePrintArea .ugs-source-wrap{}
+
+/* ________ pages: chord builder ________ */
+/* Chord Builder Dialog
+------------------------------ */
+.chordBuilderDlg{
+	right: 210px;
+	top: 70px;
+	width: 490px;
+	/* backwards transition support */
+	-webkit-transition: width 0.6s ease;
+	-moz-transition: width 0.6s ease;
+	-ms-transition: width 0.6s ease;
+	-o-transition: width 0.6s ease;
+	transition: width 0.6s ease;
+}
+html .chordBuilderNarrow{
+	width: 345px;
+}
+.chordBuilderDlg input[type=text] {
+	border: 1px solid #D7D7D7;
+	border-radius: 5px 5px 5px 5px;
+	display: block;
+	font-size: 30pt;
+	padding: 0;
+	text-align: center;
+	max-width: 100%;
+	width: 100%;
+}
+.chordBuilderDlg pre {
+	font-size: 12pt;
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	word-wrap: break-word;
+}
+/* ** canvas & editor stack */
+html body .editorSurface {
+	background-color: #fff;
+	border-radius: 5px ;
+	font-size: 0.9em;
+	height: 300px;
+	margin: 5px auto;
+	overflow: hidden;
+	padding: 0;
+	position: relative;
+	width: 462px;
+	-moz-box-shadow:1px 2px 8px rgba(0, 0, 0, 0.5) inset;
+	-webkit-box-shadow:1px 2px 8px rgba(0, 0, 0, 0.5) inset;
+	box-shadow:1px 2px 8px rgba(0, 0, 0, 0.5) inset;
+}
+/* ** stacking order ** */
+.editorSurface canvas {
+	border:none;
+	cursor:none;
+	left: 0;
+	position: absolute;
+	top: 0;
+}
+#cdBldDiagramCanvas {
+	z-index: 1;
+}
+#cdBldCursorCanvas {
+	z-index: 2;
+}
+.chordToolbox {
+	z-index: 3;
+}
+.toolboxEdgeShadow {
+	z-index: 4;
+}
+/* -- toolbox and its contents -- */
+.chordToolbox{
+	border: 0 solid #ccc;
+	background-color: #F0EEF0;/*464646;*/
+	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+	height: 250px;
+	position: absolute;
+	top: 25px;
+	width: 135px;
+	/* backwards transition support */
+	-webkit-transition: background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out;
+	-moz-transition: background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out;
+	-ms-transition: background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out;
+	-o-transition: background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out;
+	transition: background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out;
+}
+.chordToolbox.open,
+.chordToolbox:hover {
+	background-color: #fafafa;
+	border-color:#8C8C8C;
+	box-shadow: 4px 6px 9px rgba(0, 0, 0, 0.3);
+}
+.chordToolbox.leftEdge {
+	border-radius: 0 7px 7px 0;
+	border-width: 2px 2px 2px 0;
+	left: -110px;
+}
+.chordToolbox.leftEdge.open,
+.chordToolbox.leftEdge:hover {
+	left: 0;
+}
+.chordToolbox.rightEdge {
+	border-radius: 7px 0 0 7px;
+	border-width: 2px 0 2px 2px;
+	right: -110px;
+}
+.chordToolbox.rightEdge.open,
+.chordToolbox.rightEdge:hover {
+	right: 0;
+}
+.chordToolboxInner{
+	margin: 10px auto;
+	width: 100px;
+}
+/* forceed shadow over toolbox(es) */
+.toolboxEdgeShadow {
+	background-color: transparent;
+	height: 255px;
+	position: absolute;
+	top: 26px;
+	width: 10px;
+}
+
+.toolboxEdgeShadow.leftEdge{
+	box-shadow: 4px 0 6px rgba(0, 0, 0, 0.3);
+	left: -10px;
+}
+.toolboxEdgeShadow.rightEdge{
+	box-shadow: -4px 0 6px rgba(0, 0, 0, 0.3);
+	right: -10px;
+}
+/* --- */
+.toolChip {
+	background-color: #fafafa;
+	border: 1px solid #fafafa;
+	border-radius: 5px;
+	color: #C7681B;
+	cursor: pointer;
+	display: block;
+	margin-bottom:8px;
+	min-height: 70px;
+	padding: 5px 0;
+	text-align: center;
+	text-decoration: none;
+	width: 100%;
+	/* backwards transition support */
+	-webkit-transition: background-color 0.4s ease, border-color 0.4s ease;
+	-moz-transition: background-color 0.4s ease, border-color 0.4s ease;
+	-ms-transition: background-color 0.4s ease, border-color 0.4s ease;
+	-o-transition: background-color 0.4s ease, border-color 0.4s ease;
+	transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+.toolChip:hover {
+	background-color: #FEFEFE;
+	border: 1px solid #EDEDED;
+}
+html .selected,
+html .selected:hover {
+	border-color: #AAA73F;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+#cdBldBtnFingerName {
+	color: #806753;
+	display: block;
+	font-size: .67em;
+}
+.bigDot {
+	background-color: #E78333;
+	border: 3px solid #973100;
+	border-radius: 23px 23px 23px 23px;
+	display: block;
+	height: 23px;
+	margin: 5px auto;
+	width: 23px;
+}
+/* some "active" button (hover) efx */
+.toolChip img,
+.toolChip .bigDot {
+	opacity: .75;
+}
+.selected img,
+.selected .bigDot,
+.toolChip:hover img,
+.toolChip:hover .bigDot {
+	opacity: 1;
+}
+/* hand */
+.fingerToolImage {
+	background: url(../../img/editor/hand.png) top center no-repeat;
+	display:block;
+	height: 83px;
+	margin: 0 auto;
+	position: relative;
+	width: 88px;
+}
+.fingerDot {
+	background-color: #F9F340;
+	border:solid 2px #AF9607;
+	border-radius: 8px;
+	display: block;
+	height: 8px;
+	position: absolute;
+	width: 8px;
+}
+.finger0 .fingerDot {
+	display:none;
+}
+.finger1 .fingerDot {
+	right: 22px;
+	top: 3px;
+}
+.finger2 .fingerDot {
+	right: 1px;
+	top: 11px;
+}
+.finger3 .fingerDot {
+	right: 1px;
+	top: 28px;
+}
+.finger4 .fingerDot {
+	right: 1px;
+	top: 44px;
+}
+/* sliders (up/down arrows) */
+label[for=cdBldStartingFret],
+html .arrowUp,
+html .arrowDown{
+	min-height: 52px;
+}
+html .arrowUp, html .arrowDown {
+	background-repeat: no-repeat;
+	background-position: center 29px;
+}
+html .arrowUp {
+	background-image: url("../../img/editor/basic-up-arrow.png");
+}
+html .arrowDown {
+	background-image: url("../../img/editor/basic-down-arrow.png");
+}
+/* output area */
+.outputBox{
+	max-height: 30em;
+	overflow: hidden;
+	-webkit-transition: max-height 0.8s ease;
+	-moz-transition: max-height 0.8s ease;
+	-o-transition: max-height 0.8s ease;
+	-ms-transition: max-height 0.8s ease;
+	transition: max-height 0.8s ease;
+}
+.outputBox.collapseOutput{
+	max-height: 0;
+}
+
+/* ________ colorized chordPro defintion ________ */
+.chordPro-statement {
+	background-color:#f9f9f9;
+	border:solid 1px #bbb;
+	color: #999;
+	font-family: Consolas, 'courier new', monospace;
+	/* font-size: 14px; */
+	padding:1em;
+}
+.chordPro-keyword {
+	color: #8e7cc3;
+}
+.chordPro-attribute {
+	color: #741b47;
+}
+.chordPro-number {
+	color: #e69138;
+	font-weight:bold;
+}
+.chordPro-string {
+	background-color: #EDF7E6;
+	color: #38761d;
+	font-weight:bold;
+}
+/* ________ Chord Chooser (List) ________ */
+.ugsChordChooser{
+	background-color: #eed18e;
+	border-radius: 10px;
+	color: #551d00;/* #f4e19d; */
+	font-size: 14pt;
+	max-height: 17em;
+	min-height: 10em;
+	overflow-y: auto;
+	padding: .1em 0;
+}
+.ugsChordChooser li{
+	background-color: #bc9350;
+	border-radius: 6px;
+	cursor: pointer;
+	margin: 0.5em;
+	padding: 0.5em;
+	/* backwards transition support */
+	-webkit-transition: background-color 0.4s ease;
+	-moz-transition: background-color 0.4s ease;
+	-ms-transition: background-color 0.4s ease;
+	-o-transition: background-color 0.4s ease;
+	transition: background-color 0.4s ease;
+}
+.ugsChordChooser li:hover{
+	background-color: #99512c;
+	color: #f4e19d; /* #ffdb5b; */
+	text-shadow: 0px 2px 0px #551D00;
+}
+.ugsChordChooser .newChord{
+	background-color: #b2612d;
+	color: #551d00;
+	font-weight: bold;
+}
+/* delete button */
+.ugsChordChooser .deleteChord{
+	background: url("../../img/editor/delete-btn.png") right center no-repeat;
+	display: block;
+	float: right;
+	height: 30px;
+	opacity: 0;
+	width: 36px;
+	/* backwards transition support */
+	-webkit-transition: opacity 0.4s ease;
+	-moz-transition: opacity 0.4s ease;
+	-ms-transition: opacity 0.4s ease;
+	-o-transition: opacity 0.4s ease;
+	transition: opacity 0.4s ease;
+}
+.ugsChordChooser li:hover .deleteChord{
+	opacity: 1;
+}
+/* mini-diagram */
+.ugsChordChooser canvas {
+	float: right;
+	margin-right: 10px;
+}
