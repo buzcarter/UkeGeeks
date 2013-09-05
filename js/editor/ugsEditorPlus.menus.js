@@ -117,5 +117,4 @@ ugsEditorPlus.topMenus = (function(){
 	// ---------------------------------------
 	return _public;
 
-}()
-);
+}());

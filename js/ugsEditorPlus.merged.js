@@ -28,7 +28,7 @@ var ugsEditorPlus = (function() {
 		ugsEditorPlus.topMenus.init();
 		ugsEditorPlus.submenuUi.init(ugsEditorPlus.actions.doAction);
 		ugsEditorPlus.optionsDlg.init(ugsEditorPlus.actions.doAction);
-
+		ugsEditorPlus.chordBuilder.init();
 		ugsEditorPlus.actions.run();
 	};
 
@@ -615,13 +615,13 @@ ugsEditorPlus.songUi = (function() {
 ugsEditorPlus.styles = new function(){
 	var _sheet = null;
 	this.Rules = null;
-
+	
 	this.getSheet = function(title){
 		_sheet = _getSheet(title);
 		this.Rules = getRules();
 		return this;
 	};
-
+	
 	var _getSheet = function(title){
 		for (var i = 0; i < document.styleSheets.length; i++){
 			if (document.styleSheets[i].title == title){
@@ -631,14 +631,14 @@ ugsEditorPlus.styles = new function(){
 		}
 		return null;
 	};
-
+	
 	var getRules = function(){
 		if (_sheet == null){
 			return [];
 		}
 		return _sheet.cssRules ? _sheet.cssRules : _sheet.rules;
 	};
-
+	
 	this.Find = function(selector){
 		selector = selector.toLowerCase();
 		for (var i = 0; i < this.Rules.length; i++) {
@@ -1101,14 +1101,13 @@ ugsEditorPlus.autoReformat = (function() {
 
 }()
 );
-;
-/**
+;/**
  * Handles Top Menu UI -- includes the show/hide dialogs (why? cuz they're attached to top menu buttons)
  * Shows (a) dialongs (such as Edit) and (b) those tool-tippy options thingies.
  * @class topMenus
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.topMenus = (function(){
+ugsEditorPlus.topMenus = (function() {
 	/**
 	 * attach public members to this object
 	 * @type {Object}
@@ -1120,16 +1119,16 @@ ugsEditorPlus.topMenus = (function(){
 	 * @method init
 	 * @return {void}
 	 */
-	_public.init = function(){
+	_public.init = function() {
 		// $('#ugsAppToolbar > ul a')
-		$('#ugsAppToolbar > ul  li').not('[data-dialog]').children('a').click(onMenuItemClick);
-  	$('.showOptionsBox a').click(onShowOptionsClick);
+		$('#ugsAppToolbar > ul li').not('[data-dialog]').children('a').click(onMenuItemClick);
+		$('.showOptionsBox a').click(onShowOptionsClick);
 
-		$('#ugsAppToolbar > ul  li[data-dialog]').click(onShowDlgBtnClick);
+		$('#ugsAppToolbar > ul li[data-dialog]').click(onShowDlgBtnClick);
 		$('.closeBtn').click(onCloseBtnClick);
 		$('.resizeBtn').click(onResizeBtnClick);
 
- 	};
+	};
 
 	/**
 	 * DESCRIPTION
@@ -1137,7 +1136,7 @@ ugsEditorPlus.topMenus = (function(){
 	 * @method onMenuItemClick
 	 * @return {void}
 	 */
-	var onMenuItemClick = function(){
+	var onMenuItemClick = function() {
 		// the clicked anchor tag
 		var $parent = $(this).parent();
 		var isOpen = $parent.hasClass('active');
@@ -1154,7 +1153,7 @@ ugsEditorPlus.topMenus = (function(){
 	 * @private
 	 * @return {void}
 	 */
-	var _makeAllInactive = function(){
+	var _makeAllInactive = function() {
 		$('#ugsAppToolbar > ul > li').removeClass('active');
 	};
 
@@ -1167,7 +1166,7 @@ ugsEditorPlus.topMenus = (function(){
 	 * @param e {event}
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onShowDlgBtnClick = function(e){
+	var onShowDlgBtnClick = function(e) {
 		var id = $(this).data('dialog');
 		$('#' + id).fadeIn();
 		// prevent event bubbling
@@ -1182,13 +1181,13 @@ ugsEditorPlus.topMenus = (function(){
 	 * @param e {event}
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onCloseBtnClick = function(e){
+	var onCloseBtnClick = function(e) {
 		$(this).parents('.overlay').fadeOut();
 		// prevent event bubbling
 		return false;
 	};
 
-	var onResizeBtnClick = function(e){
+	var onResizeBtnClick = function(e) {
 		var dlg = $(this).parents('.overlay');
 		ugsEditorPlus.resize.toggle(dlg);
 		return false;
@@ -1200,7 +1199,7 @@ ugsEditorPlus.topMenus = (function(){
 	 * @param  {[type]} e [description]
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onShowOptionsClick = function(e){
+	var onShowOptionsClick = function(e) {
 		var id = $(this).attr('href');
 		$('.arrowBox').not(id).hide();
 		var $dlg = $(id);
@@ -1220,8 +1219,7 @@ ugsEditorPlus.topMenus = (function(){
 	// ---------------------------------------
 	return _public;
 
-}()
-);
+}());
 ;
 /**
  * Wires up all the "pseudo-selects" (aka "dropdownlists") on a Tooltip-Dialog boxes on
@@ -1910,3 +1908,1656 @@ ugsEditorPlus.resize = (function(){
 
 }()
 );
+
+;/**
+ *
+ * Dependencies: jQuery & ugsChordBuilder classes
+ * @class chordBuilder
+ * @namespace ugsEditorPlus
+ */
+ugsEditorPlus.chordBuilder = (function() {
+	/**
+	 * attach public members to this object
+	 * @type {Object}
+	 */
+	var _public = {};
+
+	var _builder = null;
+
+	_public.init = function() {
+		_builder = new ugsChordBuilder.editorUi();
+		_builder.init();
+
+		$('#cdBldOpenBtn').click(onShowDlgBtnClick);
+	};
+
+	var onShowDlgBtnClick = function(evt){
+		evt.preventDefault();
+		_builder.reload();
+		var id = $(this).data('dialog');
+		$('#' + id).fadeIn();
+	};
+
+	// ---------------------------------------
+	// return public interface "JSON handle"
+	// ---------------------------------------
+	return _public;
+
+}());
+;/**
+ * @namespace ugsChordBuilder
+ */
+var ugsChordBuilder = window.ugsChordBuilder || {};
+
+/**
+ * Entities (data containers) shared between the class libraries. Private
+ * JSON objects used internally by a class are not included here.
+ * @class entities
+ * @namespace ugsChordBuilder
+ * @static
+ */
+ugsChordBuilder.entities = new function() {
+	this.boundingBox = function(pos, dimensions) {
+		this.x = pos ? pos.x : 0;
+		this.y = pos ? pos.y : 0;
+		this.width = dimensions ? dimensions.width : 1;
+		this.height = dimensions ? dimensions.height : 1;
+	};
+
+	this.dot = function(string, fret, finger) {
+		this.string = string;
+		this.fret = fret ? fret : 0;
+		this.finger = finger ? finger : 0;
+	};
+
+	this.postion = function(x, y) {
+		this.x = x ? x : 0;
+		this.y = y ? y : 0;
+	};
+
+};
+
+/**
+ * "Properties, Options, Preferences" such as fretboard size and colors; dot attributes, the cursors, fonts etc.
+ * @class
+ * @namespace ugsChordBuilder
+ * @static
+ */
+ugsChordBuilder.settings = new function() {
+	/**
+	 * Fretboard upper left hand corner position
+	 * @type {position}
+	 */
+	this.anchorPos = {
+		x: 75,
+		y: 75
+	};
+
+	//'Geneva, "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, sans-serif';
+	var sanSerifFontStack = 'Arial, "Helvetica Neue", Helvetica, Verdana, sans-serif';
+
+	this.cursor = {
+		fillColor: 'rgba(220, 216, 73, 0.35)', // 'rgba(245, 127, 18, 0.3)',
+		strokeWidth: 1,
+		strokeColor: '#AAB444', // '#F57F12',
+		radius: 9,
+		imageUri: '/img/editor/hand-cursor.png'
+	};
+
+	this.fretBoard = {
+		numFrets: 5,
+		maxFret: 16,
+		stringNames: ['G', 'C', 'E', 'A'],
+		strokeWidth: 4,
+		strokeColor: '#8F8569',
+		fretSpace: 35,
+		stringSpace: 30
+	};
+
+	this.dot = {
+		fillColor: '#F68014',
+		radius: 11,
+		strokeWidth: 2,
+		strokeColor: '#D56333',
+		fontWeight: 'bold',
+		fontFamily: sanSerifFontStack,
+		fontSize: 16,
+		fontColor: '#ffffff'
+	};
+
+	this.fretLabel = {
+		fontFamily: sanSerifFontStack,
+		fontSize: 28, // Pixels
+		color: '#6A6A63',
+		lightColor: '#EAEAE8' //D6D6D6' //A4A4A3'
+	};
+
+	this.stringLabel = {
+		fontFamily: sanSerifFontStack,
+		fontSize: 34, // Pixels
+		color: '#DCD849' // #AAB444'//
+	};
+
+	this.chord = {
+		nameMaxLength: 20
+	};
+
+	/**
+	 * Dimensions of a single target
+	 * @return {JSON} {width: ?, height: ? }
+	 */
+	this.targetDimensions = function() {
+		return {
+			height: ugsChordBuilder.settings.fretBoard.fretSpace,
+			width: ugsChordBuilder.settings.fretBoard.stringSpace
+		};
+	};
+
+	/**
+	 * Top left-hand corner where Targets begin positioning
+	 * @return {postion}
+	 */
+	this.targetAnchorPos = function() {
+		var dimensions = this.targetDimensions();
+		return new ugsChordBuilder.entities.postion(
+			ugsChordBuilder.settings.anchorPos.x - 0.5 * dimensions.width,
+			ugsChordBuilder.settings.anchorPos.y - dimensions.height - 0.2 * ugsChordBuilder.settings.fretBoard.strokeWidth
+		);
+	};
+
+	/**
+	 * re-centers the fretboard's anchor position
+	 * @method centerFretboard
+	 * @param  {element} canvas
+	 * @return {void}
+	 */
+	this.centerAnchor = function(canvas) {
+		var x = (0.5 * canvas.width) - (0.5 * (this.fretBoard.stringNames.length - 1) * this.fretBoard.stringSpace) - this.fretBoard.strokeWidth;
+		var y = (0.5 * canvas.height) - (0.5 * this.fretBoard.numFrets * this.fretBoard.stringSpace);
+		this.anchorPos = new ugsChordBuilder.entities.postion(x, y);
+	};
+
+};
+
+/**
+ * Tracks curor position relative to fretboard's hot (clickable) regions
+ * @class
+ * @namespace ugsChordBuilder
+ * @static
+ */
+ugsChordBuilder.tracking = new function() {
+	var targetBox = null;
+
+	var getTarget = function() {
+		if (targetBox) {
+			return targetBox;
+		}
+
+		var dimensions = ugsChordBuilder.settings.targetDimensions();
+		dimensions.width = dimensions.width * ugsChordBuilder.settings.fretBoard.stringNames.length;
+		dimensions.height = dimensions.height * (ugsChordBuilder.settings.fretBoard.numFrets + 1);
+		targetBox = new ugsChordBuilder.entities.boundingBox(ugsChordBuilder.settings.targetAnchorPos(), dimensions);
+
+		return targetBox;
+	};
+
+	/**
+	 * Returns TRUE if the two objects overlap
+	 * @method  collision
+	 * @param  {boundingBox} object1
+	 * @param  {boundingBox} object2
+	 * @return {bool}
+	 */
+	var collision = function(object1, object2) {
+		return (object1.x < object2.x + object2.width) && (object1.x + object1.width  > object2.x) && (object1.y < object2.y + object2.height) && (object1.y + object1.height > object2.y);
+	};
+
+	/**
+	 * Converts position (x,y) to the fret
+	 * @method toDot
+	 * @param  {position} pos
+	 * @return {dot}
+	 */
+	this.toDot = function(pos) {
+		var cursorBox = new ugsChordBuilder.entities.boundingBox(pos);
+		var box = getTarget();
+		if (!collision(cursorBox, box)) {
+			return null;
+		}
+
+		var dimensions = ugsChordBuilder.settings.targetDimensions();
+		return new ugsChordBuilder.entities.dot(
+			Math.floor((pos.x - box.x) / dimensions.width),
+			Math.floor((pos.y - box.y) / dimensions.height)
+		);
+	};
+};
+
+/**
+ * Did I overlook this or was it deliberate? Either case, the "fret" in the dot object is
+ * merely the fret in the visible diagram -- that is, a value between 0 and maxFrets, not
+ * the actual fret on the instrument... beware.
+ *
+ * Unless otherwise stated all "dot" parames are of type ugsChordBuilder.entities.dot
+ * @class fretDots
+ * @namespace ugsChordBuilder
+ * @static
+ */
+ugsChordBuilder.fretDots = new function() {
+	var _dots = [];
+
+	this.getDots = function() {
+		return _dots.slice();
+	};
+
+	this.slide = function(numSteps) {
+		if (!inRange(numSteps)) {
+			return false;
+		}
+		for (var i = 0; i < _dots.length; i++) {
+			_dots[i].fret = _dots[i].fret + numSteps;
+		}
+		return true;
+	};
+
+	var inRange = function(numSteps) {
+		for (var i = 0; i < _dots.length; i++) {
+			if ((_dots[i].fret + numSteps < 1) || (_dots[i].fret + numSteps > ugsChordBuilder.settings.fretBoard.numFrets)) {
+				return false;
+			}
+		}
+		return true;
+	};
+
+	this.toggleDot = function(dot) {
+		if (dot.fret == 0) {
+			clearColumn(dot.string);
+			return;
+		}
+
+		var index = find(dot);
+		if (index < 0) {
+			_dots.push(dot);
+		} else {
+			_dots.splice(index, 1);
+		}
+	};
+
+	this.toggleFinger = function(dot, finger) {
+		var index = find(dot);
+		if (index < 0) {
+			return false;
+		}
+
+		_dots[index].finger = _dots[index].finger == finger ? 0 : finger;
+		return true;
+	};
+
+	/**
+	 * Clears all saved dots.
+	 * @method: reset
+	 */
+	this.reset = function() {
+		for (var i = 0; i < ugsChordBuilder.settings.fretBoard.stringNames.length; i++) {
+			clearColumn(i);
+		}
+	};
+
+	/**
+	 * Returns index of Dot within _dots or -1 if not found.
+	 * @method find
+	 * @param  {entities.dot} dot
+	 * @return {int}
+	 */
+	var find = function(dot) {
+		for (var i = _dots.length - 1; i >= 0; i--) {
+			if (_dots[i].string == dot.string && _dots[i].fret == dot.fret) {
+				return i;
+			}
+		};
+
+		return -1;
+	};
+
+	/**
+	 * Clears all dots for a particular string.
+	 * @param string {int}
+	 */
+	var clearColumn = function(string) {
+		for (var i = _dots.length - 1; i >= 0; i--) {
+			if (_dots[i].string == string) {
+				_dots.splice(i, 1);
+			}
+		};
+	};
+
+	var getPosition = function(dot) {
+		return new ugsChordBuilder.entities.postion(
+			ugsChordBuilder.settings.anchorPos.x + 0.47 * ugsChordBuilder.settings.fretBoard.strokeWidth + dot.string * ugsChordBuilder.settings.fretBoard.stringSpace,
+			ugsChordBuilder.settings.anchorPos.y + 0.47 * ugsChordBuilder.settings.fretBoard.strokeWidth + (dot.fret - 0.5) * ugsChordBuilder.settings.fretBoard.fretSpace
+		);
+	};
+
+	var drawDot = function(context, pos) {
+		var opts = ugsChordBuilder.settings.dot;
+
+		context.beginPath();
+		context.arc(pos.x, pos.y, opts.radius, 0, 2 * Math.PI, false);
+		context.fillStyle = opts.fillColor;
+		context.fill();
+		context.lineWidth = opts.strokeWidth;
+		context.strokeStyle = opts.strokeColor;
+		context.stroke();
+	};
+
+	var addLabel = function(context, pos, text) {
+		var opts = ugsChordBuilder.settings.dot;
+
+		context.font = opts.fontWeight + ' ' + opts.fontSize + 'px ' + opts.fontFamily;
+		context.textAlign = 'center';
+		context.fillStyle = opts.fontColor;
+		context.fillText(text, pos.x, pos.y + 0.3 * opts.fontSize);
+
+	};
+
+	this.draw = function(context) {
+		for (var i = _dots.length - 1; i >= 0; i--) {
+			var pos = getPosition(_dots[i]);
+			drawDot(context, pos);
+			if (_dots[i].finger > 0) {
+				addLabel(context, pos, _dots[i].finger);
+			}
+		};
+	}
+};
+
+/**
+ *
+ * @class
+ * @namespace ugsChordBuilder
+ * @static
+ */
+ugsChordBuilder.cursorCanvas = new function() {
+	var _context = null;
+
+	var _handImage = null;
+	var _imgOk = false;
+
+	var _dotCursor = true;
+	var _finger = 1;
+
+	var _lastPos = {
+		x: 0,
+		y: 0
+	};
+
+	this.init = function(ctx) {
+		_context = ctx;
+		loadImage();
+	};
+
+	var erase = function(pos) {
+		var radius = ugsChordBuilder.settings.cursor.radius + ugsChordBuilder.settings.cursor.strokeWidth;
+		// Need to allow for dot, image, and the finger number -- magic number for now:
+		_context.clearRect(pos.x - radius, pos.y - radius, radius + 50, radius + 60);
+		/*
+		if (_imgOk) {
+			_context.clearRect(pos.x - radius, pos.y - radius, radius + _handImage.width, radius + _handImage.height);
+		} else {
+			_context.clearRect(pos.x - radius, pos.y - radius, 2 * radius, 2 * radius);
+		}
+		*/
+	};
+
+	var drawHandCursor = function(pos) {
+		_context.drawImage(_handImage, pos.x, pos.y);
+
+		var opts = ugsChordBuilder.settings.dot;
+
+		_context.font = opts.fontWeight + ' ' + opts.fontSize + 'px ' + opts.fontFamily;
+		_context.textAlign = 'left';
+		_context.fillStyle = 'black'; //opts.fontColor;
+		_context.fillText(_finger, pos.x + 0.8 * _handImage.width, pos.y + _handImage.height);
+		// not centering pos.x - 0.5 * _handImage.width, pos.y - 0.5 * _handImage.height);
+	};
+
+	var loadImage = function() {
+		_handImage = new Image();
+		_handImage.onload = function() {
+			_imgOk = true;
+		};
+		_handImage.src = ugsChordBuilder.settings.cursor.imageUri;
+	};
+
+	var drawDotCursor = function(pos) {
+		var opts = ugsChordBuilder.settings.cursor;
+
+		_context.beginPath();
+		_context.arc(pos.x, pos.y, opts.radius, 0, 2 * Math.PI, false);
+		_context.fillStyle = opts.fillColor;
+		_context.fill();
+		_context.lineWidth = opts.strokeWidth;
+		_context.strokeStyle = opts.strokeColor;
+		_context.stroke();
+	};
+
+	this.setCursor = function(isDot, finger) {
+		_dotCursor = isDot;
+		_finger = finger;
+	};
+
+	this.draw = function(pos) {
+		erase(_lastPos);
+		if (!_imgOk || _dotCursor) {
+			drawDotCursor(pos);
+		} else {
+			drawHandCursor(pos);
+		}
+		_lastPos = pos;
+	};
+};
+
+/**
+ *
+ * @class
+ * @namespace ugsChordBuilder
+ * @static
+ */
+ugsChordBuilder.chordCanvas = new function() {
+	var _context = null,
+		_canvas = null;
+
+	this.init = function(ctx, ele) {
+		_context = ctx;
+		_canvas = ele;
+		ugsChordBuilder.settings.centerAnchor(_canvas);
+	};
+
+	var erase = function() {
+		_context.clearRect(0, 0, _canvas.width, _canvas.height);
+	};
+
+	var addLabel = function(text, color, pos) {
+		_context.font = ugsChordBuilder.settings.fretLabel.fontSize + 'px ' + ugsChordBuilder.settings.fretLabel.fontFamily;
+		_context.textAlign = 'right';
+		_context.fillStyle = color;
+		_context.fillText(text, pos.x, pos.y);
+	};
+
+	var addLabels = function(startingFret) {
+		var pos = new ugsChordBuilder.entities.postion(
+			ugsChordBuilder.settings.anchorPos.x - 0.3 * ugsChordBuilder.settings.fretLabel.fontSize,
+			ugsChordBuilder.settings.anchorPos.y + ugsChordBuilder.settings.fretLabel.fontSize
+		);
+		var color = startingFret > 1 ? ugsChordBuilder.settings.fretLabel.color : ugsChordBuilder.settings.fretLabel.lightColor;
+		for (var i = 0; i < ugsChordBuilder.settings.fretBoard.numFrets; i++) {
+			addLabel(startingFret + i, color, pos);
+			pos.y += ugsChordBuilder.settings.fretBoard.fretSpace;
+			color = ugsChordBuilder.settings.fretLabel.lightColor;
+		};
+	};
+
+	var addStringName = function(text, pos) {
+		_context.font = ugsChordBuilder.settings.stringLabel.fontSize + 'px ' + ugsChordBuilder.settings.stringLabel.fontFamily;
+		_context.textAlign = 'center';
+		_context.fillStyle = ugsChordBuilder.settings.stringLabel.color;
+		_context.fillText(text, pos.x, pos.y);
+	};
+
+	var addStringNames = function() {
+		var opts = ugsChordBuilder.settings.fretBoard;
+
+		var pos = new ugsChordBuilder.entities.postion(
+			ugsChordBuilder.settings.anchorPos.x + 0.5 * opts.strokeWidth,
+			ugsChordBuilder.settings.anchorPos.y - 0.25 * ugsChordBuilder.settings.fretLabel.fontSize
+		);
+
+		for (var i = 0; i < opts.stringNames.length; i++) {
+			addStringName(opts.stringNames[i], pos);
+			pos.x += opts.stringSpace;
+		}
+	};
+
+	var drawFretboard = function() {
+		// shorthand handles:
+		var anchor = ugsChordBuilder.settings.anchorPos;
+		var fretBox = ugsChordBuilder.settings.fretBoard;
+
+		// width offset, a "subpixel" adjustment
+		var offset = fretBox.strokeWidth / 2;
+		// locals
+		var stringHeight = fretBox.numFrets * fretBox.fretSpace;
+		var fretWidth = (fretBox.stringNames.length - 1) * fretBox.stringSpace;
+		// build shape
+		_context.beginPath();
+		// add "C" & "E" strings
+		for (var i = 1; i < (fretBox.stringNames.length - 1); i++) {
+			var x = anchor.x + i * fretBox.stringSpace + offset;
+			_context.moveTo(x, anchor.y + offset);
+			_context.lineTo(x, anchor.y + stringHeight + offset);
+		}
+		// add frets
+		for (var i = 1; i < fretBox.numFrets; i++) {
+			var y = anchor.y + i * fretBox.fretSpace + offset;
+			_context.moveTo(anchor.x + offset, y);
+			_context.lineTo(anchor.x + fretWidth + offset, y);
+		}
+		//
+		_context.rect(anchor.x + offset, anchor.y + offset, fretWidth, stringHeight);
+		// stroke shape
+		_context.strokeStyle = fretBox.strokeColor;
+		_context.lineWidth = fretBox.strokeWidth;
+		_context.stroke();
+		_context.closePath();
+	};
+
+	this.draw = function(pos, startingFret) {
+		erase();
+		// ugsChordBuilder.debugTargets.drawTargets(_context);
+		addLabels(startingFret);
+		addStringNames();
+		drawFretboard();
+		ugsChordBuilder.fretDots.draw(_context);
+	};
+};
+
+/**
+ *
+ * @class
+ * @namespace ugsChordBuilder
+ * @static
+ */
+ugsChordBuilder.export = new function() {
+	var _fretOffset = null;
+
+	/**
+	 * Class for "reorganized" dots, think of this as a necklace where the
+	 * thread, the instrument string, has zero or more beads, or dots -- fret plus finger
+	 * @class  stringDots
+	 * @private
+	 * @param  {int} string
+	 * @param  {dot_Array} dots
+	 */
+	var stringDots = function(string, dots) {
+		this.string = string;
+		this.dots = dots ? dots : [];
+		//this.fingers = fingers ? fingers : [];
+	};
+
+	var getStringDots = function() {
+		// initialize empty string array
+		var aryStringDots = [];
+		for (var stringNumber = 1; stringNumber <= ugsChordBuilder.settings.fretBoard.stringNames.length; stringNumber++) {
+			aryStringDots.push(new stringDots(stringNumber));
+		};
+
+		// add dots
+		var dots = ugsChordBuilder.fretDots.getDots();
+		for (var stringNumber = aryStringDots.length - 1; stringNumber >= 0; stringNumber--) {
+			for (var i = dots.length - 1; i >= 0; i--) {
+				if (aryStringDots[stringNumber].string == dots[i].string + 1) {
+					aryStringDots[stringNumber].dots.push(dots[i]);
+				}
+			};
+		};
+
+		return aryStringDots;
+	};
+
+	/**
+	 * Returns the minimum & maximum fret found withing array (of dots)
+	 * @method getMinMax
+	 * @param  {dot_array} ary
+	 * @return {JSON}
+	 */
+	var getMinMax = function(ary) {
+		var max = 0;
+		var min = 900;
+		for (var i = ary.length - 1; i >= 0; i--) {
+			if (ary[i].fret > max) {
+				max = ary[i].fret;
+			}
+			if (ary[i].fret < min) {
+				min = ary[i].fret;
+			}
+		}
+		return {
+			max: max,
+			min: (min < 900) ? min : max
+		};
+	};
+
+	/**
+	 * Handles the offset, translates from fret (on the diagram's N frets) to the insturment's complete fretbaord
+	 * @method  fretNumber
+	 * @param  {int} fret
+	 * @return {int}
+	 */
+	var fretNumber = function(fret) {
+		return fret > 0 ? _fretOffset + fret : 0;
+	};
+
+	/**
+	 * Not too surprisingly this finds "fret" within dots and returns finger. If there isn't a dot
+	 * for fret returns zed.
+	 * @method  getFinger
+	 * @param  {array} dots
+	 * @param  {int} fret
+	 * @return {int}
+	 */
+	var getFinger = function(dots, fret) {
+		for (var i = 0; i < dots.length; i++) {
+			if (dots[i].fret == fret) {
+				return dots[i].finger;
+			}
+		};
+		return 0;
+	};
+
+	/**
+	 * Returns an array of ints, one for each string, with the HIGHEST REAL fret appearing on that string.
+	 * Default is zed per string.
+	 * @method getPrimaryFrets
+	 * @param  {int} startingFret
+	 * @return {int}
+	 */
+	this.getPrimaryFrets = function(startingFret) {
+		_fretOffset = startingFret - 1;
+		var dotsPerString = getStringDots();
+		var primaries = [];
+		for (var i = 0; i < dotsPerString.length; i++) {
+			var minMax = getMinMax(dotsPerString[i].dots);
+			primaries.push(fretNumber(minMax.max));
+		};
+		return primaries;
+	};
+
+	/**
+	 * Returns complete ChordPro definition statement
+	 * @action getDefinition
+	 * @param  {string} chordName
+	 * @param  {int} startingFret
+	 * @return {string}
+	 */
+	this.getDefinition = function(chordName, startingFret) {
+		chordName = scrub(chordName);
+		var name = (chordName && chordName.length > 0) ? chordName : 'CHORDNAME';
+		var fretsStr = '';
+		var fingersString = '';
+		var addsString = '';
+
+		_fretOffset = startingFret - 1;
+		var dotsPerString = getStringDots();
+		for (var i = 0; i < dotsPerString.length; i++) {
+			var minMax = getMinMax(dotsPerString[i].dots);
+			fretsStr += fretNumber(minMax.max) + ' ';
+			fingersString += getFinger(dotsPerString[i].dots, minMax.max) + ' ';
+			if (minMax.max != minMax.min) {
+				addsString += ' add: string ' + dotsPerString[i].string + ' fret ' + fretNumber(minMax.min) + ' finger ' + getFinger(dotsPerString[i].dots, minMax.min);
+			}
+		};
+
+		// no double spaces, no space before the closing "}"
+		return ('{define: ' + name + ' frets ' + fretsStr + ' fingers ' + fingersString + addsString + '}').replace(/\s+/g, ' ').replace(' }', '}');
+	};
+
+	/**
+	 * Returns "highlighted" (HTML-ified) ChordPro definition statement.
+	 * @action getDefinition
+	 * @param  {string} chordName
+	 * @param  {int} startingFret
+	 * @return {string}
+	 */
+	this.getDefinitionHtml = function(chordName, startingFret) {
+		chordName = scrub(chordName);
+		// Keep regexs simple by a couple cheats:
+		// First, using 'X07MX001' as my CSS clasname prefix to avoid collisions.
+		// We temporarily remove the name, then put it back in the very last step.
+		var html = this.getDefinition(chordName, startingFret);
+		html = html.replace(' ' + chordName, ' ' + 'X07Myq791wso01');
+		html = html.replace(/\b(\d+)\b/g, '<span class="chordPro-X07MX001number">$1</span>');
+		html = html.replace(/\b(frets?|fingers?|string)\b/g, '<span class="chordPro-X07MX001attribute">$1</span>');
+		html = html.replace(/\b(define|add)\b/g, '<span class="chordPro-X07MX001keyword">$1</span>');
+		return html
+			.replace('X07Myq791wso01', '<span class="chordPro-string">' + chordName + '</span>')
+			.replace(/X07MX001/g, '')
+			.replace(/ +/g, ' ');
+	};
+
+	/**
+	 * Returns "safe" version of chord name, removing disallowed characters and reserved names (such as "add:")
+	 * @action scrub
+	 * @param  {string} chordName
+	 * @return {string}
+	 */
+	var scrub = function(name) {
+		// paranoia protection: no reserved words (makes life easier for parsing)
+		var disallow = /^(frets|fingers|add:)$/i;
+		// trim leading & trailing spaces, internal spaces get smushed into single dash
+		var cleaned = name.replace(/^\s*(.*?)\s*$/, '$1').replace(/\s+/g, '-');
+		if (disallow.test(cleaned)) {
+			cleaned = '';
+		}
+		return cleaned.substring(0, ugsChordBuilder.settings.chord.nameMaxLength);
+	};
+};
+;/**
+ *
+ * @class chooserList
+ * @namespace ugsChordBuilder
+ * @static
+ */
+ugsChordBuilder.chooserList = new function() {
+	// array of custom chords defined in this song
+	var _chordDictionary = [];
+	// handle to HTML UL element
+	var _eleChordList = null;
+
+	/**
+	 * magic value for start a new chord
+	 * @constant
+	 * @name C_NEW_CHORD
+	 * @type {Int}
+	 */
+	var C_NEW_CHORD = -1;
+
+	// next available Id used on LI's
+	var _nextId = 0;
+
+	// HTML element Ids
+	var _ids = {
+		// ChordPro Song -- the unmodified source
+		source: 'chordProSource',
+		// the UL where we'll be loading the chords
+		chordList: 'cdBldPick',
+		builderPanel: 'cdBldBuilderPanel',
+		chooserPanel: 'cdBldChooserPanel'
+	};
+
+	/**
+	 * Chord current sent to the editor.
+	 * @field
+	 */
+	var _currentChord = null;
+
+	/**
+	 * Handle to the chordBuilder (UI) "setChord" method
+	 * @field
+	 */
+	var _setChordMethod = function() {};
+
+	/**
+	 * "safe" this handle for buried references.
+	 * @field
+	 */
+	var _that = this;
+
+	/**
+	 * Hanlde to instance of Scriptasaurus chord brush class, to paint the wee little
+	 * chord diagrams onto the Chooser List.
+	 * @field _ugsBrushTool
+	 * @type {Object}
+	 */
+	var _ugsBrushTool = null;
+
+	/**
+	 * Required settings for the Chord Brush -- dimensions, fonts, and colors.
+	 * @field _diagramSettings
+	 * @type {JSON}
+	 */
+	var _diagramSettings = {
+		dimensions: {
+			showText: false,
+			height: 50,
+			width: 40,
+			fretSpace: 9,
+			stringSpace: 7,
+			dotRadius: 3,
+			lineWidth: 1,
+			topLeftPos: {
+				x: 10,
+				y: 2
+			},
+			xWidth: 0.7 * 7,
+			xStroke: 1.4 * 1
+		},
+		fonts: {
+			dot: '8pt Arial',
+			text: '8pt Arial',
+			fret: '8pt Arial'
+		},
+		colors: {
+			fretLines: '#EED18E',
+			dots: '#551D00', //'#9A532D',
+			dotText: '#ffffff',
+			text: '#000000',
+			fretText: '#EED18E',
+			xStroke: '#551D00'
+		}
+	};
+
+	/**
+	 * entity for storing raw chord info; attached to the LI via id
+	 * @class ChordDefinition
+	 * @param {string} name
+	 * @param {string} definition
+	 */
+	var ChordDefinition = function(name, definition) {
+		this.id = _nextId++;
+		this.name = name;
+		this.definition = definition;
+	};
+
+	/**
+	 * @method init
+	 * @param  {function} setChordFunction
+	 */
+	this.init = function(setChordFunction) {
+		_setChordMethod = setChordFunction;
+		_eleChordList = document.getElementById(_ids.chordList);
+		// attach click handler to the UL avoids need to attach to individual LI items (these get added & deleted frequently)
+		_eleChordList.addEventListener('click', onClick, false);
+		_start();
+	};
+
+	var _start = function() {
+		songGetDefinitions(document.getElementById(_ids.source).value);
+		listLoad(_eleChordList, _chordDictionary);
+	};
+
+	this.reset = function() {
+		_chordDictionary = [];
+		document.getElementById(_ids.chordList).innerHTML = '';
+		_nextId = 0;
+		_currentChord = null;
+		_start();
+	};
+
+	/**
+	 * Shows either the "Chooser" or "Chord Builder/Editor" panel.
+	 * @param {bool} isChooserPanel
+	 */
+	this.show = function(isChooserPanel) {
+		document.getElementById(_ids.chooserPanel).style.display = isChooserPanel ? 'block' : 'none';
+		document.getElementById(_ids.builderPanel).style.display = !isChooserPanel ? 'block' : 'none';
+		$('#' + _ids.chooserPanel).closest('.overlay').toggleClass('chordBuilderNarrow', isChooserPanel);
+	};
+
+	/**
+	 * Returns TRUE if Save completed OK, false otherwise (duplicate name or unable to update)
+	 * @method save
+	 * @param  {JSON} data
+	 * @return {bool}
+	 */
+	this.save = function(data) {
+		if (dictionaryFindDupes(_currentChord == null ? -1 : _currentChord.id, data.name) >= 0) {
+			alert('Hey, this chord name is already being used.');
+			return false;
+		}
+		var id = -1;
+		if (_currentChord == null) {
+			id = definitionAdd(data.name, data.definition);
+			_currentChord = dictionaryFind(id);
+			songAddDefinition(data.definition);
+		} else {
+			var i = dictionaryGetIndex(_currentChord.id);
+			if (i < 0) {
+				// console.log('error: not found');
+				return false;
+			}
+			var oldDefinition = _chordDictionary[i].definition;
+			_chordDictionary[i].name = data.name;
+			_chordDictionary[i].definition = data.definition;
+			id = _chordDictionary[i].id;
+			songReplace(oldDefinition, _chordDictionary[i].definition);
+		}
+		listUpdate(id);
+		this.show(true);
+		return true;
+	};
+
+	/**
+	 * Handles confirming & removing a chord from the list and the song.
+	 * @method doDelete description]
+	 * @param  {ChordDefinition} chord
+	 * @return {void}
+	 */
+	var doDelete = function(chord) {
+		if (!confirm('Delete definition for "' + chord.name + '"?')) {
+			return;
+		}
+		var item = listGetItem(chord.id);
+		if (!item) {
+			return;
+		}
+		_eleChordList.removeChild(item);
+		songReplace(chord.definition, '');
+
+	};
+
+	/**
+	 * ListItem click event handler
+	 * @method onClick
+	 * @param  {Event} evt
+	 */
+	var onClick = function(evt) {
+		evt.preventDefault();
+		_currentChord = dictionaryFind(evt.target.getAttribute('data-id'));
+		if (evt.target.getAttribute('data-action') == 'delete') {
+			doDelete(_currentChord);
+			return;
+		}
+
+		var chord = null;
+		if (_currentChord != null) {
+			chord = ukeGeeks.chordImport.runLine(_currentChord.definition);
+			if (hasMutedStrings(chord)) {
+				alert('Uh-oh! This chord uses muted strings!\nCurrently the Chord Builder does not support muted strings -- \nsaving edits will result in mutes being lost.');
+			}
+		}
+		_setChordMethod(chord);
+		_that.show(false);
+	};
+
+	/**
+	 * Checks whether any of the Chord's strings have been muted.
+	 * @method hasMutedStrings
+	 * @param  {ugs.chord}  chord
+	 * @return {Boolean}
+	 */
+	var hasMutedStrings = function(chord) {
+		if (chord.muted) {
+			for (var i = 0; i < chord.muted.length; i++) {
+				if (chord.muted[i]) {
+					return true;
+				}
+			};
+		}
+		return false;
+	};
+
+	/**
+	 * updates an exiting HTML ListItem (LI) using the info stored for Id in
+	 * the chord dictionary (array). Appends new ListItem if not found.
+	 * @method listUpdate
+	 * @param  {int} id
+	 * @return {DOM_LI}
+	 */
+	var listUpdate = function(id) {
+		var def = dictionaryFind(id);
+		var item = listGetItem(id);
+		if (!item) {
+			item = listAddItem(id, def.name);
+		} else {
+			item.innerHTML = listHtmlString(id, def.name, true);
+		}
+		listAddDiagram(id);
+		return item;
+	};
+
+	/**
+	 * finds the HTML ListItem corresponding to Id
+	 * @method listGetItem
+	 * @param  {int} id
+	 * @return {DOM_LI}
+	 */
+	var listGetItem = function(id) {
+		var items = _eleChordList.getElementsByTagName('li');
+		for (var i = 0; i < items.length; i++) {
+			if (items[i].getAttribute('data-id') == ('' + id)) {
+				return items[i];
+			}
+		};
+		return null;
+	};
+
+	/**
+	 * Returns HTML snippet for an LI
+	 * @method listHtmlString
+	 * @param  {int} id
+	 * @param  {string} name
+	 * @param  {bool} isInner (optional) if TRUE only reutrns the inner HTML part, otherwise returns complete LI tag
+	 * @return {string}
+	 */
+	var listHtmlString = function(id, name, isInner) {
+		isInner = (arguments.length > 2) ? isInner : false;
+		var innerHtml = '<span class="deleteChord" data-id="' + id + '" data-action="delete" title="Remove this definition"></span>' + name;
+		return isInner ? innerHtml : '<li data-id="' + id + '" title="Edit this definition" class="ugs-grouped">' + innerHtml + '</li>';
+	};
+
+	/**
+	 * Clears and loads the HTML UL using currently values in Chord Dictionary
+	 * @method listLoad
+	 * @param {DOM_UL} ul
+	 * @param {array} chordDefs
+	 */
+	var listLoad = function(ul, chordDefs) {
+		var s = '';
+		for (var i = 0; i < chordDefs.length; i++) {
+			s += listHtmlString(chordDefs[i].id, chordDefs[i].name);
+		}
+		ul.innerHTML = '<li data-id="' + C_NEW_CHORD + '" class="newChord">+ Add New Chord</li>' + s;
+
+		var items = ul.getElementsByTagName('li');
+		for (var i = items.length - 1; i >= 0; i--) {
+			if (i < 1) {
+				continue;
+			}
+			listAddDiagram(items[i].getAttribute('data-id'));
+		};
+	};
+
+	/**
+	 * Appends a new HTML ListItem to our UL.
+	 * @method listAddItem
+	 * @param  {int} id
+	 * @param  {string} name
+	 */
+	var listAddItem = function(id, name) {
+		var temp = document.createElement('ul');
+		temp.innerHTML = listHtmlString(id, name);
+		_eleChordList.appendChild(temp.childNodes[0]);
+	};
+
+	/**
+	 * Adds mini-chord diagram to the list item found by Id.
+	 */
+	var listAddDiagram = function(id) {
+		var element = listGetItem(id);
+		var defintion = dictionaryFind(id);
+		var chord = ukeGeeks.chordImport.runLine(defintion.definition);
+		//var fretBox = ukeGeeks.settings.inlineFretBox;
+		//var fontSettings = ukeGeeks.settings.inlineFretBox.fonts;
+		if (_ugsBrushTool == null) {
+			_ugsBrushTool = new ukeGeeks.chordBrush();
+		}
+		_ugsBrushTool.plot(element, chord, _diagramSettings.dimensions, _diagramSettings.fonts, _diagramSettings.colors);
+	};
+
+	/**
+	 * Using just a bit of recursion performs as advertised: replaces all occurences of
+	 * searchValue with newValue within text (haystack).
+	 * DANGER: it is, of course, for this to get hung in an infinite loop if new value
+	 * inclues complete search value. :D
+	 * @method replaceAll
+	 * @param  {string} text
+	 * @param  {string} searchValue
+	 * @param  {string} newValue
+	 * @return {string}
+	 */
+	var replaceAll = function(text, searchValue, newValue) {
+		var newText = text.replace(searchValue, newValue);
+		return (newText == text) ? text : replaceAll(newText, searchValue, newValue);
+	};
+
+	/**
+	 * Updates Source and Runs Scriptasaurus after updaint the definition
+	 * @method songReplace
+	 * @param  {string} oldDefinition
+	 * @param  {string} newDefinition
+	 * @return {void}
+	 */
+	var songReplace = function(oldDefinition, newDefinition) {
+		var e = document.getElementById(_ids.source);
+		e.value = replaceAll(e.value, oldDefinition, newDefinition);
+		ugsEditorPlus.actions.run();
+	};
+
+	/**
+	 * Loops over all lines in "text" and extracts any {define:...} statements, adding
+	 * them to the ChordDictionary.
+	 * @method songGetDefinitions
+	 */
+	var songGetDefinitions = function(text) {
+		var defineRegEx = /\{define:\s*([^}]+?)\s+frets[^}]+?\}/im;
+		var lines = text.split('\n');
+		for (var i = lines.length - 1; i >= 0; i--) {
+			if (!defineRegEx.test(lines[i])) {
+				continue;
+			}
+			definitionAdd(lines[i].replace(defineRegEx, '$1'), lines[i]);
+		}
+	};
+
+	/**
+	 * Inserts the passed chord definition into the song (and reruns Sscriptasaurus).
+	 * The chord insertion point is at the end of either the song meta tags or the
+	 * existing chord defintion block. Determined by the _last_ "header" tag line.
+	 * @method songAddDefinition
+	 * @param  {string}
+	 */
+	var songAddDefinition = function(definition) {
+		var e = document.getElementById(_ids.source);
+		var instructionRegEx = /\s*\{\s*(title|t|artist|subtitle|st|album|define):.*?\}/im;
+		var lines = e.value.split('\n');
+		var html = '';
+		var inserted = false;
+		for (var i = lines.length - 1; i >= 0; i--) {
+			if (!inserted && instructionRegEx.test(lines[i])) {
+				html = definition + '\n' + html;
+				inserted = true;
+			}
+			html = lines[i] + '\n' + html;
+		};
+		e.value = html;
+		ugsEditorPlus.actions.run();
+	};
+
+	/**
+	 * Returns Index of Id within the chord Dictionary or -1 if not found.
+	 * @method dictionaryGetIndex
+	 * @param  {int} id
+	 * @return {int}
+	 */
+	var dictionaryGetIndex = function(id) {
+		for (var i = 0; i < _chordDictionary.length; i++) {
+			if ('' + _chordDictionary[i].id == id) {
+				return i;
+			}
+		}
+		return -1;
+	};
+
+	/**
+	 * Returns index of the duplicate chord name. Pass in Id of the chord to be ignored,
+	 * (i.e. the one currently being edited). Comparison ignores case. Returns -1 if no
+	 * dupe is found.
+	 * @method dictionaryFindDupes
+	 * @param  {int} id
+	 * @param  {string} name
+	 * @return {int}
+	 */
+	var dictionaryFindDupes = function(id, name) {
+		var search = name.toLowerCase();
+		for (var i = _chordDictionary.length - 1; i >= 0; i--) {
+			if (('' + _chordDictionary[i].id != '' + id) && (_chordDictionary[i].name.toLowerCase() == search)) {
+				return i;
+			}
+		};
+
+		return -1;
+	};
+
+	/**
+	 * Returns the entry for Id from Chord Dictionary
+	 * @method dictionaryFind
+	 * @param  {int} id
+	 * @return {ChordDefinition}
+	 */
+	var dictionaryFind = function(id) {
+		var i = dictionaryGetIndex(id);
+		return i >= 0 ? _chordDictionary[i] : null;
+	};
+
+	/**
+	 * Adds new chord definition to our Dictionary array. Returns the
+	 * new item's Id (int).
+	 * @param {string} name
+	 * @param {string} definition
+	 * @retugn {int}
+	 */
+	var definitionAdd = function(name, definition) {
+		var chord = new ChordDefinition(name, definition);
+		_chordDictionary.push(chord);
+		return chord.id;
+	};
+
+};
+;
+/**
+ * Doing
+ * @class editorUi
+ * @namespace ugsChordBuilder
+ */
+ugsChordBuilder.editorUi = function() {
+
+	var _ids = {
+		// top-most container, the "master drawing surface"
+		container: 'cdBldEditorSurface',
+		// stacked canvas elements
+		cursorCanvas: 'cdBldCursorCanvas',
+		diagramCanvas: 'cdBldDiagramCanvas',
+		// chord definition meta: name & fret
+		startingFret: 'cdBldStartingFret',
+		chordName: 'cdBldChordName',
+		// container wrapping sliding toolbox pallet
+		toolbox: 'cdBldToolbox',
+		// toolbox buttons:
+		dotsBtn: 'cdBldDotsBtn',
+		fingersBtn: 'cdBldFingersBtn',
+		slideUpBtn: 'toolboxSlideUpBtn',
+		slideDownBtn: 'toolboxSlideDownBtn',
+		// display on "Hand" toolbox button
+		btnFingerName: 'cdBldBtnFingerName',
+		btnHandPic: 'cdBldBtnDiagram',
+		// container for generated chordPro "define" tag (colorized)
+		output: 'cdBldOutput',
+		// show/hide definition output & container where we'll stuff the colorized definition
+		showOutputBtn: 'cdBldShowOutputBtn',
+		outputBox: 'cdBldOutputBox',
+		cancelBtn: 'cdBldCancelBtn',
+		saveBtn: 'cdBldSaveBtn'
+		// 		openBtn: 'cdBldOpenBtn'
+	};
+
+	var _cursorCanvas = null,
+		_eleDotsBtn = null,
+		_eleFingerBtn = null;
+
+	var _startingFret = 1;
+	var _currentName = '';
+
+	var _isDotToolActive = true;
+	var _finger = 0;
+
+	/**
+	 * A "reverse Enum" dictionary of finger number to description
+	 * @name _fingerNames
+	 * @enum {JSON}
+	 */
+	var _fingerNames = {
+		0: 'None',
+		1: 'Index finger',
+		2: 'Middle finger',
+		3: 'Ring finger',
+		4: 'Pinkie'
+	};
+
+	/**
+	 * Returns FALSE if canvas is not supported
+	 * @method init
+	 * @return {bool}
+	 */
+	this.init = function() {
+		_cursorCanvas = document.getElementById(_ids.cursorCanvas);
+		if (!_cursorCanvas.getContext) {
+			return false;
+		}
+
+		var cursorContext = _cursorCanvas.getContext('2d');
+		var diagramContext = document.getElementById(_ids.diagramCanvas).getContext('2d');
+
+		var ele = document.getElementById(_ids.startingFret);
+		addStartingFretOptions(ele);
+		ele.addEventListener('change', onFretChange, false);
+
+		document.getElementById(_ids.chordName).addEventListener('keyup', onNameChange, false);
+
+		_eleDotsBtn = document.getElementById(_ids.dotsBtn);
+		_eleFingerBtn = document.getElementById(_ids.fingersBtn);
+		_eleDotsBtn.addEventListener('click', toggleTool, false);
+		_eleFingerBtn.addEventListener('click', toggleTool, false);
+
+		document.getElementById(_ids.showOutputBtn).addEventListener('click', showOutputBox, false);
+		document.getElementById(_ids.cancelBtn).addEventListener('click', onCancelClick, false);
+		document.getElementById(_ids.saveBtn).addEventListener('click', onSaveClick, false);
+
+		document.getElementById(_ids.slideUpBtn).addEventListener('click', slide, false);
+		document.getElementById(_ids.slideDownBtn).addEventListener('click', slide, false);
+
+		updateFinger();
+
+		document.getElementById(_ids.container).addEventListener('mousemove', onMouseMove, false);
+		_cursorCanvas.addEventListener('click', onMouseClick, false);
+
+		ugsChordBuilder.chordCanvas.init(diagramContext, _cursorCanvas);
+		ugsChordBuilder.cursorCanvas.init(cursorContext);
+
+		redraw();
+		exportDefinition();
+
+		ugsChordBuilder.chooserList.init(setChord);
+
+		return true;
+	};
+
+	/**
+	 * Successively clicking the Finger tool cycles through index to pinky, then none, and so on.
+	 * This method automatically increments the "currently active finger" (odd sentence, that)
+	 * and updates the toolbox UI.
+	 * Note: changing the cursor is not handled here.
+	 * @method updateFinger
+	 * @private
+	 * @return {void}
+	 */
+	var updateFinger = function() {
+		_finger++;
+		if (_finger > 4) {
+			_finger = 0;
+		}
+		document.getElementById(_ids.btnFingerName).innerHTML = _fingerNames[_finger] + ' (' + _finger + ')';
+		document.getElementById(_ids.btnHandPic).className = 'fingerToolImage finger' + _finger;
+	};
+
+	/**
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var showOutputBox = function(evt) {
+		setClass(document.getElementById(_ids.outputBox), 'collapseOutput', !evt.target.checked);
+	};
+
+	/**
+	 * Cancel button's click event handler
+	 * @method onCancelClick
+	 */
+	var onCancelClick = function(evt) {
+		evt.preventDefault();
+		reset();
+		ugsChordBuilder.chooserList.show(true);
+	};
+
+	/**
+	 * Save button's click event handler
+	 * @method onSaveClick
+	 */
+	var onSaveClick = function(evt) {
+		evt.preventDefault();
+		var d = {
+			name: _currentName,
+			startingFret: _startingFret,
+			dots: ugsChordBuilder.fretDots.getDots(),
+			definition: ugsChordBuilder.export.getDefinition(_currentName, _startingFret)
+		};
+		if (!ugsChordBuilder.chooserList.save(d)){
+			var e = document.getElementById(_ids.chordName);
+			e.focus();
+			e.select();
+		}
+	};
+
+	/**
+	 * DANGER!! this is really a public method! A reference to this is passed to the
+	 * scrapper during its initialization. Used to load ths Chord Builder
+	 * @method setChord
+	 * @param {Chord} chord
+	 */
+	var setChord = function(chord) {
+		var isNew = chord == null;
+		if (isNew) {
+			reset();
+			return;
+		}
+
+		var maxFret = findMaxFret(chord.dots);
+		var startingFret = (maxFret > ugsChordBuilder.settings.fretBoard.numFrets) ? maxFret - ugsChordBuilder.settings.fretBoard.numFrets + 1 : 1;
+		reset(chord.name, startingFret, convertDots(startingFret, chord.dots), false);
+	};
+
+	/**
+	 * Converts standard scriptasaurus Dot array to chordBuilder dot array (fret changes)
+	 * @method convertDots
+	 * @param {int} startingFret
+	 * @param  {array} builderDots
+	 * @return {array}
+	 */
+	var convertDots = function(startingFret, builderDots) {
+		var offset = startingFret - 1;
+		var ugsDots = [];
+		for (var i = 0; i < builderDots.length; i++) {
+			var fret = builderDots[i].fret - offset;
+			ugsDots.push(new ugsChordBuilder.entities.dot(builderDots[i].string, (fret < 0 ? 0 : fret), builderDots[i].finger));
+		};
+		return ugsDots;
+	};
+
+	/**
+	 * Loops over dots to find the largest fret value
+	 * @method findMaxFret
+	 * @param  {array} dots
+	 * @return {ing}
+	 */
+	var findMaxFret = function(dots) {
+		var max = 0;
+		for (var i = 0; i < dots.length; i++) {
+			if (dots[i].fret > max) {
+				max = dots[i].fret;
+			}
+		};
+		return max;
+	};
+
+	/**
+	 * Updates the "standard form-like inputs"
+	 * @method resetInputs
+	 * @param {string} name
+	 * @param {int} startingFret
+	 * @param {bool} isNew
+	 * @return {void}
+	 */
+	var resetInputs = function(name, startingFret, isNew) {
+		_currentName = (name && name.length > 0) ? name : 'CHORDNAME';
+		document.getElementById(_ids.chordName).value = _currentName;
+
+		_startingFret = startingFret ? startingFret : 1;
+		document.getElementById(_ids.startingFret).value = _startingFret;
+
+		document.getElementById(_ids.showOutputBtn).checked = false;
+		setClass(document.getElementById(_ids.outputBox), 'collapseOutput', true);
+
+		document.getElementById(_ids.saveBtn).value = isNew ? 'Add' : 'Update';
+	};
+
+	/**
+	 * Updates the Toolbox's current tool to be "Add Dot"; sets properties required for cursor, etc.
+	 * @method resetCurrentTool
+	 */
+	var resetCurrentTool = function() {
+		// restore current drawing tool (this is lame-o)
+		// -----------------------------------------------
+		_isDotToolActive = true;
+		_finger = 0;
+		updateFinger();
+		setClass(_eleDotsBtn, 'selected', _isDotToolActive);
+		setClass(_eleFingerBtn, 'selected', !_isDotToolActive);
+		setClass(document.getElementById(_ids.toolbox), 'open', !_isDotToolActive);
+		ugsChordBuilder.cursorCanvas.setCursor(_isDotToolActive, _finger);
+	};
+
+	/**
+	 * Does a complete UI reset (if no values provided in params), otherwise this is kinda a "set"
+	 * @method reset
+	 * @param {string} name Chord name
+	 * @param {int} startingFret
+	 * @param {array} dots
+	 * @param {bool} isNew Used to set the button text
+	 */
+	var reset = function(name, startingFret, dots, isNew) {
+		isNew = arguments.length > 3 ? isNew : true;
+		// fire cleanup on other classes...
+		// -----------------------------------------------
+		ugsChordBuilder.fretDots.reset();
+
+		// easy elements back to default...
+		// -----------------------------------------------
+		resetInputs(name, startingFret, isNew);
+
+		resetCurrentTool();
+
+		if (dots && dots.length > 0) {
+			for (var i = 0; i < dots.length; i++) {
+				ugsChordBuilder.fretDots.toggleDot(dots[i]);
+			};
+		}
+
+		// ok, probably done
+		// -----------------------------------------------
+		redraw();
+		exportDefinition();
+	};
+
+	/**
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var toggleTool = function(evt) {
+		evt.preventDefault();
+		var useDotTool = evt.currentTarget.href.indexOf('#dots') >= 0;
+		if (useDotTool == _isDotToolActive) {
+			if (!useDotTool) {
+				updateFinger();
+				ugsChordBuilder.cursorCanvas.setCursor(_isDotToolActive, _finger);
+			}
+			return;
+		}
+
+		setClass(_eleDotsBtn, 'selected', useDotTool);
+		setClass(_eleFingerBtn, 'selected', !useDotTool);
+		setClass(document.getElementById(_ids.toolbox), 'open', !useDotTool);
+
+		_isDotToolActive = useDotTool;
+		ugsChordBuilder.cursorCanvas.setCursor(_isDotToolActive, _finger);
+	};
+
+	/**
+	 * Yet another poor man's jQuery envying add/remove CSS class method.
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var setClass = function(element, className, isSet) {
+		var hasClass = element.className.indexOf(className) >= 0;
+		if (isSet && !hasClass) {
+			// add
+			element.className += ' ' + className;
+		} else if (!isSet && hasClass) {
+			// remove
+			element.className = element.className.replace(className, '').replace(/\s+/g, ' ');
+		}
+	};
+
+	/**
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var addStartingFretOptions = function(ele) {
+		var s = '';
+		var lastValue = ugsChordBuilder.settings.fretBoard.maxFret - ugsChordBuilder.settings.fretBoard.numFrets + 1;
+		for (var i = 1; i <= lastValue; i++) {
+			s += '<option value="' + i + '">' + i + '</option>';
+		};
+		ele.innerHTML = s;
+	};
+
+	/**
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var onNameChange = function(evt) {
+		_currentName = this.value;
+		exportDefinition();
+	};
+
+	/**
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var onFretChange = function(evt) {
+		_startingFret = parseInt(this.value);
+		exportDefinition();
+		redraw();
+	};
+
+	/**
+	 * Needs to watch for closed chords!
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var slide = function(evt) {
+		evt.preventDefault();
+		var moveAllowed = false;
+		var numSteps = evt.target.getAttribute('data-direction') == 'up' ? -1 : +1;
+		if (ugsChordBuilder.fretDots.slide(numSteps)) {
+			moveAllowed = true;
+		} else {
+			var newStart = _startingFret + numSteps;
+			var lastValue = ugsChordBuilder.settings.fretBoard.maxFret - ugsChordBuilder.settings.fretBoard.numFrets + 1;
+			if ((newStart >= 1) && (newStart <= lastValue)) {
+				_startingFret = newStart;
+				document.getElementById(_ids.startingFret).value = newStart;
+				moveAllowed = true;
+			}
+		}
+
+		if (moveAllowed) {
+			redraw();
+			exportDefinition();
+		}
+	};
+
+	/**
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var onMouseMove = function(evt) {
+		ugsChordBuilder.cursorCanvas.draw(getPosition(this, evt));
+	};
+
+	/**
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var onMouseClick = function(evt) {
+		var pos = getPosition(_cursorCanvas, evt);
+		var dot = ugsChordBuilder.tracking.toDot(pos);
+		if (!dot) {
+			return;
+		}
+
+		if (_isDotToolActive) {
+			ugsChordBuilder.fretDots.toggleDot(dot);
+			redraw(pos);
+			exportDefinition();
+		} else if (ugsChordBuilder.fretDots.toggleFinger(dot, _finger)) {
+			redraw(pos);
+			exportDefinition();
+		}
+	};
+
+	/**
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var getPosition = function(canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+		return new ugsChordBuilder.entities.postion(
+			evt.clientX - rect.left,
+			evt.clientY - rect.top
+		);
+	};
+
+	/**
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var redraw = function(pos) {
+		pos = pos || new ugsChordBuilder.entities.postion(0, 0);
+		ugsChordBuilder.chordCanvas.draw(pos, _startingFret);
+	};
+
+	/**
+	 * @method
+	 * @private
+	 * @return {void}
+	 */
+	var exportDefinition = function() {
+		document.getElementById(_ids.output).innerHTML = ugsChordBuilder.export.getDefinitionHtml(_currentName, _startingFret);
+	};
+
+	this.reload = function(){
+		reset();
+		ugsChordBuilder.chooserList.reset();
+		ugsChordBuilder.chooserList.show(true);
+	};
+
+};

@@ -167,7 +167,7 @@ ukeGeeks.definitions.addInstrument("\
 {define: Gsus4 frets 0 2 3 3}\
 {define: G9 frets 2 2 1 2}\
 # G#\
-{define: G# frets 5 3 4 3 fingers 3 1 2 1 add: string 2 fret 3 finger 1 add: string 4 fret 3 finger 1}\
+{define: G# frets 5 3 4 3 fingers 3 1 2 1 add: string 1 fret 3 finger 1 add: string 3 fret 3 finger 1}\
 {define: G#m frets 1 3 4 2 fingers 1 3 4 2}\
 {define: G#7 frets 1 3 2 3 fingers 1 3 2 4}\
 {define: G#7sus4 frets 1 3 2 4 fingers 1 3 2 4}\
@@ -179,7 +179,7 @@ ukeGeeks.definitions.addInstrument("\
 {define: G#sus2 frets 1 3 4 1 fingers 2 3 4 1}\
 {define: G#sus4 frets 1 3 4 4 fingers 1 2 3 3}\
 {define: G#aug frets 1 0 0 3 fingers 1 0 0 4}\
-{define: G#9 frets 2 2 1 2}\
+{define: G#9 frets 1 0 2 1 fingers 1 0 3 2}\
 # slash chords & other oddities\
 {define: C-F frets 2 0 1 3}\
 {define: D/A frets 2 2 2 0}\

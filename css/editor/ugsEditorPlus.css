@@ -230,12 +230,19 @@ html .diagramsOnTop .ugs-source-wrap {
 	width: 490px;
 	z-index:0;
 }
-.overlay div {
+.overlay > div {
 	background: url(../../img/editor/woodChip.png) repeat scroll 0 0 transparent;
 	border-radius: 0 0 13px 13px;
 	overflow: hidden;
 	padding: 10px;
 }
+/*
+.overlay div div{
+	background-image: none;
+	border-radius:0;
+	padding: 0;
+}
+*/
 /* Form inputs,
 ----------------------------------- */
 .overlay select{
@@ -265,16 +272,16 @@ html .diagramsOnTop .ugs-source-wrap {
 .overlay textarea {
 	background-color: rgba(255, 255, 255, 0.7);
 	border: solid 1px #E1B166;
-}
-.overlay input[type=text]:hover,
-.overlay input[type=password]:hover,
-.overlay textarea:hover {
-	background-color:rgba(255, 255, 200, 0.7);
 	-webkit-transition: background-color 500ms linear;
 	-moz-transition: background-color 500ms linear;
 	-o-transition: background-color 500ms linear;
 	-ms-transition: background-color 500ms linear;
 	transition: background-color 500ms linear;
+}
+.overlay input[type=text]:hover,
+.overlay input[type=password]:hover,
+.overlay textarea:hover {
+	background-color:rgba(255, 255, 200, 0.7);
 	border-color:#444;
 }
 .overlay input[type=text]:focus,
@@ -431,11 +438,6 @@ html .optionsDlg {
 	width: 480px;
 	z-index: 3;
 }
-.noThanks{
-	float:right;
-	line-height: 33px;
-	margin-right:2em;
-}
 .instructions {
 	width: 28em;
 	padding:0 0 .7em;
@@ -449,6 +451,37 @@ html .optionsDlg {
 }
 html .reformatDlg textarea{
 	height: 15em;
+}
+/* "Cancel"/"No Thanks" (subtle, alternate) buttons
+------------------------------ */
+.alternateBtn,
+.noThanks {
+	color: #3965B0;
+	float: right;
+	line-height: 33px;
+	margin-right: 1.5em;
+	text-decoration: none;
+}
+.alternateBtn:hover,
+.noThanks:hover {
+	color:#0646AD;
+}
+.noThanks {
+	background-color: #EFD292;
+	border-radius: 6px;
+	padding: 0 0.4em;
+	/* backwards transition support */
+	-webkit-transition: background-color 0.4s ease;
+	-moz-transition: background-color 0.4s ease;
+	-ms-transition: background-color 0.4s ease;
+	-o-transition: background-color 0.4s ease;
+	transition: background-color 0.4s ease;
+}
+.noThanks:hover {
+	background-color: #F2E2C1;
+}
+.alternateBtn{
+
 }
 /* MOVED FROM PAGE: SECTION 4
 ------------------------------ */

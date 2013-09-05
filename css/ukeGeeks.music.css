@@ -130,6 +130,9 @@
 	margin:0 0 1em;
 	padding:0;
 }
+.ugsTabs canvas{
+	max-width: 100%;
+}
 /* PLACE CHORDS ABOVE TEXT
   ------------------------------ */
 .ugs-song-wrap .ugsChords {

@@ -25,6 +25,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ukeGeeks.music.css" />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/editor/ugsEditorPlus.css" title="ugsEditorCss" />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/editor/ugsEditorPlus.print.css" media="print" />
+<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/editor/ugsChordBuilder.css" />
 </head>
 <body class="editableSongPage pageWidth_screen">
 <section id="scalablePrintArea" class="scalablePrintArea">
@@ -63,12 +64,10 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 				</em>
 			</span>
 			<input type="button" id="updateBtn" class="baseBtn blueBtn" value="Update" title="Rebuild digarams and music" />
-			<?php if ($model->IsUpdateAllowed) {
-				?>
+			<?php if ($model->IsUpdateAllowed) { ?>
 				<input type="button" id="saveBtn" class="baseBtn orange" value="Save" title="Save" style="margin-right:1.6em;" />
-				<?php
-			}
-			?>
+			<?php } ?>
+			<a href="#chordBuilder" id="cdBldOpenBtn" data-dialog="cdBldDlg" class="alternateBtn" title="Add custom &amp; alternate chord diagrams">Chord Builder</a>
 		</p>
 		<textarea id="chordProSource" wrap="off"><?php echo($model->Body); ?></textarea>
 	</div>
@@ -208,16 +207,9 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <aside class="arrowBox helpOptions" id="helpDlg">
 	<fieldset class="arrowBoxContent linksList">
 		<ul>
-			<li><a href="http://ukegeeks.com/users-guide.htm" target="_blank" title="View the complete documentation including ChordPro tips">User Guide</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#how_do_i_markup" target="_blank">How do I &quot;mark-up&quot; my music?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#chordNames" target="_blank">How do I name chords?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#chordpro_markup_reference" target="_blank">ChordPro markup reference</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#saveBtn" target="_blank">Where's the &quot;Save&quot; button?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#defined_chords" target="_blank">What chords are already defined?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#more_chord_definitions" target="_blank">How can I use an alternate chord fingering?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#muted_strings" target="_blank">How can I indicate muted strings?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#barre_chords" target="_blank">How can I make a barre chord?</a></li>
-			<li><a href="http://ukegeeks.com/users-guide.htm#formatter" target="_blank">What if my song has the chords above the lyrics?</a></li>
+			<li><a href="http://blog.ukegeeks.com/users-guide/" target="_blank" title="View the complete documentation including ChordPro tips">User Guide</a></li>
+			<li><a href="http://ukegeeks.com/tools/chord-finder.htm" target="_blank" title="Access the UkeGeeks library of common chords">Chord Finder</a></li>
+			<li><a href="http://ukegeeks.com/tools/reverse-chord-finder.htm" target="_blank" title="Find chord names by drawing the diagram">Reverse Chord Lookup</a></li>
 		</ul>
 	</fieldset>
 </aside>
@@ -237,6 +229,56 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		<textarea id="reformatSource" wrap="off"></textarea>
 		<p class="instructions small">Want to make more adjustments? Click &ldquo;No Thanks&rdquo; and try the <a href="http://ukegeeks.com/tools" target="_blank" title="open the reformat tool in a new window">Reformater Tool</a> instead.</p>
 		<p class="instructions small"><input type="checkbox" value="true" id="reformatDisable" /> <label for="reformatDisable">Don't perform this check again.</label></p>
+	</div>
+</section>
+
+<!-- CHORD BUILDER (DIALOG) -->
+<section id="cdBldDlg" class="overlay chordBuilderDlg isHidden chordBuilderNarrow">
+	<hgroup>
+		<h3>Chord Builder</h3>
+	</hgroup>
+	<div>
+		<a title="close this" href="#close" class="closeBtn">Close</a>
+		<div id="cdBldChooserPanel">
+			<ul id="cdBldPick" class="ugsChordChooser"></ul>
+		</div>
+		<div id="cdBldBuilderPanel" style="display:none">
+			<p class="">
+				<label for="cdBldChordName">Chord Name: <input class="chordName" type="text" id="cdBldChordName" value="CHORDNAME" /></label>
+			</p>
+			<div class="editorSurface" id="cdBldEditorSurface">
+				<div class="toolboxEdgeShadow leftEdge"></div>
+				<div id="cdBldToolbox" class="chordToolbox leftEdge">
+					<div class="chordToolboxInner">
+						<a href="#dots" id="cdBldDotsBtn" class="toolChip selected">Add Dots <span class="bigDot"></span></a>
+						<a href="#fingers" id="cdBldFingersBtn" class="toolChip">Set Fingers <span id="cdBldBtnDiagram" class="fingerToolImage finger1"><span class="fingerDot"></span></span><span id="cdBldBtnFingerName"></span></a>
+					</div>
+				</div>
+				<div class="toolboxEdgeShadow rightEdge"></div>
+				<div class="chordToolbox rightEdge">
+					<div class="chordToolboxInner">
+						<label for="cdBldStartingFret" class="toolChip">Starting Fret
+							<select id="cdBldStartingFret"></select>
+						</label>
+						<a href="#slide-up" id="toolboxSlideUpBtn" class="toolChip arrowUp" data-direction="up" title="move all dots -1 fret">Slide Up</a>
+						<a href="#slide-down" id="toolboxSlideDownBtn" class="toolChip arrowDown" data-direction="down" title="move all dots +1 fret">Slide Down</a>
+					</div>
+				</div>
+				<canvas id="cdBldCursorCanvas" width="462" height="300"></canvas>
+				<canvas id="cdBldDiagramCanvas" width="462" height="300"></canvas>
+			</div>
+
+			<p class="">
+				<label for="cdBldShowOutputBtn"><input id="cdBldShowOutputBtn" type="checkbox" value="0" /> Show ChordPro output</label>
+			</p>
+			<p class="btnBar">
+				<input type="button" value="Add" class="baseBtn blueBtn" id="cdBldSaveBtn">
+				<a href="#closeBuilder" id="cdBldCancelBtn" class="noThanks">Cancel</a>
+			</p>
+			<div id="cdBldOutputBox" class="outputBox collapseOutput" style="clear:right;">
+				<pre id="cdBldOutput" class="chordPro-statement" title="Your ChordPro define tag"></pre>
+			</div>
+		</div>
 	</div>
 </section>
 

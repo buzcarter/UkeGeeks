@@ -28,7 +28,7 @@ var ugsEditorPlus = (function() {
 		ugsEditorPlus.topMenus.init();
 		ugsEditorPlus.submenuUi.init(ugsEditorPlus.actions.doAction);
 		ugsEditorPlus.optionsDlg.init(ugsEditorPlus.actions.doAction);
-
+		ugsEditorPlus.chordBuilder.init();
 		ugsEditorPlus.actions.run();
 	};
 

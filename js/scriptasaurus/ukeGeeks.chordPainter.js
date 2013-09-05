@@ -45,6 +45,13 @@ ukeGeeks.chordPainter = function(){
 	var	ignoreMatchList = [];
 
 		/**
+	 * Ignore "tacet" or "no chord" chords
+	 * @property _tacet
+	 * @type {RegExp}
+	 */
+	var _tacet = /^(n.?\/?c.?|tacet)$/i;
+
+	/**
 		 * Checks whether speicified chord (name) is on the ignore list.
 		 * @param  {string} chord Chord name
 		 * @return {boolean}	return TRUE if "chord" is on ignore list.
@@ -69,6 +76,9 @@ ukeGeeks.chordPainter = function(){
 		errors = [];
 		ignoreMatchList = [];
 		for (var i=0; i < chords.length; i++){
+			if (_tacet.test(chords[i])) {
+				continue;
+			}
 			if (ukeGeeks.settings.opts.ignoreCommonChords && ignoreChord(chords[i])){
 				ignoreMatchList.push(chords[i]);
 				continue;
@@ -129,4 +139,4 @@ ukeGeeks.chordPainter = function(){
 	 *
 	 */
 	return publics;
-}
+};

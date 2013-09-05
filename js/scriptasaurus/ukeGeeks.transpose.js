@@ -61,7 +61,7 @@ ukeGeeks.transpose = new function(){
 	 */
 	var getTone = function(name){
 		var m = name.match(re);
-		if (m.length < 1){
+		if (!m || m.length < 1){
 			return null;
 		}
 		return {
