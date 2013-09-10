@@ -215,6 +215,10 @@ ukeGeeks.cpmParser.prototype = {
 				// TODO: beware undefined's!!!
 				// Repack the text, only open/close <pre> tags when type changes
 				// problem: exacerbates WebKit browsers' first chord position bug.
+				if (song[i].lines[0].length < 1) {
+					// prevent empty blocks (usually caused by comments mixed in header tags)
+					continue;
+				}
 				var myClass = (song[i].type == this.blockTypeEnum.PlainText) ? this.classNames.PrePlain : this.classNames.PreChords;
 				if (song[i].type == this.blockTypeEnum.ChordOnlyText){
 					myClass += ' ' +this.classNames.NoLyrics;
