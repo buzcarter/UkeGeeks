@@ -32,6 +32,9 @@ html .diagramsOnTop .ugs-diagrams-wrap {
 html .diagramsOnTop .ugs-source-wrap {
 	margin-left: 0;
 }
+.ugsNoChords .ugs-source-wrap{
+	margin-left: 0;
+}
 /* Alternate Layouts: standard Two Column
 ------------------------------ */
 .diagramsOnSide .ugs-diagrams-wrap {
@@ -58,41 +61,6 @@ html .diagramsOnTop .ugs-source-wrap {
 }
 .pageWidth_screen .scalablePrintArea {
 	padding:20px;
-}
-/* Alternate color schemes
--------------------------------- */
-.reversed {
-	background-color: #000;
-	color: #FFF;
-}
-.reversed .scalablePrintArea{
-	background-color: transparent;
-}
-.reversed pre {
-	color: #e9e9e9;
-}
-.reversed .ugsChords code {
-	color: #333;
-}
-.reversed .ugsChords code em {
-	color: #F42;
-}
-.reversed .ugsChorus {
-	border-left-color: #333;
-}
-.reversed h5, .reversed h6 {
-	border-left-color: #444;
-	color: #69F;
-}
-.reversed .subNav a:hover {
-	background-color: #888;
-	color: #000;
-}
-.reversed .overlay {
-	background-color: #4E1C07;
-	/*622105;*/
-	box-shadow: none;
-	color: #000;
 }
 /* redundant rule to allow JS hook
 -------------------------------- */

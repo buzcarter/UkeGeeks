@@ -246,42 +246,6 @@ ugsEditorPlus.actions = (function() {
 	|* Color Methods
 	|* ----------------------------------------------------------------------------------- */
 
-	/**
-	 * available color schemes
-	 * @property _colorSchemes
-	 * @type {JSON-Object}
-	 */
-	var _colorSchemes = {
-		'reversed' : {
-			song: {
-				fretLines: '#365F70',
-				dots: '#FDD96F',
-				dotText: '#000000',
-				text: '#FF6040',
-				fretText: '#999999'
-			},
-			tabs: {
-				lines: '#365F70',
-				dots: '#FDD96F',
-				text: '#000000'
-			}
-		},
-
-		'normal' : {
-			song: {
-				fretLines: '#003366',
-				dots: '#ff0000',
-				dotText: '#ffffff',
-				text: '#000000',
-				fretText: '#4a4a4a'
-			},
-			tabs: {
-				lines: '#999999',
-				dots: '#eaeaea',
-				text: '#000000'
-			}
-		}
-	};
 
 	/**
 	 * Change the color scheme -- requires changing CSS Class and reruning (to regenerate reference chord diagrams)
@@ -290,14 +254,7 @@ ugsEditorPlus.actions = (function() {
 	 * @param value {string} value of the clicked value item
 	 */
 	var doColors = function(value){
-		$('body').toggleClass('reversed', value == 'reversed');
-
-		var c = _colorSchemes[value];
-		ukeGeeks.settings.colors = c.song;
-		ukeGeeks.settings.tabs.lineColor = c.tabs.lines;
-		ukeGeeks.settings.tabs.dotColor = c.tabs.dots;
-		ukeGeeks.settings.tabs.textColor = c.tabs.text;
-
+		 ugsEditorPlus.themes.set(value);
 		_public.run();
 	};
 

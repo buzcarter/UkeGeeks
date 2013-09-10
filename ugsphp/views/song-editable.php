@@ -19,7 +19,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <script type="text/javascript" src="//explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.legacyIe.css" />
 <![endif]-->
-<link href='http://fonts.googleapis.com/css?family=Peralta' rel='stylesheet' type='text/css' />
+<link href='http://fonts.googleapis.com/css?family=Peralta|Smokum|Cherry+Cream+Soda|Ranchers|Creepster' rel='stylesheet' type='text/css' />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/yuiReset.css" />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/basic-page-layout.css" />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ukeGeeks.music.css" />
@@ -133,8 +133,13 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			<dt><label for="colorPicker"><span>Normal colors (white paper) </span><em>&#9658;</em></label></dt>
 			<dd id="colorPicker" data-action="colors">
 				<ul class="pseudoSelect">
-					<li class="checked"><a href="#normal">Normal (white paper)</a></li>
-					<li><a href="#reversed">Reversed for projectors</a></li>
+					<li class="checked"><a href="#normal" title="Simple, legible text on white paper">Normal (white paper)</a></li>
+					<li><a href="#reversed" title="Light text on dark background">Reversed for projectors</a></li>
+					<li><a href="#frosty" title="Brrrr... icy cool blues">Frostcicle</a></li>
+					<li><a href="#jellyBean" title="Sugary, vibrant bowl of jelly beans!">Jelly Beans</a></li>
+					<li><a href="#western" title="Dusty Honky Tonk/Country/Western look">Out West</a></li>
+					<li><a href="#pumpkin" title="Fall 'n Halloween 'n Jack o'Lantern Fun">Pumpkin Pie</a></li>
+					<li><a href="#zombie" title="Blood 'n gore for Halloween">Zombies!</a></li>
 				</ul>
 			</dd>
 		</dl>

@@ -169,7 +169,6 @@ ugsEditorPlus.submenuUi = (function(){
 		'zoomDiagrams' : ['Tiny', 'Small', 'Medium', 'Large', 'Stupid Large'],
 		'layout' : ['Reference diagrams on left', 'Reference diagrams at top', 'No reference diagrams'],
 		'placement' : ['Chord names inline with lyrics', 'Chord names above lyrics', 'Names & diagrams above lyrics'],
-		'colors' : ['Normal colors (white paper)', 'Reversed colors (for projectors)'],
 		'tuning' : ['Soprano (GCEA) tuning', 'Baritone (DBEA) tuning']
 	};
 
@@ -191,6 +190,8 @@ ugsEditorPlus.submenuUi = (function(){
 				return 'Font size ' + value + 'pt';
 			case 'zoomDiagrams':
 				return _desriptions.zoomDiagrams[index] + ' diagrams';
+			case 'colors':
+				return ugsEditorPlus.themes.getDescription(value);
 			case 'transpose':
 				if (value == 'up_0'){
 					return 'Original key';

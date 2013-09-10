@@ -1,0 +1,257 @@
+/*
+ * Document   : ugsEditorPlus.themese.css
+ * Author     : Buz
+ * Description: Alternative color schemes.
+ */
+
+ /* __________ Reverse __________ */
+
+ .theme-reversed {
+ 	background-color: #000;
+ 	color: #FFF;
+ }
+ .theme-reversed .scalablePrintArea{
+ 	background-color: transparent;
+ }
+ .theme-reversed pre {
+ 	color: #e9e9e9;
+ }
+ .theme-reversed .ugsChords code {
+ 	color: #333;
+ }
+ .theme-reversed .ugsChords code em {
+ 	color: #F42;
+ }
+ .theme-reversed .ugsChorus {
+ 	border-left-color: #333;
+ }
+ .theme-reversed .scalablePrintArea h5, .theme-reversed .scalablePrintArea h6 {
+ 	border-left-color: #444;
+ 	color: #69F;
+ }
+ /* unique to the reversed theme we need to harden editor's UI */
+ .theme-reversed .subNav a:hover {
+ 	background-color: #888;
+ 	color: #000;
+ }
+ .theme-reversed .overlay {
+ 	background-color: #4E1C07;
+ 	box-shadow: none;
+ 	color: #000;
+ }
+
+ /* __________ Jelly Bean __________ */
+
+ .theme-jellyBean .scalablePrintArea{
+ 	color: #56A0A5;
+ 	font-family: "Comic Sans MS", cursive, sans-serif;
+ }
+ .theme-jellyBean .scalablePrintArea hgroup {
+ 	color: #FF9417;
+ 	text-align: center;
+ }
+ .theme-jellyBean .scalablePrintArea h1 {
+ 	color: #D20770;
+ 	font-family: 'Peralta','Mouse Memoirs';
+ 	font-size: 2em;
+ 	text-shadow: 1px 2px 0 #FFF, 3px 4px 0 #F2E660;
+ }
+ .theme-jellyBean .scalablePrintArea h2 {
+ 	font-size: 1.1em;
+ }
+ .theme-jellyBean pre {
+ 	color: inherit;
+ }
+ .theme-jellyBean .ugsChords code {
+ 	color: #333;
+ }
+ .theme-jellyBean .ugsChords code em {
+ 	color: #D20070;
+ }
+ .theme-jellyBean .ugsChorus {
+ 	border-left-color: #F2E660;
+ 	border-radius: 5px 0 0 5px;
+ }
+ .theme-jellyBean .scalablePrintArea h5, .theme-jellyBean .scalablePrintArea h6 {
+ 	border-left-color: #F2E660;
+ 	color: #9C55ED; /* 6699FF; */
+ 	font-family: inherit;
+ 	letter-spacing: 0.045em;
+ }
+
+ /* __________ Western __________ */
+
+/* replaced Rye #9E1B28
+#92A88C
+*/
+.theme-western .scalablePrintArea{
+	color: #88410A;
+}
+.theme-western .scalablePrintArea hgroup{
+	color: #88410A;
+	font-family: 'Smokum',cursive;
+	text-align: center;
+}
+.theme-western .scalablePrintArea h1 {
+	color: #472B07; /* #51472A; */
+	font-family: inherit;
+	font-size: 3.3em;
+	text-shadow: 1px 2px 0 #FFFFFF, 3px 4px 0 #E5DCC0;
+}
+.theme-western .scalablePrintArea h2{
+	font-size: 1.7em;
+}
+.theme-western .ugsChorus {
+	border-left-color: #BEC481;
+	border-radius: 5px 0 0 5px;
+}
+.theme-western .scalablePrintArea h5, .theme-western .scalablePrintArea h6 {
+	border-left-color: #BED379;
+	color: #92A88C;
+	font-family: 'Smokum',cursive;
+	font-size: 1.4em;
+	font-style: normal;
+	padding: 0;
+	text-indent: 1em;
+}
+.theme-western .ugs-source-wrap pre {
+	color: inherit;
+}
+
+/* __________ Pumpkin (Halloween 1) __________ */
+
+.theme-pumpkin .scalablePrintArea {
+	color: #68391D;
+}
+.theme-pumpkin .ugs-source-wrap pre {
+	color: inherit;
+}
+.theme-pumpkin .scalablePrintArea hgroup{
+	color: #B14623;/* #754495; */
+	text-align: center;
+}
+.theme-pumpkin .scalablePrintArea h1 {
+	/* Red, duller orange: D3770E DB831E */
+	/* bright orange: FF9922;  Fontdiner Swanky */
+	color: #D3770E;
+	font-family: 'Ranchers','Cherry Cream Soda',Arial,sans-serif;
+	font-size: 3.2em;
+	line-height: 1.1;
+	text-shadow: 0.064em 0.044em 0 #EDF8CE, -0.037em 0.044em 0 #EDF8CE, -0.074em .094em 0 #BED379, 0.074em .094em 0 #BED379;
+	/* 2px 2px 0 #EDF8CE, -1px 2px 0 #EDF8CE, -2px 4px 0 #BED379, 2px 4px 0 #BED379 */
+}
+.theme-pumpkin .scalablePrintArea h2{
+	font-family: 'Cherry Cream Soda',Arial,sans-serif;
+	font-size: 1.1em;
+}
+.theme-pumpkin .ugsChorus {
+	border-left-color: #A0B74E;
+	border-radius: 5px 0 0 5px;
+}
+.theme-pumpkin .ugsChords code em {
+	color: #FE9600;
+}
+.theme-pumpkin .scalablePrintArea h5, .theme-pumpkin .scalablePrintArea h6 {
+	border-left-color: #BED379;
+	color: #FFC501;
+	font-family: 'Cherry Cream Soda',cursive;
+	font-size: 1.4em;
+	font-style: normal;
+	padding: 0;
+	text-indent: 1em;
+}
+
+/* __________ Zombie (Halloween II) __________ */
+
+/*	Nice colors - 		DC331D 		*/
+/*
+0.064em 0.044em 0 #CA4F04, -0.042em -0.014em 0 #8F2472, -0.074em 0.094em 0 #CA4F04, 0.074em 0.174em 0 #CA4F04
+*/
+.theme-zombie .scalablePrintArea {
+	color: #798666;
+}
+.theme-zombie .ugs-source-wrap pre {
+	color: inherit;
+}
+.theme-zombie .scalablePrintArea hgroup{
+	color: #902374;
+	text-align: center;
+}
+.theme-zombie .scalablePrintArea h1 {
+	color: #BED63A;
+	font-family: 'Creepster','Ranchers','Cherry Cream Soda',Arial,sans-serif;
+	font-size: 3.2em;
+	line-height: 1.1;
+	text-shadow: 0.044em 0.044em 0 #9EB036, -0.042em -0.014em 0 #8F2472, 0.087em 0.074em 0 #8F2472, -0.074em 0.094em 0 #CA4F04, 0.074em 0.174em 0 #CA4F04;
+}
+.theme-zombie .scalablePrintArea h2 {
+	font-family: 'Cherry Cream Soda',Arial,sans-serif;
+	font-size: 1.1em;
+	text-shadow: 0.12em 0.13em 0 #DBDAE8;
+}
+.theme-zombie .ugsChorus {
+	border-left-color: #CDC693;
+	border-radius: 6px 0 0 6px;
+}
+.theme-zombie .ugsChords code em {
+	color: #DD1A52;
+}
+.theme-zombie .scalablePrintArea h5, .theme-zombie .scalablePrintArea h6 {
+	border-left-color: #E4DCA4;
+	color: #798666;
+	font-family: 'Peralta','Cherry Cream Soda',cursive;
+	font-size: 1.4em;
+	font-style: normal;
+	padding: 0;
+	text-indent: 1em;
+	text-shadow: 0.03em 0.07em 0 #BED63A;
+}
+
+/* __________ Fresty __________ */
+/*
+-0.064em -0.034em 0 #fff, 0.064em 0.064em 0 #154286, -0.114em -0.064em 0 #154286, -0.114em 0 0 #154286, 0 -0.064em 0 #154286, -0.084em 0.064em 0 #154286, 0.064em -0.034em 0 #154286
+-0.064em -0.034em 0 #fff, 0.064em 0.064em 0 #154286, -0.064em -0.034em 0 #154286, -0.084em 0.064em 0 #154286, 0.064em -0.034em 0 #154286
+color: #154286;
+font-family: 'Cherry Cream Soda',Arial,sans-serif;
+font-size: 2.3em;
+line-height: 1.1;
+text-shadow: 0.044em 0.044em 0 #D5E2F5;
+*/
+.theme-frosty .scalablePrintArea {
+	color: #154286;
+}
+.theme-frosty .ugs-source-wrap pre {
+	color: inherit;
+}
+.theme-frosty .scalablePrintArea hgroup{
+	color: #6A97DB;
+	text-align: center;
+}
+.theme-frosty .scalablePrintArea h1 {
+    color: #D5E2F5;
+    font-family: 'Cherry Cream Soda',Arial,sans-serif;
+    font-size: 2.18em;
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+    text-shadow: -0.064em -0.034em 0 #FFFFFF, 0.008em 0.008em 0 #A3E3D7, 0.009em -0.009em 0 #A3E3D7, 0.098em 0.115em 0 #154286, 0.064em 0.064em 0 #00183D, -0.114em -0.064em 0 #154286, -0.114em 0 0 #154286, 0 -0.064em 0 #154286, -0.084em 0.064em 0 #154286, 0.064em -0.034em 0 #154286;
+}
+.theme-frosty .scalablePrintArea h2 {
+    font-family: 'Ranchers',Arial,sans-serif;
+    font-size: 1.2em;
+}
+.theme-frosty .ugsChorus {
+	border-left-color: #0896FE;/*CDC693;*/
+	border-radius: 6px 0 0 6px;
+}
+.theme-frosty .ugsChords code em {
+	color: #0896FE; /*757F0A; */
+}
+.theme-frosty .scalablePrintArea h5, .theme-frosty .scalablePrintArea h6 {
+    border-left-color: #E3F7F3;
+    color: #80B7B1;
+    font-family: 'Cherry Cream Soda',cursive;
+    font-size: 1.4em;
+    font-style: normal;
+    padding: 0;
+    text-indent: 0.6em;
+}
