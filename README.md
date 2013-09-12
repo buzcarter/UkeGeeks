@@ -8,13 +8,25 @@ Visit the [UkeGeeks website](http://ukegeeks.com) for more information.
 
 Follow [@ukegeeks](https://twitter.com/ukegeeks)
 
-Ongoing discussions and "How To" videos posted at [blog.ukegeeks.com](http://blog.ukegeeks.com). Also read the [User Guide and Chord Pro mark-up reference](http://ukegeeks.com/users-guide.htm) for more demos and examples.
+Ongoing discussions and "How To" videos posted at [blog.ukegeeks.com](http://blog.ukegeeks.com). Also read the [User Guide and Chord Pro mark-up reference](http://blog.ukegeeks.com/users-guide/) for more demos and examples.
+
+Lastly, the blog includes a [technical discussion and tips section](http://blog.ukegeeks.com/technical-reference/)
 
 ## Authors
 
 * [Buz Carter](http://pizzabytheslice.com) (buz@ukegeeks.com)
 
 ## What's New...
+
+#### V1.14
+* "Song-a-matic" editor additions:
+  * **Chord Builder**. A point-n-click way to generate ChordPro define tags. The "mechanics" and "UI wireup" live in separate JS namespaces (new "chordBuilder" and existing "ugsEditorPlus", respectively)
+  * **Themes**. Expanded from Standard and Reversed to include more colors and font options
+  * Broke out the Stylesheet (from 2 to 6 files, including merged and minified versions for deployment)
+* Scriptasaurus Core
+  * Add "tacet chords" support (ignores various [NC] phrases).
+  * Fix bug that allowed empty pre tags to be emitted
+  * Fix mini-diagrams above 5th fret text overlap
 
 #### V1.13
 * Song-a-matic Editor
@@ -49,20 +61,68 @@ Ongoing discussions and "How To" videos posted at [blog.ukegeeks.com](http://blo
 ### What's Missing
 - [x] Password protection
 - [x] Chord overlap, aka "crash" detection
-- [_] Mini-diagrams above 5th fret are misdrawn
+- [X] Mini-diagrams above 5th fret are misdrawn
 - [_] Add-in chord libraries (augment built-in library)
 - [x] Hide common chords option (end editable lists)
 - [_] Per-user preferences (hello, cookie!)
 - [_] CSS scrub -- tighten vertical spaces between blocks
 
 -----------------------------------
-## More Files Than You Need
+## What's In This Project/Download
+The UkeGeeks GitHub repostitory contains:
 
-In the JavaScript directory you'll find "merged" and "min" (minified) versions of the libraries. These are all you need to start using the applications. However, if you want to tinker or see under the hoods then you'll find the individual JS class libraries under the subdirectories helpful.
+* **Static HTML Demos** illustrating how you can use only the minimum CSS & JS on your existing pages. This includes _Dreamweaver Templates_, if that makes your life easier, fantastic. If not, ignore them and, if you choose, remove any HTML comments you'll see refering to them.
+* **PHP Powered Songbook Application** is a complete, plug-n-play application that dynamically reads ChordPro text files and generates a song listing page in addition to the individual song pages.
+
+### Demos
+To illustrate the similarities of the static HTML and PHP-driven versions we have two presentations of "My Little Grass Shack in Kealakekua" (note: links point to UkeGeeks.com but will run on your web server):
+
+* [Demo Static HTML](http://ukegeeks.com/songs/my-little-grass-shack-in-kealakekua.htm) _(see section Static Site Info below)_
+* [Demo Songbook App's Song View](http://ukegeeks.com/music.php?action=song&song=my-little-grass-shack-in-kealakekuahttp://ukegeeks.com/music.php?action=song&song=my-little-grass-shack-in-kealakekua) _(see section "Getting Started With PHP Songbook" below)_
+
+### Overview
+Scriptasaurus does two things:
+1. formats HTML;
+2. generates chord diagrams.
+
+It does these by reading a text block and rewriting it with additional HTML tags (&lt;code&gt;) wrapping any chords it detects (a chord is any text enclosed within square brackets, i.e. [Fmaj7])
+
+It recognizes several ChordPro tags (for the most detailed info on supported tags visit [Uke Geek's User's Guide: ChordPro Markup Reference](http://blog.ukegeeks.com/users-guide/chordpro-markup-reference/))
+
+#### About Names and Scope
+Many files and CSS class names are prefaced with **"UGS"**: Uke Geeks Scriptasaurus. _"Uke Geeks"_ is the whole schmeer, the collection of projects. _"Scriptasuarus"_ (or "Core Library") refers to the single JavaScript library that does the heavy lifting.
+
+Thus Scriptasuarus forms the heart of all Uke Geeks projects.
+
+So the Editor uses Scritasaurus PLUS an additional class library ("ugsEditorPlus.merged.js"), but to merely render a song one only needs Scriptasaurus (ukeGeeks.Scriptasaurus.merged.js). (see note on "Merged versus Min" below)
+
+This raises an important point:
+
+> **Scriptasuaus does NOT use any jQuery**. The editor, however, is completely dependent upon jQuery.
 
 -----------------------------------
-## Getting Started With PHP Site
+## More Files Than You Need
 
+In the JavaScript and CSS directories you'll find "merged" and "min" (minified) versions of the libraries. These are all you need to start using the applications. However, if you want to tinker or see under the hood then you'll find the individual JS class libraries (or stylesheets) under the subdirectories helpful.
+
+#### Merged versus Min
+To better organize and maintain the JavaScript classes I've tried to follow strict "one class per file" and "one purpose, one class" policies. Thus, as you'll notice, there are a LOT of files which would clearly be a perfomance issue if they were linked individually. Fortunately [PHP minify](https://code.google.com/p/minify/) allows us to smush them all into a single file. In addition, minify allows us to further compact our merged files, removing comments and unneeded white-space.
+
+Thus you'll find the individual class files as well as single merged and minified files. For a true production environment use the min version. To reverse engineer the project try the merged or single class files.
+
+-----------------------------------
+## Static Site Info
+
+If you'll be hand building your HTML or adding it to your exising site pages I'll refer you to the sample songs under the "songs" directory.
+
+Note: If you are serving static pages (no server application language such as PHP) I recommend using Dreamweaver's Templating system -- though this is entirely up to you. It's consistent, fast, and prevents you from accidentally editing a critical part of your file. This download includes sample templates used by the static HTML song page (located in the "`templates`" directory).
+
+-----------------------------------
+## Getting Started With PHP Songbook
+
+The Songbook implements a rudamentary [Model-View-Controller architecture](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). Why? This approach allows you to modify _Views_ (pages made mostly of HTML with a few PHP tags for emitting dynamic content) without need to worry about breaking any of the inner workings (hint: there aren't many inner workings either).
+
+### A Poorboy's "Lite" MVC Architecture
 All access to the application goes through a single file, "music.php" -- the only PHP file that lives outside of the ugsphp directory. Music.php instantiates the program's core class, Ugs, which bootstraps the system -- it's the Controller.
 
 Ugs loads all class files, including Config.php, and chooses which action is required.
@@ -74,10 +134,32 @@ Here's the ugsphp directory breakdown:
 - **builders** : _handles Actions for the Controller._ Builder classes all end with "_vmb" suffix and have a public Build method that returns a ViewModel
 - **cache** : _optional directory contains pre-indexed songs_
 - **classes** : _Helper classes/Libraries_
-- **viewmodels** : _Entity classes passed to Views_
+- **viewmodels** : _Entity classes passed to Views_ These are the data objects available within the View pages.
 - **views** : _display HTML_ All views are PHP files that have a predefined $model variable (the corresponding View Model)
 
-###Caching###
+### Using mod_rewrite For Pretty URL's
+
+Without `mod_rewrite` your PHP Songbook will work fine, you'll just see page requests like this:
+````
+music.php?action=song&amp;song=filename
+````
+
+This URL's "query param" named "song" tells the Builder class which song file to read and prep for easy rendering via Scriptasaurus.
+
+However, instead of surfacing rather klunky URLs make use of Apache's `mod_rewrite` engine to convert a doopey URL such as:
+
+````
+http://mysite.com/music.php?action=song&amp;song=my-favorite-martian
+````
+
+To the more friendly:
+````
+http://mysite.com/songbook/my-favorite-martian
+````
+
+The included `.htacces.txt` file has an easy rule for doing just this. If you already have an .htacces file just merge in the contents, otherwise remove the ".txt" portion. Make sure you've enabled MOD_REWRITE in your apache config (if you're just now enabling it remember to restart Apache).
+
+### Caching
 If you've enabled the "detailed" song lists the system automatically switches to using a cached list of the songs. Therefore, the cache must be rebuilt each time a song file is manually added (cache is automatically rebuilt after each Add or Update if editing is enabled)
 
 To manually reindex your songs use this url (second is available if you've enabled mod_rewrite):
@@ -105,6 +187,26 @@ And, of course, restart apache
 ```
 $ sudo /usr/sbin/apachectl restart
 ```
+
+### Actions
+Whether running mod_rewrite or using query params ("mysite.com/songbook" versus "mysite.com/music.php?action=songbook") there are a set of supported actions (verbs):
+
+* **song**: view a single song
+* **reindex**: (optional) rebuilds the song list cache by reading every CPM file
+* **source**: view the "raw" ChordPro song
+* **edit**: open a single song in the editor
+* **login**: (optional) login a user
+* **logout**: logs out the currently logged in user
+* **ajaxnewsong**: (JavaScript call) create a new song using minimal inputs (title and artist)
+* **ajaxupdatesong**: (JavaScript call) update existing song, key is file name
+
+## Trouble Shooting
+* **Nothing's happening on sample songs** : Make sure the page is finding the CSS and JavaScript files. You might need to&hellip;
+  * adjust your web server "root" directory (did you install this in default directory?)
+  * edit the page's script source and stylesheet link tags
+* **Server error: _"File Not Found: 404"_** : Check file locations.
+* **PHP error: _"Warning: include_once(ugsphp/Ugs.php) [function.include-once]: failed to open stream_** : Check where you've installed the MVC files used by the views. You may move them, but be sure that the config and the Views are able to locate the required files.
+
 
 ## License
 
