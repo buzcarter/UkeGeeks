@@ -626,7 +626,9 @@ ugsEditorPlus.themes = new function() {
 	 */
 	var _colorSchemes = {
 		'normal': {
-			description: 'Normal colors (white paper)',
+			name: 'Normal (white paper)',
+			selectText: 'Normal colors (white paper)',
+			description: 'Simple, legible text on white paper',
 			song: {
 				fretLines: '#003366',
 				dots: '#ff0000',
@@ -642,7 +644,9 @@ ugsEditorPlus.themes = new function() {
 		},
 
 		'reversed': {
-			description: 'Reversed colors (for projectors)',
+			name: 'Reversed for projectors',
+			selectText: 'Reversed colors (for projectors)',
+			description: 'Light text on dark background',
 			song: {
 				fretLines: '#365F70',
 				dots: '#FDD96F',
@@ -658,7 +662,9 @@ ugsEditorPlus.themes = new function() {
 		},
 
 		'frosty': {
-			description: 'Frostcicle (cool blue)',
+			name: 'Frostcicle',
+			selectText: 'Frostcicle (cool blue)',
+			description: 'Brrrr... icy cool blues',
 			song: {
 				fretLines: '#66B4CC',
 				dots: '#332335',
@@ -669,30 +675,50 @@ ugsEditorPlus.themes = new function() {
 			tabs: {
 				lines: '#6699FF',
 				dots: '#EFFCF9',
-				text: '#00558E' // 0896FE'
+				text: '#00558E'
 			}
 		},
 
 		'jellyBean': {
-			description: 'Jelly Beans (vibrant)',
+			name: 'Jelly Beans',
+			selectText: 'Jelly Beans (vibrant)',
+			description: 'Sugary, vibrant bowl of jelly beans!',
 			song: {
 				fretLines: '#49BC45',
 				dots: '#FF9417',
-				dotText: '#FCF49F', // '#F2E660',
+				dotText: '#FCF49F',
 				text: '#D20070',
 				fretText: '#4a4a4a'
 			},
 			tabs: {
 				lines: '#6699FF',
 				dots: '#FFF9BA',
-				/* '#FF9417', */
-				text: '#75003E' // 72003D'
+				text: '#75003E'
+			}
+		},
+
+		'krampus': {
+			name: 'Gruss vom Krampus',
+			selectText: 'Gruss vom Krampus (Xmas)',
+			description: 'Seasons Greetin\'s, Happy Holidays, Merry Christmas, Krampus Nichte!',
+			song: {
+				fretLines: '#929867',
+				dots: '#A22C27',
+				dotText: '#EBD592',
+				text: '#4F2621',
+				fretText: '#4a4a4a'
+			},
+			tabs: {
+				lines: '#B69C01',
+				dots: '#E1EEC8',
+				text: '#75003E'
 			}
 		},
 
 		'western': {
-			/* #9E1B28 */
-			description: 'Out West (dust country)',
+			name: 'Out West',
+			selectText: 'Out West (dust country)',
+			description: 'Dusty Honky Tonk/Country/Western look',
 			song: {
 				fretLines: '#B5A679',
 				dots: '#CF8300',
@@ -703,19 +729,20 @@ ugsEditorPlus.themes = new function() {
 			tabs: {
 				lines: '#697665',
 				dots: '#F1E3C5',
-				text: '#632424' // '#33444A'
+				text: '#632424'
 			}
 		},
 
 		'pumpkin': {
-			/* #9E1B28 */
-			description: 'Pumpkin Pie',
+			name: 'Pumpkin Pie',
+			selectText: 'Pumpkin Pie (fall colors)',
+			description: 'Fall \'n Halloween \'n Jack o\'Lantern \'n Thanksgiving Fun',
 			song: {
-				fretLines: '#8E9A6C', // Light orange: '#FFC501',
-				dots: '#DA6328', // Nice purple: '#754495',
+				fretLines: '#8E9A6C',
+				dots: '#DA6328',
 				dotText: '#FFEE4A',
 				text: '#68391D',
-				fretText: '#B14623' // too purply 754495'
+				fretText: '#B14623'
 			},
 			tabs: {
 				lines: '#BED379',
@@ -724,13 +751,34 @@ ugsEditorPlus.themes = new function() {
 			}
 		},
 
+		'notebook': {
+			name: 'Rock Notebook',
+			selectText: 'Rock Notebook (marker)',
+			description: 'A strong, hand-scrawled, and edgily unreliable look',
+			song: {
+				fretLines: '#747CAD',
+				dots: '#1C0866',
+				dotText: '#ffffff',
+				text: '#B22000',
+				fretText: '#A4A0B2'
+			},
+			tabs: {
+				lines: '#A4A0B2',
+				dots: '#F1E3C5',
+				text: '#2E2ECC'
+			}
+		},
+
+
 		'zombie': {
-			description: 'Zombies!',
+			name: 'Zombies!!!',
+			selectText: 'Zombies!!!',
+			description: 'Blood \'n gore for Halloween',
 			song: {
 				fretLines: '#9EB036',
-				dots: '#E52501',//AF380D',
+				dots: '#E52501',
 				dotText: '#FEDA79',
-				text: '#798666',// '#602749',
+				text: '#798666',
 				fretText: '#B14623'
 			},
 			tabs: {
@@ -754,13 +802,30 @@ ugsEditorPlus.themes = new function() {
 	};
 
 	/**
-	 * Returns text description for specified theme.
+	 * Returns text to be deisplayed when the  specified theme is selected.
 	 * @method  getDescription
-	 * @param  {string} themeName [description]
-	 * @return {string}           [description]
+	 * @param  {string} themeName
+	 * @return {string}
 	 */
 	this.getDescription = function(themeName) {
-		return _colorSchemes[themeName].description;
+		return _colorSchemes[themeName].selectText;
+	};
+
+
+	/**
+	 * Populates the UL (identified via CSS/jQuery selector) with the color scheme List Items (LIs)
+	 * @method loadList
+	 * @param  {string} selector
+	 */
+	this.loadList = function(selector) {
+		var s = '';
+		for (var key in _colorSchemes) {
+			if (_colorSchemes.hasOwnProperty(key)) {
+				var cssClass = (key == 'normal') ? 'checked' : '';
+				s += '<li class="' + cssClass + '"><a href="#' + key + '" title="' + _colorSchemes[key].description + '">' + _colorSchemes[key].name + '</a></li>';
+			}
+		}
+		$(selector).html(s);
 	};
 
 	/**
@@ -1376,7 +1441,7 @@ ugsEditorPlus.submenuUi = (function(){
 	 */
 	_public.init = function(doAction){
 		_doAction = doAction;
-
+		ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect');
 		$('.enablePseudoSelects label').click(onLabelClick);
 		$('.pseudoSelect li').click(onOptionClick);
 		$('body').bind('click', closeAll);

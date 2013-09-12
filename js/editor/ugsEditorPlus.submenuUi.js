@@ -29,7 +29,7 @@ ugsEditorPlus.submenuUi = (function(){
 	 */
 	_public.init = function(doAction){
 		_doAction = doAction;
-
+		ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect');
 		$('.enablePseudoSelects label').click(onLabelClick);
 		$('.pseudoSelect li').click(onOptionClick);
 		$('body').bind('click', closeAll);
