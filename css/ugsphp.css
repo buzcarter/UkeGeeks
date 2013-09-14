@@ -6,7 +6,7 @@ html, body {
 	height: 100%;
 }
 html {
-	background: url("/img/ugs/subpage-stripe-bg.png") repeat scroll;
+	background: url("../img/editor/subpage-stripe-bg.png") repeat scroll;
 	font-family: Verdana,Geneva,sans-serif;
 	padding-bottom: 1px;
 }

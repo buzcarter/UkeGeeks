@@ -14,6 +14,6 @@ abstract class _base_Vm{
 
 	function __construct()
 	{
-		$this->StaticsPrefix = defined(Config::StaticsPrefix) ? Config::StaticsPrefix : '/';
+		$this->StaticsPrefix = defined('Config::StaticsPrefix') ? Config::StaticsPrefix : '/';
 	}
 }

@@ -81,7 +81,7 @@ function MakeRowHtml($song){
 				<h3>Add Song</h3>
 			</hgroup>
 			<div><a title="close this" href="#close" id="hideNewSongBtn" class="closeBtn">Close</a>
-				<p id="loadingSpinner"><img src="/img/ugs/busy.gif" /> Saving&hellip;</p>
+				<p id="loadingSpinner"><img src="<?php echo($model->StaticsPrefix); ?>img/editor/busy.gif" /> Saving&hellip;</p>
 				<p class="errorMessage" style="display:none;"></p>
 				<label for="songTitle">Title</label>
 				<input type="text" name="songTitle" id="songTitle" value="" />

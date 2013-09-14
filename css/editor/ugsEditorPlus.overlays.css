@@ -22,7 +22,7 @@
 	z-index:0;
 }
 .overlay > div {
-	background: url(../../img/editor/woodChip.png) repeat scroll 0 0 transparent;
+	background: url("../img/editor/woodChip.png") repeat scroll 0 0 transparent;
 	border-radius: 0 0 13px 13px;
 	overflow: hidden;
 	padding: 10px;
@@ -93,7 +93,7 @@
 	/*
 	cursor: move;
 	*/
-	background: url(../../img/editor/editorSprite.png) repeat-x 0 -100px #933f17;
+	background: url("../img/editor/editorSprite.png") repeat-x 0 -100px #933f17;
 	border-bottom: 1px solid #240E01;
 	border-radius: 12px 12px 0 0;
 	border-top: 1px solid #84623C;
@@ -106,7 +106,7 @@
 	text-shadow: 1px 2px 0 #592108;
 }
 .overlay .closeBtn {
-	background: url(../../img/editor/closeBtn.png) no-repeat 0 0 transparent;
+	background: url("../img/editor/closeBtn.png") no-repeat 0 0 transparent;
 	display: block;
 	height: 30px;
 	outline: none;
@@ -117,7 +117,7 @@
 	width: 30px;
 }
 .overlay .resizeBtn {
-	background: url(../../img/editor/resizeBtn.png) no-repeat 0 0 transparent;
+	background: url("../img/editor/resizeBtn.png") no-repeat 0 0 transparent;
 	display: block;
 	height: 20px;
 	outline: none;

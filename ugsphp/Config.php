@@ -14,13 +14,29 @@ class Config {
 	const NotFound_404File = 'error.txt';
 
 	// --------------------------------------
-	// file paths/directories (initialize with class)
+	// file paths/directories (DO NOT DIRECTLY EDIT THESE... see Init method below)
 	// --------------------------------------
 	static public $SongDirectory = '';
 	static public $CachePath = '';
 	static public $ViewsPath = '';
 
+	// --------------------------------------
+	// Alternate directory or path locations
+	// --------------------------------------
+	
+	/**
+	 * Location of UGS asset directories, i.e. JavaScript (JS), Stylesheet (CSS), and Image (leave as "/" if standard install)
+	 * @constant(StaticsPrefix)
+	 * @var String
+	 */
 	const StaticsPrefix = '/';
+
+	/**
+	 * If you want your URLs to be prefixed with a subdirectory specify that here (leave as "/" if standard install)
+	 * @constant(Subdirectory)
+	 * @var String
+	 */
+	const Subdirectory = '/';
 
 	// --------------------------------------
 	// Attribution & Site Credits

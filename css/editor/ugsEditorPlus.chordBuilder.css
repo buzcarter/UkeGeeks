@@ -176,7 +176,7 @@ html .selected:hover {
 }
 /* hand */
 .fingerToolImage {
-	background: url(../../img/editor/hand.png) top center no-repeat;
+	background: url("../img/editor/hand.png") top center no-repeat;
 	display:block;
 	height: 83px;
 	margin: 0 auto;
@@ -222,10 +222,10 @@ html .arrowUp, html .arrowDown {
 	background-position: center 29px;
 }
 html .arrowUp {
-	background-image: url("../../img/editor/basic-up-arrow.png");
+	background-image: url("../img/editor/basic-up-arrow.png");
 }
 html .arrowDown {
-	background-image: url("../../img/editor/basic-down-arrow.png");
+	background-image: url("../img/editor/basic-down-arrow.png");
 }
 /* output area */
 .outputBox{
@@ -301,7 +301,7 @@ html .arrowDown {
 }
 /* delete button */
 .ugsChordChooser .deleteChord{
-	background: url("../../img/editor/delete-btn.png") right center no-repeat;
+	background: url("../img/editor/delete-btn.png") right center no-repeat;
 	display: block;
 	float: right;
 	height: 30px;

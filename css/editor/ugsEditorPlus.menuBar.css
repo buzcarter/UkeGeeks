@@ -34,7 +34,7 @@
 /* App
 -------------------------------- */
 .ugsAppMenuBar {
-	background: #933f17 url("../../img/editor/editorSprite.png") 0 -100px repeat-x;
+	background: #933f17 url("../img/editor/editorSprite.png") 0 -100px repeat-x;
 	-moz-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
 	-webkit-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
 	box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
@@ -72,20 +72,20 @@
 .ugsAppMenuBar > ul > li > a:hover {
 	border-color: #600000;
 	background-color: #451212;
-	background: url("../../img/editor/editorSprite.png") 0 -145px repeat-x;
+	background: url("../img/editor/editorSprite.png") 0 -145px repeat-x;
 	color: #fdda61;
 	text-shadow: none;
 }
 .ugsAppMenuBar > ul > .active > a {
 	background-color: #451212;
-	background: url("../../img/editor/editorSprite.png") 0 -145px repeat-x;
+	background: url("../img/editor/editorSprite.png") 0 -145px repeat-x;
 	color: #fef5e3;
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 /* Icons/Sprits
 -------------------------------- */
 .ugsAppMenuBar > ul > li > a span {
-	background-image: url("../../img/editor/editorSprite.png");
+	background-image: url("../img/editor/editorSprite.png");
 	background-repeat: no-repeat;
 	float: left;
 	height: 25px;

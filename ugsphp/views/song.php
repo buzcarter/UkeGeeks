@@ -11,12 +11,12 @@ isLegacyIe = true;
 document.getElementsByTagName('html')[0].className = 'ie';
 </script>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<script type="text/javascript" src="../js/excanvas.js"></script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>/js/excanvas.js"></script>
 <![endif]-->
-<link rel="stylesheet" type="text/css" href="/css/yuiReset.css" />
-<link rel="stylesheet" type="text/css" href="/css/basic-page-layout.css" media="all" />
-<link rel="stylesheet" type="text/css" href="/css/ukeGeeks.music.css" media="all" />
-<link rel="stylesheet" href="/css/ukeGeeks.musicPrint.css" media="print" />
+<link rel="stylesheet" type="text/css" href="<?php echo($model->StaticsPrefix); ?>/css/yuiReset.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo($model->StaticsPrefix); ?>/css/basic-page-layout.css" media="all" />
+<link rel="stylesheet" type="text/css" href="<?php echo($model->StaticsPrefix); ?>/css/ukeGeeks.music.css" media="all" />
+<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>/css/ukeGeeks.musicPrint.css" media="print" />
 <style>
 header aside a{
 	padding-left: 1em;
@@ -58,7 +58,7 @@ header aside a{
 <footer>
 	<p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by UkeGeeks' Scriptasaurus &bull; ukegeeks.com</small></p>
 </footer>
-<script type="text/javascript" src="/js/ukeGeeks.scriptasaurus.min.js"></script>
-<script type="text/javascript" src="/js/startup.js"></script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>/js/ukeGeeks.scriptasaurus.min.js"></script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>/js/startup.js"></script>
 </body>
 </html>

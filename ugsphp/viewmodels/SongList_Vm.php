@@ -28,12 +28,12 @@ class SongList_Vm extends _base_Vm {
 	function __construct()
 	{
 		parent::__construct();
-		$title = defined(Config::SongbookHeadline) ? Config::SongbookHeadline : 'The BIG UKE Book';
+		$title = defined('Config::SongbookHeadline') ? Config::SongbookHeadline : 'The BIG UKE Book';
 
 		$this->EditAjaxUri = Ugs::MakeUri( Actions::AjaxNewSong);
 		$this->LogoutUri = Ugs::MakeUri( Actions::Logout);
 		$this->Headline = $title;
-		$this->SubHeadline = defined(Config::SongbookSubHeadline) ? Config::SongbookSubHeadline : 'Sample Styled Songbook &raquo;';
+		$this->SubHeadline = defined('Config::SongbookSubHeadline') ? Config::SongbookSubHeadline : 'Sample Styled Songbook &raquo;';
 		$this->PageTitle = $title . ' ' . Config::PageTitleSuffix;
 	}
 

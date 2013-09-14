@@ -186,18 +186,19 @@ class Ugs{
 	 * @return  string
 	 */
 	public static function MakeUri($action, $param = ''){
+		$directory = defined('Config::Subdirectory') ? Config::Subdirectory : '/';
 		$actionName = Actions::ToName($action);
 		$param = trim($param);
 
 		if (!Config::UseModRewrite){
 			$actionParams = strlen($param) > 0 ? '&song=' . $param : '';
-			return '/music.php?action=' . $actionName . $actionParams;
+			return $directory . 'music.php?action=' . $actionName . $actionParams;
 		}
 
 		if ($action == Actions::Song ) {
 			$actionName = 'songbook';
 		}
-		return '/' . strtolower($actionName) . '/' . $param;
+		return $directory . strtolower($actionName) . '/' . $param;
 	}
 
 	/**
@@ -205,7 +206,7 @@ class Ugs{
 	 * returns a PHP Object version of the posted JSON.
 	 * @return Object
 	 */
-	public function GetJsonObject(){
+	public static function GetJsonObject(){
 		$input = @file_get_contents('php://input');
 		$response = json_decode($input);
 		return $response;
@@ -229,6 +230,5 @@ class Ugs{
 		}
 		return Config::UseDetailedLists ? 'song-list-detailed.php' : 'song-list.php';
 	}
-
 
 }

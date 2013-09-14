@@ -188,6 +188,43 @@ And, of course, restart apache
 $ sudo /usr/sbin/apachectl restart
 ```
 
+### Installing In A Different Directory
+
+The Songbook assumes that it's installed in your web server's root directory, but you might want it in a subdirectory. Perhaps you want the URLs to be "mysite.com/hobbies/ukulele/music.php", for example. Excellent! To do this we just need to open `config.php` and change the subdirectory.
+
+By default this is set to the root:
+
+````
+    const Subdirectory = '/';
+````
+
+You can just modify it to whatever you wish (include leading and trailing last forward slashes "/")
+
+````
+    const Subdirectory = '/hobbies/ukulele/';
+````
+
+If you're using caching (and by default the Songbook does) then the only remaining task is to reindex your ChordPro songs (the song URLs are stored along with the song meta-info). Type this into your browser's location bar:
+
+````
+http://mysite.com/hobbies/ukulele/music.php?action=reindex
+````
+##### Moving Uke Geek Asset Directories
+
+You may also move the JavaScript, Stylesheet, and Image "static" directories, however, they all should live in the same directory in order for the styles to work correctly.
+
+For example, you may change the `StaticsPrefix` option from the root `'/'` to:
+
+````
+const StaticsPrefix = '/uke-static/';
+````
+
+The Editor, for example, will now link to:
+
+````
+http://mysite.com/uke-static/js/ukeGeeks.scriptasaurus.merged.js'
+````
+
 ### Actions
 Whether running mod_rewrite or using query params ("mysite.com/songbook" versus "mysite.com/music.php?action=songbook") there are a set of supported actions (verbs):
 

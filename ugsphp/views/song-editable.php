@@ -58,7 +58,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		<p class="btnBar">
 			<span id="messageBox" class="updateMessage">
 				<em>
-					<img src="/img/ugs/busy.gif" id="loadingSpinner" style="display:none;" />
+					<img src="<?php echo($model->StaticsPrefix); ?>img/editor/busy.gif" id="loadingSpinner" style="display:none;" />
 					<span id="sourceFeedback"></span>
 				</em>
 			</span>

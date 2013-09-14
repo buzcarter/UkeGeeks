@@ -146,7 +146,7 @@ html .active label{
 	text-align: inherit;
 }
 .pseudoSelect .checked a {
-	background: url("../../img/editor/checked.png") no-repeat scroll 10px center #2A2A2A;
+	background: url("../img/editor/checked.png") no-repeat scroll 10px center #2A2A2A;
 	border-color: #C5C5C5;
 	color: #FFFFFF;
 	text-shadow:1px 2px 1px #000;
@@ -506,7 +506,7 @@ html .selected:hover {
 }
 /* hand */
 .fingerToolImage {
-	background: url(../../img/editor/hand.png) top center no-repeat;
+	background: url("../img/editor/hand.png") top center no-repeat;
 	display:block;
 	height: 83px;
 	margin: 0 auto;
@@ -552,10 +552,10 @@ html .arrowUp, html .arrowDown {
 	background-position: center 29px;
 }
 html .arrowUp {
-	background-image: url("../../img/editor/basic-up-arrow.png");
+	background-image: url("../img/editor/basic-up-arrow.png");
 }
 html .arrowDown {
-	background-image: url("../../img/editor/basic-down-arrow.png");
+	background-image: url("../img/editor/basic-down-arrow.png");
 }
 /* output area */
 .outputBox{
@@ -631,7 +631,7 @@ html .arrowDown {
 }
 /* delete button */
 .ugsChordChooser .deleteChord{
-	background: url("../../img/editor/delete-btn.png") right center no-repeat;
+	background: url("../img/editor/delete-btn.png") right center no-repeat;
 	display: block;
 	float: right;
 	height: 30px;
@@ -687,7 +687,7 @@ html .arrowDown {
 /* App
 -------------------------------- */
 .ugsAppMenuBar {
-	background: #933f17 url("../../img/editor/editorSprite.png") 0 -100px repeat-x;
+	background: #933f17 url("../img/editor/editorSprite.png") 0 -100px repeat-x;
 	-moz-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
 	-webkit-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
 	box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);
@@ -725,20 +725,20 @@ html .arrowDown {
 .ugsAppMenuBar > ul > li > a:hover {
 	border-color: #600000;
 	background-color: #451212;
-	background: url("../../img/editor/editorSprite.png") 0 -145px repeat-x;
+	background: url("../img/editor/editorSprite.png") 0 -145px repeat-x;
 	color: #fdda61;
 	text-shadow: none;
 }
 .ugsAppMenuBar > ul > .active > a {
 	background-color: #451212;
-	background: url("../../img/editor/editorSprite.png") 0 -145px repeat-x;
+	background: url("../img/editor/editorSprite.png") 0 -145px repeat-x;
 	color: #fef5e3;
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 /* Icons/Sprits
 -------------------------------- */
 .ugsAppMenuBar > ul > li > a span {
-	background-image: url("../../img/editor/editorSprite.png");
+	background-image: url("../img/editor/editorSprite.png");
 	background-repeat: no-repeat;
 	float: left;
 	height: 25px;
@@ -831,7 +831,7 @@ html .arrowDown {
 	z-index:0;
 }
 .overlay > div {
-	background: url(../../img/editor/woodChip.png) repeat scroll 0 0 transparent;
+	background: url("../img/editor/woodChip.png") repeat scroll 0 0 transparent;
 	border-radius: 0 0 13px 13px;
 	overflow: hidden;
 	padding: 10px;
@@ -902,7 +902,7 @@ html .arrowDown {
 	/*
 	cursor: move;
 	*/
-	background: url(../../img/editor/editorSprite.png) repeat-x 0 -100px #933f17;
+	background: url("../img/editor/editorSprite.png") repeat-x 0 -100px #933f17;
 	border-bottom: 1px solid #240E01;
 	border-radius: 12px 12px 0 0;
 	border-top: 1px solid #84623C;
@@ -915,7 +915,7 @@ html .arrowDown {
 	text-shadow: 1px 2px 0 #592108;
 }
 .overlay .closeBtn {
-	background: url(../../img/editor/closeBtn.png) no-repeat 0 0 transparent;
+	background: url("../img/editor/closeBtn.png") no-repeat 0 0 transparent;
 	display: block;
 	height: 30px;
 	outline: none;
@@ -926,7 +926,7 @@ html .arrowDown {
 	width: 30px;
 }
 .overlay .resizeBtn {
-	background: url(../../img/editor/resizeBtn.png) no-repeat 0 0 transparent;
+	background: url("../img/editor/resizeBtn.png") no-repeat 0 0 transparent;
 	display: block;
 	height: 20px;
 	outline: none;
