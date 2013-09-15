@@ -1,6 +1,9 @@
 @media print{
-	body {
+	body,
+	.editableSongPage{
 		background-color: #fff;
+	}
+	body {
 		padding: 1px 0 0 0;
 	}
 	.scalablePrintArea {
