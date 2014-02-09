@@ -68,6 +68,8 @@
 .overlay textarea {
 	background-color: rgba(255, 255, 255, 0.7);
 	border: solid 1px #E1B166;
+	max-width: 100%;
+	max-height: 100%;
 	-webkit-transition: background-color 500ms linear;
 	-moz-transition: background-color 500ms linear;
 	-o-transition: background-color 500ms linear;

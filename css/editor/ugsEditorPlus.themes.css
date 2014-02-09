@@ -44,7 +44,7 @@
 
  .theme-jellyBean .scalablePrintArea{
  	color: #56A0A5;
- 	font-family: "Comic Sans MS", cursive, sans-serif;
+	font-family: "Comic Sans MS", "Marker Felt", cursive, sans-serif;
  }
  .theme-jellyBean .scalablePrintArea hgroup {
  	color: #FF9417;
@@ -329,4 +329,26 @@ http://www.colourlovers.com/palette/510474/vintage_Christmas
 	font-size: 1.3em;
 	padding: 0;
 	text-indent: 0.7em;
+}
+
+/* __________ Just BLack __________ */
+
+.theme-justBlack .ugs-source-wrap h5,
+.theme-justBlack .ugs-source-wrap h6,
+.theme-justBlack .ugsChords code em {
+    color: #000;
+}
+.theme-justBlack .ugsChords code em{
+	font-weight: bold;
+}
+.theme-justBlack .ugs-source-wrap h5,
+.theme-justBlack .ugs-source-wrap h6,
+.theme-justBlack .scalablePrintArea hgroup,
+.theme-justBlack .scalablePrintArea hgroup *{
+	/* first choice: museo slab 500 */
+	font-family: 'Bree Serif', Arial, sans-serif;
+	font-style: normal;
+}
+.theme-justBlack .scalablePrintArea hgroup{
+	text-align: center;
 }

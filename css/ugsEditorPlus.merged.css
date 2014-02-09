@@ -877,6 +877,8 @@ html .arrowDown {
 .overlay textarea {
 	background-color: rgba(255, 255, 255, 0.7);
 	border: solid 1px #E1B166;
+	max-width: 100%;
+	max-height: 100%;
 	-webkit-transition: background-color 500ms linear;
 	-moz-transition: background-color 500ms linear;
 	-o-transition: background-color 500ms linear;
@@ -1370,7 +1372,30 @@ http://www.colourlovers.com/palette/510474/vintage_Christmas
 	font-size: 1.3em;
 	padding: 0;
 	text-indent: 0.7em;
-}/*
+}
+
+/* __________ Just BLack __________ */
+
+.theme-justBlack .ugs-source-wrap h5,
+.theme-justBlack .ugs-source-wrap h6,
+.theme-justBlack .ugsChords code em {
+    color: #000;
+}
+.theme-justBlack .ugsChords code em{
+	font-weight: bold;
+}
+.theme-justBlack .ugs-source-wrap h5,
+.theme-justBlack .ugs-source-wrap h6,
+.theme-justBlack .scalablePrintArea hgroup,
+.theme-justBlack .scalablePrintArea hgroup *{
+	/* first choice: museo slab 500 */
+	font-family: 'Bree Serif', Arial, sans-serif;
+	font-style: normal;
+}
+.theme-justBlack .scalablePrintArea hgroup{
+	text-align: center;
+}
+/*
  *	Document   : ugsEditorPlus.song.css
  * Author     : Buz
  * Description: Classes affecting song layout and style; Critical to Scriptasaurus presentation.

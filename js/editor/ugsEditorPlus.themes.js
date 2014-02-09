@@ -84,9 +84,27 @@ ugsEditorPlus.themes = new function() {
 			}
 		},
 
+		'justBlack': {
+			name: 'Just Black',
+			selectText: 'Black (for laser printers)',
+			description: 'No color, but black, best for B&W laser printers',
+			song: {
+				fretLines: '#cccccc',
+				dots: '#000000',
+				dotText: '#ffffff',
+				text: '#000000',
+				fretText: '#000000'
+			},
+			tabs: {
+				lines: '#cccccc',
+				dots: '#000000',
+				text: '#ffffff'
+			}
+		},
+
 		'krampus': {
 			name: 'Gruss vom Krampus',
-			selectText: 'Gruss vom Krampus (Xmas)',
+			selectText: 'Krampus (Ye Olde Christmas)',
 			description: 'Seasons Greetin\'s, Happy Holidays, Merry Christmas, Krampus Nichte!',
 			song: {
 				fretLines: '#929867',

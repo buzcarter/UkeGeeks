@@ -23,7 +23,7 @@ class Config {
 	// --------------------------------------
 	// Alternate directory or path locations
 	// --------------------------------------
-	
+
 	/**
 	 * Location of UGS asset directories, i.e. JavaScript (JS), Stylesheet (CSS), and Image (leave as "/" if standard install)
 	 * @constant(StaticsPrefix)
@@ -42,7 +42,7 @@ class Config {
 	// Attribution & Site Credits
 	// --------------------------------------
 	const PageTitleSuffix = ' | UkeGeek\'s Scriptasaurus';
-	const PoweredBy = 'UkeGeeks-Scriptasaurus-v1.11';
+	const PoweredBy = 'UkeGeeks-Scriptasaurus-v1.4';
 	const SupportEmail = 'buz@your-domain-not-mine.com';
 
 	// --------------------------------------
@@ -54,14 +54,41 @@ class Config {
 	// --------------------------------------
 	// Boolean Options/Settings
 	// --------------------------------------
+
+	/**
+	 * Apache Web Server Only: if true links are generated using ModRewrite rules syntax (no query params)
+	 * @constant(UseModRewrite)
+	 * @var Boolean
+	 */
 	const UseModRewrite = false;
+
+	/**
+	 * if true the Songbook shows the dedtailed (title, artist, subtitle) song page and uses the song list cache.
+	 * If false the song list page uses the filenames for the link text (does minor tidy-up)
+	 * @constant(UseDetailedLists)
+	 * @var Boolean
+	 */
 	const UseDetailedLists = true;
+
+	/**
+	 * If true when visitor clicks to a page the full editor toolbar is present; if false only the song is displayed (no formatting or other features)
+	 * @constant(UseEditableSong)
+	 * @var Boolean
+	 */
 	const UseEditableSong = true;
+
+	/**
+	 * If true visitors must login to view or edit any page. Login must be enabled to Add or Update songs
+	 * @constant(IsLoginRequired)
+	 * @var Boolean
+	 */
 	const IsLoginRequired = false;
 
-	// --------------------------------------
-	// Cache (only if "UseDetailedLists" enabled)
-	// --------------------------------------
+	/**
+	 * File names used for song list cache files (only if "UseDetailedLists" enabled).
+	 * @constant(SongCacheKey_FileName)
+	 * @var string
+	 */
 	const SongCacheKey_FileName = 'SongList';
 
 	// --------------------------------------

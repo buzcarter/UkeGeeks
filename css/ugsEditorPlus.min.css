@@ -105,7 +105,7 @@ select{font-size:1.1em}.overlay input[type=text],
 textarea{font-family:Monaco,"Consolas","Lucida Console","Courier New",courier,monospace;font-size:10pt;line-height:1.25;padding-left: .3em;white-space:nowrap;white-space:pre;overflow:scroll;height:525px;width:98%}.overlay input[type=text],
 .overlay input[type=password],
 .overlay
-textarea{background-color:rgba(255, 255, 255, 0.7);border:solid 1px #E1B166;-webkit-transition:background-color 500ms linear;-moz-transition:background-color 500ms linear;-o-transition:background-color 500ms linear;-ms-transition:background-color 500ms linear;transition:background-color 500ms linear}.overlay input[type=text]:hover,
+textarea{background-color:rgba(255, 255, 255, 0.7);border:solid 1px #E1B166;max-width:100%;max-height:100%;-webkit-transition:background-color 500ms linear;-moz-transition:background-color 500ms linear;-o-transition:background-color 500ms linear;-ms-transition:background-color 500ms linear;transition:background-color 500ms linear}.overlay input[type=text]:hover,
 .overlay input[type=password]:hover,
 .overlay textarea:hover{background-color:rgba(255, 255, 200, 0.7);border-color:#444}.overlay input[type=text]:focus,
 .overlay input[type=password]:focus,
@@ -189,7 +189,16 @@ h1{border-color:#E4E4FF;border-style:solid;border-width:1px 0;color:#252537;font
 h2{border-bottom:1px solid #E4E4FF;font-size:1.1em}.theme-notebook
 .ugsChorus{border-left-color:#a4a0b2;border-radius:6px 0 0 6px}.theme-notebook .ugsChords
 code{font-family:inherit}.theme-notebook .scalablePrintArea h5, .theme-notebook .scalablePrintArea
-h6{border-left-color:#626283;color:#2E2ECC;font-family:'Permanent Marker',Arial,sans-serif;font-size:1.3em;padding:0;text-indent:0.7em}.scalablePrintArea{-moz-transform-origin:0 0;-webkit-transform-origin:0 0;background-color:#fff;border-right:solid 1px #888;font-size:inherit;box-shadow:3px 0 9px rgba(0, 0, 0, 0.4)}.scalablePrintArea
+h6{border-left-color:#626283;color:#2E2ECC;font-family:'Permanent Marker',Arial,sans-serif;font-size:1.3em;padding:0;text-indent:0.7em}.theme-justBlack .ugs-source-wrap h5,
+.theme-justBlack .ugs-source-wrap h6,
+.theme-justBlack .ugsChords code
+em{color:#000}.theme-justBlack .ugsChords code
+em{font-weight:bold}.theme-justBlack .ugs-source-wrap h5,
+.theme-justBlack .ugs-source-wrap h6,
+.theme-justBlack .scalablePrintArea hgroup,
+.theme-justBlack .scalablePrintArea hgroup
+*{font-family:'Bree Serif',Arial,sans-serif;font-style:normal}.theme-justBlack .scalablePrintArea
+hgroup{text-align:center}.scalablePrintArea{-moz-transform-origin:0 0;-webkit-transform-origin:0 0;background-color:#fff;border-right:solid 1px #888;font-size:inherit;box-shadow:3px 0 9px rgba(0, 0, 0, 0.4)}.scalablePrintArea
 hgroup{padding-bottom: .15in}html .ugsHideDiagrams .ugs-diagrams-wrap{display:none}html .ugsHideDiagrams .ugs-source-wrap{margin-left:0}html .diagramsOnTop .ugs-diagrams-wrap{float:none;width:auto}html .diagramsOnTop .ugs-source-wrap{margin-left:0}.ugsNoChords .ugs-source-wrap{margin-left:0}.diagramsOnSide .ugs-diagrams-wrap{float:left;width:225px}.diagramsOnSide .ugs-source-wrap{margin-left:250px}.liBtn, .liBtn
 *{cursor:pointer}.pageWidth_letter
 .scalablePrintArea{width:8in;padding:0.2in;min-height:10.5in}.pageWidth_a4
