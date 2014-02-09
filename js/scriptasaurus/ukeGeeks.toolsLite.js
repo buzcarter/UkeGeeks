@@ -79,7 +79,8 @@ ukeGeeks.toolsLite = (function() {
 	 * @return {arrayDomElements}
 	 */
 	_public.getElementsByClass = function(searchClass, node, tag) {
-		if (node === null) {
+		// use falsey -- if ((node === null) || (node === undefined)) {
+		if (!node) {
 			node = document;
 		}
 		if (node.getElementsByClassName){
@@ -87,7 +88,7 @@ ukeGeeks.toolsLite = (function() {
 		}
 
 		var classElements = [];
-		if (tag === null) {
+		if (!tag) {
 			tag = '*';
 		}
 		var els = node.getElementsByTagName(tag);
