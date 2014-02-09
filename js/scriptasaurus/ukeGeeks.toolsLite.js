@@ -4,8 +4,16 @@
  * @class toolsLite
  * @namespace ukeGeeks
  * @project UkeGeeks' Scriptasaurus 
+ * @singleton
  */
-ukeGeeks.toolsLite = new function(){
+ukeGeeks.toolsLite = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	var regEx = {
 		dbleSpace: /\s{2,}/g,
 		trim: /^\s+|\s+$/g
@@ -18,29 +26,29 @@ ukeGeeks.toolsLite = new function(){
 	 * @param className {string} CSS classname to add
 	 * @return {void}
 	 */
-	this.addClass = function(element, className){
-		if (!this.hasClass(element,className)) { 
+	_public.addClass = function(element, className) {
+		if (!_public.hasClass(element, className)) {
 			element.className += ' ' + className; 
 		}
 	};
 	
-	this.hasClass = function(element, className) {
+	_public.hasClass = function(element, className) {
 		return element.className.match(getRegEx(className));
 	};
 
-	this.removeClass = function(element, className) {
-		if (this.hasClass(element, className)) {
+	_public.removeClass = function(element, className) {
+		if (_public.hasClass(element, className)) {
 			var reg = getRegEx(className);
 			element.className=element.className.replace(reg,' ');
 		}
 	};
 	
-	this.setClass = function(element, className, isActive) {
+	_public.setClass = function(element, className, isActive) {
 		if (isActive){
-			this.addClass(element, className);
+			_public.addClass(element, className);
 		}
 		else{
-			this.removeClass(element, className);
+			_public.removeClass(element, className);
 		}
 	};
 
@@ -54,11 +62,11 @@ ukeGeeks.toolsLite = new function(){
 	 * @param str {String} String to trim.
 	 * @return {String} Returns string without leading and following white space characters.
 	 */
-	this.trim = function(str){
+	_public.trim = function(str) {
 		return str.replace(regEx.trim, '');
 	};
 	
-	this.pack = function(value){
+	_public.pack = function(value) {
 		return value.replace(regEx.dbleSpace, ' ').replace(regEx.trim, '');
 	};
 	
@@ -70,16 +78,16 @@ ukeGeeks.toolsLite = new function(){
 	 * @param tag {string} restrict search to a specific tag name. defaults to all tags.
 	 * @return {arrayDomElements}
 	 */
-	this.getElementsByClass = function(searchClass, node, tag) {
-		if (node == null){
+	_public.getElementsByClass = function(searchClass, node, tag) {
+		if (node === null) {
 			node = document;
 		}
 		if (node.getElementsByClassName){
 			return node.getElementsByClassName(searchClass);
 		}
 
-		var classElements = new Array();
-		if (tag == null){
+		var classElements = [];
+		if (tag === null) {
 			tag = '*';
 		}
 		var els = node.getElementsByTagName(tag);
@@ -93,4 +101,7 @@ ukeGeeks.toolsLite = new function(){
 		}
 		return classElements;
 	};
-};
+
+	return _public;
+
+}());

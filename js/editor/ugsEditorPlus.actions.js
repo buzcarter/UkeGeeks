@@ -146,7 +146,7 @@ ugsEditorPlus.actions = (function() {
 			ugsEditorPlus.songUi.update(_song);
 
 			// maintains last copy of USER edited song -- used for transpose etc
-			if (isDoBackup || (_sourceOriginal == null)){
+			if (isDoBackup || (_sourceOriginal === null)) {
 				_sourceOriginal = _ele.cpmSource.value;
 				_originalChords = _song.chords;
 				resetTranspose(_song.chords.length < 1 ? '' : _song.chords[0]);
@@ -288,10 +288,15 @@ ugsEditorPlus.actions = (function() {
 	 * @param value {string} value of the clicked value item
 	 */
 	var doTuning = function(value){
-		var tuning = (value == 'baritone')
-			? ukeGeeks.definitions.instrument.baritoneUke
-			: ukeGeeks.definitions.instrument.sopranoUke;
+		var tuning = ukeGeeks.definitions.instrument.sopranoUke,
+			msg = 'Standard <strong>GCEA</strong> Soprano Ukulele';
 
+		if (value == 'baritone') {
+			tuning = ukeGeeks.definitions.instrument.baritoneUke;
+			msg = 'Standard <strong>DGBE</strong> Baritone Ukulele';
+		}
+
+		$('#footTuningInfo').html(msg);
 		ukeGeeks.scriptasaurus.setTuningOffset(tuning);
 		_public.run();
 	};
@@ -314,9 +319,11 @@ ugsEditorPlus.actions = (function() {
 	 * @param steps {int} number of semitones, +/-6
 	 */
 	var transpose = function(steps){
-		var safeChords = [];
-		var bad = '';
-		for(var i = 0; i < _originalChords.length; i++){
+		var safeChords = [],
+			bad = '',
+			i;
+
+		for (i = 0; i < _originalChords.length; i++) {
 			if (_re.safe.test(_originalChords[i])){
 				safeChords.push(_originalChords[i]);
 			}
@@ -335,12 +342,12 @@ ugsEditorPlus.actions = (function() {
 		var s = _sourceOriginal;
 		var r;
 
-		for(var i = 0; i < safeChords.length; i++){
+		for (i = 0; i < safeChords.length; i++) {
 			r = new RegExp('\\[' + safeChords[i] + '\\]', 'g');
 			s = s.replace(r, '[ugsxx_' + i + ']');
 		}
 
-		for(var i = 0; i < newChords.length; i++){
+		for (i = 0; i < newChords.length; i++) {
 			r = new RegExp('\\[ugsxx_' + i + '\\]', 'g');
 			s = s.replace(r, '[' + newChords[i] + ']');
 		}
@@ -370,7 +377,7 @@ ugsEditorPlus.actions = (function() {
 			ukeGeeks.toolsLite.removeClass(items[i], 'checked');
 			sample = (chord.length < 1) ? '' : ukeGeeks.transpose.shift(chord, steps);
 			items[i].getElementsByTagName('em')[0].innerHTML = sample;
-			if (steps == 0){
+			if (steps === 0) {
 				ukeGeeks.toolsLite.addClass(items[i], 'checked');
 			}
 			steps++;
@@ -421,7 +428,7 @@ ugsEditorPlus.actions = (function() {
 			if (c.length > 0){
 				cleanList.push(c);
 			}
-		};
+		}
 
 		ukeGeeks.settings.commonChords = cleanList;
 
@@ -435,5 +442,4 @@ ugsEditorPlus.actions = (function() {
 	// ---------------------------------------
 	return _public;
 
-}()
-);
+}());

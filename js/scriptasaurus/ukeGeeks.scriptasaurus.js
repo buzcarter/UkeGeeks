@@ -5,15 +5,23 @@
  * @class scriptasaurus
  * @namespace ukeGeeks
  * @static
+ * @singleton
  */
-ukeGeeks.scriptasaurus = new function(){
+ukeGeeks.scriptasaurus = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * Preps this class for running
 	 * @method init
 	 * @param isIeFamily {bool} TRUE if UserAgent (Browser to you and me) is Internet Explorer
 	 * @return {void}
 	 */
-	this.init = function(isIeFamily){
+	_public.init = function(isIeFamily) {
 		ukeGeeks.settings.environment.isIe = isIeFamily;
 		// TODO: known problem -- need to preload Sorprano chord libarary then we can retune if needed
 		ukeGeeks.definitions.useInstrument(ukeGeeks.definitions.instrument.sopranoUke);
@@ -28,7 +36,7 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @method run
 	 * @return {songObject}
 	 */
-	this.run = function(){
+	_public.run = function() {
 		//console.log('run (Classic Mode)');
 		var handles = _getHandlesFromId();
 		if (!handles || !handles.diagrams || !handles.text || !handles.wrap) {
@@ -45,12 +53,12 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @method runByClasses
 	 * @return {Array of songObject}
 	 */
-	this.runByClasses = function(){
+	_public.runByClasses = function() {
 		var songs = [];
 		var songWraps = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.wrap);
 		for(var i = 0; i < songWraps.length; i++){
 			var handles = _getHandlesFromClass(songWraps[i]);
-			if (handles == null){
+			if (handles === null) {
 				continue;
 			}
 			songs.push(_runSong(handles));
@@ -63,7 +71,7 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @method setTuningOffset
 	 * @param offset {int} (optional) default 0. Number of semitones to shift the tuning. See ukeGeeks.definitions.instrument.
 	 */
-	this.setTuningOffset = function(offset){
+	_public.setTuningOffset = function(offset) {
 		ukeGeeks.definitions.useInstrument(offset);
 	};
 
@@ -81,18 +89,18 @@ ukeGeeks.scriptasaurus = new function(){
 		// console.log('run Song');
 
 		// read Music, find chords, generate HTML version of song:
-		var cpm = new ukeGeeks.cpmParser;
+		var cpm = new ukeGeeks.cpmParser();
 		cpm.init();
 		var song = cpm.parse(handles.text.innerHTML);
 		ukeGeeks.definitions.replace(song.defs);
 
-		var chrdPrsr = new ukeGeeks.chordParser;
+		var chrdPrsr = new ukeGeeks.chordParser();
 		chrdPrsr.init();
 		handles.text.innerHTML = chrdPrsr.parse(song.body);
 		song.chords = chrdPrsr.getChords();
 
 		// Draw the Chord Diagrams:
-		var painter = new ukeGeeks.chordPainter;
+		var painter = new ukeGeeks.chordPainter();
 		painter.init(handles);
 		painter.show(song.chords);
 		// Show chord diagrams inline with lyrics
@@ -102,7 +110,7 @@ ukeGeeks.scriptasaurus = new function(){
 		}
 
 		// Do Tablature:
-		var tabs = new ukeGeeks.tabs;
+		var tabs = new ukeGeeks.tabs();
 		tabs.init();
 		tabs.replace(handles.text);
 
@@ -156,7 +164,7 @@ ukeGeeks.scriptasaurus = new function(){
 	var _getHandlesFromClass = function(wrap){
 		var diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
 		var text = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.text, wrap);
-		if ((diagrams == undefined) || (diagrams.length < 1) || (text == undefined) || (text.length < 1)){
+		if ((diagrams === undefined) || (diagrams.length < 1) || (text === undefined) || (text.length < 1)) {
 			return null;
 		}
 		return new ukeGeeks.data.htmlHandles(wrap, diagrams[0], text[0]);
@@ -176,4 +184,5 @@ ukeGeeks.scriptasaurus = new function(){
 		);
 	};
 
-}
+	return _public;
+}());

@@ -2,15 +2,23 @@
  * A container or Models library. ukegeeks.data is really a "Models" namespace. Please refactor.
  * @class data
  * @namespace ukeGeeks
+ * @singleton
  */
-ukeGeeks.data = new function(){
+ukeGeeks.data = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * Chord info sutiable for plotting on Canvas; has name and dot positions
 	 * @class expandedChord
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
-	this.expandedChord = function(name){
+	_public.expandedChord = function(name) {
 		/**
 		 * string, i.e. 'C#6'
 		 * @property name
@@ -37,7 +45,7 @@ ukeGeeks.data = new function(){
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
-	this.song = function(){ 
+	_public.song = function() {
 		/**
 		 * Song Title
 		 * @property title
@@ -103,7 +111,7 @@ ukeGeeks.data = new function(){
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
-	this.dot = function(string, fret, finger){
+	_public.dot = function(string, fret, finger) {
 		/**
 		 * The ukulele's string, numbered from "top" (1) to "bottom" (4). Sporano uke strings would be ['G' => 1,'C' => 2,'E' => 3,'A' => 4]
 		 * @property string
@@ -124,14 +132,14 @@ ukeGeeks.data = new function(){
 		this.finger = finger;
 	};
 
-	this.instrument  = function(key, name, tuning, chords){
+	_public.instrument = function(key, name, tuning, chords) {
 		this.key = key;
 		this.name = name;
 		this.tuning = tuning;
 		this.chords = chords;
 	};
 	
-	this.htmlHandles = function(wrap, diagrams, text){
+	_public.htmlHandles = function(wrap, diagrams, text) {
 		this.wrap = wrap;
 		this.diagrams = diagrams;
 		this.text = text;
@@ -181,4 +189,6 @@ ukeGeeks.data = new function(){
 		* @for ukeGeeks.data.addInFinger
 		*/
 
-}
+	return _public;
+
+}());

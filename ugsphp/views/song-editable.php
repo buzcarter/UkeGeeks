@@ -44,7 +44,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		</article>
 	</article>
 	<footer>
-		<p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by <a href="http://ukegeeks.com/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.com</small></p>
+		<p>Note: <span id="footTuningInfo">Standard <strong>GCEA</strong> Soprano Ukulele</span> Tuning. <small>Powered by <a href="http://ukegeeks.com/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.com</small></p>
 	</footer>
 </section>
 <!-- EDIT SONG (DIALOG) -->

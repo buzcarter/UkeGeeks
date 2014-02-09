@@ -37,7 +37,7 @@ ukeGeeks.chordPainter = function(){
 	 * @return {void}
 	 */
 	publics.init = function(htmlHandles){
-		brush = new ukeGeeks.chordBrush;
+		brush = new ukeGeeks.chordBrush();
 		brush.init();
 		handles = htmlHandles;
 	};
@@ -61,7 +61,7 @@ ukeGeeks.chordPainter = function(){
 			if (chord == ukeGeeks.settings.commonChords[i]){
 				return true;
 			}
-		};
+		}
 		return false;
 	};
 

@@ -1,10 +1,17 @@
 /**
- * Wraps three common canvas actions: adding canvas element to DOM, drawing a dot, adding text. A singleton.
+ * Wraps three common canvas actions: adding canvas element to DOM, drawing a dot, adding text.
  * @class canvasTools
  * @namespace ukeGeeks
  * @static
+ * @singleton
  */
-ukeGeeks.canvasTools = new function(){
+ukeGeeks.canvasTools = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
 	/**
 	 * @method drawDot
 	 * @param ctx {type} blah
@@ -13,7 +20,7 @@ ukeGeeks.canvasTools = new function(){
 	 * @param color {string} Hex color
 	 * @return {void}
 	 */
-	this.drawDot = function (ctx, centerPos, radius, color){
+	_public.drawDot = function(ctx, centerPos, radius, color) {
 		ctx.beginPath();
 		ctx.arc(centerPos.x, centerPos.y, radius, 0, Math.PI * 2, true);
 		ctx.closePath();
@@ -31,7 +38,7 @@ ukeGeeks.canvasTools = new function(){
 	 * @param align {string} (optional) Text will be aligned at position (pos) as [left,right,center]. Default is center.
 	 * @return {void}
 	 */
-	this.drawText= function(ctx, pos, text, font, color, align){
+	_public.drawText = function(ctx, pos, text, font, color, align) {
 		if (!ctx.fillText) return;// IE check
 		ctx.font = font;
 		ctx.textAlign = (align || 'center');
@@ -47,7 +54,7 @@ ukeGeeks.canvasTools = new function(){
 	 * @param height {int} Desired height of new canvas element
 	 * @return {canvasContextHandle}
 	 */
-	this.addCanvas = function(element, width, height){
+	_public.addCanvas = function(element, width, height) {
 		// make element
 		var c = document.createElement('canvas');
 		if (!c){
@@ -68,5 +75,5 @@ ukeGeeks.canvasTools = new function(){
 		return ctx;
 	};
 
-}
-
+	return _public;
+}());

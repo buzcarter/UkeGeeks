@@ -3,12 +3,13 @@
  * @class overlapFixer
  * @namespace ukeGeeks
  * @project UkeGeeks' Scriptasaurus
+ * @singleton
  */
 ukeGeeks.overlapFixer = (function() {
 
 	// private
 	// ---------------------------
-	var _publics = {};
+	var _public = {};
 
 	/**
 	 * returns TRUE if Box A overlaps Box B. Detailed horizontal check, we "cheat" the
@@ -76,9 +77,7 @@ ukeGeeks.overlapFixer = (function() {
 			return ele.clip.width;
 		}
 
-		return (ele.style.pixelWidth)
-			? ele.style.pixelWidth
-			: ele.offsetWidth;
+		return (ele.style.pixelWidth) ? ele.style.pixelWidth : ele.offsetWidth;
 	};
 
 	/**
@@ -90,8 +89,7 @@ ukeGeeks.overlapFixer = (function() {
 	 * @return {JSON}
 	 */
 	var getOffsets = function(ele) {
-		var box =
-		{
+		var box = {
 			top: 0,
 			left: 0,
 			right: 0,
@@ -138,7 +136,7 @@ ukeGeeks.overlapFixer = (function() {
 	 * @method Fix
 	 * @param  {DOM_element} element containing the UGS HTML song
 	 */
-	_publics.Fix = function(ele){
+	_public.Fix = function(ele) {
 		var elements = ele.getElementsByTagName('code');
 
 		for (var i = 0; i < elements.length; i++) {
@@ -150,5 +148,5 @@ ukeGeeks.overlapFixer = (function() {
 		}
 	};
 
-	return _publics;
+	return _public;
 })();

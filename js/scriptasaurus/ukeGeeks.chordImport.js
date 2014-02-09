@@ -4,8 +4,16 @@
  * @class chordImport
  * @namespace ukeGeeks
  * @project UkeGeeks' Scriptasaurus 
+ * @singleton
  */
-ukeGeeks.chordImport = new function(){
+ukeGeeks.chordImport = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * Internal storage of partially converted "define" statements. The Definition (string) and addIn (array<strings>)
 	 * @class chordImport.chordParts
@@ -257,11 +265,11 @@ ukeGeeks.chordImport = new function(){
 		var name = _getName(text);
 		var fingers = _getFingers(text);
 		
-		if (name == null || name == 'frets'){
+		if (name === null || name == 'frets') {
 			_log('bad "define" instruction: chord name not found: ' + text);
 			return null;
 		}
-		if (frets == null){
+		if (frets === null) {
 			_log('bad "define" instruction: frets not found: ' + text);
 			return null;
 		}
@@ -303,7 +311,7 @@ ukeGeeks.chordImport = new function(){
 	 */
 	var _log = function(msg){
 		_errs.push(msg);
-	}
+	};
 	var _errs = [];
 	var _echoLog = function(){
 		for(var i in _errs){
@@ -317,7 +325,7 @@ ukeGeeks.chordImport = new function(){
 	 * @param line {string} Single line (string with one statment)
 	 * @return {ukeGeeks.data.expandedChord}
 	 */
-	this.runLine = function(line){
+	_public.runLine = function(line) {
 		var c = _lineToParts(line);
 		if (!c){
 			return null;
@@ -331,7 +339,7 @@ ukeGeeks.chordImport = new function(){
 	 * @param text {string} Multiline text block containing definition, instrument, and tuning statements.
 	 * @return {ukeGeeks.data.instrument}
 	 */
-	this.runBlock = function(text){
+	_public.runBlock = function(text) {
 		//TODO: newlines get lost in strings, do I always relya on "{"?
 		var nL = text.split('\n');
 		if (nL.length < 2){
@@ -348,4 +356,5 @@ ukeGeeks.chordImport = new function(){
 		);
 	};
 
-}
+	return _public;
+}());

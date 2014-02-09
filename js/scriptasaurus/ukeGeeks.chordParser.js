@@ -18,8 +18,7 @@ ukeGeeks.chordParser.prototype = {
 	 * @method init
 	 * @return {void}
 	 */
-	init: function(){
-	},
+	init: function() {},
 
 	/**
 	 * This does all of the work -- it's a Wrapper method that calls all of this classes other 
@@ -138,5 +137,4 @@ ukeGeeks.chordParser.prototype = {
 			return text.replace(re,' ');
 		}
 	}
-}
-
+};

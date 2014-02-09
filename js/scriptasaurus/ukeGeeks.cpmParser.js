@@ -39,8 +39,7 @@ ukeGeeks.cpmParser.prototype = {
 	 * @method init
 	 * @return {void}
 	 */
-	init: function(){
-	},
+	init: function() {},
 
 	/**
 	 * Accepts CPM text, returning HTML marked-up text
@@ -49,7 +48,7 @@ ukeGeeks.cpmParser.prototype = {
 	 * @return {songObject}
 	 */
 	parse: function(text){
-		var song = new ukeGeeks.data.song;
+		var song = new ukeGeeks.data.song();
 		text = this._stripHtml(text);
 		var songDom = this._domParse(text);
 		songDom = this._parseInstr(songDom);
@@ -57,11 +56,7 @@ ukeGeeks.cpmParser.prototype = {
 		songDom = this._markChordLines(songDom);
 		song.body = this._export(songDom);
 		if (this.columnCount > 1){
-			song.body = '<div class="' + this.classNames.ColumnWrap + ' ' + this.classNames.ColumnCount + this.columnCount + '">'
-			+ '<div class="' + this.classNames.Column + '">'
-			+ song.body
-			+ '</div>'
-			+ '</div>';
+			song.body = '<div class="' + this.classNames.ColumnWrap + ' ' + this.classNames.ColumnCount + this.columnCount + '">' + '<div class="' + this.classNames.Column + '">' + song.body + '</div>' + '</div>';
 		}
 		song.hasChords = this.hasChords;
 		var tmp;
@@ -248,8 +243,7 @@ ukeGeeks.cpmParser.prototype = {
 			else if (song[i].type == this.blockTypeEnum.ColumnBreak){
 				html += '</div><div class="' + this.classNames.Column + '">' ;
 			}
-			else{
-			}
+			else {}
 		}
 		return html;
 	},
@@ -447,8 +441,7 @@ ukeGeeks.cpmParser.prototype = {
 						isChrdOnly = hasChrd && (ukeGeeks.toolsLite.trim(line.replace(regEx.allChords, '')).length < 1);
 						// need to find
 						song[i].lines[j] = {
-							type: (isChrdOnly ? this.blockTypeEnum.ChordOnlyText
-								: (hasChrd ? this.blockTypeEnum.ChordText : this.blockTypeEnum.PlainText)),
+							type: (isChrdOnly ? this.blockTypeEnum.ChordOnlyText : (hasChrd ? this.blockTypeEnum.ChordText : this.blockTypeEnum.PlainText)),
 							lines : [line]
 						};
 					}

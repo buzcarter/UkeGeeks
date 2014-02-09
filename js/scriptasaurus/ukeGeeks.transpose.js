@@ -2,27 +2,38 @@
  * Can shift a single chord or list of chords up/down by a series of steps. Hangles
  * finding equivalent chord names (i.e. A# is same as Bb)
  *
- * This is a SINGLETON class.
- *
  * @class transpose
  * @namespace ukeGeeks
  * @static
+ * @singleton
  */
-ukeGeeks.transpose = new function(){
+ukeGeeks.transpose = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	var re = /^([A-G][#b]?)(.*)/;
 	var tones = {
 		'A' : 0,
-		'A#' : 1, 'Bb' : 1,
+		'A#': 1,
+		'Bb': 1,
 		'B' : 2,
 		'C' : 3,
-		'C#' : 4, 'Db' : 4,
+		'C#': 4,
+		'Db': 4,
 		'D' : 5,
-		'D#' : 6, 'Eb' : 6,
+		'D#': 6,
+		'Eb': 6,
 		'E' : 7,
 		'F' : 8,
-		'F#' : 9, 'Gb' : 9,
+		'F#': 9,
+		'Gb': 9,
 		'G' : 10,
-		'G#' : 11, 'Ab' : 11
+		'G#': 11,
+		'Ab': 11
 	};
 
 	/**
@@ -32,19 +43,16 @@ ukeGeeks.transpose = new function(){
 	 * @param steps (int) number of semitones to transpose
 	 * @return string
 	 */
-	this.shift = function(name, steps){
+	_public.shift = function(name, steps) {
 		var t = getTone(name);
-		if (t == null){
+		if (t === null) {
 			return null;
 		}
-		var tone = t.tone + steps;
-		if (tone > 11){
-			tone = tone - 12;
-		}
-		else if (tone < 0){
+		var tone = (t.tone + steps) % 12;
+		// TODO: negative steps are allowed!!!
+		if (tone < 0) {
 			tone = tone + 12;
 		}
-		// TODO: negative steps are allowed!!!
 		for(var key in tones){
 			if (tone == tones[key]){
 				return key + t.suffix;
@@ -54,7 +62,7 @@ ukeGeeks.transpose = new function(){
 	};
 
 	/**
-	 *
+	 * Returns object with name (A - G with flat/sharp), integer value (0 - 11), and its "suffix" (minor, 7th, etc)
 	 * @method getTone
 	 * @param name (string)
 	 * @return JSON
@@ -65,25 +73,10 @@ ukeGeeks.transpose = new function(){
 			return null;
 		}
 		return {
-			tone: parseInt(tones[m[1]]),
+			tone: parseInt(tones[m[1]], 10),
 			prefix: m[1],
 			suffix: m[2]
 		};
-	};
-
-
-	/**
-	 * something's gone amiss here...
-	 * @method transpose
-	 * @param name (string)
-	 * @param steps (int)
-	 * @return {string}
-	 */
-	this.transpose = function(name, steps){
-		if (steps == 0){
-			return name;
-		}
-		return '';
 	};
 
 	/**
@@ -92,18 +85,24 @@ ukeGeeks.transpose = new function(){
 	 * @param offset (int) optional
 	 * @return {array}
 	 */
-	this.retune = function(){
+	_public.retune = function() {
 		var offset = (arguments.length > 0) ? arguments[0] : 0;
 		var chords = ukeGeeks.definitions.getChords();
 		var s = [];
-		if (offset == 0){
+		if (offset === 0) {
 			for(var i in chords){
-				s.push({original: chords[i].name, transposed: chords[i].name});
+				s.push({
+					original: chords[i].name,
+					transposed: chords[i].name
+				});
 			}
 		}
 		else{
-			for(var i in chords){
-				s.push({original: chords[i].name, transposed: ukeGeeks.transpose.shift(chords[i].name, offset)});
+			for (var z in chords) {
+				s.push({
+					original: chords[z].name,
+					transposed: _public.shift(chords[z].name, offset)
+				});
 			}
 		}
 		return s;
@@ -116,11 +115,17 @@ ukeGeeks.transpose = new function(){
 	 * @param  int steps  number of semitone steps (up or down)
 	 * @return array<strings>
 	 */
-	this.shiftChords = function(chords, steps){
+	_public.shiftChords = function(chords, steps) {
 		var newChords = [];
 		for(var i = 0; i < chords.length; i++){
-			newChords.push(this.shift(chords[i], steps));
+			newChords.push(_public.shift(chords[i], steps));
 		}
 		return newChords;
 	};
-};
+
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());

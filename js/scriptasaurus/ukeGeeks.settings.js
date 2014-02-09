@@ -3,19 +3,25 @@
  * HTML element names. It's divided into four sections: graphics, ids, layout,
  * and "options".
  *
- * This is a SINGLETON class.
- *
  * @class settings
  * @namespace ukeGeeks
  * @static
+_public * @singleton
  */
-ukeGeeks.settings = new function(){
+ukeGeeks.settings = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * Chord Diagram Font styles -- font size, font-weight, font-face stack, etc.
 	 * @property fonts
 	 * @type JSON Object
 	 */
-	this.fonts = {
+	_public.fonts = {
 		dot: '9pt Arial Black,Arial',
 		text: 'bold 14pt Arial',
 		fret: 'bold 13pt Arial'
@@ -27,7 +33,7 @@ ukeGeeks.settings = new function(){
 	 * @property colors
 	 * @type JSON Object
 	 */
-	this.colors= {
+	_public.colors = {
 		fretLines: '#003366',
 		dots: '#ff0000',
 		dotText: '#ffffff',
@@ -38,7 +44,7 @@ ukeGeeks.settings = new function(){
 	};
 
 	/* Standard Fretbox Options, these properties documented individually */
-	this.fretBox = {
+	_public.fretBox = {
 		/**
 		 * True if chord name and finger "number" are to be drawn on canvas.
 		 * By default normal chord diagrams have text (TRUE) whereas inlineDiagrams
@@ -114,7 +120,7 @@ ukeGeeks.settings = new function(){
 	 * @property layout
 	 * @type JSON Object
 	 */
-	this.inlineFretBox = {
+	_public.inlineFretBox = {
 		showText: false,
 		height: 50,
 		width: 40,
@@ -140,7 +146,7 @@ ukeGeeks.settings = new function(){
 	 * @property ids
 	 * @type JSON Object
 	 */
-	this.ids = {
+	_public.ids = {
 		songText: 'ukeSongText', // element holding the song's text
 		canvas: 'ukeChordsCanvas', // canvas
 		container: 'ukeSongContainer' // wraps BOTH Song Text and Chord Canvas
@@ -151,7 +157,7 @@ ukeGeeks.settings = new function(){
 	 * @property wrapClasses
 	 * @type JSON Object
 	 */
-	this.wrapClasses = {
+	_public.wrapClasses = {
 		wrap: 'ugs-song-wrap', // wraps BOTH Song Text and Chord Canvas
 		diagrams: 'ugs-diagrams-wrap', // canvas
 		text: 'ugs-source-wrap' // element holding the song's text
@@ -162,7 +168,7 @@ ukeGeeks.settings = new function(){
 	 * @property opts
 	 * @type JSON Object
 	 */
-	this.opts = {
+	_public.opts = {
 		columnsEnabled: true,
 		/**
 		 * the [ and ] surrounding chord names often looks bad in print (usually only good when inline)
@@ -192,7 +198,7 @@ ukeGeeks.settings = new function(){
 	 * @property inlineDiagrams
 	 * @type Bool
 	 */
-	this.inlineDiagrams = false;
+	_public.inlineDiagrams = false;
 
 	/**
 	 * Number of frets to draw. Default is 5 (as this is as wide as my hand can go and
@@ -200,28 +206,28 @@ ukeGeeks.settings = new function(){
 	 * @property numFrets
 	 * @type int
 	 */
-	this.numFrets = 5;
+	_public.numFrets = 5;
 
 	/**
 	 * Array of string names, changes between baritone and soprano
 	 * @property tuning
 	 * @type string Array
 	 */
-	this.tuning = ['G','C','E','A'];
+	_public.tuning = ['G', 'C', 'E', 'A'];
 
 	/**
 	 * The initial tuning when page first loads, used in scriptasaurus.init.
 	 * @property defaultInstrument
 	 * @type {enum_int}
 	 */
-	this.defaultInstrument = ukeGeeks.definitions.instrument.sopranoUke;
+	_public.defaultInstrument = ukeGeeks.definitions.instrument.sopranoUke;
 
 	/**
 	 * TODO: Clean-up Tab Options!!
 	 * @property tabs
 	 * @type JSON Object
 	 */
-	this.tabs = {
+	_public.tabs = {
 		lineSpacing : 16, // pixels between lines (or strings)
 		noteSpacing : 14, // pixels between finger dots
 		lineWidth : 1, // pixels
@@ -236,7 +242,7 @@ ukeGeeks.settings = new function(){
 	};
 
 	// Info about runtime environment. Not really a setting.
-	this.environment = {
+	_public.environment = {
 		/**
 		 * set in scriptasaurus. True if UserAgent is Internet Explorer
 		 * @property settings.environment.isIe
@@ -250,7 +256,7 @@ ukeGeeks.settings = new function(){
 	 * List of common chords to be "ignored" (won't show master chord diagrams)
 	 * @type string Array
 	 */
-	this.commonChords = ['A','B','C','D','E','F','G', 'Am'];
+	_public.commonChords = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'Am'];
 
 	/**
 	 * TODO: determine minimum value... 1?
@@ -300,7 +306,7 @@ ukeGeeks.settings = new function(){
 	 * @param mulitplier {int}
 	 * @return {void}
 	 */
-	this.scale = function(mulitplier){
+	_public.scale = function(mulitplier) {
 		if (mulitplier == 1.0){
 			return;
 		}
@@ -313,4 +319,5 @@ ukeGeeks.settings = new function(){
 		this.fretBox = _scaleNode(this.fretBox, mulitplier);
 	};
 
-};
+	return _public;
+}());
