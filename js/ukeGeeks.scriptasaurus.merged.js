@@ -25,8 +25,16 @@ var ukeGeeks = window.ukeGeeks || {};
  * @class definitions
  * @namespace ukeGeeks
  * @static
+ * @singleton
  */
-ukeGeeks.definitions = new function(){
+ukeGeeks.definitions = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * Array of "user" defined chords, in compactChord format. Use "Add" method.
 	 * @property _userChords
@@ -47,9 +55,9 @@ ukeGeeks.definitions = new function(){
 	 * @property instrument
 	 * @type JSON
 	 */
-	this.instrument = {
+	_public.instrument = {
 		sopranoUke: 0, // GCEA
-		baritoneUke : 7 // DGBA
+		baritoneUke: 5 // DGBA -- Baritone's "A" fingering is the Soprano's "D"
 	};
 
 	/* PUBLIC METHODS
@@ -60,7 +68,7 @@ ukeGeeks.definitions = new function(){
 	 * @param text {string} Block of CPM text -- specifically looks for instrurment, tuning, and define statements.
 	 * @return {void}
 	 */
-	this.addInstrument = function(text){
+	_public.addInstrument = function(text) {
 		_instruments.push(text);
 	};
 
@@ -71,13 +79,13 @@ ukeGeeks.definitions = new function(){
 	 * @param offset {int} (optional) default 0. Number of semitones to shif the tuning.
 	 * @return {void}
 	 */
-	this.useInstrument = function(offset){
-		var offset = (arguments.length > 0) ? arguments[0] : this.instrument.sopranoUke;
-		_offset = parseInt(offset);
-		if (_offset > 0){
+	_public.useInstrument = function(offset) {
+		offset = (arguments.length > 0) ? arguments[0] : _public.instrument.sopranoUke;
+		_offset = parseInt(offset, 10);
+		if (_offset > 0) {
 			_map = ukeGeeks.transpose.retune(_offset);
 		}
-		this.setChords(ukeGeeks.chordImport.runBlock(_instruments[0]).chords);
+		_public.setChords(ukeGeeks.chordImport.runBlock(_instruments[0]).chords);
 	};
 
 	/**
@@ -86,36 +94,42 @@ ukeGeeks.definitions = new function(){
 	 * @param chordName {string} Chord name
 	 * @return {expandedChord}
 	 */
-	this.get = function(chordName){
+	_public.get = function(chordName) {
 		// try User Defined chords first
-		for (var i = 0; i < _userChords.length; i++){
-			if (chordName == _userChords[i].name){
+		for (var i = 0; i < _userChords.length; i++) {
+			if (chordName == _userChords[i].name) {
 				return _userChords[i];
 			}
 		}
 		// next: built-in chords:
-		if (_offset < 1){
+		if (_offset < 1) {
 			return _get(chordName);
 		}
-		else{
-			// user has retuned the chords, need to find chord name "as-is",
-			// but get the fingering from the mapping
-			for(var i in _map){
-				if (chordName == _map[i].original){
-					var x = _get(_map[i].transposed);
-					if (x){
-						var chrd = new ukeGeeks.data.expandedChord(chordName);
-						chrd.dots = x.dots;
-						return chrd;
-					}
+
+		// user has retuned the chords, need to find chord name "as-is",
+		// but get the fingering from the mapping
+		for (var i in _map) {
+			if (chordName == _map[i].original) {
+				var x = _get(_map[i].transposed);
+				if (x) {
+					var chrd = new ukeGeeks.data.expandedChord(chordName);
+					chrd.dots = x.dots;
+					return chrd;
 				}
 			}
 		}
+
 		return null;
 	};
 
 	// local substitions (replacements for identical chord shapes)
-	var _subs = {'A#' : 'Bb', 'Db' : 'C#', 'D#' : 'Eb', 'Gb' : 'F#', 'Ab' : 'G#'};
+	var _subs = {
+		'A#': 'Bb',
+		'Db': 'C#',
+		'D#': 'Eb',
+		'Gb': 'F#',
+		'Ab': 'G#'
+	};
 	/**
 	 * todo:
 	 * @private
@@ -123,20 +137,20 @@ ukeGeeks.definitions = new function(){
 	 * @param chordName {string} Chord name
 	 * @return {expandedChord}
 	 */
-	var _get = function(chordName){
-		var n = chordName.substr(0,2);
+	var _get = function(chordName) {
+		var n = chordName.substr(0, 2);
 		var s = _subs[n];
-		if (s){
+		if (s) {
 			var c = _get(s + chordName.substr(2));
-			if (!c){
+			if (!c) {
 				return null;
 			}
 			var chrd = new ukeGeeks.data.expandedChord(chordName);
 			chrd.dots = c.dots;
 			return chrd;
 		}
-		for (var i = 0; i <_chords.length; i++){
-			if (chordName == _chords[i].name){
+		for (var i = 0; i < _chords.length; i++) {
+			if (chordName == _chords[i].name) {
 				return _chords[i];
 			}
 		}
@@ -148,9 +162,9 @@ ukeGeeks.definitions = new function(){
 	 * @param data {type} array of expanded chord objects
 	 * @return {int}
 	 */
-	this.add = function(data){
-		if (data.length){
-			for (var i=0; i < data.length; i++){
+	_public.add = function(data) {
+		if (data.length) {
+			for (var i = 0; i < data.length; i++) {
 				_userChords.push(data[i]);
 			}
 		}
@@ -162,9 +176,9 @@ ukeGeeks.definitions = new function(){
 	 * @param data {type} array of expanded chord objects
 	 * @return {int}
 	 */
-	this.replace = function(data){
+	_public.replace = function(data) {
 		_userChords = [];
-		return this.add(data);
+		return _public.add(data);
 	};
 
 	/**
@@ -172,33 +186,40 @@ ukeGeeks.definitions = new function(){
 	 * @method getChords
 	 * @return {arrayChords}
 	 */
-	this.getChords = function(){
+	_public.getChords = function() {
 		return _chords;
 	};
 
-	this.setChords = function(value){
+	_public.setChords = function(value) {
 		_chords = value;
 	};
 
-};
+	return _public;
+}());
 ;/**
  * Customize your installation. This JSON object controls appearance and
  * HTML element names. It's divided into four sections: graphics, ids, layout,
  * and "options".
  *
- * This is a SINGLETON class.
- *
  * @class settings
  * @namespace ukeGeeks
  * @static
+_public * @singleton
  */
-ukeGeeks.settings = new function(){
+ukeGeeks.settings = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * Chord Diagram Font styles -- font size, font-weight, font-face stack, etc.
 	 * @property fonts
 	 * @type JSON Object
 	 */
-	this.fonts = {
+	_public.fonts = {
 		dot: '9pt Arial Black,Arial',
 		text: 'bold 14pt Arial',
 		fret: 'bold 13pt Arial'
@@ -210,7 +231,7 @@ ukeGeeks.settings = new function(){
 	 * @property colors
 	 * @type JSON Object
 	 */
-	this.colors= {
+	_public.colors = {
 		fretLines: '#003366',
 		dots: '#ff0000',
 		dotText: '#ffffff',
@@ -221,7 +242,7 @@ ukeGeeks.settings = new function(){
 	};
 
 	/* Standard Fretbox Options, these properties documented individually */
-	this.fretBox = {
+	_public.fretBox = {
 		/**
 		 * True if chord name and finger "number" are to be drawn on canvas.
 		 * By default normal chord diagrams have text (TRUE) whereas inlineDiagrams
@@ -274,8 +295,8 @@ ukeGeeks.settings = new function(){
 		 * @type JSON
 		 */
 		topLeftPos: {
-			x:22,
-			y:25
+			x: 22,
+			y: 25
 		},
 		/**
 		 * muted string "X" width of the 'X' crossbars. Recommend this be about 0.5 to 0.9 relative to stringSpace.
@@ -297,7 +318,7 @@ ukeGeeks.settings = new function(){
 	 * @property layout
 	 * @type JSON Object
 	 */
-	this.inlineFretBox = {
+	_public.inlineFretBox = {
 		showText: false,
 		height: 50,
 		width: 40,
@@ -311,7 +332,7 @@ ukeGeeks.settings = new function(){
 		},
 		xWidth: 0.7 * 7,
 		xStroke: 1.4 * 1,
-		fonts : {
+		fonts: {
 			dot: '8pt Arial',
 			text: '8pt Arial',
 			fret: '8pt Arial'
@@ -323,7 +344,7 @@ ukeGeeks.settings = new function(){
 	 * @property ids
 	 * @type JSON Object
 	 */
-	this.ids = {
+	_public.ids = {
 		songText: 'ukeSongText', // element holding the song's text
 		canvas: 'ukeChordsCanvas', // canvas
 		container: 'ukeSongContainer' // wraps BOTH Song Text and Chord Canvas
@@ -334,7 +355,7 @@ ukeGeeks.settings = new function(){
 	 * @property wrapClasses
 	 * @type JSON Object
 	 */
-	this.wrapClasses = {
+	_public.wrapClasses = {
 		wrap: 'ugs-song-wrap', // wraps BOTH Song Text and Chord Canvas
 		diagrams: 'ugs-diagrams-wrap', // canvas
 		text: 'ugs-source-wrap' // element holding the song's text
@@ -345,7 +366,7 @@ ukeGeeks.settings = new function(){
 	 * @property opts
 	 * @type JSON Object
 	 */
-	this.opts = {
+	_public.opts = {
 		columnsEnabled: true,
 		/**
 		 * the [ and ] surrounding chord names often looks bad in print (usually only good when inline)
@@ -360,14 +381,14 @@ ukeGeeks.settings = new function(){
 		 * @property opts.ignoreCommonChords
 		 * @type Boolean
 		 */
-		ignoreCommonChords : false,
+		ignoreCommonChords: false,
 		/**
 		 * if TRUE chords that overlap each other (in the music area) will have their spacing adjuste
 		 * to prevent overlapping.
 		 * @property opts.autoFixOverlaps
 		 * @type Boolean
 		 */
-		autoFixOverlaps : true
+		autoFixOverlaps: true
 	};
 
 	/**
@@ -375,7 +396,7 @@ ukeGeeks.settings = new function(){
 	 * @property inlineDiagrams
 	 * @type Bool
 	 */
-	this.inlineDiagrams = false;
+	_public.inlineDiagrams = false;
 
 	/**
 	 * Number of frets to draw. Default is 5 (as this is as wide as my hand can go and
@@ -383,31 +404,31 @@ ukeGeeks.settings = new function(){
 	 * @property numFrets
 	 * @type int
 	 */
-	this.numFrets = 5;
+	_public.numFrets = 5;
 
 	/**
 	 * Array of string names, changes between baritone and soprano
 	 * @property tuning
 	 * @type string Array
 	 */
-	this.tuning = ['G','C','E','A'];
+	_public.tuning = ['G', 'C', 'E', 'A'];
 
 	/**
 	 * The initial tuning when page first loads, used in scriptasaurus.init.
 	 * @property defaultInstrument
 	 * @type {enum_int}
 	 */
-	this.defaultInstrument = ukeGeeks.definitions.instrument.sopranoUke;
+	_public.defaultInstrument = ukeGeeks.definitions.instrument.sopranoUke;
 
 	/**
 	 * TODO: Clean-up Tab Options!!
 	 * @property tabs
 	 * @type JSON Object
 	 */
-	this.tabs = {
-		lineSpacing : 16, // pixels between lines (or strings)
-		noteSpacing : 14, // pixels between finger dots
-		lineWidth : 1, // pixels
+	_public.tabs = {
+		lineSpacing: 16, // pixels between lines (or strings)
+		noteSpacing: 14, // pixels between finger dots
+		lineWidth: 1, // pixels
 		lineColor: '#999999', // hex
 		labelWidth: 12, // pixels, how much room to allow for string names, eg, "G" or "A"
 		labelFont: '10pt Arial, Helvetica, Verdana, Geneva, sans-serif',
@@ -419,13 +440,13 @@ ukeGeeks.settings = new function(){
 	};
 
 	// Info about runtime environment. Not really a setting.
-	this.environment = {
+	_public.environment = {
 		/**
 		 * set in scriptasaurus. True if UserAgent is Internet Explorer
 		 * @property settings.environment.isIe
 		 * @type bool
 		 */
-		isIe : false
+		isIe: false
 	};
 
 
@@ -433,7 +454,7 @@ ukeGeeks.settings = new function(){
 	 * List of common chords to be "ignored" (won't show master chord diagrams)
 	 * @type string Array
 	 */
-	this.commonChords = ['A','B','C','D','E','F','G', 'Am'];
+	_public.commonChords = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'Am'];
 
 	/**
 	 * TODO: determine minimum value... 1?
@@ -443,12 +464,12 @@ ukeGeeks.settings = new function(){
 	 * @param mulitplier {int} see scale method's parameter
 	 * @return mixed
 	 */
-	var _scaleNode = function(node, mulitplier){
-		if (typeof(node) == 'number'){
+	var _scaleNode = function(node, mulitplier) {
+		if (typeof(node) == 'number') {
 			return node * mulitplier;
 		}
-		else if (typeof(node) == 'object'){
-			for(var i in node){
+		else if (typeof(node) == 'object') {
+			for (var i in node) {
 				node[i] = _scaleNode(node[i], mulitplier);
 			}
 			return node;
@@ -466,9 +487,9 @@ ukeGeeks.settings = new function(){
 	 * @param mulitplier {int} see scale method's parameter
 	 * @return {void}
 	 */
-	var _scaleFont = function(font, mulitplier){
+	var _scaleFont = function(font, mulitplier) {
 		var bits = font.match(sizeRe);
-		if (bits.length < 2){
+		if (bits.length < 2) {
 			return font;
 		}
 		var size = parseInt(bits[1]) * mulitplier;
@@ -483,12 +504,12 @@ ukeGeeks.settings = new function(){
 	 * @param mulitplier {int}
 	 * @return {void}
 	 */
-	this.scale = function(mulitplier){
-		if (mulitplier == 1.0){
+	_public.scale = function(mulitplier) {
+		if (mulitplier == 1.0) {
 			return;
 		}
 
-		for(var i in this.fonts){
+		for (var i in this.fonts) {
 			this.fonts[i] = _scaleFont(this.fonts[i], mulitplier);
 		}
 
@@ -496,38 +517,47 @@ ukeGeeks.settings = new function(){
 		this.fretBox = _scaleNode(this.fretBox, mulitplier);
 	};
 
-};
+	return _public;
+}());
 ;/**
  * A container or Models library. ukegeeks.data is really a "Models" namespace. Please refactor.
  * @class data
  * @namespace ukeGeeks
+ * @singleton
  */
-ukeGeeks.data = new function(){
+ukeGeeks.data = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * Chord info sutiable for plotting on Canvas; has name and dot positions
 	 * @class expandedChord
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
-	this.expandedChord = function(name){
+	_public.expandedChord = function(name) {
 		/**
 		 * string, i.e. 'C#6'
 		 * @property name
-	   * @type string
-	   */
-		this.name= name;
+		 * @type string
+		 */
+		this.name = name;
 		/**
 		 * Array of data.dot objects
 		 * @property dots
-	   * @type array
-	   */
-		this.dots= [];
+		 * @type array
+		 */
+		this.dots = [];
 		/**
 		 * Array of bools, true means that string is not played (muted). i.e. chord.mute[2] means third string is muted.
 		 * @property mute
-	   * @type array
-	   */
-		this.muted= [];
+		 * @type array
+		 */
+		this.muted = [];
 	};
 
 	/**
@@ -536,64 +566,64 @@ ukeGeeks.data = new function(){
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
-	this.song = function(){
+	_public.song = function() {
 		/**
 		 * Song Title
 		 * @property title
-	   * @type string
-	   */
-		this.title= '';
+		 * @type string
+		 */
+		this.title = '';
 		/**
 		 * Album
 		 * @property album
-	   * @type string
-	   */
+		 * @type string
+		 */
 		this.album = '';
 		/**
 		 * Artist Info
 		 * @property artist
-	   * @type string
-	   */
+		 * @type string
+		 */
 		this.artist = '';
 		/**
 		 * Subtitle, often Artist Info
 		 * @property st
-	   * @type string
-	   */
-		this.st= '';
+		 * @type string
+		 */
+		this.st = '';
 		/**
 		 * Subtitle Number 2, subtitle2 (not used yet)
 		 * @property st2
-	   * @type string
-	   */
-		this.st2= '';
+		 * @type string
+		 */
+		this.st2 = '';
 		/**
 		 *
 		 * @property body
-	   * @type string
-	   */
-		this.body= '';
+		 * @type string
+		 */
+		this.body = '';
 		/**
 		 * True if there is at least one chord in use, false otherwise. Useful for laying out tablature, which might have no chords.
 		 * @property hasChords
-	   * @type bool
-	   */
+		 * @type bool
+		 */
 		this.hasChords = false;
 
-		this.ugsMeta=[];
+		this.ugsMeta = [];
 		/**
 		 * array of data.dots
 		 * @property defs
-	   * @type array
-	   */
-		this.defs= [];
+		 * @type array
+		 */
+		this.defs = [];
 
 		/**
 		 * array of chord names found in current song
 		 * @property chordNames
-	   * @type array(strings)
-	   */
-		this.chords= [];
+		 * @type array(strings)
+		 */
+		this.chords = [];
 	};
 
 	/**
@@ -602,44 +632,44 @@ ukeGeeks.data = new function(){
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
-	this.dot = function(string, fret, finger){
+	_public.dot = function(string, fret, finger) {
 		/**
 		 * The ukulele's string, numbered from "top" (1) to "bottom" (4). Sporano uke strings would be ['G' => 1,'C' => 2,'E' => 3,'A' => 4]
 		 * @property string
-	   * @type int
-	   */
-		this.string= string;
+		 * @type int
+		 */
+		this.string = string;
 		/**
 		 * Fret position, i.e. 0-12
 		 * @property fret
-	   * @type int
-	   */
+		 * @type int
+		 */
 		this.fret = fret;
 		/**
 		 * Your finger, 0-4
 		 * @property finger
-	   * @type int
-	   */
+		 * @type int
+		 */
 		this.finger = finger;
 	};
 
-	this.instrument  = function(key, name, tuning, chords){
+	_public.instrument = function(key, name, tuning, chords) {
 		this.key = key;
 		this.name = name;
 		this.tuning = tuning;
 		this.chords = chords;
 	};
 
-	this.htmlHandles = function(wrap, diagrams, text){
+	_public.htmlHandles = function(wrap, diagrams, text) {
 		this.wrap = wrap;
 		this.diagrams = diagrams;
 		this.text = text;
 	};
 
-// -----------------------------------------------------------------------------------------
-// *** DOCUMENTAION ONLY ***
-// -----------------------------------------------------------------------------------------
-/**
+	// -----------------------------------------------------------------------------------------
+	// *** DOCUMENTAION ONLY ***
+	// -----------------------------------------------------------------------------------------
+	/**
 	 * Documentation Only (no JS Definition)
 	 * <br />
 	 * <br />The JSON format used for add-in fingerings. Frequently you'll add this to indicate
@@ -662,33 +692,43 @@ ukeGeeks.data = new function(){
 	 * @namespace ukeGeeks.data
 	 */
 	/**
-		* ex: 'G'
-		* @property string
-		* @type char
-		* @for ukeGeeks.data.addInFinger
-		*/
+	 * ex: 'G'
+	 * @property string
+	 * @type char
+	 * @for ukeGeeks.data.addInFinger
+	 */
 	/**
-		* ex: 0-12
-		* @property fret
-		* @type int
-		* @for ukeGeeks.data.addInFinger
-		*/
+	 * ex: 0-12
+	 * @property fret
+	 * @type int
+	 * @for ukeGeeks.data.addInFinger
+	 */
 	/**
-		* ex: 0-4 (where 1 = index finger and 4 = pinky)
-		* @property  finger
-		* @type int
-		* @for ukeGeeks.data.addInFinger
-		*/
+	 * ex: 0-4 (where 1 = index finger and 4 = pinky)
+	 * @property  finger
+	 * @type int
+	 * @for ukeGeeks.data.addInFinger
+	 */
 
-}
+	return _public;
+
+}());
 ;/**
  * some jQuery-like tools (very, very crappy. wish we could count on jQuery being on the page.)
  * if you do want to use jQuery (and why wouldn't you) I'm not offended if you yank this out.
  * @class toolsLite
  * @namespace ukeGeeks
  * @project UkeGeeks' Scriptasaurus
+ * @singleton
  */
-ukeGeeks.toolsLite = new function(){
+ukeGeeks.toolsLite = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	var regEx = {
 		dbleSpace: /\s{2,}/g,
 		trim: /^\s+|\s+$/g
@@ -701,34 +741,34 @@ ukeGeeks.toolsLite = new function(){
 	 * @param className {string} CSS classname to add
 	 * @return {void}
 	 */
-	this.addClass = function(element, className){
-		if (!this.hasClass(element,className)) {
+	_public.addClass = function(element, className) {
+		if (!_public.hasClass(element, className)) {
 			element.className += ' ' + className;
 		}
 	};
 
-	this.hasClass = function(element, className) {
+	_public.hasClass = function(element, className) {
 		return element.className.match(getRegEx(className));
 	};
 
-	this.removeClass = function(element, className) {
-		if (this.hasClass(element, className)) {
+	_public.removeClass = function(element, className) {
+		if (_public.hasClass(element, className)) {
 			var reg = getRegEx(className);
-			element.className=element.className.replace(reg,' ');
+			element.className = element.className.replace(reg, ' ');
 		}
 	};
 
-	this.setClass = function(element, className, isActive) {
-		if (isActive){
-			this.addClass(element, className);
+	_public.setClass = function(element, className, isActive) {
+		if (isActive) {
+			_public.addClass(element, className);
 		}
-		else{
-			this.removeClass(element, className);
+		else {
+			_public.removeClass(element, className);
 		}
 	};
 
-	var getRegEx = function(className){
-		return new RegExp('(\\s|^)'+className+'(\\s|$)');
+	var getRegEx = function(className) {
+		return new RegExp('(\\s|^)' + className + '(\\s|$)');
 	};
 
 	/**
@@ -737,11 +777,11 @@ ukeGeeks.toolsLite = new function(){
 	 * @param str {String} String to trim.
 	 * @return {String} Returns string without leading and following white space characters.
 	 */
-	this.trim = function(str){
+	_public.trim = function(str) {
 		return str.replace(regEx.trim, '');
 	};
 
-	this.pack = function(value){
+	_public.pack = function(value) {
 		return value.replace(regEx.dbleSpace, ' ').replace(regEx.trim, '');
 	};
 
@@ -753,21 +793,21 @@ ukeGeeks.toolsLite = new function(){
 	 * @param tag {string} restrict search to a specific tag name. defaults to all tags.
 	 * @return {arrayDomElements}
 	 */
-	this.getElementsByClass = function(searchClass, node, tag) {
-		if (node == null){
+	_public.getElementsByClass = function(searchClass, node, tag) {
+		if (node === null) {
 			node = document;
 		}
-		if (node.getElementsByClassName){
+		if (node.getElementsByClassName) {
 			return node.getElementsByClassName(searchClass);
 		}
 
-		var classElements = new Array();
-		if (tag == null){
+		var classElements = [];
+		if (tag === null) {
 			tag = '*';
 		}
 		var els = node.getElementsByTagName(tag);
 		var elsLen = els.length;
-		var pattern = new RegExp("(^|\\s)"+searchClass+"(\\s|$)");
+		var pattern = new RegExp("(^|\\s)" + searchClass + "(\\s|$)");
 		for (i = 0, j = 0; i < elsLen; i++) {
 			if (pattern.test(els[i].className)) {
 				classElements[j] = els[i];
@@ -776,22 +816,33 @@ ukeGeeks.toolsLite = new function(){
 		}
 		return classElements;
 	};
-};
+
+	return _public;
+
+}());
 ;/**
  * Converts text to JSON objects. Accetps either large text blocks or single lines of
  * text written in CPM syntax (looks for instrument, tuning, and define statements).
  * @class chordImport
  * @namespace ukeGeeks
  * @project UkeGeeks' Scriptasaurus
+ * @singleton
  */
-ukeGeeks.chordImport = new function(){
+ukeGeeks.chordImport = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * Internal storage of partially converted "define" statements. The Definition (string) and addIn (array<strings>)
 	 * @class chordImport.chordParts
 	 * @type ClassDefinition
 	 * @private
 	 */
-	var chordParts = function(definition, addIns){
+	var chordParts = function(definition, addIns) {
 		this.define = definition;
 		this.adds = addIns;
 	};
@@ -807,13 +858,13 @@ ukeGeeks.chordImport = new function(){
 		define: /\s*{?define\s*:(.*?)(}|add:)/i,
 		add: /(add:.*?)(}|add:)/i,
 		// chord building filters
-		name : /(\S+)\s+/,
-		frets : /\s+frets\s+([\dx]{4}|(([\dx]{1,2}\s){3})[\dx]{1,2})/i,
-		fingers : /\s+fingers\s+((\d\s+){3}\d|\d{4})/i,
-		muted : /\s+mute\s+(\d\s){0,3}\d?/i,
+		name: /(\S+)\s+/,
+		frets: /\s+frets\s+([\dx]{4}|(([\dx]{1,2}\s){3})[\dx]{1,2})/i,
+		fingers: /\s+fingers\s+((\d\s+){3}\d|\d{4})/i,
+		muted: /\s+mute\s+(\d\s){0,3}\d?/i,
 		// TODO: ignores "base-fret 1"
 		// filter "add-in" chord fingers
-		addin : /add:\s*string\s*(\S+)\s+fret\s+(\d+)\sfinger\s(\d)/i,
+		addin: /add:\s*string\s*(\S+)\s+fret\s+(\d+)\sfinger\s(\d)/i,
 		// extra commands
 		instr: /{\s*instrument\s*:\s*(.*?)\s*}/i,
 		tuning: /{\s*tuning\s*:\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*}/i,
@@ -830,11 +881,11 @@ ukeGeeks.chordImport = new function(){
 	 * @param line {string} Single line (string with one statment)
 	 * @return {array<chordParts>}
 	 */
-	var _lineToParts = function(line){
+	var _lineToParts = function(line) {
 		var s = ukeGeeks.toolsLite.pack(line);
-		if (s.length > 1 && s[0] != '#'){
+		if (s.length > 1 && s[0] != '#') {
 			var m = s.match(regEx.define);
-			if (m && m.length > 1){
+			if (m && m.length > 1) {
 				return new chordParts(m[1], _getAddIns(s));
 			}
 		}
@@ -848,11 +899,11 @@ ukeGeeks.chordImport = new function(){
 	 * @param line {array<string>} Array of lines (stings) each wtih one statment
 	 * @return {void}
 	 */
-	var _textToParts = function(lines){
+	var _textToParts = function(lines) {
 		var p = [];
-		for(var i in lines){
+		for (var i in lines) {
 			var c = _lineToParts(lines[i]);
-			if (c){
+			if (c) {
 				p.push(c);
 			}
 		}
@@ -866,10 +917,10 @@ ukeGeeks.chordImport = new function(){
 	 * @param txt {string}
 	 * @return {void}
 	 */
-	var _getAddIns = function(txt){
+	var _getAddIns = function(txt) {
 		var finds = [];
 		var m = txt.match(regEx.add);
-		while (m && m.length > 1){
+		while (m && m.length > 1) {
 			finds.push(m[1]);
 			txt = txt.replace(m[1], '');
 			m = txt.match(regEx.add);
@@ -884,9 +935,9 @@ ukeGeeks.chordImport = new function(){
 	 * @param text {string} Single statement to be searched
 	 * @return {string}
 	 */
-	var _getInstrument = function(text){
+	var _getInstrument = function(text) {
 		var c = text.match(regEx.instr);
-		if (!c){
+		if (!c) {
 			return null;
 		}
 		return ukeGeeks.toolsLite.pack(c[1]);
@@ -899,9 +950,9 @@ ukeGeeks.chordImport = new function(){
 	 * @param text {string} Single statement to be searched
 	 * @return {string}
 	 */
-	var _getTuning = function(text){
+	var _getTuning = function(text) {
 		var c = text.match(regEx.tuning);
-		if (!c){
+		if (!c) {
 			return null;
 		}
 		return [c[1], c[2], c[3], c[4]];
@@ -914,9 +965,9 @@ ukeGeeks.chordImport = new function(){
 	 * @param text {string} Single statement to be searched
 	 * @return {string}
 	 */
-	var _getName = function(text){
+	var _getName = function(text) {
 		var c = text.match(regEx.name);
-		if (!c){
+		if (!c) {
 			return null;
 		}
 		return c[1];
@@ -930,10 +981,10 @@ ukeGeeks.chordImport = new function(){
 	 * @param tuning {array<string>}
 	 * @return {string}
 	 */
-	var _getKey = function(name, tuning){
+	var _getKey = function(name, tuning) {
 		var s = name.replace(' ', '-');
-		for(var i in tuning){
-			s+= '-' + tuning[i];
+		for (var i in tuning) {
+			s += '-' + tuning[i];
 		}
 		return s.toLowerCase();
 	};
@@ -948,13 +999,13 @@ ukeGeeks.chordImport = new function(){
 	 * @param muted {array<bool>}
 	 * @return {void}
 	 */
-	var _fretOMatic = function(text, frets, muted){
+	var _fretOMatic = function(text, frets, muted) {
 		var f = text.match(regEx.frets);
-		if (!f){
+		if (!f) {
 			return;
 		}
 		var m = (f[1].length == 4) ? f[1].match(regEx.any) : f[1].match(regEx.numOrX);
-		for(var i = 0; i < m.length; i++){
+		for (var i = 0; i < m.length; i++) {
 			var isX = m[i] == 'x' || m[i] == 'X';
 			frets[i] = isX ? 0 : parseInt(m[i]);
 			muted[i] = isX;
@@ -968,13 +1019,13 @@ ukeGeeks.chordImport = new function(){
 	 * @param text {string} string to be searched
 	 * @return {array<string>}
 	 */
-	var _getFingers = function(text){
+	var _getFingers = function(text) {
 		var f = text.match(regEx.fingers);
-		if (!f){
+		if (!f) {
 			return [];
 		}
 		var x = f[1];
-		if (x.length == 4){
+		if (x.length == 4) {
 			x = x.replace(regEx.any, '$1 ');
 		}
 		return x.split(' ');
@@ -988,12 +1039,12 @@ ukeGeeks.chordImport = new function(){
 	 * @param fingers {array}
 	 * @return {array<ukeGeeks.data.dot>} array of dots
 	 */
-	var _toDots = function(frets, fingers){
+	var _toDots = function(frets, fingers) {
 		var dots = [];
 		var tuning = ukeGeeks.settings.tuning;
-		for (var j = 0; j < tuning.length; j++){
+		for (var j = 0; j < tuning.length; j++) {
 			var n = parseInt(frets[j]);
-			if (n > 0){
+			if (n > 0) {
 				dots.push(new ukeGeeks.data.dot(j, n, (fingers.length - 1 >= j) ? parseInt(fingers[j]) : 0));
 			}
 		}
@@ -1008,13 +1059,13 @@ ukeGeeks.chordImport = new function(){
 	 * @param adds {array<string>} array of "add instruction" to be parsed (i.e. "add: string G fret 1 finger 1")
 	 * @return {void}
 	 */
-	var _addInDots = function(dots, adds){
-		if (!adds || adds.length < 1){
+	var _addInDots = function(dots, adds) {
+		if (!adds || adds.length < 1) {
 			return;
 		}
-		for(var i in adds){
+		for (var i in adds) {
 			var a = adds[i].match(regEx.addin);
-			if (a && a.length > 2){
+			if (a && a.length > 2) {
 				dots.push(new ukeGeeks.data.dot(parseInt(a[1]) - 1, parseInt(a[2]), parseInt(a[3])));
 			}
 		}
@@ -1028,7 +1079,7 @@ ukeGeeks.chordImport = new function(){
 	 * @param adds {type}
 	 * @return {void}
 	 */
-	var _getExpandedChord = function(text, adds){
+	var _getExpandedChord = function(text, adds) {
 		var frets = [];
 		var muted = [];
 		_fretOMatic(text, frets, muted);
@@ -1036,11 +1087,11 @@ ukeGeeks.chordImport = new function(){
 		var name = _getName(text);
 		var fingers = _getFingers(text);
 
-		if (name == null || name == 'frets'){
+		if (name === null || name == 'frets') {
 			_log('bad "define" instruction: chord name not found: ' + text);
 			return null;
 		}
-		if (frets == null){
+		if (frets === null) {
 			_log('bad "define" instruction: frets not found: ' + text);
 			return null;
 		}
@@ -1060,12 +1111,12 @@ ukeGeeks.chordImport = new function(){
 	 * @param parts {type}
 	 * @return {void}
 	 */
-	var _partsToChords = function(parts){
+	var _partsToChords = function(parts) {
 		var c = [];
 		var x = null;
-		for(var i in parts){
+		for (var i in parts) {
 			x = _getExpandedChord(parts[i].define, parts[i].adds);
-			if (x){
+			if (x) {
 				c.push(x);
 			}
 		}
@@ -1080,12 +1131,12 @@ ukeGeeks.chordImport = new function(){
 	 * @param msg {string} Error message to be added
 	 * @return {void}
 	 */
-	var _log = function(msg){
+	var _log = function(msg) {
 		_errs.push(msg);
-	}
+	};
 	var _errs = [];
-	var _echoLog = function(){
-		for(var i in _errs){
+	var _echoLog = function() {
+		for (var i in _errs) {
 			console.log(i + '. ' + _errs[i]);
 		}
 	};
@@ -1096,9 +1147,9 @@ ukeGeeks.chordImport = new function(){
 	 * @param line {string} Single line (string with one statment)
 	 * @return {ukeGeeks.data.expandedChord}
 	 */
-	this.runLine = function(line){
+	_public.runLine = function(line) {
 		var c = _lineToParts(line);
-		if (!c){
+		if (!c) {
 			return null;
 		}
 		return _getExpandedChord(c.define, c.adds);
@@ -1110,10 +1161,10 @@ ukeGeeks.chordImport = new function(){
 	 * @param text {string} Multiline text block containing definition, instrument, and tuning statements.
 	 * @return {ukeGeeks.data.instrument}
 	 */
-	this.runBlock = function(text){
+	_public.runBlock = function(text) {
 		//TODO: newlines get lost in strings, do I always relya on "{"?
 		var nL = text.split('\n');
-		if (nL.length < 2){
+		if (nL.length < 2) {
 			nL = text.split('{');
 		}
 		var parts = _textToParts(nL);
@@ -1127,32 +1178,44 @@ ukeGeeks.chordImport = new function(){
 		);
 	};
 
-}
+	return _public;
+}());
 ;/**
  * Can shift a single chord or list of chords up/down by a series of steps. Hangles
  * finding equivalent chord names (i.e. A# is same as Bb)
  *
- * This is a SINGLETON class.
- *
  * @class transpose
  * @namespace ukeGeeks
  * @static
+ * @singleton
  */
-ukeGeeks.transpose = new function(){
+ukeGeeks.transpose = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	var re = /^([A-G][#b]?)(.*)/;
 	var tones = {
-		'A' : 0,
-		'A#' : 1, 'Bb' : 1,
-		'B' : 2,
-		'C' : 3,
-		'C#' : 4, 'Db' : 4,
-		'D' : 5,
-		'D#' : 6, 'Eb' : 6,
-		'E' : 7,
-		'F' : 8,
-		'F#' : 9, 'Gb' : 9,
-		'G' : 10,
-		'G#' : 11, 'Ab' : 11
+		'A': 0,
+		'A#': 1,
+		'Bb': 1,
+		'B': 2,
+		'C': 3,
+		'C#': 4,
+		'Db': 4,
+		'D': 5,
+		'D#': 6,
+		'Eb': 6,
+		'E': 7,
+		'F': 8,
+		'F#': 9,
+		'Gb': 9,
+		'G': 10,
+		'G#': 11,
+		'Ab': 11
 	};
 
 	/**
@@ -1162,21 +1225,18 @@ ukeGeeks.transpose = new function(){
 	 * @param steps (int) number of semitones to transpose
 	 * @return string
 	 */
-	this.shift = function(name, steps){
+	_public.shift = function(name, steps) {
 		var t = getTone(name);
-		if (t == null){
+		if (t === null) {
 			return null;
 		}
-		var tone = t.tone + steps;
-		if (tone > 11){
-			tone = tone - 12;
-		}
-		else if (tone < 0){
+		var tone = (t.tone + steps) % 12;
+		// TODO: negative steps are allowed!!!
+		if (tone < 0) {
 			tone = tone + 12;
 		}
-		// TODO: negative steps are allowed!!!
-		for(var key in tones){
-			if (tone == tones[key]){
+		for (var key in tones) {
+			if (tone == tones[key]) {
 				return key + t.suffix;
 			}
 		}
@@ -1184,36 +1244,21 @@ ukeGeeks.transpose = new function(){
 	};
 
 	/**
-	 *
+	 * Returns object with name (A - G with flat/sharp), integer value (0 - 11), and its "suffix" (minor, 7th, etc)
 	 * @method getTone
 	 * @param name (string)
 	 * @return JSON
 	 */
-	var getTone = function(name){
+	var getTone = function(name) {
 		var m = name.match(re);
-		if (!m || m.length < 1){
+		if (!m || m.length < 1) {
 			return null;
 		}
 		return {
-			tone: parseInt(tones[m[1]]),
+			tone: parseInt(tones[m[1]], 10),
 			prefix: m[1],
 			suffix: m[2]
 		};
-	};
-
-
-	/**
-	 * something's gone amiss here...
-	 * @method transpose
-	 * @param name (string)
-	 * @param steps (int)
-	 * @return {string}
-	 */
-	this.transpose = function(name, steps){
-		if (steps == 0){
-			return name;
-		}
-		return '';
 	};
 
 	/**
@@ -1222,18 +1267,24 @@ ukeGeeks.transpose = new function(){
 	 * @param offset (int) optional
 	 * @return {array}
 	 */
-	this.retune = function(){
+	_public.retune = function() {
 		var offset = (arguments.length > 0) ? arguments[0] : 0;
 		var chords = ukeGeeks.definitions.getChords();
 		var s = [];
-		if (offset == 0){
-			for(var i in chords){
-				s.push({original: chords[i].name, transposed: chords[i].name});
+		if (offset === 0) {
+			for (var i in chords) {
+				s.push({
+					original: chords[i].name,
+					transposed: chords[i].name
+				});
 			}
 		}
-		else{
-			for(var i in chords){
-				s.push({original: chords[i].name, transposed: ukeGeeks.transpose.shift(chords[i].name, offset)});
+		else {
+			for (var z in chords) {
+				s.push({
+					original: chords[z].name,
+					transposed: _public.shift(chords[z].name, offset)
+				});
 			}
 		}
 		return s;
@@ -1246,14 +1297,20 @@ ukeGeeks.transpose = new function(){
 	 * @param  int steps  number of semitone steps (up or down)
 	 * @return array<strings>
 	 */
-	this.shiftChords = function(chords, steps){
+	_public.shiftChords = function(chords, steps) {
 		var newChords = [];
-		for(var i = 0; i < chords.length; i++){
-			newChords.push(this.shift(chords[i], steps));
+		for (var i = 0; i < chords.length; i++) {
+			newChords.push(_public.shift(chords[i], steps));
 		}
 		return newChords;
 	};
-};
+
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());
 ;ukeGeeks.definitions.addInstrument("\
 {instrument: Soprano Ukulele}\
 {tuning: G C E A}\
@@ -1448,12 +1505,20 @@ ukeGeeks.transpose = new function(){
 ");
 
 ;/**
- * Wraps three common canvas actions: adding canvas element to DOM, drawing a dot, adding text. A singleton.
+ * Wraps three common canvas actions: adding canvas element to DOM, drawing a dot, adding text.
  * @class canvasTools
  * @namespace ukeGeeks
  * @static
+ * @singleton
  */
-ukeGeeks.canvasTools = new function(){
+ukeGeeks.canvasTools = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * @method drawDot
 	 * @param ctx {type} blah
@@ -1462,7 +1527,7 @@ ukeGeeks.canvasTools = new function(){
 	 * @param color {string} Hex color
 	 * @return {void}
 	 */
-	this.drawDot = function (ctx, centerPos, radius, color){
+	_public.drawDot = function(ctx, centerPos, radius, color) {
 		ctx.beginPath();
 		ctx.arc(centerPos.x, centerPos.y, radius, 0, Math.PI * 2, true);
 		ctx.closePath();
@@ -1480,8 +1545,8 @@ ukeGeeks.canvasTools = new function(){
 	 * @param align {string} (optional) Text will be aligned at position (pos) as [left,right,center]. Default is center.
 	 * @return {void}
 	 */
-	this.drawText= function(ctx, pos, text, font, color, align){
-		if (!ctx.fillText) return;// IE check
+	_public.drawText = function(ctx, pos, text, font, color, align) {
+		if (!ctx.fillText) return; // IE check
 		ctx.font = font;
 		ctx.textAlign = (align || 'center');
 		ctx.fillStyle = color;
@@ -1496,14 +1561,14 @@ ukeGeeks.canvasTools = new function(){
 	 * @param height {int} Desired height of new canvas element
 	 * @return {canvasContextHandle}
 	 */
-	this.addCanvas = function(element, width, height){
+	_public.addCanvas = function(element, width, height) {
 		// make element
 		var c = document.createElement('canvas');
-		if (!c){
+		if (!c) {
 			return null;
 		}
 		// because IE is an abomination... must init & place in DOM BEFORE doing anything else
-		if (ukeGeeks.settings.environment.isIe){
+		if (ukeGeeks.settings.environment.isIe) {
 			c = G_vmlCanvasManager.initElement(c);
 		}
 		element.appendChild(c);
@@ -1511,15 +1576,14 @@ ukeGeeks.canvasTools = new function(){
 		c.height = height;
 		// canvas context handle
 		var ctx = c.getContext('2d');
-		if (!ctx){
+		if (!ctx) {
 			return null;
 		}
 		return ctx;
 	};
 
-}
-
-
+	return _public;
+}());
 ;/**
  * First places a Canvas element within a DOM element, then draws a chord diagram on it.
  * @class chordBrush
@@ -1758,7 +1822,8 @@ ukeGeeks.chordBrush = function() {
  * @class chordParser
  * @namespace ukeGeeks
  */
-ukeGeeks.chordParser = function(){};
+ukeGeeks.chordParser = function() {};
+
 ukeGeeks.chordParser.prototype = {
 	chords: [],
 
@@ -1772,8 +1837,7 @@ ukeGeeks.chordParser.prototype = {
 	 * @method init
 	 * @return {void}
 	 */
-	init: function(){
-	},
+	init: function() {},
 
 	/**
 	 * This does all of the work -- it's a Wrapper method that calls all of this classes other
@@ -1782,7 +1846,7 @@ ukeGeeks.chordParser.prototype = {
 	 * @param text {string} CPM Text Block to be parsed
 	 * @return {string}
 	 */
-	parse: function(text){
+	parse: function(text) {
 		this.chords = this._findChords(text);
 		text = this._encloseChords(text, this.chords);
 		text = this._packChords(text);
@@ -1794,7 +1858,7 @@ ukeGeeks.chordParser.prototype = {
 	 * @method getChords
 	 * @return {Array-chords}
 	 */
-	getChords: function(){
+	getChords: function() {
 		return this.chords;
 	},
 
@@ -1811,7 +1875,7 @@ ukeGeeks.chordParser.prototype = {
 	 * @param text {string} CPM Text Block to be parsed
 	 * @return {StringArray}
 	 */
-	_findChords: function(text){
+	_findChords: function(text) {
 		var re = /\[(.+?)]/img;
 		var m = text.match(re);
 		if (!m) return [];
@@ -1819,21 +1883,21 @@ ukeGeeks.chordParser.prototype = {
 		// why not use associative array?
 		var chords = [];
 		var found;
-		for (var i = 0; i < m.length; i++){
+		for (var i = 0; i < m.length; i++) {
 			found = false;
-			for (var j = 0; j < chords.length; j++){
+			for (var j = 0; j < chords.length; j++) {
 				if (chords[j] == m[i]) {
 					found = true;
 					break;
 				}
 			}
-			if (!found){
+			if (!found) {
 				chords.push(m[i]);
 			}
 		}
 		// clean 'em
-		for (var j in chords){
-			chords[j] = chords[j].replace('[','').replace(']','');
+		for (var j in chords) {
+			chords[j] = chords[j].replace('[', '').replace(']', '');
 		}
 		// done
 		return chords;
@@ -1848,12 +1912,12 @@ ukeGeeks.chordParser.prototype = {
 	 * @param chords {StringArray}
 	 * @return {string}
 	 */
-	_encloseChords: function(text, chords){
+	_encloseChords: function(text, chords) {
 		var openBracket = ukeGeeks.settings.opts.retainBrackets ? '[' : ' ';
 		var closeBracket = ukeGeeks.settings.opts.retainBrackets ? ']' : ' ';
-		for(var i in chords){
+		for (var i in chords) {
 			do {}
-			while(text.length != (text = text.replace(
+			while (text.length != (text = text.replace(
 				'[' + chords[i] + ']',
 				'<code data-chordName="' + chords[i] + '"><strong>' + openBracket + '<em>' + chords[i] + '</em>' + closeBracket + '</strong></code>')).length);
 		}
@@ -1877,24 +1941,22 @@ ukeGeeks.chordParser.prototype = {
 	 * @param text {string}
 	 * @return {string}
 	 */
-	_packChords: function(text){
-		if (ukeGeeks.settings.inlineDiagrams){
+	_packChords: function(text) {
+		if (ukeGeeks.settings.inlineDiagrams) {
 			/* TODO: problem with packing */
 			var re = /(<\/strong><\/code>)[ 	]*(<code data-chordName="[^"]*"><strong>)/ig;
-			return text.replace(re,'$1<span class="ugsInlineSpacer">&nbsp;</span>$2');
+			return text.replace(re, '$1<span class="ugsInlineSpacer">&nbsp;</span>$2');
 			/*
 			var re = /(<\/strong><\/code>)[ 	]*<code (data-chordName="[^"]*"><strong>)/ig;
 			return text.replace(re,'$1<code style="display:inline-block;width:40px;" $2');
 			*/
 		}
-		else{
+		else {
 			var re = /<\/strong><\/code>[ 	]*<code data-chordName="[^"]*"><strong>/ig;
-			return text.replace(re,' ');
+			return text.replace(re, ' ');
 		}
 	}
-}
-
-
+};
 ;/**
  * Reads a text block and returns an object containing whatever ChordPro elements it recognizes.
  *
@@ -1936,8 +1998,7 @@ ukeGeeks.cpmParser.prototype = {
 	 * @method init
 	 * @return {void}
 	 */
-	init: function(){
-	},
+	init: function() {},
 
 	/**
 	 * Accepts CPM text, returning HTML marked-up text
@@ -1946,7 +2007,7 @@ ukeGeeks.cpmParser.prototype = {
 	 * @return {songObject}
 	 */
 	parse: function(text) {
-		var song = new ukeGeeks.data.song;
+		var song = new ukeGeeks.data.song();
 		text = this._stripHtml(text);
 		var songDom = this._domParse(text);
 		songDom = this._parseInstr(songDom);
@@ -1954,11 +2015,7 @@ ukeGeeks.cpmParser.prototype = {
 		songDom = this._markChordLines(songDom);
 		song.body = this._export(songDom);
 		if (this.columnCount > 1) {
-			song.body = '<div class="' + this.classNames.ColumnWrap + ' ' + this.classNames.ColumnCount + this.columnCount + '">'
-			+ '<div class="' + this.classNames.Column + '">'
-			+ song.body
-			+ '</div>'
-			+ '</div>';
+			song.body = '<div class="' + this.classNames.ColumnWrap + ' ' + this.classNames.ColumnCount + this.columnCount + '">' + '<div class="' + this.classNames.Column + '">' + song.body + '</div>' + '</div>';
 		}
 		song.hasChords = this.hasChords;
 		var tmp;
@@ -2145,8 +2202,7 @@ ukeGeeks.cpmParser.prototype = {
 			else if (song[i].type == this.blockTypeEnum.ColumnBreak) {
 				html += '</div><div class="' + this.classNames.Column + '">';
 			}
-			else{
-			}
+			else {}
 		}
 		return html;
 	},
@@ -2344,8 +2400,7 @@ ukeGeeks.cpmParser.prototype = {
 						isChrdOnly = hasChrd && (ukeGeeks.toolsLite.trim(line.replace(regEx.allChords, '')).length < 1);
 						// need to find
 						song[i].lines[j] = {
-							type: (isChrdOnly ? this.blockTypeEnum.ChordOnlyText
-								: (hasChrd ? this.blockTypeEnum.ChordText : this.blockTypeEnum.PlainText)),
+							type: (isChrdOnly ? this.blockTypeEnum.ChordOnlyText : (hasChrd ? this.blockTypeEnum.ChordText : this.blockTypeEnum.PlainText)),
 							lines: [line]
 						};
 					}
@@ -2435,7 +2490,7 @@ ukeGeeks.chordPainter = function() {
 	 * @return {void}
 	 */
 	publics.init = function(htmlHandles) {
-		brush = new ukeGeeks.chordBrush;
+		brush = new ukeGeeks.chordBrush();
 		brush.init();
 		handles = htmlHandles;
 	};
@@ -2459,7 +2514,7 @@ ukeGeeks.chordPainter = function() {
 			if (chord == ukeGeeks.settings.commonChords[i]) {
 				return true;
 			}
-		};
+		}
 		return false;
 	};
 
@@ -2539,23 +2594,42 @@ ukeGeeks.chordPainter = function() {
 	return publics;
 };
 ;/**
- *
+ * Tablature renderer -- reads tab data and draws canvas elements.
+ * Creates "packed" versions of the tabs, including a "key line" that's comprised
+ * only of '-' and '*' -- the asterisks denoting where a dot will eventually be placed.
  * @class tabs
  * @namespace ukeGeeks
  */
-ukeGeeks.tabs = function(){};
+ukeGeeks.tabs = function() {};
 
 ukeGeeks.tabs.prototype = {
 
+	/**
+	 * (Constant) Number of Strings (dashed lines of tablature notation) expected. (For now
+	 * a constant -- ukueleles "always" have four). Making a variable to help support port
+	 * for other instruments.
+	 * @property _numStrings
+	 * @private
+	 * @type int
+	 */
+	_numStrings: 4,
+
+	/**
+	 * (Constant) Last String Name (Note), as above, on Ukulele is a "G". Here for other instruments.
+	 * @property _lastStringName
+	 * @private
+	 * @type string
+	 */
+	_lastStringName: 'G',
+
 	/* PUBLIC METHODS
-	  ---------------------------------------------- */
+	---------------------------------------------- */
 	/**
 	 * Again this is a constructor replacement
 	 * @method init
 	 * @return {void}
 	 */
-	init: function(){
-	},
+	init: function() {},
 
 	/**
 	 * Races through all &lt;pre&gt; tags within h, any with the CSS class of "ugsTabs" will be replaced with the canvas element.
@@ -2563,13 +2637,13 @@ ukeGeeks.tabs.prototype = {
 	 * @param h {DOM-element}
 	 * @return {void}
 	 */
-	replace: function(h){
+	replace: function(h) {
 		var tabBlocks = h.getElementsByTagName('pre');
-		for (var i in tabBlocks){
-			if (tabBlocks[i].className == 'ugsTabs'){
+		for (var i in tabBlocks) {
+			if (tabBlocks[i].className == 'ugsTabs') {
 				var s = tabBlocks[i].innerHTML;
-				tabBlocks[i].innerHTML = "";
-				this.loadBlocks(s,tabBlocks[i]);
+				tabBlocks[i].innerHTML = '';
+				this.loadBlocks(s, tabBlocks[i]);
 			}
 		}
 	},
@@ -2581,15 +2655,15 @@ ukeGeeks.tabs.prototype = {
 	 * @param outElement {string or DOM} Either: (string) the Id to a DOM element, or DOM element handle where the canvas/converted text will be placed.
 	 * @return {void}
 	 */
-	loadBlocks: function(text, outElement){
-		var lns = text.split('\n');
+	loadBlocks: function(text, outElement) {
+		var lines = text.split('\n');
 		var tab = [];
-		for(var i in lns){
-			var s = ukeGeeks.toolsLite.trim(lns[i]);
-			if (s.length > 0){
+		for (var i in lines) {
+			var s = ukeGeeks.toolsLite.trim(lines[i]);
+			if (s.length > 0) {
 				tab.push(s);
 			}
-			if (tab.length == 4){
+			if (tab.length == this._numStrings) {
 				this.redraw(tab, outElement);
 				tab = [];
 			}
@@ -2603,21 +2677,22 @@ ukeGeeks.tabs.prototype = {
 	 * @param outElement {string or DOM} Either: (string) the Id to a DOM element, or DOM element handle where the canvas/converted text will be placed.
 	 * @return {void}
 	 */
-	redraw: function(inTabs, outElement){
+	redraw: function(inTabs, outElement) {
 		// validate inTabs input...
 		// TODO: instead of this if it's text pop the entire processing back to loadBlocks!
 		inTabs = (typeof(inTabs) == 'string') ? (inTabs.split('\n')) : inTabs;
-		if (inTabs.length < 4) {
+		if (inTabs.length < this._numStrings) {
 			return;
 		}
 		// read tabs
 		var tabInfo = this._readTabs(inTabs);
-		var labelOffset = (tabInfo.hasLabels) ? ukeGeeks.settings.tabs.labelWidth: 0;
+		var labelOffset = (tabInfo.hasLabels) ? ukeGeeks.settings.tabs.labelWidth : 0;
 		var tabs = tabInfo.tabs;
 		// how much space?
-		var height = (3 * ukeGeeks.settings.tabs.lineSpacing) + (2 * ukeGeeks.settings.tabs.dotRadius) + ukeGeeks.settings.tabs.bottomPadding;
+		var height = ((this._numStrings - 1) * ukeGeeks.settings.tabs.lineSpacing) + (2 * ukeGeeks.settings.tabs.dotRadius) + ukeGeeks.settings.tabs.bottomPadding;
 		// prep canvas
 		outElement = (typeof(outElement) == 'string') ? document.getElementById(outElement) : outElement;
+
 		var ctx = ukeGeeks.canvasTools.addCanvas(outElement, this._getWidth(tabs, labelOffset, false), height);
 		var pos = {
 			x: ukeGeeks.settings.tabs.dotRadius + labelOffset,
@@ -2625,31 +2700,31 @@ ukeGeeks.tabs.prototype = {
 		};
 		this._drawStaff(ctx, pos, this._getWidth(tabs, labelOffset, true), ukeGeeks.settings.tabs);
 		this._drawNotes(ctx, pos, tabs, ukeGeeks.settings.tabs);
-		if (tabInfo.hasLabels){
+		if (tabInfo.hasLabels) {
 			this._drawLabels(ctx, pos, ukeGeeks.settings.tabs);
 		}
 	},
 
 	/**
-	 * This is insanely long, insanely kludely, but, insanely, it works. This will read break a block of text into
-	 * four lines (the ukulele strings), then find which frets are used by eadh. Then, the hard part, pack uneeded
+	 * This is insanely long, insanely kludgy, but, insanely, it works. This will read break a block of text into
+	 * four lines (the ukulele strings), then find which frets are used by each. Then, the hard part, pack un-needed
 	 * dashes. Once it's done that a 2-dimentional array (strings X frets) is created and returned.
 	 * @method _readTabs
 	 * @private
 	 * @param ukeStrings {array<string>} Block of tablbabure to be parsed
 	 * @return {2-dimentional array}
 	 */
-	_readTabs: function(ukeStrings){
-		var hasLabels = ukeStrings[3][0] == 'G';
-		if (hasLabels){
-			this._rdTbStripLabels(ukeStrings);
+	_readTabs: function(ukeStrings) {
+		var hasLabels = ukeStrings[this._numStrings - 1][0] == this._lastStringName;
+		if (hasLabels) {
+			this._stripStringLabels(ukeStrings);
 		}
-		var frets = this._rdTbGetFrets(ukeStrings);
-		var symbols = this._rdTbGetSymbols(ukeStrings);
-		var minLength = this._rdTbGetMinLength(ukeStrings);
-		var guide = this._rdTbGetGuide(symbols, minLength);
+		var frets = this._getFretNumbers(ukeStrings);
+		var symbols = this._getSymbols(ukeStrings);
+		var minLength = this._getMinLineLength(ukeStrings);
+		var guide = this._getGuideLine(symbols, minLength);
 		return {
-			tabs: this._rdTbGetPacked(frets,symbols,guide,minLength),
+			tabs: this._getPackedLines(frets, symbols, guide, minLength),
 			hasLabels: hasLabels
 		};
 	},
@@ -2659,17 +2734,18 @@ ukeGeeks.tabs.prototype = {
 	 * @private
 	 * @param tabs {2Darray}
 	 * @param labelOffset {int}
-	 * @param isTruncate {bool} If TRUE returns the length of the line, allowing for a terminating "|" character, othwrwise, it's for cavas width
+	 * @param isTruncate {bool} If TRUE returns the length of the line, allowing for a terminating "|" character, othwrwise, it's for canvas width
 	 * @return {int}
 	 */
-	_getWidth : function(tabs, labelOffset, isTruncate){
-		if (!isTruncate){
+	_getWidth: function(tabs, labelOffset, isTruncate) {
+		if (!isTruncate) {
 			return (ukeGeeks.settings.tabs.noteSpacing * tabs[0].length) + labelOffset + ukeGeeks.settings.tabs.dotRadius;
 		}
 
 		var len = tabs[0].length;
 		var plusDot = ukeGeeks.settings.tabs.dotRadius;
-		if (tabs[0][len - 1] == '|'){
+		if (tabs[0][len - 1] == '|') {
+			// TODO: too much??? retest
 			len -= 1;
 			plusDot = 0;
 		}
@@ -2679,32 +2755,31 @@ ukeGeeks.tabs.prototype = {
 
 	/**
 	 * Processes ukeStrings stripping the first character from each line
-	 * @method _rdTbStripLabels
+	 * @method _stripStringLabels
 	 * @private
 	 * @param ukeStrings {array<string>}
 	 * @return {void}
 	 */
-	_rdTbStripLabels: function(ukeStrings){
-		for(var i = 0; i < 4; i++){
+	_stripStringLabels: function(ukeStrings) {
+		for (var i = 0; i < this._numStrings; i++) {
 			ukeStrings[i] = ukeStrings[i].substr(1);
 		}
-	// return ukeStrings;
 	},
 
 	/**
 	 * Finds the frets in used for each line. In other words, ignoring
-	 * spacers ("-" or "|" for example) this returns arrays of numbers, the frets
+	 * spacers ("-" or "|") this returns arrays of numbers, the frets
 	 * in use, for each line.
-	 * @method _rdTbGetFrets
+	 * @method _getFretNumbers
 	 * @private
 	 * @param ukeStrings {array<string>}
 	 * @return {void}
 	 */
-	_rdTbGetFrets: function(ukeStrings){
+	_getFretNumbers: function(ukeStrings) {
 		// first, get the frets
 		var reInts = /([0-9]+)/g;
 		var frets = [];
-		for(var i=0; i < 4; i++){
+		for (var i = 0; i < this._numStrings; i++) {
 			frets[i] = ukeStrings[i].match(reInts);
 		}
 		return frets;
@@ -2713,19 +2788,19 @@ ukeGeeks.tabs.prototype = {
 	/**
 	 * Returns array of the strings with placeholders instead of the numbers.
 	 * This helps us pack because "12" and "7" now occupy the same space horizontally.
-	 * @method _rdTbGetSymbols
+	 * @method _getSymbols
 	 * @private
 	 * @param ukeStrings {array<string>}
 	 * @return {void}
 	 */
-	_rdTbGetSymbols: function(ukeStrings){
+	_getSymbols: function(ukeStrings) {
 		// convert to symbols
 		var reDoubles = /([0-9]{2})/g;
 		var reSingle = /([0-9])/g;
 		var symbols = [];
-		for(var i=0; i < 4; i++){
-			symbols[i] = ukeStrings[i].replace(reDoubles,'-*');
-			symbols[i] = symbols[i].replace(reSingle,'*');
+		for (var i = 0; i < this._numStrings; i++) {
+			symbols[i] = ukeStrings[i].replace(reDoubles, '-*');
+			symbols[i] = symbols[i].replace(reSingle, '*');
 		}
 		return symbols;
 	},
@@ -2734,15 +2809,15 @@ ukeGeeks.tabs.prototype = {
 	 * Run through all of the strings (array) and return the length of the shortest one.
 	 * would prefer the max length, but then I'd need to pad the shorter ones and ... well, it's complicated.
 	 * this gets a TODO: get max!
-	 * @method _rdTbGetMinLength
+	 * @method _getMinLineLength
 	 * @private
 	 * @param ukeStrings {array<string>}
 	 * @return {void}
 	 */
-	_rdTbGetMinLength: function(ukeStrings){
+	_getMinLineLength: function(ukeStrings) {
 		var minLength = 10000;
-		for(var i=0; i < 4; i++){
-			minLength = (ukeStrings[i].length < minLength)? ukeStrings[i].length : minLength;
+		for (var i = 0; i < this._numStrings; i++) {
+			minLength = (ukeStrings[i].length < minLength) ? ukeStrings[i].length : minLength;
 		}
 		return minLength;
 	},
@@ -2752,20 +2827,20 @@ ukeGeeks.tabs.prototype = {
 	 * here we go through and "merge" them into a single, master "guide" -- saying
 	 * "somewhere on this beat you'll pluck (or not) one note". This normalized
 	 * guide will be the master for the next step.
-	 * @method _rdTbGetGuide
+	 * @method _getGuideLine
 	 * @private
 	 * @param symbols {undefined}
 	 * @param minLength {int}
 	 * @return {void}
 	 */
-	_rdTbGetGuide: function(symbols, minLength){
+	_getGuideLine: function(symbols, minLength) {
 		// Build a master pattern "guide" and eliminate double dashes
 		var guide = '';
-		for(var i=0; i < minLength; i++){
-			if (symbols[0][i] == '|'){
+		for (var i = 0; i < minLength; i++) {
+			if (symbols[0][i] == '|') {
 				guide += '|';
 			}
-			else{
+			else {
 				guide += ((symbols[0][i] == '*') || (symbols[1][i] == '*') || (symbols[2][i] == '*') || (symbols[3][i] == '*')) ? '*' : '-';
 			}
 		}
@@ -2773,14 +2848,13 @@ ukeGeeks.tabs.prototype = {
 		guide = guide.replace(reDash, '- ');
 		reDash = / -/g;
 		var lastGuide = guide;
-		while (true){
+		while (true) {
 			guide = guide.replace(reDash, '  ');
-			if (guide == lastGuide){
+			if (guide == lastGuide) {
 				break;
 			}
 			lastGuide = guide;
 		}
-		// console.log(guide);
 		return guide;
 	},
 
@@ -2789,7 +2863,7 @@ ukeGeeks.tabs.prototype = {
 	 * with either a space, measure marker, or the note -- as an integer! Now the frets
 	 * are the same regardless of whether they are single or double digit numbers:
 	 * a "12" occupies no more horizontal space than a "5".
-	 * @method _rdTbGetPacked
+	 * @method _getPackedLines
 	 * @private
 	 * @param frets {undefined}
 	 * @param symbols {undefined}
@@ -2797,20 +2871,25 @@ ukeGeeks.tabs.prototype = {
 	 * @param minLength {undefined}
 	 * @return {void}
 	 */
-	_rdTbGetPacked: function(frets, symbols, guide, minLength){
+	_getPackedLines: function(frets, symbols, guide, minLength) {
 		// pack it!
-		var packed = [[],[],[],[]];
+		var packed = [
+			[],
+			[],
+			[],
+			[]
+		];
 		var chrNote = ''; // a temp variable to hold the 'note'
-		for (var j=0; j<4; j++){ // loop over lines
+		for (var j = 0; j < this._numStrings; j++) { // loop over lines
 			var p = 0; // packed counter
 			var f = 0; // fret counter
-			for(var i=0; i < minLength; i++){ // loop over guide
-				if (guide[i] != ' '){
-					if (symbols[j][i] == '*'){
+			for (var i = 0; i < minLength; i++) { // loop over guide
+				if (guide[i] != ' ') {
+					if (symbols[j][i] == '*') {
 						chrNote = frets[j][f];
 						f++;
 					}
-					else{
+					else {
 						chrNote = ((guide[i] == '|')) ? '|' : '-';
 					}
 					packed[j][p] = chrNote;
@@ -2831,12 +2910,12 @@ ukeGeeks.tabs.prototype = {
 	 * @param settings {settingsObj}
 	 * @return {voie}
 	 */
-	_drawStaff: function(ctx, pos, length, settings){
+	_drawStaff: function(ctx, pos, length, settings) {
 		var offset = settings.lineWidth / 2;
 		var x = pos.x + offset;
 		var y = pos.y + offset;
 		ctx.beginPath();
-		for (var i=0; i < 4; i++){
+		for (var i = 0; i < this._numStrings; i++) {
 			ctx.moveTo(x, y);
 			ctx.lineTo(x + length, y);
 			y += settings.lineSpacing;
@@ -2857,29 +2936,31 @@ ukeGeeks.tabs.prototype = {
 	 * @param settings {settingsObj}
 	 * @return {void}
 	 */
-	_drawNotes: function(ctx, pos, tabs, settings){
+	_drawNotes: function(ctx, pos, tabs, settings) {
 		var c;
 		var center = {
 			x: 0,
 			y: pos.y
 		};
-		for(var i in tabs){
-			if (i > 3) return;
+
+		for (var i in tabs) {
+			if (i > 3) {
+				return;
+			}
 			center.x = pos.x;
-			for (var j in tabs[i]){
+			for (var j in tabs[i]) {
 				c = tabs[i][j];
 				// (c != '-'){
-				if (c == '|'){
+				if (c == '|') {
 					var jnum = parseInt(j, 10);
 					var heavy =
-						(((jnum + 1) < (tabs[i].length - 1)) && (tabs[i][jnum + 1] == '|'))
-						|| ((jnum == (tabs[i].length - 1)) && (tabs[i][jnum - 1] == '|'));
+						(((jnum + 1) < (tabs[i].length - 1)) && (tabs[i][jnum + 1] == '|')) || ((jnum == (tabs[i].length - 1)) && (tabs[i][jnum - 1] == '|'));
 					this._drawMeasure(ctx, {
 						x: center.x,
 						y: pos.y
 					}, settings, heavy);
 				}
-				else if (!isNaN(c)){
+				else if (!isNaN(c)) {
 					ukeGeeks.canvasTools.drawDot(ctx, center, settings.dotRadius, settings.dotColor);
 					ukeGeeks.canvasTools.drawText(ctx, {
 						x: center.x,
@@ -2902,11 +2983,11 @@ ukeGeeks.tabs.prototype = {
 	 * @param heavy {bool} if TRUE hevy line
 	 * @return {void}
 	 */
-	_drawMeasure: function(ctx, pos, settings, heavy){
+	_drawMeasure: function(ctx, pos, settings, heavy) {
 		var offset = settings.lineWidth / 2;
 		ctx.beginPath();
 		ctx.moveTo(pos.x + offset, pos.y);
-		ctx.lineTo(pos.x + offset, pos.y + 3 * settings.lineSpacing);
+		ctx.lineTo(pos.x + offset, pos.y + (this._numStrings - 1) * settings.lineSpacing);
 		ctx.strokeStyle = settings.lineColor;
 		ctx.lineWidth = (heavy ? 4.5 : 1) * settings.lineWidth;
 		ctx.stroke();
@@ -2922,27 +3003,29 @@ ukeGeeks.tabs.prototype = {
 	 * @param settings {settingsObj}
 	 * @return {void}
 	 */
-	_drawLabels: function(ctx, pos, settings){
-		var labels = ukeGeeks.settings.tuning.slice(0).reverse();// ['A','E','C','G'];
-		for (var i=0; i < 4; i++){
+	_drawLabels: function(ctx, pos, settings) {
+		// ['A','E','C','G'];
+		var labels = ukeGeeks.settings.tuning.slice(0).reverse();
+		for (var i = 0; i < this._numStrings; i++) {
 			ukeGeeks.canvasTools.drawText(ctx, {
 				x: 1,
 				y: (pos.y + (i + 0.3) * settings.lineSpacing)
 			}, labels[i], settings.labelFont, settings.lineColor, 'left');
 		}
 	}
-}
+};
 ;/**
  * Singleton to correct overlapping chord names/diagrams in songs rendered by UGS
  * @class overlapFixer
  * @namespace ukeGeeks
  * @project UkeGeeks' Scriptasaurus
+ * @singleton
  */
 ukeGeeks.overlapFixer = (function() {
 
 	// private
 	// ---------------------------
-	var _publics = {};
+	var _public = {};
 
 	/**
 	 * returns TRUE if Box A overlaps Box B. Detailed horizontal check, we "cheat" the
@@ -2979,7 +3062,7 @@ ukeGeeks.overlapFixer = (function() {
 	 * @param  {DOM_element} element to be measured
 	 * @return {object}
 	 */
-	var getBox = function(ele){
+	var getBox = function(ele) {
 		var box = getOffsets(ele);
 		box.width = getWidth(ele);
 
@@ -2987,9 +3070,9 @@ ukeGeeks.overlapFixer = (function() {
 		// chord name is actually wider than the <strong>, let's check.
 		// BTW: this will happen on the "mini-chord diagram" option
 		var em = ele.getElementsByTagName('em')[0];
-		if (em){
+		if (em) {
 			var emWidth = getWidth(em);
-			if (emWidth > box.width){
+			if (emWidth > box.width) {
 				//console.log('box strong.width: ' + box.width + 'px, em.width: ' + emWidth +'px');
 				box.width = emWidth + 2;
 			}
@@ -3010,9 +3093,7 @@ ukeGeeks.overlapFixer = (function() {
 			return ele.clip.width;
 		}
 
-		return (ele.style.pixelWidth)
-			? ele.style.pixelWidth
-			: ele.offsetWidth;
+		return (ele.style.pixelWidth) ? ele.style.pixelWidth : ele.offsetWidth;
 	};
 
 	/**
@@ -3024,15 +3105,14 @@ ukeGeeks.overlapFixer = (function() {
 	 * @return {JSON}
 	 */
 	var getOffsets = function(ele) {
-		var box =
-		{
+		var box = {
 			top: 0,
 			left: 0,
 			right: 0,
 			width: 0
 		};
 
-		while( ele && !isNaN( ele.offsetLeft ) && !isNaN( ele.offsetTop ) ) {
+		while (ele && !isNaN(ele.offsetLeft) && !isNaN(ele.offsetTop)) {
 			box.left += ele.offsetLeft - ele.scrollLeft;
 			box.top += ele.offsetTop - ele.scrollTop;
 			ele = ele.offsetParent;
@@ -3049,20 +3129,20 @@ ukeGeeks.overlapFixer = (function() {
 	 * @param  {[DOM_element]} codeB [description]
 	 * @return {void}
 	 */
-	var checkChords = function(codeA, codeB){
+	var checkChords = function(codeA, codeB) {
 		var strongA = codeA.getElementsByTagName('strong')[0];
 		var strongB = codeB.getElementsByTagName('strong')[0];
 
-		if (!strongA || !strongB){
+		if (!strongA || !strongB) {
 			return;
 		}
 
 		var boxA = getBox(strongA);
 		var boxB = getBox(strongB);
 
-		if(checkOverlap(boxA, boxB)){
+		if (checkOverlap(boxA, boxB)) {
 			var width = boxA.right - boxB.left + 1;
-			codeA.style.paddingRight = (width < 1 ? 1 : width) +'px';
+			codeA.style.paddingRight = (width < 1 ? 1 : width) + 'px';
 		}
 	};
 
@@ -3072,7 +3152,7 @@ ukeGeeks.overlapFixer = (function() {
 	 * @method Fix
 	 * @param  {DOM_element} element containing the UGS HTML song
 	 */
-	_publics.Fix = function(ele){
+	_public.Fix = function(ele) {
 		var elements = ele.getElementsByTagName('code');
 
 		for (var i = 0; i < elements.length; i++) {
@@ -3084,9 +3164,8 @@ ukeGeeks.overlapFixer = (function() {
 		}
 	};
 
-	return _publics;
+	return _public;
 })();
-
 ;/**
  * Finds page HTML elements & creates ukeGeek objects;
  * Reads song text, parses, draws choard diagrams.
@@ -3094,19 +3173,27 @@ ukeGeeks.overlapFixer = (function() {
  * @class scriptasaurus
  * @namespace ukeGeeks
  * @static
+ * @singleton
  */
-ukeGeeks.scriptasaurus = new function(){
+ukeGeeks.scriptasaurus = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
 	/**
 	 * Preps this class for running
 	 * @method init
 	 * @param isIeFamily {bool} TRUE if UserAgent (Browser to you and me) is Internet Explorer
 	 * @return {void}
 	 */
-	this.init = function(isIeFamily){
+	_public.init = function(isIeFamily) {
 		ukeGeeks.settings.environment.isIe = isIeFamily;
 		// TODO: known problem -- need to preload Sorprano chord libarary then we can retune if needed
 		ukeGeeks.definitions.useInstrument(ukeGeeks.definitions.instrument.sopranoUke);
-		if (ukeGeeks.settings.defaultInstrument != ukeGeeks.definitions.instrument.sopranoUke){
+		if (ukeGeeks.settings.defaultInstrument != ukeGeeks.definitions.instrument.sopranoUke) {
 			ukeGeeks.definitions.useInstrument(ukeGeeks.settings.defaultInstrument);
 		}
 	};
@@ -3117,7 +3204,7 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @method run
 	 * @return {songObject}
 	 */
-	this.run = function(){
+	_public.run = function() {
 		//console.log('run (Classic Mode)');
 		var handles = _getHandlesFromId();
 		if (!handles || !handles.diagrams || !handles.text || !handles.wrap) {
@@ -3134,12 +3221,12 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @method runByClasses
 	 * @return {Array of songObject}
 	 */
-	this.runByClasses = function(){
+	_public.runByClasses = function() {
 		var songs = [];
 		var songWraps = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.wrap);
-		for(var i = 0; i < songWraps.length; i++){
+		for (var i = 0; i < songWraps.length; i++) {
 			var handles = _getHandlesFromClass(songWraps[i]);
-			if (handles == null){
+			if (handles === null) {
 				continue;
 			}
 			songs.push(_runSong(handles));
@@ -3152,7 +3239,7 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @method setTuningOffset
 	 * @param offset {int} (optional) default 0. Number of semitones to shift the tuning. See ukeGeeks.definitions.instrument.
 	 */
-	this.setTuningOffset = function(offset){
+	_public.setTuningOffset = function(offset) {
 		ukeGeeks.definitions.useInstrument(offset);
 	};
 
@@ -3166,32 +3253,32 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @param handles {ukeGeeks.data.htmlHandles}
 	 * @return {songObj}
 	 */
-	var _runSong = function(handles){
+	var _runSong = function(handles) {
 		// console.log('run Song');
 
 		// read Music, find chords, generate HTML version of song:
-		var cpm = new ukeGeeks.cpmParser;
+		var cpm = new ukeGeeks.cpmParser();
 		cpm.init();
 		var song = cpm.parse(handles.text.innerHTML);
 		ukeGeeks.definitions.replace(song.defs);
 
-		var chrdPrsr = new ukeGeeks.chordParser;
+		var chrdPrsr = new ukeGeeks.chordParser();
 		chrdPrsr.init();
 		handles.text.innerHTML = chrdPrsr.parse(song.body);
 		song.chords = chrdPrsr.getChords();
 
 		// Draw the Chord Diagrams:
-		var painter = new ukeGeeks.chordPainter;
+		var painter = new ukeGeeks.chordPainter();
 		painter.init(handles);
 		painter.show(song.chords);
 		// Show chord diagrams inline with lyrics
-		if (ukeGeeks.settings.inlineDiagrams){
+		if (ukeGeeks.settings.inlineDiagrams) {
 			ukeGeeks.toolsLite.addClass(handles.wrap, 'ugsInlineDiagrams');
 			painter.showInline(song.chords);
 		}
 
 		// Do Tablature:
-		var tabs = new ukeGeeks.tabs;
+		var tabs = new ukeGeeks.tabs();
 		tabs.init();
 		tabs.replace(handles.text);
 
@@ -3199,16 +3286,16 @@ ukeGeeks.scriptasaurus = new function(){
 		_errList.push(painter.getErrors());
 
 		var container = handles.wrap;
-		if (container){
-			if (!song.hasChords){
+		if (container) {
+			if (!song.hasChords) {
 				ukeGeeks.toolsLite.addClass(container, 'ugsNoChords');
 			}
-			else{
+			else {
 				ukeGeeks.toolsLite.removeClass(container, 'ugsNoChords');
 			}
 		}
 
-		if (ukeGeeks.settings.opts.autoFixOverlaps){
+		if (ukeGeeks.settings.opts.autoFixOverlaps) {
 			ukeGeeks.overlapFixer.Fix(handles.text);
 		}
 
@@ -3221,14 +3308,14 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @method showErrors
 	 * @return {void}
 	 */
-	var showErrors = function(errs){
+	var showErrors = function(errs) {
 		if (errs.length < 1) {
 			return;
 		}
 
 		//console.log(typeof(errs[0]));
 		var s = '';
-		for(var i = 0; i < errs.length; i++){
+		for (var i = 0; i < errs.length; i++) {
 			s += (s.length > 0) ? ', ' : '';
 			s += errs[i];
 		}
@@ -3242,10 +3329,10 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @param wrap {domElement}
 	 * @retuns {ukeGeeks.data.htmlHandles}
 	 */
-	var _getHandlesFromClass = function(wrap){
+	var _getHandlesFromClass = function(wrap) {
 		var diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
 		var text = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.text, wrap);
-		if ((diagrams == undefined) || (diagrams.length < 1) || (text == undefined) || (text.length < 1)){
+		if ((diagrams === undefined) || (diagrams.length < 1) || (text === undefined) || (text.length < 1)) {
 			return null;
 		}
 		return new ukeGeeks.data.htmlHandles(wrap, diagrams[0], text[0]);
@@ -3257,7 +3344,7 @@ ukeGeeks.scriptasaurus = new function(){
 	 * @private
 	 * @retuns {ukeGeeks.data.htmlHandles}
 	 */
-	var _getHandlesFromId = function(){
+	var _getHandlesFromId = function() {
 		return new ukeGeeks.data.htmlHandles(
 			document.getElementById(ukeGeeks.settings.ids.container),
 			document.getElementById(ukeGeeks.settings.ids.canvas),
@@ -3265,4 +3352,5 @@ ukeGeeks.scriptasaurus = new function(){
 		);
 	};
 
-}
+	return _public;
+}());
