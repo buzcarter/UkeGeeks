@@ -87,14 +87,14 @@ ukeGeeks.definitions = (function() {
 
 			// user has retuned the chords, need to find chord name "as-is",
 			// but get the fingering from the mapping
-		var alias = _getAlias(chordName);
-		var name = (alias && (chordName != alias)) ? alias : chordName;
+		var name = _getAlias(chordName);
 		for (i in _map) {
 			if (name == _map[i].original) {
 				var c = _get(_map[i].transposed);
 				if (c) {
 						var chrd = new ukeGeeks.data.expandedChord(chordName);
 					chrd.dots = c.dots;
+					chrd.muted = c.muted;
 						return chrd;
 					}
 				}
@@ -113,40 +113,37 @@ ukeGeeks.definitions = (function() {
 	};
 
 	/**
-	 * We don't store any chord definitions for A#, Db, D#, Gb, or Ab. Instead definitions of the more common
-	 * notes are stored instead. So for the A# fingering we return ght Bb fingering and so on.
-	 * Returns null if there is no defined alias.
+	 * A chord name normalizer: We don't store any chord definitions for A#, Db, D#, Gb, or Ab. Instead
+	 * definitions of the more common notes are stored instead. So for the A# fingering we return the
+	 * Bb fingering and so on.
+	 *
+	 * Returns original chord name if there is no defined alias.
+	 *
 	 * @method _getAlias
 	 * @param  {string} chordName [
 	 * @return {string}
 	 */
 	var _getAlias = function(chordName) {
 		var n = chordName.substr(0, 2);
-		return (!_aliases[n]) ? null : _aliases[n] + chordName.substr(2);
+		return !_aliases[n] ? chordName : _aliases[n] + chordName.substr(2);
 	};
 
 	/**
-	 * todo:
+	 * Pass in "standard" chord name, returns match from defined chords or null if not found
 	 * @private
 	 * @method _get
 	 * @param chordName {string} Chord name
 	 * @return {expandedChord}
 	 */
 	var _get = function(chordName){
-		var alias = _getAlias(chordName);
-		if (alias && (chordName != alias)) {
-			var c = _get(alias);
-			if (!c){
-				return null;
-			}
+		var name = _getAlias(chordName);
+		for (var i = 0; i < _chords.length; i++) {
+			if (name == _chords[i].name) {
 			var chrd = new ukeGeeks.data.expandedChord(chordName);
-			chrd.dots = c.dots;
+				chrd.dots = _chords[i].dots;
+				chrd.muted = _chords[i].muted;
 			return chrd;
 		}
-		for (var i = 0; i <_chords.length; i++){
-			if (chordName == _chords[i].name){
-				return _chords[i];
-			}
 		}
 		return null;
 	};
