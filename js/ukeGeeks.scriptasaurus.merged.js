@@ -21,7 +21,7 @@
 var ukeGeeks = window.ukeGeeks || {};
 
 ;/**
- * SINGLETON: Defines chords and provides simple lookup (find) tools.
+ * Defines chords and provides simple lookup (find) tools.
  * @class definitions
  * @namespace ukeGeeks
  * @static
@@ -95,8 +95,9 @@ ukeGeeks.definitions = (function() {
 	 * @return {expandedChord}
 	 */
 	_public.get = function(chordName) {
+		var i;
 		// try User Defined chords first
-		for (var i = 0; i < _userChords.length; i++) {
+		for (i = 0; i < _userChords.length; i++) {
 			if (chordName == _userChords[i].name) {
 				return _userChords[i];
 			}
@@ -108,12 +109,14 @@ ukeGeeks.definitions = (function() {
 
 		// user has retuned the chords, need to find chord name "as-is",
 		// but get the fingering from the mapping
-		for (var i in _map) {
-			if (chordName == _map[i].original) {
-				var x = _get(_map[i].transposed);
-				if (x) {
+		var name = _getAlias(chordName);
+		for (i in _map) {
+			if (name == _map[i].original) {
+				var c = _get(_map[i].transposed);
+				if (c) {
 					var chrd = new ukeGeeks.data.expandedChord(chordName);
-					chrd.dots = x.dots;
+					chrd.dots = c.dots;
+					chrd.muted = c.muted;
 					return chrd;
 				}
 			}
@@ -123,35 +126,45 @@ ukeGeeks.definitions = (function() {
 	};
 
 	// local substitions (replacements for identical chord shapes)
-	var _subs = {
+	var _aliases = {
 		'A#': 'Bb',
 		'Db': 'C#',
 		'D#': 'Eb',
 		'Gb': 'F#',
 		'Ab': 'G#'
 	};
+
 	/**
-	 * todo:
+	 * A chord name normalizer: We don't store any chord definitions for A#, Db, D#, Gb, or Ab. Instead
+	 * definitions of the more common notes are stored instead. So for the A# fingering we return the
+	 * Bb fingering and so on.
+	 *
+	 * Returns original chord name if there is no defined alias.
+	 *
+	 * @method _getAlias
+	 * @param  {string} chordName [
+	 * @return {string}
+	 */
+	var _getAlias = function(chordName) {
+		var n = chordName.substr(0, 2);
+		return !_aliases[n] ? chordName : _aliases[n] + chordName.substr(2);
+	};
+
+	/**
+	 * Pass in "standard" chord name, returns match from defined chords or null if not found
 	 * @private
 	 * @method _get
 	 * @param chordName {string} Chord name
 	 * @return {expandedChord}
 	 */
 	var _get = function(chordName) {
-		var n = chordName.substr(0, 2);
-		var s = _subs[n];
-		if (s) {
-			var c = _get(s + chordName.substr(2));
-			if (!c) {
-				return null;
-			}
-			var chrd = new ukeGeeks.data.expandedChord(chordName);
-			chrd.dots = c.dots;
-			return chrd;
-		}
+		var name = _getAlias(chordName);
 		for (var i = 0; i < _chords.length; i++) {
-			if (chordName == _chords[i].name) {
-				return _chords[i];
+			if (name == _chords[i].name) {
+				var chrd = new ukeGeeks.data.expandedChord(chordName);
+				chrd.dots = _chords[i].dots;
+				chrd.muted = _chords[i].muted;
+				return chrd;
 			}
 		}
 		return null;
@@ -794,7 +807,8 @@ ukeGeeks.toolsLite = (function() {
 	 * @return {arrayDomElements}
 	 */
 	_public.getElementsByClass = function(searchClass, node, tag) {
-		if (node === null) {
+		// use falsey -- if ((node === null) || (node === undefined)) {
+		if (!node) {
 			node = document;
 		}
 		if (node.getElementsByClassName) {
@@ -802,7 +816,7 @@ ukeGeeks.toolsLite = (function() {
 		}
 
 		var classElements = [];
-		if (tag === null) {
+		if (!tag) {
 			tag = '*';
 		}
 		var els = node.getElementsByTagName(tag);
@@ -937,10 +951,7 @@ ukeGeeks.chordImport = (function() {
 	 */
 	var _getInstrument = function(text) {
 		var c = text.match(regEx.instr);
-		if (!c) {
-			return null;
-		}
-		return ukeGeeks.toolsLite.pack(c[1]);
+		return !c ? null : ukeGeeks.toolsLite.pack(c[1]);
 	};
 
 	/**
@@ -952,10 +963,7 @@ ukeGeeks.chordImport = (function() {
 	 */
 	var _getTuning = function(text) {
 		var c = text.match(regEx.tuning);
-		if (!c) {
-			return null;
-		}
-		return [c[1], c[2], c[3], c[4]];
+		return !c ? null : [c[1], c[2], c[3], c[4]];
 	};
 
 	/**
@@ -967,10 +975,7 @@ ukeGeeks.chordImport = (function() {
 	 */
 	var _getName = function(text) {
 		var c = text.match(regEx.name);
-		if (!c) {
-			return null;
-		}
-		return c[1];
+		return !c ? null : c[1];
 	};
 
 	/**
@@ -1134,7 +1139,9 @@ ukeGeeks.chordImport = (function() {
 	var _log = function(msg) {
 		_errs.push(msg);
 	};
+
 	var _errs = [];
+
 	var _echoLog = function() {
 		for (var i in _errs) {
 			console.log(i + '. ' + _errs[i]);
@@ -1149,10 +1156,7 @@ ukeGeeks.chordImport = (function() {
 	 */
 	_public.runLine = function(line) {
 		var c = _lineToParts(line);
-		if (!c) {
-			return null;
-		}
-		return _getExpandedChord(c.define, c.adds);
+		return !c ? null : _getExpandedChord(c.define, c.adds);
 	};
 
 	/**
@@ -1179,6 +1183,7 @@ ukeGeeks.chordImport = (function() {
 	};
 
 	return _public;
+
 }());
 ;/**
  * Can shift a single chord or list of chords up/down by a series of steps. Hangles
