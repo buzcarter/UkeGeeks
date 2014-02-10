@@ -115,10 +115,7 @@ ukeGeeks.chordImport = (function() {
 	 */
 	var _getInstrument = function(text){
 		var c = text.match(regEx.instr);
-		if (!c){
-			return null;
-		}
-		return ukeGeeks.toolsLite.pack(c[1]);
+		return !c ? null : ukeGeeks.toolsLite.pack(c[1]);
 	};
 	
 	/**
@@ -130,10 +127,7 @@ ukeGeeks.chordImport = (function() {
 	 */
 	var _getTuning = function(text){
 		var c = text.match(regEx.tuning);
-		if (!c){
-			return null;
-		}
-		return [c[1], c[2], c[3], c[4]];
+		return !c ? null : [c[1], c[2], c[3], c[4]];
 	};
 	
 	/**
@@ -145,10 +139,7 @@ ukeGeeks.chordImport = (function() {
 	 */
 	var _getName = function(text){
 		var c = text.match(regEx.name);
-		if (!c){
-			return null;
-		}
-		return c[1];
+		return !c ? null : c[1];
 	};
 	
 	/**
@@ -327,10 +318,7 @@ ukeGeeks.chordImport = (function() {
 	 */
 	_public.runLine = function(line) {
 		var c = _lineToParts(line);
-		if (!c){
-			return null;
-		}
-		return _getExpandedChord(c.define, c.adds);
+		return !c ? null : _getExpandedChord(c.define, c.adds);
 	};
 	
 	/**

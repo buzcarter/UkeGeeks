@@ -1,5 +1,5 @@
 /**
- * SINGLETON: Defines chords and provides simple lookup (find) tools.
+ * Defines chords and provides simple lookup (find) tools.
  * @class definitions
  * @namespace ukeGeeks
  * @static
@@ -73,8 +73,9 @@ ukeGeeks.definitions = (function() {
 	 * @return {expandedChord}
 	 */
 	_public.get = function(chordName) {
+		var i;
 		// try User Defined chords first
-		for (var i = 0; i < _userChords.length; i++){
+		for (i = 0; i < _userChords.length; i++) {
 			if (chordName == _userChords[i].name){
 				return _userChords[i];
 			}
@@ -86,12 +87,14 @@ ukeGeeks.definitions = (function() {
 
 			// user has retuned the chords, need to find chord name "as-is",
 			// but get the fingering from the mapping
-			for(var i in _map){
-				if (chordName == _map[i].original){
-					var x = _get(_map[i].transposed);
-					if (x){
+		var alias = _getAlias(chordName);
+		var name = (alias && (chordName != alias)) ? alias : chordName;
+		for (i in _map) {
+			if (name == _map[i].original) {
+				var c = _get(_map[i].transposed);
+				if (c) {
 						var chrd = new ukeGeeks.data.expandedChord(chordName);
-						chrd.dots = x.dots;
+					chrd.dots = c.dots;
 						return chrd;
 					}
 				}
@@ -101,13 +104,27 @@ ukeGeeks.definitions = (function() {
 	};
 
 	// local substitions (replacements for identical chord shapes)
-	var _subs = {
+	var _aliases = {
 		'A#': 'Bb',
 		'Db': 'C#',
 		'D#': 'Eb',
 		'Gb': 'F#',
 		'Ab': 'G#'
 	};
+
+	/**
+	 * We don't store any chord definitions for A#, Db, D#, Gb, or Ab. Instead definitions of the more common
+	 * notes are stored instead. So for the A# fingering we return ght Bb fingering and so on.
+	 * Returns null if there is no defined alias.
+	 * @method _getAlias
+	 * @param  {string} chordName [
+	 * @return {string}
+	 */
+	var _getAlias = function(chordName) {
+		var n = chordName.substr(0, 2);
+		return (!_aliases[n]) ? null : _aliases[n] + chordName.substr(2);
+	};
+
 	/**
 	 * todo:
 	 * @private
@@ -116,10 +133,9 @@ ukeGeeks.definitions = (function() {
 	 * @return {expandedChord}
 	 */
 	var _get = function(chordName){
-		var n = chordName.substr(0,2);
-		var s = _subs[n];
-		if (s){
-			var c = _get(s + chordName.substr(2));
+		var alias = _getAlias(chordName);
+		if (alias && (chordName != alias)) {
+			var c = _get(alias);
 			if (!c){
 				return null;
 			}
