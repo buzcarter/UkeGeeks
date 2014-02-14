@@ -7,12 +7,14 @@
 ugsEditorPlus.newSong = (function() {
 	/**
 	 * attach public members to this object
-	 * @type {Object}
+	 * @property _public
+	 * @type JsonObject
 	 */
 	var _public = {};
 
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
+	 *  @attribute _isUpdating
 	 * @type {Boolean}
 	 */
 	var _isUpdating = false;
@@ -96,7 +98,8 @@ ugsEditorPlus.newSong = (function() {
 			if(hasErrors) {
 				$err.show().html(message);
 				$('#songTitle').focus();
-			} else {
+		}
+		else {
 				$err.hide();
 			}
 		};

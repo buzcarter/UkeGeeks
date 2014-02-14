@@ -7,7 +7,7 @@ ugsEditorPlus.optionsDlg = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
-	 * @type {Object}
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -40,15 +40,26 @@ ugsEditorPlus.optionsDlg = (function() {
 		restoreDefaults();
 
 		// button clicks
-		document.getElementById('updateBtn').onclick = function(){onUpdateBtnClick(); return false;};
+		document.getElementById('updateBtn').onclick = function() {
+			onUpdateBtnClick();
+			return false;
+		};
 
 		//_ele.pageWidth.onchange = function(){doSetWidth(this.value); };
-		_ele.chkEnclosures.onclick = function(){onSetEnclosureClick(!this.checked); };
-		_ele.inputIgnoreList.onchange = function(){onCommonChordFieldChange(); };
-		_ele.chkIgnore.onclick = function(){onIgnoreCommonClick(this.checked); };
+		_ele.chkEnclosures.onclick = function() {
+			onSetEnclosureClick(!this.checked);
+		};
+		_ele.inputIgnoreList.onchange = function() {
+			onCommonChordFieldChange();
+		};
+		_ele.chkIgnore.onclick = function() {
+			onIgnoreCommonClick(this.checked);
+		};
 
 		// ugh! Event bubbling!
-		$('.checkboxBlock label, input[type=checkbox]').click(function(e){e.stopPropagation();});
+		$('.checkboxBlock label, input[type=checkbox]').click(function(e) {
+			e.stopPropagation();
+		});
 		//$('#helpDlg a').click(function(e){console.log('anchor click');});
 
 		$('.overlay').draggable({
@@ -105,5 +116,4 @@ ugsEditorPlus.optionsDlg = (function() {
 	// ---------------------------------------
 	return _public;
 
-}()
-);
+}());

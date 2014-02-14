@@ -272,7 +272,6 @@ ukeGeeks.cpmParser.prototype = {
 	 * @return {songNodeArray}
 	 */
 	_domParse: function(text){
-		// var ezBlock = function(){};
 		var lines = text.split('\n');
 		var song = [];
 		var tmpBlk = null;
@@ -283,9 +282,9 @@ ukeGeeks.cpmParser.prototype = {
 				continue;
 			}
 			isMarker = this.regEx.blocks.test(lines[i]);
-			if (isMarker || tmpBlk == null){
+			if (isMarker || tmpBlk === null) {
 				// save last block, start new one...
-				if (tmpBlk != null){
+				if (tmpBlk !== null) {
 					song.push(tmpBlk);
 				}
 				tmpBlk = {

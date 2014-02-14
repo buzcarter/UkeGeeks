@@ -3,6 +3,7 @@
  * @class chooserList
  * @namespace ugsChordBuilder
  * @static
+ * @singleton
  */
 ugsChordBuilder.chooserList = new function() {
 	// array of custom chords defined in this song
@@ -11,9 +12,9 @@ ugsChordBuilder.chooserList = new function() {
 	var _eleChordList = null;
 
 	/**
-	 * magic value for start a new chord
-	 * @constant
-	 * @name C_NEW_CHORD
+	 * magic value for start a new chord (constant)
+	 * @final
+	 * @attribute C_NEW_CHORD
 	 * @type {Int}
 	 */
 	var C_NEW_CHORD = -1;
@@ -33,33 +34,33 @@ ugsChordBuilder.chooserList = new function() {
 
 	/**
 	 * Chord current sent to the editor.
-	 * @field
+	 * @attribute _currentChord
 	 */
 	var _currentChord = null;
 
 	/**
 	 * Handle to the chordBuilder (UI) "setChord" method
-	 * @field
+	 * @attribute _setChordMethod
 	 */
 	var _setChordMethod = function() {};
 
 	/**
 	 * "safe" this handle for buried references.
-	 * @field
+	 * @attribute _that
 	 */
 	var _that = this;
 
 	/**
 	 * Hanlde to instance of Scriptasaurus chord brush class, to paint the wee little
 	 * chord diagrams onto the Chooser List.
-	 * @field _ugsBrushTool
+	 * @attribute _ugsBrushTool
 	 * @type {Object}
 	 */
 	var _ugsBrushTool = null;
 
 	/**
 	 * Required settings for the Chord Brush -- dimensions, fonts, and colors.
-	 * @field _diagramSettings
+	 * @attribute _diagramSettings
 	 * @type {JSON}
 	 */
 	var _diagramSettings = {
@@ -132,6 +133,8 @@ ugsChordBuilder.chooserList = new function() {
 
 	/**
 	 * Shows either the "Chooser" or "Chord Builder/Editor" panel.
+	 * @method show
+	 * @public
 	 * @param {bool} isChooserPanel
 	 */
 	this.show = function(isChooserPanel) {
@@ -156,7 +159,8 @@ ugsChordBuilder.chooserList = new function() {
 			id = definitionAdd(data.name, data.definition);
 			_currentChord = dictionaryFind(id);
 			songAddDefinition(data.definition);
-		} else {
+		}
+		else {
 			var i = dictionaryGetIndex(_currentChord.id);
 			if (i < 0) {
 				// console.log('error: not found');
@@ -228,7 +232,7 @@ ugsChordBuilder.chooserList = new function() {
 				if (chord.muted[i]) {
 					return true;
 				}
-			};
+			}
 		}
 		return false;
 	};
@@ -245,7 +249,8 @@ ugsChordBuilder.chooserList = new function() {
 		var item = listGetItem(id);
 		if (!item) {
 			item = listAddItem(id, def.name);
-		} else {
+		}
+		else {
 			item.innerHTML = listHtmlString(id, def.name, true);
 		}
 		listAddDiagram(id);
@@ -264,7 +269,7 @@ ugsChordBuilder.chooserList = new function() {
 			if (items[i].getAttribute('data-id') == ('' + id)) {
 				return items[i];
 			}
-		};
+		}
 		return null;
 	};
 
@@ -289,19 +294,19 @@ ugsChordBuilder.chooserList = new function() {
 	 * @param {array} chordDefs
 	 */
 	var listLoad = function(ul, chordDefs) {
-		var s = '';
-		for (var i = 0; i < chordDefs.length; i++) {
+		var i, s = '';
+		for (i = 0; i < chordDefs.length; i++) {
 			s += listHtmlString(chordDefs[i].id, chordDefs[i].name);
 		}
 		ul.innerHTML = '<li data-id="' + C_NEW_CHORD + '" class="newChord">+ Add New Chord</li>' + s;
 
 		var items = ul.getElementsByTagName('li');
-		for (var i = items.length - 1; i >= 0; i--) {
+		for (i = items.length - 1; i >= 0; i--) {
 			if (i < 1) {
 				continue;
 			}
 			listAddDiagram(items[i].getAttribute('data-id'));
-		};
+		}
 	};
 
 	/**
@@ -318,6 +323,7 @@ ugsChordBuilder.chooserList = new function() {
 
 	/**
 	 * Adds mini-chord diagram to the list item found by Id.
+	 * @method listAddDiagram
 	 */
 	var listAddDiagram = function(id) {
 		var element = listGetItem(id);
@@ -381,7 +387,7 @@ ugsChordBuilder.chooserList = new function() {
 	 * The chord insertion point is at the end of either the song meta tags or the
 	 * existing chord defintion block. Determined by the _last_ "header" tag line.
 	 * @method songAddDefinition
-	 * @param  {string}
+	 * @param {string} definition
 	 */
 	var songAddDefinition = function(definition) {
 		var e = document.getElementById(_ids.source);
@@ -395,7 +401,7 @@ ugsChordBuilder.chooserList = new function() {
 				inserted = true;
 			}
 			html = lines[i] + '\n' + html;
-		};
+		}
 		e.value = html;
 		ugsEditorPlus.actions.run();
 	};
@@ -430,7 +436,7 @@ ugsChordBuilder.chooserList = new function() {
 			if (('' + _chordDictionary[i].id != '' + id) && (_chordDictionary[i].name.toLowerCase() == search)) {
 				return i;
 			}
-		};
+		}
 
 		return -1;
 	};
@@ -449,9 +455,10 @@ ugsChordBuilder.chooserList = new function() {
 	/**
 	 * Adds new chord definition to our Dictionary array. Returns the
 	 * new item's Id (int).
+	 * @method definitionAdd
 	 * @param {string} name
 	 * @param {string} definition
-	 * @retugn {int}
+	 * @return {int}
 	 */
 	var definitionAdd = function(name, definition) {
 		var chord = new ChordDefinition(name, definition);
@@ -459,4 +466,4 @@ ugsChordBuilder.chooserList = new function() {
 		return chord.id;
 	};
 
-};
+}();

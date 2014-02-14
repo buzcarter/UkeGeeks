@@ -7,7 +7,7 @@ ugsEditorPlus.autoReformat = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
-	 * @type {Object}
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -29,13 +29,21 @@ ugsEditorPlus.autoReformat = (function() {
 		_ele.reformatTextBox = document.getElementById('reformatSource');
 		_ele.reformatDlg = document.getElementById('reformatDlg');
 
-		document.getElementById('reformatYesBtn').onclick = function(){ doOk(); return false; };
-		document.getElementById('reformatNoBtn').onclick = function(){ doClose(); return false; };
+		document.getElementById('reformatYesBtn').onclick = function() {
+			doOk();
+			return false;
+		};
+		document.getElementById('reformatNoBtn').onclick = function() {
+			doClose();
+			return false;
+		};
 
 		// need to reset on reload
 		var chk = document.getElementById('reformatDisable');
 		chk.checked = false;
-		chk.onclick = function(){ doDisable(this.checked); };
+		chk.onclick = function() {
+			doDisable(this.checked);
+		};
 
 		runNow();
 	};
@@ -70,5 +78,4 @@ ugsEditorPlus.autoReformat = (function() {
 	// ---------------------------------------
 	return _public;
 
-}()
-);
+}());

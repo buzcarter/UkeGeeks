@@ -254,6 +254,7 @@ ukeGeeks.settings = (function() {
 
 	/**
 	 * List of common chords to be "ignored" (won't show master chord diagrams)
+	 * @property commonChords
 	 * @type string Array
 	 */
 	_public.commonChords = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'Am'];
@@ -294,7 +295,7 @@ ukeGeeks.settings = (function() {
 		if (bits.length < 2){
 			return font;
 		}
-		var size = parseInt(bits[1]) * mulitplier;
+		var size = parseInt(bits[1], 10) * mulitplier;
 		return font.replace(sizeRe, size + bits[2]);
 	};
 

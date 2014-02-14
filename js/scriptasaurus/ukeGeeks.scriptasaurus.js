@@ -22,11 +22,14 @@ ukeGeeks.scriptasaurus = (function() {
 	 * @return {void}
 	 */
 	_public.init = function(isIeFamily) {
+		var defs = ukeGeeks.definitions;
+
 		ukeGeeks.settings.environment.isIe = isIeFamily;
 		// TODO: known problem -- need to preload Sorprano chord libarary then we can retune if needed
-		ukeGeeks.definitions.useInstrument(ukeGeeks.definitions.instrument.sopranoUke);
-		if (ukeGeeks.settings.defaultInstrument != ukeGeeks.definitions.instrument.sopranoUke){
-			ukeGeeks.definitions.useInstrument(ukeGeeks.settings.defaultInstrument);
+		defs.addInstrument(defs.sopranoUkuleleGcea);
+		defs.useInstrument(defs.instrument.sopranoUke);
+		if (ukeGeeks.settings.defaultInstrument != defs.instrument.sopranoUke) {
+			defs.useInstrument(ukeGeeks.settings.defaultInstrument);
 		}
 	};
 
@@ -159,7 +162,7 @@ ukeGeeks.scriptasaurus = (function() {
 	 * @method _getHandlesFromClass
 	 * @private
 	 * @param wrap {domElement}
-	 * @retuns {ukeGeeks.data.htmlHandles}
+	 * @return {ukeGeeks.data.htmlHandles}
 	 */
 	var _getHandlesFromClass = function(wrap){
 		var diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
@@ -174,7 +177,7 @@ ukeGeeks.scriptasaurus = (function() {
 	 *
 	 * @method _getHandlesFromId
 	 * @private
-	 * @retuns {ukeGeeks.data.htmlHandles}
+	 * @return {ukeGeeks.data.htmlHandles}
 	 */
 	var _getHandlesFromId = function(){
 		return new ukeGeeks.data.htmlHandles(

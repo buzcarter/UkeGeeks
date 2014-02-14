@@ -80,7 +80,7 @@ ukeGeeks.definitions = (function() {
 	 * @return {void}
 	 */
 	_public.useInstrument = function(offset) {
-		offset = (arguments.length > 0) ? arguments[0] : _public.instrument.sopranoUke;
+		offset = (arguments.length > 0) ? offset : _public.instrument.sopranoUke;
 		_offset = parseInt(offset, 10);
 		if (_offset > 0) {
 			_map = ukeGeeks.transpose.retune(_offset);
@@ -95,7 +95,8 @@ ukeGeeks.definitions = (function() {
 	 * @return {expandedChord}
 	 */
 	_public.get = function(chordName) {
-		var i;
+		var i, c, chrd, name;
+
 		// try User Defined chords first
 		for (i = 0; i < _userChords.length; i++) {
 			if (chordName == _userChords[i].name) {
@@ -109,12 +110,12 @@ ukeGeeks.definitions = (function() {
 
 		// user has retuned the chords, need to find chord name "as-is",
 		// but get the fingering from the mapping
-		var name = _getAlias(chordName);
+		name = _getAlias(chordName);
 		for (i in _map) {
 			if (name == _map[i].original) {
-				var c = _get(_map[i].transposed);
+				c = _get(_map[i].transposed);
 				if (c) {
-					var chrd = new ukeGeeks.data.expandedChord(chordName);
+					chrd = new ukeGeeks.data.expandedChord(chordName);
 					chrd.dots = c.dots;
 					chrd.muted = c.muted;
 					return chrd;
@@ -158,10 +159,11 @@ ukeGeeks.definitions = (function() {
 	 * @return {expandedChord}
 	 */
 	var _get = function(chordName) {
-		var name = _getAlias(chordName);
-		for (var i = 0; i < _chords.length; i++) {
+		var i, chrd,
+			name = _getAlias(chordName);
+		for (i = 0; i < _chords.length; i++) {
 			if (name == _chords[i].name) {
-				var chrd = new ukeGeeks.data.expandedChord(chordName);
+				chrd = new ukeGeeks.data.expandedChord(chordName);
 				chrd.dots = _chords[i].dots;
 				chrd.muted = _chords[i].muted;
 				return chrd;
@@ -172,7 +174,7 @@ ukeGeeks.definitions = (function() {
 
 	/**
 	 * @method add
-	 * @param data {type} array of expanded chord objects
+	 * @param data {array} array of expanded chord objects
 	 * @return {int}
 	 */
 	_public.add = function(data) {
@@ -186,7 +188,7 @@ ukeGeeks.definitions = (function() {
 
 	/**
 	 * @method replace
-	 * @param data {type} array of expanded chord objects
+	 * @param data {array} array of expanded chord objects
 	 * @return {int}
 	 */
 	_public.replace = function(data) {
@@ -465,6 +467,7 @@ ukeGeeks.settings = (function() {
 
 	/**
 	 * List of common chords to be "ignored" (won't show master chord diagrams)
+	 * @property commonChords
 	 * @type string Array
 	 */
 	_public.commonChords = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'Am'];
@@ -505,7 +508,7 @@ ukeGeeks.settings = (function() {
 		if (bits.length < 2) {
 			return font;
 		}
-		var size = parseInt(bits[1]) * mulitplier;
+		var size = parseInt(bits[1], 10) * mulitplier;
 		return font.replace(sizeRe, size + bits[2]);
 	};
 
@@ -549,6 +552,7 @@ ukeGeeks.data = (function() {
 	/**
 	 * Chord info sutiable for plotting on Canvas; has name and dot positions
 	 * @class expandedChord
+	 * @constructor
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
@@ -576,6 +580,7 @@ ukeGeeks.data = (function() {
 	/**
 	 * Song object holds all meta info (Title, Subtitles) plus an array of plot
 	 * @class song
+	 * @constructor
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
@@ -642,6 +647,7 @@ ukeGeeks.data = (function() {
 	/**
 	 * A single fretboard fingering "dot" -- the position on the Canvas object that a dot should occupy.
 	 * @class dot
+	 * @constructor
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
@@ -666,6 +672,14 @@ ukeGeeks.data = (function() {
 		this.finger = finger;
 	};
 
+	/**
+	 * @class instrument
+	 * @constructor
+	 * @param  {string} key
+	 * @param  {string} name
+	 * @param  {string} tuning
+	 * @param  {array} chords
+	 */
 	_public.instrument = function(key, name, tuning, chords) {
 		this.key = key;
 		this.name = name;
@@ -690,9 +704,9 @@ ukeGeeks.data = (function() {
 	 * <br />
 	 * <br />For example, the D7 is often played by laying the index finger across the entire
 	 * second fret and then placing middle finger on 3rd fret of "A" string like this:
-	 <pre>
-	  G C E A
-	  - - - -  (1st fret)
+	 &gt;pre&lt;
+		G C E A
+		- - - -  (1st fret)
 		X X X X
 		- - - X
 		- - - -  (4th fret)
@@ -701,6 +715,7 @@ ukeGeeks.data = (function() {
 	 * chord much easier to play.
 	 *
 	 * @class addInFinger
+	 * @constructor
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
@@ -807,6 +822,7 @@ ukeGeeks.toolsLite = (function() {
 	 * @return {arrayDomElements}
 	 */
 	_public.getElementsByClass = function(searchClass, node, tag) {
+		var i, j;
 		// use falsey -- if ((node === null) || (node === undefined)) {
 		if (!node) {
 			node = document;
@@ -853,6 +869,7 @@ ukeGeeks.chordImport = (function() {
 	/**
 	 * Internal storage of partially converted "define" statements. The Definition (string) and addIn (array<strings>)
 	 * @class chordImport.chordParts
+	 * @constructor
 	 * @type ClassDefinition
 	 * @private
 	 */
@@ -1012,7 +1029,7 @@ ukeGeeks.chordImport = (function() {
 		var m = (f[1].length == 4) ? f[1].match(regEx.any) : f[1].match(regEx.numOrX);
 		for (var i = 0; i < m.length; i++) {
 			var isX = m[i] == 'x' || m[i] == 'X';
-			frets[i] = isX ? 0 : parseInt(m[i]);
+			frets[i] = isX ? 0 : parseInt(m[i], 10);
 			muted[i] = isX;
 		}
 	};
@@ -1048,9 +1065,9 @@ ukeGeeks.chordImport = (function() {
 		var dots = [];
 		var tuning = ukeGeeks.settings.tuning;
 		for (var j = 0; j < tuning.length; j++) {
-			var n = parseInt(frets[j]);
+			var n = parseInt(frets[j], 10);
 			if (n > 0) {
-				dots.push(new ukeGeeks.data.dot(j, n, (fingers.length - 1 >= j) ? parseInt(fingers[j]) : 0));
+				dots.push(new ukeGeeks.data.dot(j, n, (fingers.length - 1 >= j) ? parseInt(fingers[j], 10) : 0));
 			}
 		}
 		return dots;
@@ -1071,7 +1088,7 @@ ukeGeeks.chordImport = (function() {
 		for (var i in adds) {
 			var a = adds[i].match(regEx.addin);
 			if (a && a.length > 2) {
-				dots.push(new ukeGeeks.data.dot(parseInt(a[1]) - 1, parseInt(a[2]), parseInt(a[3])));
+				dots.push(new ukeGeeks.data.dot(parseInt(a[1], 10) - 1, parseInt(a[2], 10), parseInt(a[3], 10)));
 			}
 		}
 	};
@@ -1316,199 +1333,219 @@ ukeGeeks.transpose = (function() {
 	return _public;
 
 }());
-;ukeGeeks.definitions.addInstrument("\
-{instrument: Soprano Ukulele}\
-{tuning: G C E A}\
-# Ab returns G#\
-# A\
-{define: A frets 2 1 0 0 fingers 1 2 0 0}\
-{define: Am frets 2 0 0 0 fingers 1 0 0 0}\
-{define: A7 frets 0 1 0 0 fingers 0 1 0 0}\
-{define: A7sus4 frets 0 2 0 0 fingers 0 2 0 0}\
-{define: Am7 frets 0 0 0 0}\
-{define: Adim frets 2 3 2 3 fingers 1 3 2 4}\
-{define: Amaj7 frets 1 1 0 0 fingers 1 2 0 0}\
-{define: A6 frets 2 4 2 4 fingers 1 3 2 4}\
-{define: Asus2 frets 2 4 5 2 fingers 2 3 4 1}\
-{define: Asus4 frets 2 2 0 0 fingers 1 2 0 0}\
-{define: Aaug frets 2 1 1 4 fingers 2 1 1 4 add: string 1 fret 1 finger 1 add: string 4 fret 1 finger 1}\
-{define: Am6 frets 2 4 2 3 fingers 1 3 1 2 add: string 2 fret 2 finger 1}\
-{define: A9 frets 0 1 0 2 fingers 0 1 0 2}\
-# A# retruns Bb\
-# Bb\
-{define: Bb frets 3 2 1 1 fingers 3 2 1 1}\
-{define: Bbm frets 3 1 1 1 fingers 3 1 1 1 add: string 1 fret 1 finger 1}\
-{define: Bb7 frets 1 2 1 1 fingers 1 2 1 1 add: string 2 fret 1 finger 1}\
-{define: Bb7sus4 frets 1 3 1 1 fingers 1 3 1 1 add: string 2 fret 1 finger 1}\
-{define: Bbm7 frets 1 1 1 1 fingers 1 1 1 1}\
-{define: Bbdim frets 0 1 0 1 fingers 0 1 0 2}\
-{define: Bbmaj7 frets 2 2 1 1 fingers 2 2 1 1}\
-{define: Bb6 frets 0 2 1 1 fingers 0 2 1 1}\
-{define: Bbm6 frets 0 1 1 1 fingers 0 1 1 1}\
-{define: Bbsus2 frets 3 0 1 1 fingers 3 0 1 1}\
-{define: Bbsus4 frets 3 3 1 1 fingers 3 3 1 1}\
-{define: Bbaug frets 3 2 2 5 fingers 2 1 1 4 add: string 1 fret 2 finger 1 add: string 4 fret 2 finger 1}\
-{define: Bb9 frets 1 2 1 3 fingers 2 1 4 3}\
-{define: Bbmaj7 frets 2 2 1 1 fingers 2 2 1 1}\
-{define: Bbm7-5 frets 1 1 0 1 fingers 1 2 0 3}\
-# B\
-{define: B frets 4 3 2 2 fingers 3 2 1 1}\
-{define: Bm frets 4 2 2 2 fingers 3 1 1 1 add: string 1 fret 2 finger 1}\
-{define: Bm6 frets 1 2 2 2 fingers 1 2 3 4}\
-{define: B7 frets 2 3 2 2 fingers 1 2 1 1 add: string 2 fret 2 finger 1}\
-{define: B7sus4 frets 2 4 2 2 fingers 1 3 1 1 add: string 2 fret 2 finger 1}\
-{define: Bm7 frets 2 2 2 2 fingers 1 1 1 1}\
-{define: Bdim frets 1 2 1 2 fingers 1 3 2 4}\
-{define: Bmaj7 frets 3 3 2 2 fingers 2 2 1 1}\
-{define: B6 frets 1 3 2 2 fingers 1 4 2 3}\
-{define: Bsus2 frets 5 1 2 2 fingers 4 1 3 2}\
-{define: Bsus4 frets 4 4 2 2 fingers 2 2 1 1}\
-{define: Baug frets 0 3 3 2 fingers 0 2 2 1}\
-{define: B9 frets 2 3 2 4}\
-# C\
-{define: C frets 0 0 0 3 fingers 0 0 0 3}\
-{define: Cm frets 0 3 3 3 fingers 0 1 2 3}\
-{define: C7 frets 0 0 0 1 fingers 0 0 0 1}\
-{define: C7sus4 frets 0 0 1 1 fingers 0 0 1 1}\
-{define: Cm7 frets 3 3 3 3 fingers 1 1 1 1}\
-{define: Cdim frets 2 3 2 3 fingers 1 3 2 4}\
-{define: Cmaj7 frets 0 0 0 2 fingers 0 0 0 1}\
-{define: C6 frets 0 0 0 0}\
-{define: Cm6 frets 0 3 5 5 fingers 0 1 3 1}\
-{define: Csus2 frets 0 2 3 3 fingers 0 1 2 2}\
-{define: Csus4 frets 0 0 1 3 fingers 0 0 1 3}\
-{define: Caug frets 1 0 0 3 fingers 1 0 0 4}\
-{define: C9 frets 0 2 0 1 fingers 0 2 0 1}\
-# C#\
-{define: C# frets 1 1 1 4 fingers 1 1 1 4 add: string 4 fret 1 finger 1}\
-{define: C#m frets 1 4 4 4 fingers 1 2 3 3}\
-{define: C#7 frets 1 1 1 2 fingers 1 1 1 2 add: string 4 fret 1 finger 1}\
-{define: C#7sus4 frets 1 1 2 2 fingers 1 1 2 3}\
-{define: C#m7 frets 1 4 4 2 fingers 1 3 3 2}\
-{define: C#dim frets 0 1 0 1 fingers 0 1 0 2}\
-{define: C#maj7 frets 1 1 1 3 fingers 1 1 1 3 add: string 4 fret 1 finger 1}\
-{define: C#6 frets 1 1 1 1 fingers 1 1 1 1}\
-{define: C#m6 frets 1 1 0 1 fingers 1 2 0 3}\
-{define: C#sus2 frets 1 3 4 4 fingers 1 2 3 3}\
-{define: C#sus4 frets 1 1 2 4 fingers 1 1 2 4}\
-{define: C#aug frets 2 1 1 4 fingers 2 1 1 4 add: string 1 fret 1 finger 1 add: string 4 fret 1 finger 1}\
-{define: C#9 frets 1 3 1 2}\
-# Db returns C#\
-# D\
-{define: D frets 2 2 2 0 fingers 1 1 1 0}\
-{define: Dm frets 2 2 1 0 fingers 2 2 1 0}\
-{define: Dm6 frets 0 2 1 2 fingers 0 2 1 3}\
-{define: D7 frets 2 2 2 3 fingers 1 1 1 2 add: string 4 fret 2 finger 1}\
-{define: D7sus4 frets 2 2 3 3 fingers 1 1 2 3}\
-{define: Dm7 frets 2 2 1 3 fingers 2 2 1 3}\
-{define: Ddim frets 1 2 1 2 fingers 1 3 2 4}\
-{define: Dmaj7 frets 2 2 2 4 fingers 1 1 1 2 add: string 4 fret 2 finger 1}\
-{define: D6 frets 2 2 2 2 fingers 2 2 2 2}\
-{define: Dsus2 frets 2 2 0 0 fingers 1 2 0 0}\
-{define: Dsus4 frets 0 2 3 0 fingers 0 1 2 0}\
-{define: Daug frets 3 2 2 5 fingers 2 1 1 4 add: string 1 fret 2 finger 1 add: string 4 fret 2 finger 1}\
-{define: D9 frets 2 4 2 3}\
-# D# returns Eb\
-# Eb\
-{define: Eb frets 0 3 3 1 fingers 0 2 2 1}\
-{define: Ebm frets 3 3 2 1 fingers 3 3 2 1}\
-{define: Eb7 frets 3 3 3 4 fingers 1 1 1 2 add: string 4 fret 3 finger 1}\
-{define: Eb7sus4 frets 3 3 4 4 fingers 1 1 2 3}\
-{define: Ebm7 frets 3 3 2 4 fingers 2 2 1 4}\
-{define: Ebdim frets 2 3 2 3 fingers 1 3 2 4}\
-{define: Ebmaj7 frets 3 3 3 5 fingers 1 1 1 2 add: string 4 fret 3 finger 1}\
-{define: Eb6 frets 3 3 3 3 fingers 1 1 1 1}\
-{define: Ebm6 frets 3 3 2 3 fingers 2 3 1 4}\
-{define: Ebsus2 frets 3 3 1 1 fingers 2 2 1 1}\
-{define: Ebsus4 frets 1 3 4 1 fingers 2 3 4 1}\
-{define: Ebaug frets 0 3 3 2 fingers 0 2 2 1}\
-{define: Eb9 frets 0 1 1 1}\
-# E\
-{define: E frets 4 4 4 2 fingers 2 3 4 1}\
-{define: Em frets 0 4 3 2 fingers 0 3 2 1}\
-{define: E7 frets 1 2 0 2 fingers 1 2 0 3}\
-{define: E7sus4 frets 2 2 0 2 fingers 2 3 0 4}\
-{define: Em6 frets 4 4 3 4 fingers 2 3 1 4}\
-{define: Em7 frets 0 2 0 2 fingers 0 1 0 2}\
-{define: Edim frets 0 1 0 1 fingers 0 1 0 2}\
-{define: Emaj7 frets 1 3 0 2 fingers 1 3 0 2}\
-{define: E6 frets 4 4 4 4 fingers 1 1 1 1}\
-{define: Esus2 frets 4 4 2 2 fingers 3 3 1 1}\
-{define: Esus4 frets 2 4 0 2 fingers 2 4 0 1}\
-{define: Eaug frets 1 0 0 3 fingers 1 0 0 4}\
-{define: E9 frets 1 2 2 2}\
-# F\
-{define: F frets 2 0 1 0 fingers 2 0 1 0}\
-{define: Fm frets 1 0 1 3 fingers 1 0 2 4}\
-{define: F7 frets 2 3 1 0 fingers 2 3 1 0}\
-{define: F7sus4 frets 3 3 1 3 fingers 2 3 1 4}\
-{define: Fm6 frets 1 2 1 3 fingers 1 2 1 3 add: string 2 fret 1 finger 1 add: string 4 fret 1 finger 1}\
-{define: Fm7 frets 1 3 1 3 fingers 1 3 2 4}\
-{define: Fdim frets 1 2 1 2 fingers 1 3 2 4}\
-{define: Fmaj7 frets 5 5 0 0 fingers 1 2 0 0}\
-{define: F6 frets 2 2 1 3 fingers 2 2 1 4}\
-{define: Fsus2 frets 0 0 1 3 fingers 0 0 1 3}\
-{define: Fsus4 frets 3 0 1 3 fingers 3 0 1 4}\
-{define: F6sus2 frets 0 0 1 3 fingers 0 0 1 3}\
-{define: F6sus4 frets 3 0 1 1 fingers 3 0 1 1}\
-{define: F6aug frets 2 1 1 4 fingers 2 1 1 4 add: string 1 fret 1 finger 1 add: string 4 fret 1 finger 1}\
-{define: F9 frets 2 3 3 3}\
-{define: Faug frets 2 1 1 0 fingers 3 1 2 0}\
-# F#\
-{define: F# frets 3 1 2 1 fingers 3 1 2 1 add: string 1 fret 1 finger 1 add: string 3 fret 1 finger 1}\
-{define: F#m frets 2 1 2 0 fingers 2 1 3 0}\
-{define: F#7 frets 3 4 2 1 fingers 3 4 2 1}\
-{define: F#7sus4 frets 4 4 2 4 fingers 2 3 1 4}\
-{define: F#m7 frets 2 4 2 4 fingers 1 3 2 4}\
-{define: F#dim frets 2 3 2 3 fingers 1 3 2 4}\
-{define: F#maj7 frets 3 5 2 4 fingers 2 4 1 3}\
-{define: F#m6 frets 2 1 2 4 fingers 2 1 3 4}\
-{define: F#6 frets 3 3 2 4 fingers 2 2 1 4}\
-{define: F#sus2 frets 1 1 2 4 fingers 1 1 2 4}\
-{define: F#sus4 frets 4 1 2 2 fingers 4 1 2 3}\
-{define: F#aug frets 3 2 2 5 fingers 2 1 1 4 add: string 1 fret 2 finger 1 add: string 4 fret 2 finger 1}\
-{define: F#9 frets 1 1 0 1}\
-# Gb returns F#\
-# G\
-{define: G frets 0 2 3 2 fingers 0 1 3 2}\
-{define: Gm frets 0 2 3 1 fingers 0 2 3 1}\
-{define: Gm6 frets 0 2 0 1 fingers 0 2 0 1}\
-{define: G7 frets 0 2 1 2 fingers 0 2 1 3}\
-{define: G7sus4 frets 0 2 1 3 fingers 0 2 1 4}\
-{define: Gm7 frets 0 2 1 1 fingers 0 2 1 1}\
-{define: Gdim frets 0 1 0 1 fingers 0 1 0 2}\
-{define: Gmaj7 frets 0 2 2 2 fingers 0 1 2 3}\
-{define: G6 frets 0 2 0 2 fingers 0 1 0 2}\
-{define: Gsus2 frets 0 2 3 0 fingers 0 1 2 0}\
-{define: Gsus4 frets 0 2 3 3 fingers 0 1 2 3}\
-{define: Gaug frets 0 3 3 2 fingers 0 2 2 1}\
-{define: Gsus4 frets 0 2 3 3}\
-{define: G9 frets 2 2 1 2}\
-# G#\
-{define: G# frets 5 3 4 3 fingers 3 1 2 1 add: string 1 fret 3 finger 1 add: string 3 fret 3 finger 1}\
-{define: G#m frets 1 3 4 2 fingers 1 3 4 2}\
-{define: G#7 frets 1 3 2 3 fingers 1 3 2 4}\
-{define: G#7sus4 frets 1 3 2 4 fingers 1 3 2 4}\
-{define: G#m7 frets 1 3 2 2 fingers 1 4 2 3}\
-{define: G#dim frets 1 2 1 2 fingers 1 3 2 4}\
-{define: G#maj7 frets 1 3 3 3 fingers 1 2 2 3}\
-{define: G#6 frets 1 3 1 3 fingers 1 3 2 4}\
-{define: G#m6 frets 1 3 1 2 fingers 1 3 1 2 add: string 2 fret 1 finger 1 add: string 4 fret 1 finger 1}\
-{define: G#sus2 frets 1 3 4 1 fingers 2 3 4 1}\
-{define: G#sus4 frets 1 3 4 4 fingers 1 2 3 3}\
-{define: G#aug frets 1 0 0 3 fingers 1 0 0 4}\
-{define: G#9 frets 1 0 2 1 fingers 1 0 3 2}\
-# slash chords & other oddities\
-{define: C-F frets 2 0 1 3}\
-{define: D/A frets 2 2 2 0}\
-{define: Dm/C frets 2 2 1 3}\
-{define: Fm7/C frets 1 3 1 3}\
-{define: G/B frets 0 2 3 2}\
-{define: G/F# frets 0 2 2 2}\
-{define: G/F frets 0 2 1 2}\
-{define: G7/B frets 0 2 1 2}\
-");
-
+;// -------------------------------------------------------
+// Scriptasaurus preloads Soprano Uke chord dictionary.
+// Unusual array joined to make multi-lined super string
+// being used to avoid JsLint warnings about JS string
+// continuation character: \
+// -------------------------------------------------------
+ukeGeeks.definitions.sopranoUkuleleGcea = [
+	// Required: Instruement Name and Tuning (string names)
+	// -------------------------------------------------------
+	'{instrument: Soprano Ukulele}',
+	'{tuning: G C E A}',
+	//  Ab returns G#
+	//  A
+	// -------------------------------------------------------
+	'{define: A frets 2 1 0 0 fingers 1 2 0 0}',
+	'{define: Am frets 2 0 0 0 fingers 1 0 0 0}',
+	'{define: A7 frets 0 1 0 0 fingers 0 1 0 0}',
+	'{define: A7sus4 frets 0 2 0 0 fingers 0 2 0 0}',
+	'{define: Am7 frets 0 0 0 0}',
+	'{define: Adim frets 2 3 2 3 fingers 1 3 2 4}',
+	'{define: Amaj7 frets 1 1 0 0 fingers 1 2 0 0}',
+	'{define: A6 frets 2 4 2 4 fingers 1 3 2 4}',
+	'{define: Asus2 frets 2 4 5 2 fingers 2 3 4 1}',
+	'{define: Asus4 frets 2 2 0 0 fingers 1 2 0 0}',
+	'{define: Aaug frets 2 1 1 4 fingers 2 1 1 4 add: string 1 fret 1 finger 1 add: string 4 fret 1 finger 1}',
+	'{define: Am6 frets 2 4 2 3 fingers 1 3 1 2 add: string 2 fret 2 finger 1}',
+	'{define: A9 frets 0 1 0 2 fingers 0 1 0 2}',
+	//  A# retruns Bb
+	//  Bb
+	// -------------------------------------------------------
+	'{define: Bb frets 3 2 1 1 fingers 3 2 1 1}',
+	'{define: Bbm frets 3 1 1 1 fingers 3 1 1 1 add: string 1 fret 1 finger 1}',
+	'{define: Bb7 frets 1 2 1 1 fingers 1 2 1 1 add: string 2 fret 1 finger 1}',
+	'{define: Bb7sus4 frets 1 3 1 1 fingers 1 3 1 1 add: string 2 fret 1 finger 1}',
+	'{define: Bbm7 frets 1 1 1 1 fingers 1 1 1 1}',
+	'{define: Bbdim frets 0 1 0 1 fingers 0 1 0 2}',
+	'{define: Bbmaj7 frets 2 2 1 1 fingers 2 2 1 1}',
+	'{define: Bb6 frets 0 2 1 1 fingers 0 2 1 1}',
+	'{define: Bbm6 frets 0 1 1 1 fingers 0 1 1 1}',
+	'{define: Bbsus2 frets 3 0 1 1 fingers 3 0 1 1}',
+	'{define: Bbsus4 frets 3 3 1 1 fingers 3 3 1 1}',
+	'{define: Bbaug frets 3 2 2 5 fingers 2 1 1 4 add: string 1 fret 2 finger 1 add: string 4 fret 2 finger 1}',
+	'{define: Bb9 frets 1 2 1 3 fingers 2 1 4 3}',
+	'{define: Bbmaj7 frets 2 2 1 1 fingers 2 2 1 1}',
+	'{define: Bbm7-5 frets 1 1 0 1 fingers 1 2 0 3}',
+	//  B
+	// -------------------------------------------------------
+	'{define: B frets 4 3 2 2 fingers 3 2 1 1}',
+	'{define: Bm frets 4 2 2 2 fingers 3 1 1 1 add: string 1 fret 2 finger 1}',
+	'{define: Bm6 frets 1 2 2 2 fingers 1 2 3 4}',
+	'{define: B7 frets 2 3 2 2 fingers 1 2 1 1 add: string 2 fret 2 finger 1}',
+	'{define: B7sus4 frets 2 4 2 2 fingers 1 3 1 1 add: string 2 fret 2 finger 1}',
+	'{define: Bm7 frets 2 2 2 2 fingers 1 1 1 1}',
+	'{define: Bdim frets 1 2 1 2 fingers 1 3 2 4}',
+	'{define: Bmaj7 frets 3 3 2 2 fingers 2 2 1 1}',
+	'{define: B6 frets 1 3 2 2 fingers 1 4 2 3}',
+	'{define: Bsus2 frets 5 1 2 2 fingers 4 1 3 2}',
+	'{define: Bsus4 frets 4 4 2 2 fingers 2 2 1 1}',
+	'{define: Baug frets 0 3 3 2 fingers 0 2 2 1}',
+	'{define: B9 frets 2 3 2 4}',
+	//  C
+	// -------------------------------------------------------
+	'{define: C frets 0 0 0 3 fingers 0 0 0 3}',
+	'{define: Cm frets 0 3 3 3 fingers 0 1 2 3}',
+	'{define: C7 frets 0 0 0 1 fingers 0 0 0 1}',
+	'{define: C7sus4 frets 0 0 1 1 fingers 0 0 1 1}',
+	'{define: Cm7 frets 3 3 3 3 fingers 1 1 1 1}',
+	'{define: Cdim frets 2 3 2 3 fingers 1 3 2 4}',
+	'{define: Cmaj7 frets 0 0 0 2 fingers 0 0 0 1}',
+	'{define: C6 frets 0 0 0 0}',
+	'{define: Cm6 frets 0 3 5 5 fingers 0 1 3 1}',
+	'{define: Csus2 frets 0 2 3 3 fingers 0 1 2 2}',
+	'{define: Csus4 frets 0 0 1 3 fingers 0 0 1 3}',
+	'{define: Caug frets 1 0 0 3 fingers 1 0 0 4}',
+	'{define: C9 frets 0 2 0 1 fingers 0 2 0 1}',
+	//  C#
+	// -------------------------------------------------------
+	'{define: C# frets 1 1 1 4 fingers 1 1 1 4 add: string 4 fret 1 finger 1}',
+	'{define: C#m frets 1 4 4 4 fingers 1 2 3 3}',
+	'{define: C#7 frets 1 1 1 2 fingers 1 1 1 2 add: string 4 fret 1 finger 1}',
+	'{define: C#7sus4 frets 1 1 2 2 fingers 1 1 2 3}',
+	'{define: C#m7 frets 1 4 4 2 fingers 1 3 3 2}',
+	'{define: C#dim frets 0 1 0 1 fingers 0 1 0 2}',
+	'{define: C#maj7 frets 1 1 1 3 fingers 1 1 1 3 add: string 4 fret 1 finger 1}',
+	'{define: C#6 frets 1 1 1 1 fingers 1 1 1 1}',
+	'{define: C#m6 frets 1 1 0 1 fingers 1 2 0 3}',
+	'{define: C#sus2 frets 1 3 4 4 fingers 1 2 3 3}',
+	'{define: C#sus4 frets 1 1 2 4 fingers 1 1 2 4}',
+	'{define: C#aug frets 2 1 1 4 fingers 2 1 1 4 add: string 1 fret 1 finger 1 add: string 4 fret 1 finger 1}',
+	'{define: C#9 frets 1 3 1 2}',
+	//  Db returns C#
+	//  D
+	// -------------------------------------------------------
+	'{define: D frets 2 2 2 0 fingers 1 1 1 0}',
+	'{define: Dm frets 2 2 1 0 fingers 2 2 1 0}',
+	'{define: Dm6 frets 0 2 1 2 fingers 0 2 1 3}',
+	'{define: D7 frets 2 2 2 3 fingers 1 1 1 2 add: string 4 fret 2 finger 1}',
+	'{define: D7sus4 frets 2 2 3 3 fingers 1 1 2 3}',
+	'{define: Dm7 frets 2 2 1 3 fingers 2 2 1 3}',
+	'{define: Ddim frets 1 2 1 2 fingers 1 3 2 4}',
+	'{define: Dmaj7 frets 2 2 2 4 fingers 1 1 1 2 add: string 4 fret 2 finger 1}',
+	'{define: D6 frets 2 2 2 2 fingers 2 2 2 2}',
+	'{define: Dsus2 frets 2 2 0 0 fingers 1 2 0 0}',
+	'{define: Dsus4 frets 0 2 3 0 fingers 0 1 2 0}',
+	'{define: Daug frets 3 2 2 5 fingers 2 1 1 4 add: string 1 fret 2 finger 1 add: string 4 fret 2 finger 1}',
+	'{define: D9 frets 2 4 2 3}',
+	//  D# returns Eb
+	//  Eb
+	// -------------------------------------------------------
+	'{define: Eb frets 0 3 3 1 fingers 0 2 2 1}',
+	'{define: Ebm frets 3 3 2 1 fingers 3 3 2 1}',
+	'{define: Eb7 frets 3 3 3 4 fingers 1 1 1 2 add: string 4 fret 3 finger 1}',
+	'{define: Eb7sus4 frets 3 3 4 4 fingers 1 1 2 3}',
+	'{define: Ebm7 frets 3 3 2 4 fingers 2 2 1 4}',
+	'{define: Ebdim frets 2 3 2 3 fingers 1 3 2 4}',
+	'{define: Ebmaj7 frets 3 3 3 5 fingers 1 1 1 2 add: string 4 fret 3 finger 1}',
+	'{define: Eb6 frets 3 3 3 3 fingers 1 1 1 1}',
+	'{define: Ebm6 frets 3 3 2 3 fingers 2 3 1 4}',
+	'{define: Ebsus2 frets 3 3 1 1 fingers 2 2 1 1}',
+	'{define: Ebsus4 frets 1 3 4 1 fingers 2 3 4 1}',
+	'{define: Ebaug frets 0 3 3 2 fingers 0 2 2 1}',
+	'{define: Eb9 frets 0 1 1 1}',
+	//  E
+	// -------------------------------------------------------
+	'{define: E frets 4 4 4 2 fingers 2 3 4 1}',
+	'{define: Em frets 0 4 3 2 fingers 0 3 2 1}',
+	'{define: E7 frets 1 2 0 2 fingers 1 2 0 3}',
+	'{define: E7sus4 frets 2 2 0 2 fingers 2 3 0 4}',
+	'{define: Em6 frets 4 4 3 4 fingers 2 3 1 4}',
+	'{define: Em7 frets 0 2 0 2 fingers 0 1 0 2}',
+	'{define: Edim frets 0 1 0 1 fingers 0 1 0 2}',
+	'{define: Emaj7 frets 1 3 0 2 fingers 1 3 0 2}',
+	'{define: E6 frets 4 4 4 4 fingers 1 1 1 1}',
+	'{define: Esus2 frets 4 4 2 2 fingers 3 3 1 1}',
+	'{define: Esus4 frets 2 4 0 2 fingers 2 4 0 1}',
+	'{define: Eaug frets 1 0 0 3 fingers 1 0 0 4}',
+	'{define: E9 frets 1 2 2 2}',
+	//  F
+	// -------------------------------------------------------
+	'{define: F frets 2 0 1 0 fingers 2 0 1 0}',
+	'{define: Fm frets 1 0 1 3 fingers 1 0 2 4}',
+	'{define: F7 frets 2 3 1 0 fingers 2 3 1 0}',
+	'{define: F7sus4 frets 3 3 1 3 fingers 2 3 1 4}',
+	'{define: Fm6 frets 1 2 1 3 fingers 1 2 1 3 add: string 2 fret 1 finger 1 add: string 4 fret 1 finger 1}',
+	'{define: Fm7 frets 1 3 1 3 fingers 1 3 2 4}',
+	'{define: Fdim frets 1 2 1 2 fingers 1 3 2 4}',
+	'{define: Fmaj7 frets 5 5 0 0 fingers 1 2 0 0}',
+	'{define: F6 frets 2 2 1 3 fingers 2 2 1 4}',
+	'{define: Fsus2 frets 0 0 1 3 fingers 0 0 1 3}',
+	'{define: Fsus4 frets 3 0 1 3 fingers 3 0 1 4}',
+	'{define: F6sus2 frets 0 0 1 3 fingers 0 0 1 3}',
+	'{define: F6sus4 frets 3 0 1 1 fingers 3 0 1 1}',
+	'{define: F6aug frets 2 1 1 4 fingers 2 1 1 4 add: string 1 fret 1 finger 1 add: string 4 fret 1 finger 1}',
+	'{define: F9 frets 2 3 3 3}',
+	'{define: Faug frets 2 1 1 0 fingers 3 1 2 0}',
+	//  F#
+	// -------------------------------------------------------
+	'{define: F# frets 3 1 2 1 fingers 3 1 2 1 add: string 1 fret 1 finger 1 add: string 3 fret 1 finger 1}',
+	'{define: F#m frets 2 1 2 0 fingers 2 1 3 0}',
+	'{define: F#7 frets 3 4 2 1 fingers 3 4 2 1}',
+	'{define: F#7sus4 frets 4 4 2 4 fingers 2 3 1 4}',
+	'{define: F#m7 frets 2 4 2 4 fingers 1 3 2 4}',
+	'{define: F#dim frets 2 3 2 3 fingers 1 3 2 4}',
+	'{define: F#maj7 frets 3 5 2 4 fingers 2 4 1 3}',
+	'{define: F#m6 frets 2 1 2 4 fingers 2 1 3 4}',
+	'{define: F#6 frets 3 3 2 4 fingers 2 2 1 4}',
+	'{define: F#sus2 frets 1 1 2 4 fingers 1 1 2 4}',
+	'{define: F#sus4 frets 4 1 2 2 fingers 4 1 2 3}',
+	'{define: F#aug frets 3 2 2 5 fingers 2 1 1 4 add: string 1 fret 2 finger 1 add: string 4 fret 2 finger 1}',
+	'{define: F#9 frets 1 1 0 1}',
+	//  Gb returns F#
+	//  G
+	// -------------------------------------------------------
+	'{define: G frets 0 2 3 2 fingers 0 1 3 2}',
+	'{define: Gm frets 0 2 3 1 fingers 0 2 3 1}',
+	'{define: Gm6 frets 0 2 0 1 fingers 0 2 0 1}',
+	'{define: G7 frets 0 2 1 2 fingers 0 2 1 3}',
+	'{define: G7sus4 frets 0 2 1 3 fingers 0 2 1 4}',
+	'{define: Gm7 frets 0 2 1 1 fingers 0 2 1 1}',
+	'{define: Gdim frets 0 1 0 1 fingers 0 1 0 2}',
+	'{define: Gmaj7 frets 0 2 2 2 fingers 0 1 2 3}',
+	'{define: G6 frets 0 2 0 2 fingers 0 1 0 2}',
+	'{define: Gsus2 frets 0 2 3 0 fingers 0 1 2 0}',
+	'{define: Gsus4 frets 0 2 3 3 fingers 0 1 2 3}',
+	'{define: Gaug frets 0 3 3 2 fingers 0 2 2 1}',
+	'{define: Gsus4 frets 0 2 3 3}',
+	'{define: G9 frets 2 2 1 2}',
+	//  G#
+	// -------------------------------------------------------
+	'{define: G# frets 5 3 4 3 fingers 3 1 2 1 add: string 1 fret 3 finger 1 add: string 3 fret 3 finger 1}',
+	'{define: G#m frets 1 3 4 2 fingers 1 3 4 2}',
+	'{define: G#7 frets 1 3 2 3 fingers 1 3 2 4}',
+	'{define: G#7sus4 frets 1 3 2 4 fingers 1 3 2 4}',
+	'{define: G#m7 frets 1 3 2 2 fingers 1 4 2 3}',
+	'{define: G#dim frets 1 2 1 2 fingers 1 3 2 4}',
+	'{define: G#maj7 frets 1 3 3 3 fingers 1 2 2 3}',
+	'{define: G#6 frets 1 3 1 3 fingers 1 3 2 4}',
+	'{define: G#m6 frets 1 3 1 2 fingers 1 3 1 2 add: string 2 fret 1 finger 1 add: string 4 fret 1 finger 1}',
+	'{define: G#sus2 frets 1 3 4 1 fingers 2 3 4 1}',
+	'{define: G#sus4 frets 1 3 4 4 fingers 1 2 3 3}',
+	'{define: G#aug frets 1 0 0 3 fingers 1 0 0 4}',
+	'{define: G#9 frets 1 0 2 1 fingers 1 0 3 2}',
+	//  slash chords & other oddities
+	// -------------------------------------------------------
+	'{define: C-F frets 2 0 1 3}',
+	'{define: D/A frets 2 2 2 0}',
+	'{define: Dm/C frets 2 2 1 3}',
+	'{define: Fm7/C frets 1 3 1 3}',
+	'{define: G/B frets 0 2 3 2}',
+	'{define: G/F# frets 0 2 2 2}',
+	'{define: G/F frets 0 2 1 2}',
+	'{define: G7/B frets 0 2 1 2}',
+].join("\n");
 ;/**
  * Wraps three common canvas actions: adding canvas element to DOM, drawing a dot, adding text.
  * @class canvasTools
@@ -1520,14 +1557,14 @@ ukeGeeks.canvasTools = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
-	 * @type {Object}
+	 * @type JsonObject
 	 */
 	var _public = {};
 
 	/**
 	 * @method drawDot
-	 * @param ctx {type} blah
-	 * @param centerPos {type} blah
+	 * @param ctx {CanvasContext} Valid Canvas Context handle
+	 * @param centerPos {XyPositionJson} JSON with two properties: x & y ints, position in pixels, format {x: <int>, y: <int>}
 	 * @param radius {int} Dot's Radius
 	 * @param color {string} Hex color
 	 * @return {void}
@@ -1542,8 +1579,8 @@ ukeGeeks.canvasTools = (function() {
 
 	/**
 	 * @method drawText
-	 * @param ctx {CanvasContext} Valid Canvas Context Handle
-	 * @param pos {XYPosObject} Object with two properties: x & y ints, position in pixels
+	 * @param ctx {CanvasContext} Valid Canvas Context handle
+	 * @param pos {XYPosObject} JSON with two properties: x & y ints, position in pixels, format {x: <int>, y: <int>}
 	 * @param text {string} Any string to be places at Pos
 	 * @param font {string} Font, CSS-like definition of size and font-family, i.e.
 	 * @param color {string} Hexadecimal RGB color definition
@@ -1551,7 +1588,9 @@ ukeGeeks.canvasTools = (function() {
 	 * @return {void}
 	 */
 	_public.drawText = function(ctx, pos, text, font, color, align) {
-		if (!ctx.fillText) return; // IE check
+		if (!ctx.fillText) {
+			return; // IE check
+		}
 		ctx.font = font;
 		ctx.textAlign = (align || 'center');
 		ctx.fillStyle = color;
@@ -1598,9 +1637,10 @@ ukeGeeks.chordBrush = function() {
 
 	/**
 	 * attach public members to this object
+	 * @property _public
 	 * @type {Object}
 	 */
-	var publics = {};
+	var _public = {};
 
 	/////////////////////////////////////////////////////////////////////////////
 	//
@@ -1613,7 +1653,7 @@ ukeGeeks.chordBrush = function() {
 	 * @method init
 	 * @return {void}
 	 */
-	publics.init = function() {};
+	_public.init = function() {};
 
 	/**
 	 * Puts a new Canvas within ChordBox and draws the chord diagram on it.
@@ -1625,9 +1665,9 @@ ukeGeeks.chordBrush = function() {
 	 * @param {JSON} colorSettings (optional) Defaults to settings.colors
 	 * @return {void}
 	 */
-	publics.plot = function(chordBox, chord, fretBox, fontSettings, colorSettings) {
+	_public.plot = function(chordBox, chord, fretBox, fontSettings, colorSettings) {
 		var ctx = ukeGeeks.canvasTools.addCanvas(chordBox, fretBox.width, fretBox.height);
-		if (ctx == null) {
+		if (!ctx) {
 			return;
 		}
 
@@ -1668,7 +1708,7 @@ ukeGeeks.chordBrush = function() {
 				ukeGeeks.canvasTools.drawText(ctx, {
 					x: p.x,
 					y: (p.y + 5)
-				}, chord.dots[i].finger, fontSettings.dot, colorSettings.dotText)
+				}, chord.dots[i].finger, fontSettings.dot, colorSettings.dotText);
 			}
 		}
 
@@ -1720,20 +1760,20 @@ ukeGeeks.chordBrush = function() {
 	 */
 	var _drawFretboard = function(ctx, pos, fretBox, fretColor) {
 		// width offset, a "subpixel" adjustment
-		var offset = fretBox.lineWidth / 2;
+		var i, offset = fretBox.lineWidth / 2;
 		// locals
 		var stringHeight = ukeGeeks.settings.numFrets * fretBox.fretSpace;
 		var fretWidth = 3 * fretBox.stringSpace;
 		// build shape
 		ctx.beginPath();
 		// add "C" & "E" strings
-		for (var i = 1; i < 3; i++) {
+		for (i = 1; i < 3; i++) {
 			var x = pos.x + i * fretBox.stringSpace + offset;
 			ctx.moveTo(x, pos.y + offset);
 			ctx.lineTo(x, pos.y + stringHeight + offset);
 		}
 		// add frets
-		for (var i = 1; i < ukeGeeks.settings.numFrets; i++) {
+		for (i = 1; i < ukeGeeks.settings.numFrets; i++) {
 			var y = pos.y + i * fretBox.fretSpace + offset;
 			ctx.moveTo(pos.x + offset, y);
 			ctx.lineTo(pos.x + fretWidth + offset, y);
@@ -1751,7 +1791,10 @@ ukeGeeks.chordBrush = function() {
 	 * TODO: Loop over the muted array, dropping X's whenever a string position is TRUE
 	 * @method _mutedStrings
 	 * @private
-	 * @param
+	 * @param  {CanvasContext} ctx  Valid Canvas Context handle
+	 * @param  {JSON} fretBox  See Settings.fretBox
+	 * @param  {bool} muted    Is this string "muted"?
+	 * @param  {string} strokeColor Valid CSS hex color (shorthand not recommended)
 	 * @return {void}
 	 */
 	var _mutedStrings = function(ctx, fretBox, muted, strokeColor) {
@@ -1771,7 +1814,10 @@ ukeGeeks.chordBrush = function() {
 	 * Plots an "X" centered at POSITION
 	 * @method _drawX
 	 * @private
-	 * @param
+	 * @param {CanvasContext} ctx Valid Canvas Context handle
+	 * @param centerPos {XyPositionJson} JSON with two properties: x & y ints, position in pixels, format {x: <int>, y: <int>}
+	 * @param  {JSON} fretBox  See Settings.fretBox
+	 * @param  {string} strokeColor Valid CSS hex color (shorthand not recommended)
 	 * @return {void}
 	 */
 	var _drawX = function(ctx, pos, fretBox, strokeColor) {
@@ -1818,7 +1864,7 @@ ukeGeeks.chordBrush = function() {
 
 	/* return our public interface
 	 */
-	return publics;
+	return _public;
 
 };
 ;/**
@@ -1881,6 +1927,7 @@ ukeGeeks.chordParser.prototype = {
 	 * @return {StringArray}
 	 */
 	_findChords: function(text) {
+		var i, j;
 		var re = /\[(.+?)]/img;
 		var m = text.match(re);
 		if (!m) return [];
@@ -1888,9 +1935,9 @@ ukeGeeks.chordParser.prototype = {
 		// why not use associative array?
 		var chords = [];
 		var found;
-		for (var i = 0; i < m.length; i++) {
+		for (i = 0; i < m.length; i++) {
 			found = false;
-			for (var j = 0; j < chords.length; j++) {
+			for (j = 0; j < chords.length; j++) {
 				if (chords[j] == m[i]) {
 					found = true;
 					break;
@@ -1901,7 +1948,7 @@ ukeGeeks.chordParser.prototype = {
 			}
 		}
 		// clean 'em
-		for (var j in chords) {
+		for (j in chords) {
 			chords[j] = chords[j].replace('[', '').replace(']', '');
 		}
 		// done
@@ -1947,19 +1994,16 @@ ukeGeeks.chordParser.prototype = {
 	 * @return {string}
 	 */
 	_packChords: function(text) {
+		var re;
+
 		if (ukeGeeks.settings.inlineDiagrams) {
 			/* TODO: problem with packing */
-			var re = /(<\/strong><\/code>)[ 	]*(<code data-chordName="[^"]*"><strong>)/ig;
+			re = /(<\/strong><\/code>)[ \t]*(<code data-chordName="[^"]*"><strong>)/ig;
 			return text.replace(re, '$1<span class="ugsInlineSpacer">&nbsp;</span>$2');
-			/*
-			var re = /(<\/strong><\/code>)[ 	]*<code (data-chordName="[^"]*"><strong>)/ig;
-			return text.replace(re,'$1<code style="display:inline-block;width:40px;" $2');
-			*/
 		}
-		else {
-			var re = /<\/strong><\/code>[ 	]*<code data-chordName="[^"]*"><strong>/ig;
-			return text.replace(re, ' ');
-		}
+
+		re = /<\/strong><\/code>[ \t]*<code data-chordName="[^"]*"><strong>/ig;
+		return text.replace(re, ' ');
 	}
 };
 ;/**
@@ -2236,7 +2280,6 @@ ukeGeeks.cpmParser.prototype = {
 	 * @return {songNodeArray}
 	 */
 	_domParse: function(text) {
-		// var ezBlock = function(){};
 		var lines = text.split('\n');
 		var song = [];
 		var tmpBlk = null;
@@ -2247,9 +2290,9 @@ ukeGeeks.cpmParser.prototype = {
 				continue;
 			}
 			isMarker = this.regEx.blocks.test(lines[i]);
-			if (isMarker || tmpBlk == null) {
+			if (isMarker || tmpBlk === null) {
 				// save last block, start new one...
-				if (tmpBlk != null) {
+				if (tmpBlk !== null) {
 					song.push(tmpBlk);
 				}
 				tmpBlk = {
@@ -2466,9 +2509,10 @@ ukeGeeks.chordPainter = function() {
 
 	/**
 	 * attach public members to this object
+	 * @property _public
 	 * @type {Object}
 	 */
-	var publics = {};
+	var _public = {};
 
 	/**
 	 * ukeGeeks.canvas object handle
@@ -2494,7 +2538,7 @@ ukeGeeks.chordPainter = function() {
 	 * @param htmlHandles {ukeGeeks.data.htmlHandles} DOM Element object
 	 * @return {void}
 	 */
-	publics.init = function(htmlHandles) {
+	_public.init = function(htmlHandles) {
 		brush = new ukeGeeks.chordBrush();
 		brush.init();
 		handles = htmlHandles;
@@ -2511,6 +2555,7 @@ ukeGeeks.chordPainter = function() {
 
 	/**
 	 * Checks whether speicified chord (name) is on the ignore list.
+	 * @method ignoreChord
 	 * @param  {string} chord Chord name
 	 * @return {boolean}	return TRUE if "chord" is on ignore list.
 	 */
@@ -2529,7 +2574,7 @@ ukeGeeks.chordPainter = function() {
 	 * @param chords {array<expandedChord>} Array of chord objects to be plotted
 	 * @return {void}
 	 */
-	publics.show = function(chords) {
+	_public.show = function(chords) {
 		handles.diagrams.innerHTML = '';
 		errors = [];
 		ignoreMatchList = [];
@@ -2557,7 +2602,7 @@ ukeGeeks.chordPainter = function() {
 	 * @param chords {array<expandedChord>} Array of chord objects to be plotted
 	 * @return {void}
 	 */
-	publics.showInline = function(chords) {
+	_public.showInline = function(chords) {
 		var e = handles.text.getElementsByTagName('code');
 		if (e.length < 1) return;
 		for (var i = 0; i < chords.length; i++) {
@@ -2580,7 +2625,7 @@ ukeGeeks.chordPainter = function() {
 	 * @method getErrors
 	 * @return {array}
 	 */
-	publics.getErrors = function() {
+	_public.getErrors = function() {
 		return errors;
 	};
 
@@ -2589,20 +2634,21 @@ ukeGeeks.chordPainter = function() {
 	 * @method getIgnoredChords
 	 * @return {array} array of strings
 	 */
-	publics.getIgnoredChords = function() {
+	_public.getIgnoredChords = function() {
 		return ignoreMatchList;
 	};
 
 	/* return our public interface
 	 *
 	 */
-	return publics;
+	return _public;
 };
 ;/**
  * Tablature renderer -- reads tab data and draws canvas elements.
  * Creates "packed" versions of the tabs, including a "key line" that's comprised
  * only of '-' and '*' -- the asterisks denoting where a dot will eventually be placed.
  * @class tabs
+ * @constructor
  * @namespace ukeGeeks
  */
 ukeGeeks.tabs = function() {};
@@ -3158,13 +3204,14 @@ ukeGeeks.overlapFixer = (function() {
 	 * @param  {DOM_element} element containing the UGS HTML song
 	 */
 	_public.Fix = function(ele) {
-		var elements = ele.getElementsByTagName('code');
+		var i,
+			elements = ele.getElementsByTagName('code');
 
-		for (var i = 0; i < elements.length; i++) {
+		for (i = 0; i < elements.length; i++) {
 			elements[i].style.paddingRight = '0px';
 		}
 
-		for (var i = 0; i < (elements.length - 1); i++) {
+		for (i = 0; i < (elements.length - 1); i++) {
 			checkChords(elements[i], elements[i + 1]);
 		}
 	};
@@ -3195,11 +3242,14 @@ ukeGeeks.scriptasaurus = (function() {
 	 * @return {void}
 	 */
 	_public.init = function(isIeFamily) {
+		var defs = ukeGeeks.definitions;
+
 		ukeGeeks.settings.environment.isIe = isIeFamily;
 		// TODO: known problem -- need to preload Sorprano chord libarary then we can retune if needed
-		ukeGeeks.definitions.useInstrument(ukeGeeks.definitions.instrument.sopranoUke);
-		if (ukeGeeks.settings.defaultInstrument != ukeGeeks.definitions.instrument.sopranoUke) {
-			ukeGeeks.definitions.useInstrument(ukeGeeks.settings.defaultInstrument);
+		defs.addInstrument(defs.sopranoUkuleleGcea);
+		defs.useInstrument(defs.instrument.sopranoUke);
+		if (ukeGeeks.settings.defaultInstrument != defs.instrument.sopranoUke) {
+			defs.useInstrument(ukeGeeks.settings.defaultInstrument);
 		}
 	};
 
@@ -3332,7 +3382,7 @@ ukeGeeks.scriptasaurus = (function() {
 	 * @method _getHandlesFromClass
 	 * @private
 	 * @param wrap {domElement}
-	 * @retuns {ukeGeeks.data.htmlHandles}
+	 * @return {ukeGeeks.data.htmlHandles}
 	 */
 	var _getHandlesFromClass = function(wrap) {
 		var diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
@@ -3347,7 +3397,7 @@ ukeGeeks.scriptasaurus = (function() {
 	 *
 	 * @method _getHandlesFromId
 	 * @private
-	 * @retuns {ukeGeeks.data.htmlHandles}
+	 * @return {ukeGeeks.data.htmlHandles}
 	 */
 	var _getHandlesFromId = function() {
 		return new ukeGeeks.data.htmlHandles(

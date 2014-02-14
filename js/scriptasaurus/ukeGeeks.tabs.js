@@ -3,6 +3,7 @@
  * Creates "packed" versions of the tabs, including a "key line" that's comprised
  * only of '-' and '*' -- the asterisks denoting where a dot will eventually be placed.
  * @class tabs
+ * @constructor
  * @namespace ukeGeeks
  */
 ukeGeeks.tabs = function(){};
@@ -346,6 +347,7 @@ ukeGeeks.tabs.prototype = {
 			x: 0,
 			y: pos.y
 		};
+
 		for(var i in tabs){
 			if (i > 3) {
 				return;

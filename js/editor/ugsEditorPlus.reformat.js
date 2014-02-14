@@ -4,6 +4,7 @@ var ugsEditorPlus = window.ugsEditorPlus || {};
  *
  * @class reformat
  * @namespace ugsEditorPlus
+ * @singleton
  */
 ugsEditorPlus.reformat = new function(){
 	var _this = this;
@@ -21,7 +22,7 @@ ugsEditorPlus.reformat = new function(){
 			lyrics : 2,
 			tabs : 3
 		}
-	}
+	};
 
 	/**
 	 * Line Object Class Definition (sets defaults)
@@ -169,21 +170,14 @@ ugsEditorPlus.reformat = new function(){
 
 			// OK, we've complicated things a bit by adding tabs, so we'll handle this in a helper...
 			if ((thisLine.lineType == _enums.lineTypes.tabs) && isTabBlock(lines, i)){
-				s += '{start_of_tab}\n'
-					+ thisLine.source.replace(_re.leadingSpace, '') + '\n'
-					+ nextLine.source.replace(_re.leadingSpace, '') + '\n'
-					+ lines[i+1].source.replace(_re.leadingSpace, '') + '\n'
-					+ lines[i+2].source.replace(_re.leadingSpace, '') + '\n'
-					+ '{end_of_tab}\n';
+				s += '{start_of_tab}\n' + thisLine.source.replace(_re.leadingSpace, '') + '\n' + nextLine.source.replace(_re.leadingSpace, '') + '\n' + lines[i + 1].source.replace(_re.leadingSpace, '') + '\n' + lines[i + 2].source.replace(_re.leadingSpace, '') + '\n' + '{end_of_tab}\n';
 				i+= 3;
 				continue;
 			}
 
 			// finally, look for a "mergable" pair: this line is chords and the next is lyrics -- if not this we'll just output the current line
 			if ((thisLine.lineType != _enums.lineTypes.chords) || (nextLine.lineType != _enums.lineTypes.lyrics)){
-				s += (thisLine.lineType == _enums.lineTypes.chords)
-					? wrapChords(thisLine.source) + '\n'
-					: thisLine.source + '\n';
+				s += (thisLine.lineType == _enums.lineTypes.chords) ? wrapChords(thisLine.source) + '\n' : thisLine.source + '\n';
 				continue;
 			}
 
@@ -259,4 +253,4 @@ ugsEditorPlus.reformat = new function(){
 		return s;
 	};
 
-};
+}();

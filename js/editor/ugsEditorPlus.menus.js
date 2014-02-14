@@ -8,7 +8,8 @@
 ugsEditorPlus.topMenus = (function(){
 	/**
 	 * attach public members to this object
-	 * @type {Object}
+	 * @property _public
+	 * @type JsonObject
 	 */
 	var _public = {};
 

@@ -17,6 +17,7 @@ ukeGeeks.chordImport = (function() {
 	/**
 	 * Internal storage of partially converted "define" statements. The Definition (string) and addIn (array<strings>)
 	 * @class chordImport.chordParts
+	 * @constructor
 	 * @type ClassDefinition
 	 * @private
 	 */
@@ -176,7 +177,7 @@ ukeGeeks.chordImport = (function() {
 		var m = (f[1].length == 4) ? f[1].match(regEx.any) : f[1].match(regEx.numOrX);
 		for(var i = 0; i < m.length; i++){
 			var isX = m[i] == 'x' || m[i] == 'X';
-			frets[i] = isX ? 0 : parseInt(m[i]);
+			frets[i] = isX ? 0 : parseInt(m[i], 10);
 			muted[i] = isX;
 		}
 	};
@@ -212,9 +213,9 @@ ukeGeeks.chordImport = (function() {
 		var dots = [];
 		var tuning = ukeGeeks.settings.tuning;
 		for (var j = 0; j < tuning.length; j++){
-			var n = parseInt(frets[j]);
+			var n = parseInt(frets[j], 10);
 			if (n > 0){
-				dots.push(new ukeGeeks.data.dot(j, n, (fingers.length - 1 >= j) ? parseInt(fingers[j]) : 0));
+				dots.push(new ukeGeeks.data.dot(j, n, (fingers.length - 1 >= j) ? parseInt(fingers[j], 10) : 0));
 			}
 		}
 		return dots;
@@ -235,7 +236,7 @@ ukeGeeks.chordImport = (function() {
 		for(var i in adds){
 			var a = adds[i].match(regEx.addin);
 			if (a && a.length > 2){
-				dots.push(new ukeGeeks.data.dot(parseInt(a[1]) - 1, parseInt(a[2]), parseInt(a[3])));
+				dots.push(new ukeGeeks.data.dot(parseInt(a[1], 10) - 1, parseInt(a[2], 10), parseInt(a[3], 10)));
 			}
 		}
 	};
@@ -345,4 +346,5 @@ ukeGeeks.chordImport = (function() {
 	};
 
 	return _public;
+
 }());

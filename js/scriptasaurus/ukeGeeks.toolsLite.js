@@ -79,6 +79,7 @@ ukeGeeks.toolsLite = (function() {
 	 * @return {arrayDomElements}
 	 */
 	_public.getElementsByClass = function(searchClass, node, tag) {
+		var i, j;
 		// use falsey -- if ((node === null) || (node === undefined)) {
 		if (!node) {
 			node = document;

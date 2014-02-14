@@ -7,9 +7,10 @@ ukeGeeks.chordBrush = function() {
 
 	/**
 	 * attach public members to this object
+	 * @property _public
 	 * @type {Object}
 	 */
-	var publics = {};
+	var _public = {};
 
 	/////////////////////////////////////////////////////////////////////////////
 	//
@@ -22,7 +23,7 @@ ukeGeeks.chordBrush = function() {
 	 * @method init
 	 * @return {void}
 	 */
-	publics.init = function() {};
+	_public.init = function() {};
 
 	/**
 	 * Puts a new Canvas within ChordBox and draws the chord diagram on it.
@@ -34,9 +35,9 @@ ukeGeeks.chordBrush = function() {
 	 * @param {JSON} colorSettings (optional) Defaults to settings.colors
 	 * @return {void}
 	 */
-	publics.plot = function(chordBox, chord, fretBox, fontSettings, colorSettings) {
+	_public.plot = function(chordBox, chord, fretBox, fontSettings, colorSettings) {
 		var ctx = ukeGeeks.canvasTools.addCanvas(chordBox, fretBox.width, fretBox.height);
-		if (ctx == null) {
+		if (!ctx) {
 			return;
 		}
 
@@ -77,7 +78,7 @@ ukeGeeks.chordBrush = function() {
 				ukeGeeks.canvasTools.drawText(ctx, {
 					x: p.x,
 					y: (p.y + 5)
-				}, chord.dots[i].finger, fontSettings.dot, colorSettings.dotText)
+				}, chord.dots[i].finger, fontSettings.dot, colorSettings.dotText);
 			}
 		}
 
@@ -129,20 +130,20 @@ ukeGeeks.chordBrush = function() {
 	 */
 	var _drawFretboard = function(ctx, pos, fretBox, fretColor) {
 		// width offset, a "subpixel" adjustment
-		var offset = fretBox.lineWidth / 2;
+		var i, offset = fretBox.lineWidth / 2;
 		// locals
 		var stringHeight = ukeGeeks.settings.numFrets * fretBox.fretSpace;
 		var fretWidth = 3 * fretBox.stringSpace;
 		// build shape
 		ctx.beginPath();
 		// add "C" & "E" strings
-		for (var i = 1; i < 3; i++) {
+		for (i = 1; i < 3; i++) {
 			var x = pos.x + i * fretBox.stringSpace + offset;
 			ctx.moveTo(x, pos.y + offset);
 			ctx.lineTo(x, pos.y + stringHeight + offset);
 		}
 		// add frets
-		for (var i = 1; i < ukeGeeks.settings.numFrets; i++) {
+		for (i = 1; i < ukeGeeks.settings.numFrets; i++) {
 			var y = pos.y + i * fretBox.fretSpace + offset;
 			ctx.moveTo(pos.x + offset, y);
 			ctx.lineTo(pos.x + fretWidth + offset, y);
@@ -160,7 +161,10 @@ ukeGeeks.chordBrush = function() {
 	 * TODO: Loop over the muted array, dropping X's whenever a string position is TRUE
 	 * @method _mutedStrings
 	 * @private
-	 * @param
+	 * @param  {CanvasContext} ctx  Valid Canvas Context handle
+	 * @param  {JSON} fretBox  See Settings.fretBox
+	 * @param  {bool} muted    Is this string "muted"?
+	 * @param  {string} strokeColor Valid CSS hex color (shorthand not recommended)
 	 * @return {void}
 	 */
 	var _mutedStrings = function(ctx, fretBox, muted, strokeColor) {
@@ -180,7 +184,10 @@ ukeGeeks.chordBrush = function() {
 	 * Plots an "X" centered at POSITION
 	 * @method _drawX
 	 * @private
-	 * @param
+	 * @param {CanvasContext} ctx Valid Canvas Context handle
+	 * @param centerPos {XyPositionJson} JSON with two properties: x & y ints, position in pixels, format {x: <int>, y: <int>}
+	 * @param  {JSON} fretBox  See Settings.fretBox
+	 * @param  {string} strokeColor Valid CSS hex color (shorthand not recommended)
 	 * @return {void}
 	 */
 	var _drawX = function(ctx, pos, fretBox, strokeColor) {
@@ -227,6 +234,6 @@ ukeGeeks.chordBrush = function() {
 
 	/* return our public interface
 	 */
-	return publics;
+	return _public;
 
 };

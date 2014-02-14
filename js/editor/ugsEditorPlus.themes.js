@@ -3,6 +3,7 @@
  * and the UkeGeek settings used to draw the diagrams.
  * @class themes
  * @namespace ugsEditorPlus
+ * @singleton
  */
 ugsEditorPlus.themes = new function() {
 
@@ -248,4 +249,4 @@ ugsEditorPlus.themes = new function() {
 		ukeGeeks.settings.tabs.textColor = c.tabs.text;
 	};
 
-};
+}();

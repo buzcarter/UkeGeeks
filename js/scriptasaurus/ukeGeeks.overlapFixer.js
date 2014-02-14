@@ -137,13 +137,14 @@ ukeGeeks.overlapFixer = (function() {
 	 * @param  {DOM_element} element containing the UGS HTML song
 	 */
 	_public.Fix = function(ele) {
-		var elements = ele.getElementsByTagName('code');
+		var i,
+			elements = ele.getElementsByTagName('code');
 
-		for (var i = 0; i < elements.length; i++) {
+		for (i = 0; i < elements.length; i++) {
 			elements[i].style.paddingRight = '0px';
 		}
 
-		for (var i = 0; i < (elements.length - 1); i++) {
+		for (i = 0; i < (elements.length - 1); i++) {
 			checkChords(elements[i], elements[i + 1]);
 		}
 	};

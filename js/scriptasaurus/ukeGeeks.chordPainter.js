@@ -8,9 +8,10 @@ ukeGeeks.chordPainter = function(){
 
 	/**
 	 * attach public members to this object
+	 * @property _public
 	 * @type {Object}
 	 */
-	var publics = {};
+	var _public = {};
 
 	/**
 	 * ukeGeeks.canvas object handle
@@ -36,7 +37,7 @@ ukeGeeks.chordPainter = function(){
 	 * @param htmlHandles {ukeGeeks.data.htmlHandles} DOM Element object
 	 * @return {void}
 	 */
-	publics.init = function(htmlHandles){
+	_public.init = function(htmlHandles) {
 		brush = new ukeGeeks.chordBrush();
 		brush.init();
 		handles = htmlHandles;
@@ -53,6 +54,7 @@ ukeGeeks.chordPainter = function(){
 
 	/**
 		 * Checks whether speicified chord (name) is on the ignore list.
+	 * @method ignoreChord
 		 * @param  {string} chord Chord name
 		 * @return {boolean}	return TRUE if "chord" is on ignore list.
 		 */
@@ -71,7 +73,7 @@ ukeGeeks.chordPainter = function(){
 	 * @param chords {array<expandedChord>} Array of chord objects to be plotted
 	 * @return {void}
 	 */
-	publics.show = function(chords){
+	_public.show = function(chords) {
 		handles.diagrams.innerHTML = '';
 		errors = [];
 		ignoreMatchList = [];
@@ -99,7 +101,7 @@ ukeGeeks.chordPainter = function(){
 	 * @param chords {array<expandedChord>} Array of chord objects to be plotted
 	 * @return {void}
 	 */
-	publics.showInline = function (chords){
+	_public.showInline = function(chords) {
 		var e = handles.text.getElementsByTagName('code');
 		if (e.length < 1) return;
 		for (var i=0; i < chords.length; i++){
@@ -122,7 +124,7 @@ ukeGeeks.chordPainter = function(){
 	 * @method getErrors
 	 * @return {array}
 	 */
-	publics.getErrors = function(){
+	_public.getErrors = function() {
 		return errors;
 	};
 
@@ -131,12 +133,12 @@ ukeGeeks.chordPainter = function(){
 	 * @method getIgnoredChords
 	 * @return {array} array of strings
 	 */
-	publics.getIgnoredChords = function(){
+	_public.getIgnoredChords = function() {
 		return ignoreMatchList;
 	};
 
 	/* return our public interface
 	 *
 	 */
-	return publics;
+	return _public;
 };

@@ -57,6 +57,7 @@ ukeGeeks.chordParser.prototype = {
 	 * @return {StringArray}
 	 */
 	_findChords: function(text){
+		var i, j;
 		var re = /\[(.+?)]/img;
 		var m = text.match(re);
 		if (!m) return [];
@@ -64,9 +65,9 @@ ukeGeeks.chordParser.prototype = {
 		// why not use associative array?
 		var chords = [];
 		var found;
-		for (var i = 0; i < m.length; i++){
+		for (i = 0; i < m.length; i++) {
 			found = false;
-			for (var j = 0; j < chords.length; j++){
+			for (j = 0; j < chords.length; j++) {
 				if (chords[j] == m[i]) {
 					found = true;
 					break;
@@ -77,7 +78,7 @@ ukeGeeks.chordParser.prototype = {
 			}
 		}
 		// clean 'em
-		for (var j in chords){
+		for (j in chords) {
 			chords[j] = chords[j].replace('[','').replace(']','');
 		}
 		// done
@@ -123,18 +124,15 @@ ukeGeeks.chordParser.prototype = {
 	 * @return {string}
 	 */
 	_packChords: function(text){
+		var re;
+
 		if (ukeGeeks.settings.inlineDiagrams){
 			/* TODO: problem with packing */
-			var re = /(<\/strong><\/code>)[ 	]*(<code data-chordName="[^"]*"><strong>)/ig;
+			re = /(<\/strong><\/code>)[ \t]*(<code data-chordName="[^"]*"><strong>)/ig;
 			return text.replace(re,'$1<span class="ugsInlineSpacer">&nbsp;</span>$2');
-			/*
-			var re = /(<\/strong><\/code>)[ 	]*<code (data-chordName="[^"]*"><strong>)/ig;
-			return text.replace(re,'$1<code style="display:inline-block;width:40px;" $2');
-			*/
 		}
-		else{
-			var re = /<\/strong><\/code>[ 	]*<code data-chordName="[^"]*"><strong>/ig;
+
+		re = /<\/strong><\/code>[ \t]*<code data-chordName="[^"]*"><strong>/ig;
 			return text.replace(re,' ');
-		}
 	}
 };

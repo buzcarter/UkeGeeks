@@ -1,14 +1,14 @@
 /**
-  * This library implments the editor functions, bridging the page UI and scriptasaurus methods.
-  * @module  UkeGeeksScriptasaurus Editor+
-  * @namespace  ugsEditorPlus
-  * @class ugsEditorPlus
-  */
+ * This library implments the UkeGeeks Scriptasaurus Song-a-matic editor functions, bridging the page UI and scriptasaurus methods.
+ * @module  ugsEditorPlus
+ * @namespace  ugsEditorPlus
+ * @class ugsEditorPlus
+ */
 var ugsEditorPlus = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
-	 * @type {Object}
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -18,7 +18,7 @@ var ugsEditorPlus = (function() {
 	 * @private
 	 * @param isLegacyIe {bool} pre-IE 9 versions
 	 */
-	var init = function(isLegacyIe){
+	var init = function(isLegacyIe) {
 		// ukeGeeks.tumblr.opts.diagramResizeTo = 1;
 		ukeGeeks.settings.opts.retainBrackets = false;
 
@@ -37,7 +37,7 @@ var ugsEditorPlus = (function() {
 	 * @method attach
 	 * @public
 	 */
-	_public.attach = function(){
+	_public.attach = function() {
 		init(false);
 	};
 
@@ -46,7 +46,7 @@ var ugsEditorPlus = (function() {
 	 * @method attach
 	 * @public
 	 */
-	_public.attachIe = function(){
+	_public.attachIe = function() {
 		init(true);
 	};
 
@@ -55,9 +55,7 @@ var ugsEditorPlus = (function() {
 	// ---------------------------------------
 	return _public;
 
-}()
-);
-
+}());
 ;/**
  * Does the work by providing "doAction" method to respond to events (does not
  * attach event handlers); Modifes some page elements -- adjust CSS classes on page,
@@ -69,7 +67,7 @@ ugsEditorPlus.actions = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
-	 * @type {Object}
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -512,7 +510,7 @@ ugsEditorPlus.songUi = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
-	 * @type {Object}
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -573,54 +571,53 @@ ugsEditorPlus.songUi = (function() {
  * from: http://www.javascriptkit.com/dhtmltutors/externalcss.shtml
  * @class styles
  * @namespace ugsEditorPlus
+ * @singleton
  */
-ugsEditorPlus.styles = new function(){
+ugsEditorPlus.styles = new function() {
 	var _sheet = null;
 	this.Rules = null;
-	
-	this.getSheet = function(title){
+
+	this.getSheet = function(title) {
 		_sheet = _getSheet(title);
 		this.Rules = getRules();
 		return this;
 	};
-	
-	var _getSheet = function(title){
-		for (var i = 0; i < document.styleSheets.length; i++){
-			if (document.styleSheets[i].title == title){
+
+	var _getSheet = function(title) {
+		for (var i = 0; i < document.styleSheets.length; i++) {
+			if (document.styleSheets[i].title == title) {
 				return document.styleSheets[i];
-				break;
 			}
 		}
 		return null;
 	};
-	
-	var getRules = function(){
-		if (_sheet == null){
+
+	var getRules = function() {
+		if (_sheet == null) {
 			return [];
 		}
 		return _sheet.cssRules ? _sheet.cssRules : _sheet.rules;
 	};
-	
-	this.Find = function(selector){
+
+	this.Find = function(selector) {
 		selector = selector.toLowerCase();
 		for (var i = 0; i < this.Rules.length; i++) {
-			if (!this.Rules[i].selectorText){
+			if (!this.Rules[i].selectorText) {
 				continue;
 			}
-			if (this.Rules[i].selectorText.toLowerCase() == selector){
+			if (this.Rules[i].selectorText.toLowerCase() == selector) {
 				return this.Rules[i];
-				break;
 			}
 		}
 		return null;
 	};
-};
-
+}();
 ;/**
  * Changes the song's color scheme ("theme") by changing both the applied body class
  * and the UkeGeek settings used to draw the diagrams.
  * @class themes
  * @namespace ugsEditorPlus
+ * @singleton
  */
 ugsEditorPlus.themes = new function() {
 
@@ -866,7 +863,7 @@ ugsEditorPlus.themes = new function() {
 		ukeGeeks.settings.tabs.textColor = c.tabs.text;
 	};
 
-};
+}();
 ;/**
  * UI mechanics of the Other Options dialog
  * @class options
@@ -876,7 +873,7 @@ ugsEditorPlus.optionsDlg = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
-	 * @type {Object}
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -896,37 +893,48 @@ ugsEditorPlus.optionsDlg = (function() {
 	 * @public
 	 * @param doAction {function} handle to method to actually DO the job
 	 */
-	_public.init = function(doAction){
+	_public.init = function(doAction) {
 		_doAction = doAction;
 
 		_ele = {
-			inputIgnoreList : document.getElementById('commonChordList'),
-			chkIgnore : document.getElementById('chkIgnoreCommon'),
+			inputIgnoreList: document.getElementById('commonChordList'),
+			chkIgnore: document.getElementById('chkIgnoreCommon'),
 			//pageWidth : document.getElementById('pageWidth'),
-			chkEnclosures : document.getElementById('chkEnclosures')
+			chkEnclosures: document.getElementById('chkEnclosures')
 		};
 
 		restoreDefaults();
 
 		// button clicks
-		document.getElementById('updateBtn').onclick = function(){onUpdateBtnClick(); return false;};
+		document.getElementById('updateBtn').onclick = function() {
+			onUpdateBtnClick();
+			return false;
+		};
 
 		//_ele.pageWidth.onchange = function(){doSetWidth(this.value); };
-		_ele.chkEnclosures.onclick = function(){onSetEnclosureClick(!this.checked); };
-		_ele.inputIgnoreList.onchange = function(){onCommonChordFieldChange(); };
-		_ele.chkIgnore.onclick = function(){onIgnoreCommonClick(this.checked); };
+		_ele.chkEnclosures.onclick = function() {
+			onSetEnclosureClick(!this.checked);
+		};
+		_ele.inputIgnoreList.onchange = function() {
+			onCommonChordFieldChange();
+		};
+		_ele.chkIgnore.onclick = function() {
+			onIgnoreCommonClick(this.checked);
+		};
 
 		// ugh! Event bubbling!
-		$('.checkboxBlock label, input[type=checkbox]').click(function(e){e.stopPropagation();});
+		$('.checkboxBlock label, input[type=checkbox]').click(function(e) {
+			e.stopPropagation();
+		});
 		//$('#helpDlg a').click(function(e){console.log('anchor click');});
 
 		$('.overlay').draggable({
-			handle : 'hgroup',
+			handle: 'hgroup',
 			//containParent: true
-    });
+		});
 	};
 
-	var restoreDefaults = function(){
+	var restoreDefaults = function() {
 		// initialize the common list
 		_ele.inputIgnoreList.value = ukeGeeks.settings.commonChords.join(", ");
 		//_ele.pageWidth.value = 'letter';
@@ -934,8 +942,8 @@ ugsEditorPlus.optionsDlg = (function() {
 		_ele.chkEnclosures.checked = !ukeGeeks.settings.opts.retainBrackets;
 	};
 
-	var onUpdateBtnClick = function(){
-		_doAction( 'update', null);
+	var onUpdateBtnClick = function() {
+		_doAction('update', null);
 	};
 
 	/**
@@ -944,8 +952,8 @@ ugsEditorPlus.optionsDlg = (function() {
 	 * @private
 	 * @param isVisible {bool}
 	 */
-	var onSetEnclosureClick = function(isVisible){
-		_doAction( 'showEnclosures', isVisible);
+	var onSetEnclosureClick = function(isVisible) {
+		_doAction('showEnclosures', isVisible);
 	};
 
 	/**
@@ -954,8 +962,8 @@ ugsEditorPlus.optionsDlg = (function() {
 	 * @private
 	 * @param isIgnore {bool}
 	 */
-	var onIgnoreCommonClick = function(isIgnore){
-		_doAction( 'hideCommonChords', isIgnore);
+	var onIgnoreCommonClick = function(isIgnore) {
+		_doAction('hideCommonChords', isIgnore);
 	};
 
 	/**
@@ -965,8 +973,8 @@ ugsEditorPlus.optionsDlg = (function() {
 	 * @private
 	 * @return {void}
 	 */
-	var onCommonChordFieldChange = function(){
-		_doAction( 'setCommonChords', _ele.inputIgnoreList.value);
+	var onCommonChordFieldChange = function() {
+		_doAction('setCommonChords', _ele.inputIgnoreList.value);
 	};
 
 	// ---------------------------------------
@@ -974,17 +982,16 @@ ugsEditorPlus.optionsDlg = (function() {
 	// ---------------------------------------
 	return _public;
 
-}()
-);
-
+}());
 ;var ugsEditorPlus = window.ugsEditorPlus || {};
 
 /**
  *
  * @class reformat
  * @namespace ugsEditorPlus
+ * @singleton
  */
-ugsEditorPlus.reformat = new function(){
+ugsEditorPlus.reformat = new function() {
 	var _this = this;
 
 	var _hasChords = false;
@@ -994,19 +1001,19 @@ ugsEditorPlus.reformat = new function(){
 	 * @class _enums
 	 */
 	var _enums = {
-		lineTypes : {
-			blank : 0,
-			chords : 1,
-			lyrics : 2,
-			tabs : 3
+		lineTypes: {
+			blank: 0,
+			chords: 1,
+			lyrics: 2,
+			tabs: 3
 		}
-	}
+	};
 
 	/**
 	 * Line Object Class Definition (sets defaults)
 	 * @class lineObj
 	 */
-	var lineObj = function(){
+	var lineObj = function() {
 		this.source = '';
 		this.wordCount = 0;
 		this.spaceCount = 0;
@@ -1016,25 +1023,25 @@ ugsEditorPlus.reformat = new function(){
 	};
 
 	var _re = {
-		words : /\b(\S+)\b/gi,
-		spaces : /(\s+)/g,
-		leadingSpace : /(^\s+)/,
-		chordNames : /\b[A-G][#b]?(m|m6|m7|m9|dim|dim7|maj7|sus2|sus4|aug|6|7|9|add9|7sus4)?\b/,
-		chrdBlock : /\b(\S+\s*)/g,
-		tabs : /^\s*(\|{0,2}[A-Gb]?\|{0,2}[-x0-9|:]{4,})/
+		words: /\b(\S+)\b/gi,
+		spaces: /(\s+)/g,
+		leadingSpace: /(^\s+)/,
+		chordNames: /\b[A-G][#b]?(m|m6|m7|m9|dim|dim7|maj7|sus2|sus4|aug|6|7|9|add9|7sus4)?\b/,
+		chrdBlock: /\b(\S+\s*)/g,
+		tabs: /^\s*(\|{0,2}[A-Gb]?\|{0,2}[-x0-9|:]{4,})/
 	};
 
-// Hal Leonard Uke Chord Finder:
-// + aug
-// o dim
-// -----------------
-// F Fm F+ Fdim
-// F5 Fadd9 Fm(add9) Fsus4
-// Fsus2 F6 Fm6 Fmaj7
-// Fmaj9 Fm7 Fm(maj7) Fm7b5
-// Fm9 Fm11 F7 Fsus4
-// F+7 F7b5 F9 F7#9
-// F7b9 F11 F13 Fdim7
+	// Hal Leonard Uke Chord Finder:
+	// + aug
+	// o dim
+	// -----------------
+	// F Fm F+ Fdim
+	// F5 Fadd9 Fm(add9) Fsus4
+	// Fsus2 F6 Fm6 Fmaj7
+	// Fmaj9 Fm7 Fm(maj7) Fm7b5
+	// Fm9 Fm11 F7 Fsus4
+	// F+7 F7b5 F9 F7#9
+	// F7b9 F11 F13 Fdim7
 
 	/**
 	 * Accepts a text block, returns "ChordPro" text block with chord lines merged into lyric lines with chords enclosed in square-brackets (i.e. [Cdim])
@@ -1042,7 +1049,7 @@ ugsEditorPlus.reformat = new function(){
 	 * @param text {string} songstring
 	 * @return {string} ChordPro format text block
 	 */
-	this.run = function(text){
+	this.run = function(text) {
 		_hasChords = false;
 		var lines = read(text);
 		return merge(lines);
@@ -1053,7 +1060,7 @@ ugsEditorPlus.reformat = new function(){
 	 * @method hasChords
 	 * @return {bool}
 	 */
-	this.hasChords = function(){
+	this.hasChords = function() {
 		return _hasChords;
 	};
 
@@ -1063,7 +1070,7 @@ ugsEditorPlus.reformat = new function(){
 	 * @param text {string} string RAW song
 	 * @return {array of Lines}
 	 */
-	var read = function(text){
+	var read = function(text) {
 		var lineAry = [];
 		text = text.replace('	', '    ');
 		var lines = text.split('\n');
@@ -1071,13 +1078,13 @@ ugsEditorPlus.reformat = new function(){
 			var words = lines[i].match(_re.words);
 			var l = new lineObj;
 			l.source = lines[i];
-			if ((words != null) && (words.length > 0)){
+			if ((words != null) && (words.length > 0)) {
 				l.wordCount = words.length;
 				l.words = words;
 				l.chordCount = countChords(words);
 			}
 			var spaces = lines[i].match(_re.spaces);
-			if ((spaces != null) && (spaces.length > 0)){
+			if ((spaces != null) && (spaces.length > 0)) {
 				l.spaceCount = spaces.length;
 			}
 			l.lineType = toLineType(l);
@@ -1092,18 +1099,18 @@ ugsEditorPlus.reformat = new function(){
 	 * @param line {line}
 	 * @return {_enums.lineTypes}
 	 */
-	var toLineType = function(line){
-		if ((line.spaceCount + line.wordCount) < 1){
+	var toLineType = function(line) {
+		if ((line.spaceCount + line.wordCount) < 1) {
 			return _enums.lineTypes.blank;
 		}
 
 		var tabs = line.source.match(_re.tabs);
-		if (tabs != null){
+		if (tabs != null) {
 			return _enums.lineTypes.tabs;
 		}
 
 		var t = _enums.lineTypes.lyrics;
-		if ((line.chordCount > 0) && (line.wordCount == line.chordCount)){
+		if ((line.chordCount > 0) && (line.wordCount == line.chordCount)) {
 			t = _enums.lineTypes.chords;
 			_hasChords = true;
 		}
@@ -1117,7 +1124,7 @@ ugsEditorPlus.reformat = new function(){
 	 * @param words {array of words}
 	 * @return [int] number found
 	 */
-	var countChords = function(words){
+	var countChords = function(words) {
 		var count = 0;
 		for (var i = 0; i < words.length; i++) {
 			if (words[i].match(_re.chordNames)) {
@@ -1133,36 +1140,29 @@ ugsEditorPlus.reformat = new function(){
 	 * @param lines {array of Lines}
 	 * @return [string]
 	 */
-	var merge = function(lines){
+	var merge = function(lines) {
 		var s = '';
 		var thisLine, nextLine;
-		for (var i = 0; i < lines.length; ) {
+		for (var i = 0; i < lines.length;) {
 			thisLine = lines[i];
-			nextLine = lines[i+1];
+			nextLine = lines[i + 1];
 			i++;
 			// If this line's blank or its the last line...
-			if (!nextLine || (thisLine.lineType == _enums.lineTypes.blank)){
+			if (!nextLine || (thisLine.lineType == _enums.lineTypes.blank)) {
 				s += thisLine.source + '\n';
 				continue;
 			}
 
 			// OK, we've complicated things a bit by adding tabs, so we'll handle this in a helper...
-			if ((thisLine.lineType == _enums.lineTypes.tabs) && isTabBlock(lines, i)){
-				s += '{start_of_tab}\n'
-					+ thisLine.source.replace(_re.leadingSpace, '') + '\n'
-					+ nextLine.source.replace(_re.leadingSpace, '') + '\n'
-					+ lines[i+1].source.replace(_re.leadingSpace, '') + '\n'
-					+ lines[i+2].source.replace(_re.leadingSpace, '') + '\n'
-					+ '{end_of_tab}\n';
-				i+= 3;
+			if ((thisLine.lineType == _enums.lineTypes.tabs) && isTabBlock(lines, i)) {
+				s += '{start_of_tab}\n' + thisLine.source.replace(_re.leadingSpace, '') + '\n' + nextLine.source.replace(_re.leadingSpace, '') + '\n' + lines[i + 1].source.replace(_re.leadingSpace, '') + '\n' + lines[i + 2].source.replace(_re.leadingSpace, '') + '\n' + '{end_of_tab}\n';
+				i += 3;
 				continue;
 			}
 
 			// finally, look for a "mergable" pair: this line is chords and the next is lyrics -- if not this we'll just output the current line
-			if ((thisLine.lineType != _enums.lineTypes.chords) || (nextLine.lineType != _enums.lineTypes.lyrics)){
-				s += (thisLine.lineType == _enums.lineTypes.chords)
-					? wrapChords(thisLine.source) + '\n'
-					: thisLine.source + '\n';
+			if ((thisLine.lineType != _enums.lineTypes.chords) || (nextLine.lineType != _enums.lineTypes.lyrics)) {
+				s += (thisLine.lineType == _enums.lineTypes.chords) ? wrapChords(thisLine.source) + '\n' : thisLine.source + '\n';
 				continue;
 			}
 
@@ -1180,12 +1180,12 @@ ugsEditorPlus.reformat = new function(){
 	 * @param index {int} current line's index within line array
 	 * @return [bool]
 	 */
-	var isTabBlock = function(lines, index){
-		if (index + 3 >= lines.length){
+	var isTabBlock = function(lines, index) {
+		if (index + 3 >= lines.length) {
 			return false;
 		}
-		for (var i = index; i < index + 3; i++){
-			if (lines[i].lineType != _enums.lineTypes.tabs){
+		for (var i = index; i < index + 3; i++) {
+			if (lines[i].lineType != _enums.lineTypes.tabs) {
 				return false;
 			}
 		}
@@ -1199,15 +1199,15 @@ ugsEditorPlus.reformat = new function(){
 	 * @param lyricsLine {string} the line of lyrics
 	 * @return [string] merged lines
 	 */
-	var mergeLines = function(chordLine, lyricsLine){
-		while (lyricsLine.length < chordLine.length){
+	var mergeLines = function(chordLine, lyricsLine) {
+		while (lyricsLine.length < chordLine.length) {
 			lyricsLine += ' ';
 		}
 		var s = '';
 		var blocks = chordLine.match(_re.chrdBlock);
 		var lead = chordLine.match(_re.leadingSpace);
 		var offset = 0;
-		if (lead){
+		if (lead) {
 			s += lyricsLine.substr(offset, lead[0].length);
 			offset = lead[0].length;
 		}
@@ -1215,7 +1215,7 @@ ugsEditorPlus.reformat = new function(){
 			s += '[' + blocks[j].replace(_re.spaces, '') + ']' + lyricsLine.substr(offset, blocks[j].length);
 			offset += blocks[j].length;
 		}
-		if (offset < lyricsLine.length){
+		if (offset < lyricsLine.length) {
 			s += lyricsLine.substr(offset, lyricsLine.length);
 		}
 		return s;
@@ -1227,19 +1227,18 @@ ugsEditorPlus.reformat = new function(){
 	 * @param chordLine {string} the line containing the chord names
 	 * @return [string] each word of input line gets bracketed
 	 */
-	var wrapChords = function(chordLine){
+	var wrapChords = function(chordLine) {
 		var chords = chordLine.replace(_re.spaces, ' ').split(' ');
 		var s = '';
 		for (var i = 0; i < chords.length; i++) {
-			if (chords[i].length > 0){
+			if (chords[i].length > 0) {
 				s += '[' + chords[i] + '] ';
 			}
 		}
 		return s;
 	};
 
-};
-
+}();
 ;/**
  *
  * @class autoReformat
@@ -1249,7 +1248,7 @@ ugsEditorPlus.autoReformat = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
-	 * @type {Object}
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -1263,44 +1262,52 @@ ugsEditorPlus.autoReformat = (function() {
 	var _formatted;
 	var _isDisabled = false;
 
-	_public.run = function(elements){
-		if (_isDisabled){
+	_public.run = function(elements) {
+		if (_isDisabled) {
 			return;
 		}
 		_ele = elements;
 		_ele.reformatTextBox = document.getElementById('reformatSource');
 		_ele.reformatDlg = document.getElementById('reformatDlg');
 
-		document.getElementById('reformatYesBtn').onclick = function(){ doOk(); return false; };
-		document.getElementById('reformatNoBtn').onclick = function(){ doClose(); return false; };
+		document.getElementById('reformatYesBtn').onclick = function() {
+			doOk();
+			return false;
+		};
+		document.getElementById('reformatNoBtn').onclick = function() {
+			doClose();
+			return false;
+		};
 
 		// need to reset on reload
 		var chk = document.getElementById('reformatDisable');
 		chk.checked = false;
-		chk.onclick = function(){ doDisable(this.checked); };
+		chk.onclick = function() {
+			doDisable(this.checked);
+		};
 
 		runNow();
 	};
 
-	var doOk = function(){
+	var doOk = function() {
 		_ele.cpmSource.value = _formatted;
 		doClose();
 		ugsEditorPlus.actions.run(true);
 	};
 
-	var doClose = function(){
+	var doClose = function() {
 		ukeGeeks.toolsLite.addClass(_ele.reformatDlg, 'isHidden');
 	};
 
-	var doDisable = function(isDisabled){
+	var doDisable = function(isDisabled) {
 		_isDisabled = isDisabled;
 	};
 
-	var runNow = function(){
+	var runNow = function() {
 		_formatted = ugsEditorPlus.reformat.run(_ele.cpmSource.value);
 		_ele.reformatTextBox.innerHTML = _formatted;
 
-		if (!ugsEditorPlus.reformat.hasChords()){
+		if (!ugsEditorPlus.reformat.hasChords()) {
 			return;
 		}
 
@@ -1312,8 +1319,7 @@ ugsEditorPlus.autoReformat = (function() {
 	// ---------------------------------------
 	return _public;
 
-}()
-);
+}());
 ;/**
  * Handles Top Menu UI -- includes the show/hide dialogs (why? cuz they're attached to top menu buttons)
  * Shows (a) dialongs (such as Edit) and (b) those tool-tippy options thingies.
@@ -1323,7 +1329,8 @@ ugsEditorPlus.autoReformat = (function() {
 ugsEditorPlus.topMenus = (function() {
 	/**
 	 * attach public members to this object
-	 * @type {Object}
+	 * @property _public
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -1433,18 +1440,18 @@ ugsEditorPlus.topMenus = (function() {
 	return _public;
 
 }());
-;
-/**
+;/**
  * Wires up all the "pseudo-selects" (aka "dropdownlists") on a Tooltip-Dialog boxes on
  * the page; assumes consistent HTML (hello, jQuery)
  * TODO: Refactor -- quite brittle!
  * @class submenuUi
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.submenuUi = (function(){
+ugsEditorPlus.submenuUi = (function() {
 	/**
 	 * attach public members to this object
-	 * @type {Object}
+	 * @property _public
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -1460,9 +1467,10 @@ ugsEditorPlus.submenuUi = (function(){
 	/**
 	 * attaches event handlers
 	 * @method init
+	 * @public
 	 * @return {[type]} [description]
 	 */
-	_public.init = function(doAction){
+	_public.init = function(doAction) {
 		_doAction = doAction;
 		ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect');
 		$('.enablePseudoSelects label').click(onLabelClick);
@@ -1473,10 +1481,11 @@ ugsEditorPlus.submenuUi = (function(){
 
 	/**
 	 * a list item has been clicked
+	 * @method onOptionClick
 	 * @param  {event} e
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onOptionClick = function(e){
+	var onOptionClick = function(e) {
 		var $optionItem = $(this);
 		var hrefValue = stripHash($optionItem.children().attr('href'));
 
@@ -1486,7 +1495,7 @@ ugsEditorPlus.submenuUi = (function(){
 		var actionName = $select.data('action');
 
 		// a selection's been made so we reset ("uncheck" all items) and hide the select list
-		$('#'+id)
+		$('#' + id)
 			.hide()
 			.find('li').removeClass('checked');
 
@@ -1510,40 +1519,42 @@ ugsEditorPlus.submenuUi = (function(){
 	/**
 	 * Label has been clicked, show associated options dialog box.
 	 * Watch for 2-clicks on same label (should hide on second click)
+	 * @method onLabelClick
 	 * @param  {event} e
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onLabelClick = function(e){
+	var onLabelClick = function(e) {
 		var $thisLabel = $(this);
 		var id = $thisLabel.attr('for');
 		setActiveLabel($thisLabel);
-		$('#'+id).show();
+		$('#' + id).show();
 		onListActive(this, true);
-		if (_open != null){
+		if (_open != null) {
 			$('#' + _open.id).hide();
 		}
-		if (_open != null && _open.id == id){
+		if (_open != null && _open.id == id) {
 			_open = null;
 		}
-		else
-		{
-		 _open = { "id" : id };
+		else {
+			_open = {
+				"id": id
+			};
 		}
 
 		// prevent event bubbling
 		return false;
 	};
 
-	_public.reset = function($dlg){
+	_public.reset = function($dlg) {
 		$dlg.find('dt').removeClass('active');
 		$dlg.find('.event-userSelecting').removeClass('event-userSelecting');
 	};
 
-	var clearActiveLabels = function($parent){
+	var clearActiveLabels = function($parent) {
 		$parent.closest('dl').children('dt').removeClass('active');
 	};
 
-	var setActiveLabel = function($label){
+	var setActiveLabel = function($label) {
 		$label.closest('dl').children('dt').removeClass('active');
 		$label.closest('dt').addClass('active');
 	};
@@ -1556,7 +1567,7 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @param  {Boolean} isInUse [description]
 	 * @return void
 	 */
-	var onListActive = function(ele, isInUse){
+	var onListActive = function(ele, isInUse) {
 		$(ele).parents('.enablePseudoSelects').toggleClass('event-userSelecting', isInUse);
 	};
 
@@ -1565,8 +1576,8 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @param  {event} e
 	 * @return bool
 	 */
-	var doCollapseAllLists = function(e){
-		if ($(e.target).is('a')){
+	var doCollapseAllLists = function(e) {
+		if ($(e.target).is('a')) {
 			return;
 		}
 		//console.log('doCollapseAllLists');
@@ -1579,15 +1590,15 @@ ugsEditorPlus.submenuUi = (function(){
 
 	/**
 	 * user clicked off the current dialog -- close 'em all
-	 * @medhod closeAll
+	 * @method closeAll
 	 * @param  {event} e
 	 */
-	var closeAll = function(e){
+	var closeAll = function(e) {
 		$('.arrowBox').fadeOut(270);
 		ugsEditorPlus.topMenus.makeAllInactive();
 	};
 
-	var stripHash = function(value){
+	var stripHash = function(value) {
 		return (value[0] == '#') ? value.substr(1) : value;
 	};
 
@@ -1597,28 +1608,29 @@ ugsEditorPlus.submenuUi = (function(){
 
 	/**
 	 * used to construct the descriptions for current values
+	 * @property _descriptions
 	 * @private
 	 * @type {JSON}
 	 */
 	var _desriptions = {
-		'zoomDiagrams' : ['Tiny', 'Small', 'Medium', 'Large', 'Stupid Large'],
-		'layout' : ['Reference diagrams on left', 'Reference diagrams at top', 'No reference diagrams'],
-		'placement' : ['Chord names inline with lyrics', 'Chord names above lyrics', 'Names & diagrams above lyrics'],
-		'tuning' : ['Soprano (GCEA) tuning', 'Baritone (DBEA) tuning']
+		'zoomDiagrams': ['Tiny', 'Small', 'Medium', 'Large', 'Stupid Large'],
+		'layout': ['Reference diagrams on left', 'Reference diagrams at top', 'No reference diagrams'],
+		'placement': ['Chord names inline with lyrics', 'Chord names above lyrics', 'Names & diagrams above lyrics'],
+		'tuning': ['Soprano (GCEA) tuning', 'Baritone (DBEA) tuning']
 	};
 
 	/**
 	 * Builds a descriptor string of the current values for the pseudo-select labels
-	 * @medhod getLabelText
+	 * @method getLabelText
 	 * @param  {string} action
 	 * @param  {string} value
 	 * @param  {jQueryElement} $ele jQuery element that ...
-	 * @return string
+	 * @return {string}
 	 */
-	var getLabelText = function(action, value, $ele){
+	var getLabelText = function(action, value, $ele) {
 		var index = $ele.index();
 
-		switch (action){
+		switch (action) {
 			case 'paper':
 				return 'Width ' + $ele.text();
 			case 'zoomFonts':
@@ -1628,17 +1640,17 @@ ugsEditorPlus.submenuUi = (function(){
 			case 'colors':
 				return ugsEditorPlus.themes.getDescription(value);
 			case 'transpose':
-				if (value == 'up_0'){
+				if (value == 'up_0') {
 					return 'Original key';
 				}
 				var txt = $ele.text();
 				return txt.replace(' ', ' steps - "') + '"';
 			default:
-			 return _desriptions[action][index];
+				return _desriptions[action][index];
 		}
 	};
 
-	_public.resetTransposeLabel = function(){
+	_public.resetTransposeLabel = function() {
 		$('label[for=transposePicker] span').text('Original key');
 	};
 
@@ -1647,8 +1659,7 @@ ugsEditorPlus.submenuUi = (function(){
 	// ---------------------------------------
 	return _public;
 
-}()
-);
+}());
 ;/**
  * Creates a new song via AJAX.
  * Dependencies: jQuery
@@ -1658,12 +1669,14 @@ ugsEditorPlus.submenuUi = (function(){
 ugsEditorPlus.newSong = (function() {
 	/**
 	 * attach public members to this object
-	 * @type {Object}
+	 * @property _public
+	 * @type JsonObject
 	 */
 	var _public = {};
 
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
+	 *  @attribute _isUpdating
 	 * @type {Boolean}
 	 */
 	var _isUpdating = false;
@@ -1674,7 +1687,7 @@ ugsEditorPlus.newSong = (function() {
 		_ajaxUri = ajaxUri;
 
 		$('#newSongBtn').click(function(e) {
-			if(doValidate(this)) {
+			if (doValidate(this)) {
 				doPost();
 			}
 		});
@@ -1690,7 +1703,7 @@ ugsEditorPlus.newSong = (function() {
 		// handle escape key
 		$('#newSongForm').bind('keydown', onEscape);
 
-		$spinner = $( "#loadingSpinner" );
+		$spinner = $("#loadingSpinner");
 		$spinner.hide();
 		$(document)
 			.ajaxStart(function() {
@@ -1704,34 +1717,34 @@ ugsEditorPlus.newSong = (function() {
 	};
 
 	var doAjaxOk = function(data) {
-			showErrors(data.HasErrors, data.Message);
-			if(data.HasErrors) {
-				return;
-			}
-			document.location.href = data.ContinueUri;
-		};
+		showErrors(data.HasErrors, data.Message);
+		if (data.HasErrors) {
+			return;
+		}
+		document.location.href = data.ContinueUri;
+	};
 
 	var doPost = function() {
-			if (_isUpdating){
-				return;
-			}
+		if (_isUpdating) {
+			return;
+		}
 
-			var data = {
-				'handler': 'ugs_new',
-				'songTitle': $('#songTitle').val(),
-				'songArtist': $('#songArtist').val()
-			};
-
-			$.ajax({
-				url: _ajaxUri,
-				type: "POST",
-				dataType: 'json',
-				data: JSON.stringify(data),
-				success: function(data) {
-					doAjaxOk(data);
-				}
-			});
+		var data = {
+			'handler': 'ugs_new',
+			'songTitle': $('#songTitle').val(),
+			'songArtist': $('#songArtist').val()
 		};
+
+		$.ajax({
+			url: _ajaxUri,
+			type: "POST",
+			dataType: 'json',
+			data: JSON.stringify(data),
+			success: function(data) {
+				doAjaxOk(data);
+			}
+		});
+	};
 
 	var doValidate = function() {
 		var $title = $('#songTitle');
@@ -1743,24 +1756,25 @@ ugsEditorPlus.newSong = (function() {
 	};
 
 	var showErrors = function(hasErrors, message) {
-			var $err = $('#newSongForm .errorMessage');
-			if(hasErrors) {
-				$err.show().html(message);
-				$('#songTitle').focus();
-			} else {
-				$err.hide();
-			}
-		};
+		var $err = $('#newSongForm .errorMessage');
+		if (hasErrors) {
+			$err.show().html(message);
+			$('#songTitle').focus();
+		}
+		else {
+			$err.hide();
+		}
+	};
 
 	var closeDlg = function(e) {
 		$('#newSongForm').fadeOut();
 	};
 
-	var resetFields = function(){
+	var resetFields = function() {
 		$('#songTitle, #songArtist').val('');
 	};
 
-	var onEscape = function(e){
+	var onEscape = function(e) {
 		if (e.which == 27) {
 			closeDlg();
 		}
@@ -1780,7 +1794,8 @@ ugsEditorPlus.newSong = (function() {
 ugsEditorPlus.updateSong = (function() {
 	/**
 	 * attach public members to this object
-	 * @type {Object}
+	 * @property _public
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -1789,18 +1804,20 @@ ugsEditorPlus.updateSong = (function() {
 
 	/**
 	 * Name / Value pairs for jQuery selectors of HTML elements to be manipulated
+	 * @property _selectors
 	 * @type {JSON}
 	 */
 	var _selectors = {
-		messageBox : '#messageBox',
-		message : '#sourceFeedback',
-		button : '#saveBtn',
-		spinner : '#loadingSpinner',
-		song : '#chordProSource'
+		messageBox: '#messageBox',
+		message: '#sourceFeedback',
+		button: '#saveBtn',
+		spinner: '#loadingSpinner',
+		song: '#chordProSource'
 	};
 
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
+	 * @property _isUpdating
 	 * @type {Boolean}
 	 */
 	var _isUpdating = false;
@@ -1826,23 +1843,23 @@ ugsEditorPlus.updateSong = (function() {
 			});
 	};
 
-	var showBusy = function(){
+	var showBusy = function() {
 		$(_selectors.message).hide().html();
 		$(_selectors.messageBox).slideDown('fast');
 		$(_selectors.spinner).show();
 	};
 
-	var showMessage = function(message){
+	var showMessage = function(message) {
 		$(_selectors.spinner).hide();
 		$(_selectors.message).show().html(message);
 	};
 
-	var hideMessage = function(){
+	var hideMessage = function() {
 		$(_selectors.messageBox).delay(3000).fadeOut('slow');
 	};
 
 	var doUpdate = function() {
-		if (_isUpdating){
+		if (_isUpdating) {
 			return;
 		}
 
@@ -1858,7 +1875,7 @@ ugsEditorPlus.updateSong = (function() {
 			url: _ajaxUri,
 			type: 'POST',
 			dataType: 'json',
-			contentType:"application/json; charset=utf-8",
+			contentType: "application/json; charset=utf-8",
 			data: JSON.stringify(data),
 			success: function(data) {
 				doAjaxOk(data);
@@ -1882,12 +1899,14 @@ ugsEditorPlus.updateSong = (function() {
  * Based on tutorial:
  * http://tatiyants.com/how-to-use-json-objects-with-twitter-bootstrap-typeahead/
  * @class typeahead
+ * @constructor
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.typeahead = function(){
+ugsEditorPlus.typeahead = function() {
 	/**
 	 * attach public members to this object
-	 * @type {Object}
+	 * @property _public
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -1911,11 +1930,12 @@ ugsEditorPlus.typeahead = function(){
 	/**
 	 * Scrapes HTML to build our list of
 	 * keys, searchable text, and display text
+	 * @method listFromHtml
 	 * @return {[type]} [description]
 	 */
-	var listFromHtml = function(){
+	var listFromHtml = function() {
 
-		$( 'li' ).each(function( index ) {
+		$('li').each(function(index) {
 			var $this = $(this);
 
 			var plainText = crushText($this.text());
@@ -1929,48 +1949,48 @@ ugsEditorPlus.typeahead = function(){
 
 			_keysToDetailsDict[key] = {
 				// content displayed in drop down list
-				html : html,
+				html: html,
 				// what we'll match against
-				searchText : plainText,
+				searchText: plainText,
 				// unique key/id
-				code : key,
+				code: key,
 				// when a selection is made this is the location we'll launch
-				href : href
+				href: href
 			};
 			_keysList.push(key);
 		});
 
 	};
 
-	var crushText = function(value){
+	var crushText = function(value) {
 		return value
 			.toLowerCase()
-    	.replace(_re.noise, '')
-    	.replace(_re.common, ' ')
-    	.replace(_re.space, ' ')
-    	.trim();
-	}
+			.replace(_re.noise, '')
+			.replace(_re.common, ' ')
+			.replace(_re.space, ' ')
+			.trim();
+	};
 
-	var _ta_source = function (query, process) {
+	var _ta_source = function(query, process) {
 		_scrubbedQuery = crushText(query);
 		_words = _scrubbedQuery.split(' ');
 		var regGroup = '';
 		for (var i = 0; i < _words.length; i++) {
 			_words[i] = _words[i].trim();
-			if (_words[i].length > 0){
+			if (_words[i].length > 0) {
 				regGroup += (regGroup.length > 0 ? '|' : '') + _words[i];
 			}
-		};
-		_regex = new RegExp( '(' + regGroup + ')', 'gi');
+		}
+		_regex = new RegExp('(' + regGroup + ')', 'gi');
 		process(_keysList);
 	};
 
-	var _ta_updater = function (item) {
+	var _ta_updater = function(item) {
 		window.location = _keysToDetailsDict[item].href;
 		return _keysToDetailsDict[item].searchText;
 	};
 
-	var _ta_matcher = function (item) {
+	var _ta_matcher = function(item) {
 		var detailed = _keysToDetailsDict[item];
 		for (var i = 0; i < _words.length; i++) {
 			if (detailed.searchText.indexOf(_words[i]) == -1) {
@@ -1980,24 +2000,24 @@ ugsEditorPlus.typeahead = function(){
 		return true;
 	};
 
-	var _ta_sorter = function (items) {
+	var _ta_sorter = function(items) {
 		return items.sort(function(a, b) {
 			return (_keysToDetailsDict[a].searchText > _keysToDetailsDict[b].searchText);
 		});
 	};
 
-	var _ta_highligher = function (item) {
+	var _ta_highligher = function(item) {
 		var $temp = $('<div/>').html(_keysToDetailsDict[item].html);
 
-		$('em, .bigger', $temp).each(function( index ){
+		$('em, .bigger', $temp).each(function(index) {
 			var $ele = $(this);
 			var text = $ele.html();
-			$ele.html(text.replace( _regex, "<strong>$1</strong>" ))
+			$ele.html(text.replace(_regex, "<strong>$1</strong>"));
 		});
 		return $temp.html();
 	};
 
-	_public.initialize = function(){
+	_public.initialize = function() {
 		listFromHtml();
 
 		$('#quickSearch')
@@ -2019,17 +2039,22 @@ ugsEditorPlus.typeahead = function(){
 	// ---------------------------------------
 	return _public;
 };
-
 ;/**
  * Resizes an overlay to fill the window (this is a 1.0, so "fill" is relative -- it gets much bigger)
  * @class resize
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.resize = (function(){
+ugsEditorPlus.resize = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
 	var _public = {};
 
 	/**
 	 * the "Safe" position and dimensions to avoid going over the top menu
+	 * @attribute safe
 	 * @type {JSON}
 	 */
 	var safe = {
@@ -2042,6 +2067,7 @@ ugsEditorPlus.resize = (function(){
 
 	/**
 	 * Hold the current state of the dialog, we'll store this on the element in "data-sized" attribute
+	 * @attribute isBig
 	 * @type {Boolean}
 	 */
 	var isBig = false;
@@ -2052,7 +2078,7 @@ ugsEditorPlus.resize = (function(){
 	 * @private
 	 * @return {JSON}
 	 */
-	var measure = function(){
+	var measure = function() {
 		return {
 			width: $w.width(),
 			height: $w.height(),
@@ -2066,13 +2092,13 @@ ugsEditorPlus.resize = (function(){
 	 * @private
 	 * @return {void}
 	 */
-	var setup = function(dlgElement){
+	var setup = function(dlgElement) {
 		$w = $(window);
 		$dlg = $(dlgElement);
 		isBig = $dlg.data('sized') == true;
 		$dlg.data('sized', isBig);
 		// console.log($dlg.data('initialPos'));
-	}
+	};
 
 	/**
 	 * Expands overlay to fill (reasonably) available area
@@ -2080,11 +2106,18 @@ ugsEditorPlus.resize = (function(){
 	 * @private
 	 * @return {void}
 	 */
-	var max = function(){
+	var max = function() {
 		var info = measure();
 		$dlg
-			.css({left: info.position.left + "px"})
-			.animate({left: safe.edge, right: safe.edge, top: safe.top, width: (info.width - 30)}, 800);
+			.css({
+				left: info.position.left + "px"
+			})
+			.animate({
+				left: safe.edge,
+				right: safe.edge,
+				top: safe.top,
+				width: (info.width - 30)
+			}, 800);
 	};
 
 	/**
@@ -2093,9 +2126,14 @@ ugsEditorPlus.resize = (function(){
 	 * @private
 	 * @return {void}
 	 */
-	var reset = function(){
+	var reset = function() {
 		//measure();
-		$dlg.css({'left': 'auto'}).animate({right: safe.edge, width: safe.width}, 800);
+		$dlg.css({
+			'left': 'auto'
+		}).animate({
+			right: safe.edge,
+			width: safe.width
+		}, 800);
 	};
 
 	/**
@@ -2104,12 +2142,12 @@ ugsEditorPlus.resize = (function(){
 	 * @param  {DOM-element} dlgElement handle to Overlay/dialog being resized
 	 * @return {void}
 	 */
-	_public.toggle = function(dlgElement){
+	_public.toggle = function(dlgElement) {
 		setup(dlgElement);
-		if (isBig){
+		if (isBig) {
 			reset();
 		}
-		else{
+		else {
 			max();
 		}
 		$dlg.data('sized', !isBig);
@@ -2120,9 +2158,7 @@ ugsEditorPlus.resize = (function(){
 	// ---------------------------------------
 	return _public;
 
-}()
-);
-
+}());
 ;/**
  *
  * Dependencies: jQuery & ugsChordBuilder classes
@@ -2132,7 +2168,8 @@ ugsEditorPlus.resize = (function(){
 ugsEditorPlus.chordBuilder = (function() {
 	/**
 	 * attach public members to this object
-	 * @type {Object}
+	 * @property _public
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -2157,7 +2194,7 @@ ugsEditorPlus.chordBuilder = (function() {
 	 * @method onShowDlgBtnClick
 	 * @param  {event} evt
 	 */
-	var onShowDlgBtnClick = function(evt){
+	var onShowDlgBtnClick = function(evt) {
 		evt.preventDefault();
 		_builder.reload();
 		var id = $(this).data('dialog');
@@ -2171,6 +2208,8 @@ ugsEditorPlus.chordBuilder = (function() {
 
 }());
 ;/**
+ * Library for an HTML5 WYSIWYG editor to build ChordPro chord define tags.
+ * @module  ugsChordBuilder
  * @namespace ugsChordBuilder
  */
 var ugsChordBuilder = window.ugsChordBuilder || {};
@@ -2181,37 +2220,98 @@ var ugsChordBuilder = window.ugsChordBuilder || {};
  * @class entities
  * @namespace ugsChordBuilder
  * @static
+ * @singleton
  */
 ugsChordBuilder.entities = new function() {
-	this.boundingBox = function(pos, dimensions) {
+	/**
+	 * @class entities.BoundingBox
+	 * @constructor
+	 * @param  {Position} pos   Position (JSON) object
+	 * @param  {JSON} dimensions JSON Object of form: {width: {int}, height: {int}}
+	 */
+	this.BoundingBox = function(pos, dimensions) {
+		/**
+		 * @property x
+		 * @type {int}
+		 */
 		this.x = pos ? pos.x : 0;
+		/**
+		 * @property y
+		 * @type {int}
+		 */
 		this.y = pos ? pos.y : 0;
+		/**
+		 * @property width
+		 * @type {int}
+		 */
 		this.width = dimensions ? dimensions.width : 1;
+		/**
+		 * @property height
+		 * @type {int}
+		 */
 		this.height = dimensions ? dimensions.height : 1;
 	};
 
-	this.dot = function(string, fret, finger) {
+	/**
+	 * Describes a fingering Dot on the fretboard
+	 * @class entities.Dot
+	 * @constructor
+	 * @param  {int} string
+	 * @param  {int} fret
+	 * @param  {int} finger
+	 */
+	this.Dot = function(string, fret, finger) {
+		/**
+		 * String number, on sporano (GCEA), G is 0th string, and so on
+		 * @property string
+		 * @type {int}
+		 */
 		this.string = string;
+		/**
+		 * @property fret
+		 * @type {int}
+		 */
 		this.fret = fret ? fret : 0;
+		/**
+		 * @property finger
+		 * @type {int}
+		 */
 		this.finger = finger ? finger : 0;
 	};
 
-	this.postion = function(x, y) {
+	/**
+	 * @class entities.Position
+	 * @constructor
+	 * @param  {int} x
+	 * @param  {int} y
+	 */
+	this.Position = function(x, y) {
+		/**
+		 * @property x
+		 * @type {int}
+		 */
 		this.x = x ? x : 0;
+		/**
+		 * @property y
+		 * @type {int}
+		 */
 		this.y = y ? y : 0;
 	};
 
-};
+}();
 
 /**
  * "Properties, Options, Preferences" such as fretboard size and colors; dot attributes, the cursors, fonts etc.
- * @class
+ * @class settings
  * @namespace ugsChordBuilder
  * @static
+ * @final
+ * @singleton
  */
 ugsChordBuilder.settings = new function() {
 	/**
 	 * Fretboard upper left hand corner position
+	 * @method anchorPos
 	 * @type {position}
 	 */
 	this.anchorPos = {
@@ -2270,6 +2370,7 @@ ugsChordBuilder.settings = new function() {
 
 	/**
 	 * Dimensions of a single target
+	 * @method targetDimensions
 	 * @return {JSON} {width: ?, height: ? }
 	 */
 	this.targetDimensions = function() {
@@ -2281,11 +2382,12 @@ ugsChordBuilder.settings = new function() {
 
 	/**
 	 * Top left-hand corner where Targets begin positioning
+	 * @method targetAnchorPos
 	 * @return {postion}
 	 */
 	this.targetAnchorPos = function() {
 		var dimensions = this.targetDimensions();
-		return new ugsChordBuilder.entities.postion(
+		return new ugsChordBuilder.entities.Position(
 			ugsChordBuilder.settings.anchorPos.x - 0.5 * dimensions.width,
 			ugsChordBuilder.settings.anchorPos.y - dimensions.height - 0.2 * ugsChordBuilder.settings.fretBoard.strokeWidth
 		);
@@ -2300,16 +2402,17 @@ ugsChordBuilder.settings = new function() {
 	this.centerAnchor = function(canvas) {
 		var x = (0.5 * canvas.width) - (0.5 * (this.fretBoard.stringNames.length - 1) * this.fretBoard.stringSpace) - this.fretBoard.strokeWidth;
 		var y = (0.5 * canvas.height) - (0.5 * this.fretBoard.numFrets * this.fretBoard.stringSpace);
-		this.anchorPos = new ugsChordBuilder.entities.postion(x, y);
+		this.anchorPos = new ugsChordBuilder.entities.Position(x, y);
 	};
 
-};
+}();
 
 /**
  * Tracks curor position relative to fretboard's hot (clickable) regions
- * @class
+ * @class tracking
  * @namespace ugsChordBuilder
  * @static
+ * @singleton
  */
 ugsChordBuilder.tracking = new function() {
 	var targetBox = null;
@@ -2322,7 +2425,7 @@ ugsChordBuilder.tracking = new function() {
 		var dimensions = ugsChordBuilder.settings.targetDimensions();
 		dimensions.width = dimensions.width * ugsChordBuilder.settings.fretBoard.stringNames.length;
 		dimensions.height = dimensions.height * (ugsChordBuilder.settings.fretBoard.numFrets + 1);
-		targetBox = new ugsChordBuilder.entities.boundingBox(ugsChordBuilder.settings.targetAnchorPos(), dimensions);
+		targetBox = new ugsChordBuilder.entities.BoundingBox(ugsChordBuilder.settings.targetAnchorPos(), dimensions);
 
 		return targetBox;
 	};
@@ -2330,8 +2433,8 @@ ugsChordBuilder.tracking = new function() {
 	/**
 	 * Returns TRUE if the two objects overlap
 	 * @method  collision
-	 * @param  {boundingBox} object1
-	 * @param  {boundingBox} object2
+	 * @param  {BoundingBox} object1
+	 * @param  {BoundingBox} object2
 	 * @return {bool}
 	 */
 	var collision = function(object1, object2) {
@@ -2345,19 +2448,19 @@ ugsChordBuilder.tracking = new function() {
 	 * @return {dot}
 	 */
 	this.toDot = function(pos) {
-		var cursorBox = new ugsChordBuilder.entities.boundingBox(pos);
+		var cursorBox = new ugsChordBuilder.entities.BoundingBox(pos);
 		var box = getTarget();
 		if (!collision(cursorBox, box)) {
 			return null;
 		}
 
 		var dimensions = ugsChordBuilder.settings.targetDimensions();
-		return new ugsChordBuilder.entities.dot(
+		return new ugsChordBuilder.entities.Dot(
 			Math.floor((pos.x - box.x) / dimensions.width),
 			Math.floor((pos.y - box.y) / dimensions.height)
 		);
 	};
-};
+}();
 
 /**
  * Did I overlook this or was it deliberate? Either case, the "fret" in the dot object is
@@ -2368,6 +2471,7 @@ ugsChordBuilder.tracking = new function() {
  * @class fretDots
  * @namespace ugsChordBuilder
  * @static
+ * @singleton
  */
 ugsChordBuilder.fretDots = new function() {
 	var _dots = [];
@@ -2421,7 +2525,7 @@ ugsChordBuilder.fretDots = new function() {
 
 	/**
 	 * Clears all saved dots.
-	 * @method: reset
+	 * @method reset
 	 */
 	this.reset = function() {
 		for (var i = 0; i < ugsChordBuilder.settings.fretBoard.stringNames.length; i++) {
@@ -2440,13 +2544,14 @@ ugsChordBuilder.fretDots = new function() {
 			if (_dots[i].string == dot.string && _dots[i].fret == dot.fret) {
 				return i;
 			}
-		};
+		}
 
 		return -1;
 	};
 
 	/**
 	 * Clears all dots for a particular string.
+	 * @method clearColumn
 	 * @param string {int}
 	 */
 	var clearColumn = function(string) {
@@ -2454,11 +2559,11 @@ ugsChordBuilder.fretDots = new function() {
 			if (_dots[i].string == string) {
 				_dots.splice(i, 1);
 			}
-		};
+		}
 	};
 
 	var getPosition = function(dot) {
-		return new ugsChordBuilder.entities.postion(
+		return new ugsChordBuilder.entities.Position(
 			ugsChordBuilder.settings.anchorPos.x + 0.47 * ugsChordBuilder.settings.fretBoard.strokeWidth + dot.string * ugsChordBuilder.settings.fretBoard.stringSpace,
 			ugsChordBuilder.settings.anchorPos.y + 0.47 * ugsChordBuilder.settings.fretBoard.strokeWidth + (dot.fret - 0.5) * ugsChordBuilder.settings.fretBoard.fretSpace
 		);
@@ -2493,15 +2598,16 @@ ugsChordBuilder.fretDots = new function() {
 			if (_dots[i].finger > 0) {
 				addLabel(context, pos, _dots[i].finger);
 			}
-		};
-	}
-};
+		}
+	};
+}();
 
 /**
  *
- * @class
+ * @class cursorCanvas
  * @namespace ugsChordBuilder
  * @static
+ * @singleton
  */
 ugsChordBuilder.cursorCanvas = new function() {
 	var _context = null;
@@ -2581,13 +2687,14 @@ ugsChordBuilder.cursorCanvas = new function() {
 		}
 		_lastPos = pos;
 	};
-};
+}();
 
 /**
  *
- * @class
+ * @class chordCanvas
  * @namespace ugsChordBuilder
  * @static
+ * @singleton
  */
 ugsChordBuilder.chordCanvas = new function() {
 	var _context = null,
@@ -2611,7 +2718,7 @@ ugsChordBuilder.chordCanvas = new function() {
 	};
 
 	var addLabels = function(startingFret) {
-		var pos = new ugsChordBuilder.entities.postion(
+		var pos = new ugsChordBuilder.entities.Position(
 			ugsChordBuilder.settings.anchorPos.x - 0.3 * ugsChordBuilder.settings.fretLabel.fontSize,
 			ugsChordBuilder.settings.anchorPos.y + ugsChordBuilder.settings.fretLabel.fontSize
 		);
@@ -2620,7 +2727,7 @@ ugsChordBuilder.chordCanvas = new function() {
 			addLabel(startingFret + i, color, pos);
 			pos.y += ugsChordBuilder.settings.fretBoard.fretSpace;
 			color = ugsChordBuilder.settings.fretLabel.lightColor;
-		};
+		}
 	};
 
 	var addStringName = function(text, pos) {
@@ -2633,7 +2740,7 @@ ugsChordBuilder.chordCanvas = new function() {
 	var addStringNames = function() {
 		var opts = ugsChordBuilder.settings.fretBoard;
 
-		var pos = new ugsChordBuilder.entities.postion(
+		var pos = new ugsChordBuilder.entities.Position(
 			ugsChordBuilder.settings.anchorPos.x + 0.5 * opts.strokeWidth,
 			ugsChordBuilder.settings.anchorPos.y - 0.25 * ugsChordBuilder.settings.fretLabel.fontSize
 		);
@@ -2645,6 +2752,7 @@ ugsChordBuilder.chordCanvas = new function() {
 	};
 
 	var drawFretboard = function() {
+		var i, x, y;
 		// shorthand handles:
 		var anchor = ugsChordBuilder.settings.anchorPos;
 		var fretBox = ugsChordBuilder.settings.fretBoard;
@@ -2657,14 +2765,14 @@ ugsChordBuilder.chordCanvas = new function() {
 		// build shape
 		_context.beginPath();
 		// add "C" & "E" strings
-		for (var i = 1; i < (fretBox.stringNames.length - 1); i++) {
-			var x = anchor.x + i * fretBox.stringSpace + offset;
+		for (i = 1; i < (fretBox.stringNames.length - 1); i++) {
+			x = anchor.x + i * fretBox.stringSpace + offset;
 			_context.moveTo(x, anchor.y + offset);
 			_context.lineTo(x, anchor.y + stringHeight + offset);
 		}
 		// add frets
-		for (var i = 1; i < fretBox.numFrets; i++) {
-			var y = anchor.y + i * fretBox.fretSpace + offset;
+		for (i = 1; i < fretBox.numFrets; i++) {
+			y = anchor.y + i * fretBox.fretSpace + offset;
 			_context.moveTo(anchor.x + offset, y);
 			_context.lineTo(anchor.x + fretWidth + offset, y);
 		}
@@ -2685,13 +2793,14 @@ ugsChordBuilder.chordCanvas = new function() {
 		drawFretboard();
 		ugsChordBuilder.fretDots.draw(_context);
 	};
-};
+}();
 
 /**
  *
- * @class
+ * @class export
  * @namespace ugsChordBuilder
  * @static
+ * @singleton
  */
 ugsChordBuilder.export = new function() {
 	var _fretOffset = null;
@@ -2700,6 +2809,7 @@ ugsChordBuilder.export = new function() {
 	 * Class for "reorganized" dots, think of this as a necklace where the
 	 * thread, the instrument string, has zero or more beads, or dots -- fret plus finger
 	 * @class  stringDots
+	 * @constructor
 	 * @private
 	 * @param  {int} string
 	 * @param  {dot_Array} dots
@@ -2712,20 +2822,21 @@ ugsChordBuilder.export = new function() {
 
 	var getStringDots = function() {
 		// initialize empty string array
-		var aryStringDots = [];
-		for (var stringNumber = 1; stringNumber <= ugsChordBuilder.settings.fretBoard.stringNames.length; stringNumber++) {
+		var stringNumber,
+			aryStringDots = [];
+		for (stringNumber = 1; stringNumber <= ugsChordBuilder.settings.fretBoard.stringNames.length; stringNumber++) {
 			aryStringDots.push(new stringDots(stringNumber));
-		};
+		}
 
 		// add dots
 		var dots = ugsChordBuilder.fretDots.getDots();
-		for (var stringNumber = aryStringDots.length - 1; stringNumber >= 0; stringNumber--) {
+		for (stringNumber = aryStringDots.length - 1; stringNumber >= 0; stringNumber--) {
 			for (var i = dots.length - 1; i >= 0; i--) {
 				if (aryStringDots[stringNumber].string == dots[i].string + 1) {
 					aryStringDots[stringNumber].dots.push(dots[i]);
 				}
-			};
-		};
+			}
+		}
 
 		return aryStringDots;
 	};
@@ -2776,7 +2887,7 @@ ugsChordBuilder.export = new function() {
 			if (dots[i].fret == fret) {
 				return dots[i].finger;
 			}
-		};
+		}
 		return 0;
 	};
 
@@ -2794,13 +2905,13 @@ ugsChordBuilder.export = new function() {
 		for (var i = 0; i < dotsPerString.length; i++) {
 			var minMax = getMinMax(dotsPerString[i].dots);
 			primaries.push(fretNumber(minMax.max));
-		};
+		}
 		return primaries;
 	};
 
 	/**
 	 * Returns complete ChordPro definition statement
-	 * @action getDefinition
+	 * @method getDefinition
 	 * @param  {string} chordName
 	 * @param  {int} startingFret
 	 * @return {string}
@@ -2821,7 +2932,7 @@ ugsChordBuilder.export = new function() {
 			if (minMax.max != minMax.min) {
 				addsString += ' add: string ' + dotsPerString[i].string + ' fret ' + fretNumber(minMax.min) + ' finger ' + getFinger(dotsPerString[i].dots, minMax.min);
 			}
-		};
+		}
 
 		// no double spaces, no space before the closing "}"
 		return ('{define: ' + name + ' frets ' + fretsStr + ' fingers ' + fingersString + addsString + '}').replace(/\s+/g, ' ').replace(' }', '}');
@@ -2829,7 +2940,7 @@ ugsChordBuilder.export = new function() {
 
 	/**
 	 * Returns "highlighted" (HTML-ified) ChordPro definition statement.
-	 * @action getDefinition
+	 * @method getDefinition
 	 * @param  {string} chordName
 	 * @param  {int} startingFret
 	 * @return {string}
@@ -2852,7 +2963,7 @@ ugsChordBuilder.export = new function() {
 
 	/**
 	 * Returns "safe" version of chord name, removing disallowed characters and reserved names (such as "add:")
-	 * @action scrub
+	 * @method scrub
 	 * @param  {string} chordName
 	 * @return {string}
 	 */
@@ -2866,12 +2977,13 @@ ugsChordBuilder.export = new function() {
 		}
 		return cleaned.substring(0, ugsChordBuilder.settings.chord.nameMaxLength);
 	};
-};
+}();
 ;/**
  *
  * @class chooserList
  * @namespace ugsChordBuilder
  * @static
+ * @singleton
  */
 ugsChordBuilder.chooserList = new function() {
 	// array of custom chords defined in this song
@@ -2880,9 +2992,9 @@ ugsChordBuilder.chooserList = new function() {
 	var _eleChordList = null;
 
 	/**
-	 * magic value for start a new chord
-	 * @constant
-	 * @name C_NEW_CHORD
+	 * magic value for start a new chord (constant)
+	 * @final
+	 * @attribute C_NEW_CHORD
 	 * @type {Int}
 	 */
 	var C_NEW_CHORD = -1;
@@ -2902,33 +3014,33 @@ ugsChordBuilder.chooserList = new function() {
 
 	/**
 	 * Chord current sent to the editor.
-	 * @field
+	 * @attribute _currentChord
 	 */
 	var _currentChord = null;
 
 	/**
 	 * Handle to the chordBuilder (UI) "setChord" method
-	 * @field
+	 * @attribute _setChordMethod
 	 */
 	var _setChordMethod = function() {};
 
 	/**
 	 * "safe" this handle for buried references.
-	 * @field
+	 * @attribute _that
 	 */
 	var _that = this;
 
 	/**
 	 * Hanlde to instance of Scriptasaurus chord brush class, to paint the wee little
 	 * chord diagrams onto the Chooser List.
-	 * @field _ugsBrushTool
+	 * @attribute _ugsBrushTool
 	 * @type {Object}
 	 */
 	var _ugsBrushTool = null;
 
 	/**
 	 * Required settings for the Chord Brush -- dimensions, fonts, and colors.
-	 * @field _diagramSettings
+	 * @attribute _diagramSettings
 	 * @type {JSON}
 	 */
 	var _diagramSettings = {
@@ -3001,6 +3113,8 @@ ugsChordBuilder.chooserList = new function() {
 
 	/**
 	 * Shows either the "Chooser" or "Chord Builder/Editor" panel.
+	 * @method show
+	 * @public
 	 * @param {bool} isChooserPanel
 	 */
 	this.show = function(isChooserPanel) {
@@ -3025,7 +3139,8 @@ ugsChordBuilder.chooserList = new function() {
 			id = definitionAdd(data.name, data.definition);
 			_currentChord = dictionaryFind(id);
 			songAddDefinition(data.definition);
-		} else {
+		}
+		else {
 			var i = dictionaryGetIndex(_currentChord.id);
 			if (i < 0) {
 				// console.log('error: not found');
@@ -3097,7 +3212,7 @@ ugsChordBuilder.chooserList = new function() {
 				if (chord.muted[i]) {
 					return true;
 				}
-			};
+			}
 		}
 		return false;
 	};
@@ -3114,7 +3229,8 @@ ugsChordBuilder.chooserList = new function() {
 		var item = listGetItem(id);
 		if (!item) {
 			item = listAddItem(id, def.name);
-		} else {
+		}
+		else {
 			item.innerHTML = listHtmlString(id, def.name, true);
 		}
 		listAddDiagram(id);
@@ -3133,7 +3249,7 @@ ugsChordBuilder.chooserList = new function() {
 			if (items[i].getAttribute('data-id') == ('' + id)) {
 				return items[i];
 			}
-		};
+		}
 		return null;
 	};
 
@@ -3158,19 +3274,19 @@ ugsChordBuilder.chooserList = new function() {
 	 * @param {array} chordDefs
 	 */
 	var listLoad = function(ul, chordDefs) {
-		var s = '';
-		for (var i = 0; i < chordDefs.length; i++) {
+		var i, s = '';
+		for (i = 0; i < chordDefs.length; i++) {
 			s += listHtmlString(chordDefs[i].id, chordDefs[i].name);
 		}
 		ul.innerHTML = '<li data-id="' + C_NEW_CHORD + '" class="newChord">+ Add New Chord</li>' + s;
 
 		var items = ul.getElementsByTagName('li');
-		for (var i = items.length - 1; i >= 0; i--) {
+		for (i = items.length - 1; i >= 0; i--) {
 			if (i < 1) {
 				continue;
 			}
 			listAddDiagram(items[i].getAttribute('data-id'));
-		};
+		}
 	};
 
 	/**
@@ -3187,6 +3303,7 @@ ugsChordBuilder.chooserList = new function() {
 
 	/**
 	 * Adds mini-chord diagram to the list item found by Id.
+	 * @method listAddDiagram
 	 */
 	var listAddDiagram = function(id) {
 		var element = listGetItem(id);
@@ -3250,7 +3367,7 @@ ugsChordBuilder.chooserList = new function() {
 	 * The chord insertion point is at the end of either the song meta tags or the
 	 * existing chord defintion block. Determined by the _last_ "header" tag line.
 	 * @method songAddDefinition
-	 * @param  {string}
+	 * @param {string} definition
 	 */
 	var songAddDefinition = function(definition) {
 		var e = document.getElementById(_ids.source);
@@ -3264,7 +3381,7 @@ ugsChordBuilder.chooserList = new function() {
 				inserted = true;
 			}
 			html = lines[i] + '\n' + html;
-		};
+		}
 		e.value = html;
 		ugsEditorPlus.actions.run();
 	};
@@ -3299,7 +3416,7 @@ ugsChordBuilder.chooserList = new function() {
 			if (('' + _chordDictionary[i].id != '' + id) && (_chordDictionary[i].name.toLowerCase() == search)) {
 				return i;
 			}
-		};
+		}
 
 		return -1;
 	};
@@ -3318,9 +3435,10 @@ ugsChordBuilder.chooserList = new function() {
 	/**
 	 * Adds new chord definition to our Dictionary array. Returns the
 	 * new item's Id (int).
+	 * @method definitionAdd
 	 * @param {string} name
 	 * @param {string} definition
-	 * @retugn {int}
+	 * @return {int}
 	 */
 	var definitionAdd = function(name, definition) {
 		var chord = new ChordDefinition(name, definition);
@@ -3328,11 +3446,11 @@ ugsChordBuilder.chooserList = new function() {
 		return chord.id;
 	};
 
-};
-;
-/**
+}();
+;/**
  * Doing
  * @class editorUi
+ * @constructor
  * @namespace ugsChordBuilder
  */
 ugsChordBuilder.editorUi = function() {
@@ -3378,8 +3496,8 @@ ugsChordBuilder.editorUi = function() {
 
 	/**
 	 * A "reverse Enum" dictionary of finger number to description
-	 * @name _fingerNames
-	 * @enum {JSON}
+	 * @attribute _fingerNames
+	 * @type {JSON}
 	 */
 	var _fingerNames = {
 		0: 'None',
@@ -3486,7 +3604,7 @@ ugsChordBuilder.editorUi = function() {
 			dots: ugsChordBuilder.fretDots.getDots(),
 			definition: ugsChordBuilder.export.getDefinition(_currentName, _startingFret)
 		};
-		if (!ugsChordBuilder.chooserList.save(d)){
+		if (!ugsChordBuilder.chooserList.save(d)) {
 			var e = document.getElementById(_ids.chordName);
 			e.focus();
 			e.select();
@@ -3523,8 +3641,8 @@ ugsChordBuilder.editorUi = function() {
 		var ugsDots = [];
 		for (var i = 0; i < builderDots.length; i++) {
 			var fret = builderDots[i].fret - offset;
-			ugsDots.push(new ugsChordBuilder.entities.dot(builderDots[i].string, (fret < 0 ? 0 : fret), builderDots[i].finger));
-		};
+			ugsDots.push(new ugsChordBuilder.entities.Dot(builderDots[i].string, (fret < 0 ? 0 : fret), builderDots[i].finger));
+		}
 		return ugsDots;
 	};
 
@@ -3540,7 +3658,7 @@ ugsChordBuilder.editorUi = function() {
 			if (dots[i].fret > max) {
 				max = dots[i].fret;
 			}
-		};
+		}
 		return max;
 	};
 
@@ -3604,7 +3722,7 @@ ugsChordBuilder.editorUi = function() {
 		if (dots && dots.length > 0) {
 			for (var i = 0; i < dots.length; i++) {
 				ugsChordBuilder.fretDots.toggleDot(dots[i]);
-			};
+			}
 		}
 
 		// ok, probably done
@@ -3648,7 +3766,8 @@ ugsChordBuilder.editorUi = function() {
 		if (isSet && !hasClass) {
 			// add
 			element.className += ' ' + className;
-		} else if (!isSet && hasClass) {
+		}
+		else if (!isSet && hasClass) {
 			// remove
 			element.className = element.className.replace(className, '').replace(/\s+/g, ' ');
 		}
@@ -3664,7 +3783,7 @@ ugsChordBuilder.editorUi = function() {
 		var lastValue = ugsChordBuilder.settings.fretBoard.maxFret - ugsChordBuilder.settings.fretBoard.numFrets + 1;
 		for (var i = 1; i <= lastValue; i++) {
 			s += '<option value="' + i + '">' + i + '</option>';
-		};
+		}
 		ele.innerHTML = s;
 	};
 
@@ -3684,7 +3803,7 @@ ugsChordBuilder.editorUi = function() {
 	 * @return {void}
 	 */
 	var onFretChange = function(evt) {
-		_startingFret = parseInt(this.value);
+		_startingFret = parseInt(this.value, 10);
 		exportDefinition();
 		redraw();
 	};
@@ -3701,7 +3820,8 @@ ugsChordBuilder.editorUi = function() {
 		var numSteps = evt.target.getAttribute('data-direction') == 'up' ? -1 : +1;
 		if (ugsChordBuilder.fretDots.slide(numSteps)) {
 			moveAllowed = true;
-		} else {
+		}
+		else {
 			var newStart = _startingFret + numSteps;
 			var lastValue = ugsChordBuilder.settings.fretBoard.maxFret - ugsChordBuilder.settings.fretBoard.numFrets + 1;
 			if ((newStart >= 1) && (newStart <= lastValue)) {
@@ -3742,7 +3862,8 @@ ugsChordBuilder.editorUi = function() {
 			ugsChordBuilder.fretDots.toggleDot(dot);
 			redraw(pos);
 			exportDefinition();
-		} else if (ugsChordBuilder.fretDots.toggleFinger(dot, _finger)) {
+		}
+		else if (ugsChordBuilder.fretDots.toggleFinger(dot, _finger)) {
 			redraw(pos);
 			exportDefinition();
 		}
@@ -3755,7 +3876,7 @@ ugsChordBuilder.editorUi = function() {
 	 */
 	var getPosition = function(canvas, evt) {
 		var rect = canvas.getBoundingClientRect();
-		return new ugsChordBuilder.entities.postion(
+		return new ugsChordBuilder.entities.Position(
 			evt.clientX - rect.left,
 			evt.clientY - rect.top
 		);
@@ -3767,7 +3888,7 @@ ugsChordBuilder.editorUi = function() {
 	 * @return {void}
 	 */
 	var redraw = function(pos) {
-		pos = pos || new ugsChordBuilder.entities.postion(0, 0);
+		pos = pos || new ugsChordBuilder.entities.Position(0, 0);
 		ugsChordBuilder.chordCanvas.draw(pos, _startingFret);
 	};
 
@@ -3780,7 +3901,7 @@ ugsChordBuilder.editorUi = function() {
 		document.getElementById(_ids.output).innerHTML = ugsChordBuilder.export.getDefinitionHtml(_currentName, _startingFret);
 	};
 
-	this.reload = function(){
+	this.reload = function() {
 		reset();
 		ugsChordBuilder.chooserList.reset();
 		ugsChordBuilder.chooserList.show(true);

@@ -4,10 +4,16 @@
  * @namespace ugsEditorPlus
  */
 ugsEditorPlus.resize = (function(){
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
 	var _public = {};
 
 	/**
 	 * the "Safe" position and dimensions to avoid going over the top menu
+	 * @attribute safe
 	 * @type {JSON}
 	 */
 	var safe = {
@@ -20,6 +26,7 @@ ugsEditorPlus.resize = (function(){
 
 	/**
 	 * Hold the current state of the dialog, we'll store this on the element in "data-sized" attribute
+	 * @attribute isBig
 	 * @type {Boolean}
 	 */
 	var isBig = false;
@@ -50,7 +57,7 @@ ugsEditorPlus.resize = (function(){
 		isBig = $dlg.data('sized') == true;
 		$dlg.data('sized', isBig);
 		// console.log($dlg.data('initialPos'));
-	}
+	};
 
 	/**
 	 * Expands overlay to fill (reasonably) available area
@@ -61,8 +68,15 @@ ugsEditorPlus.resize = (function(){
 	var max = function(){
 		var info = measure();
 		$dlg
-			.css({left: info.position.left + "px"})
-			.animate({left: safe.edge, right: safe.edge, top: safe.top, width: (info.width - 30)}, 800);
+			.css({
+				left: info.position.left + "px"
+			})
+			.animate({
+				left: safe.edge,
+				right: safe.edge,
+				top: safe.top,
+				width: (info.width - 30)
+			}, 800);
 	};
 
 	/**
@@ -73,7 +87,12 @@ ugsEditorPlus.resize = (function(){
 	 */
 	var reset = function(){
 		//measure();
-		$dlg.css({'left': 'auto'}).animate({right: safe.edge, width: safe.width}, 800);
+		$dlg.css({
+			'left': 'auto'
+		}).animate({
+			right: safe.edge,
+			width: safe.width
+		}, 800);
 	};
 
 	/**
@@ -98,5 +117,4 @@ ugsEditorPlus.resize = (function(){
 	// ---------------------------------------
 	return _public;
 
-}()
-);
+}());

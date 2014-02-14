@@ -9,7 +9,8 @@
 ugsEditorPlus.submenuUi = (function(){
 	/**
 	 * attach public members to this object
-	 * @type {Object}
+	 * @property _public
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -25,6 +26,7 @@ ugsEditorPlus.submenuUi = (function(){
 	/**
 	 * attaches event handlers
 	 * @method init
+	 * @public
 	 * @return {[type]} [description]
 	 */
 	_public.init = function(doAction){
@@ -38,6 +40,7 @@ ugsEditorPlus.submenuUi = (function(){
 
 	/**
 	 * a list item has been clicked
+	 * @method onOptionClick
 	 * @param  {event} e
 	 * @return {bool} false to kill event bubbling
 	 */
@@ -75,6 +78,7 @@ ugsEditorPlus.submenuUi = (function(){
 	/**
 	 * Label has been clicked, show associated options dialog box.
 	 * Watch for 2-clicks on same label (should hide on second click)
+	 * @method onLabelClick
 	 * @param  {event} e
 	 * @return {bool} false to kill event bubbling
 	 */
@@ -90,9 +94,10 @@ ugsEditorPlus.submenuUi = (function(){
 		if (_open != null && _open.id == id){
 			_open = null;
 		}
-		else
-		{
-		 _open = { "id" : id };
+		else {
+			_open = {
+				"id": id
+			};
 		}
 
 		// prevent event bubbling
@@ -144,7 +149,7 @@ ugsEditorPlus.submenuUi = (function(){
 
 	/**
 	 * user clicked off the current dialog -- close 'em all
-	 * @medhod closeAll
+	 * @method closeAll
 	 * @param  {event} e
 	 */
 	var closeAll = function(e){
@@ -162,6 +167,7 @@ ugsEditorPlus.submenuUi = (function(){
 
 	/**
 	 * used to construct the descriptions for current values
+	 * @property _descriptions
 	 * @private
 	 * @type {JSON}
 	 */
@@ -174,11 +180,11 @@ ugsEditorPlus.submenuUi = (function(){
 
 	/**
 	 * Builds a descriptor string of the current values for the pseudo-select labels
-	 * @medhod getLabelText
+	 * @method getLabelText
 	 * @param  {string} action
 	 * @param  {string} value
 	 * @param  {jQueryElement} $ele jQuery element that ...
-	 * @return string
+	 * @return {string}
 	 */
 	var getLabelText = function(action, value, $ele){
 		var index = $ele.index();
@@ -212,5 +218,4 @@ ugsEditorPlus.submenuUi = (function(){
 	// ---------------------------------------
 	return _public;
 
-}()
-);
+}());

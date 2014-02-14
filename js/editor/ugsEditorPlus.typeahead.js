@@ -4,12 +4,14 @@
  * Based on tutorial:
  * http://tatiyants.com/how-to-use-json-objects-with-twitter-bootstrap-typeahead/
  * @class typeahead
+ * @constructor
  * @namespace ugsEditorPlus
  */
 ugsEditorPlus.typeahead = function(){
 	/**
 	 * attach public members to this object
-	 * @type {Object}
+	 * @property _public
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -33,6 +35,7 @@ ugsEditorPlus.typeahead = function(){
 	/**
 	 * Scrapes HTML to build our list of
 	 * keys, searchable text, and display text
+	 * @method listFromHtml
 	 * @return {[type]} [description]
 	 */
 	var listFromHtml = function(){
@@ -71,7 +74,7 @@ ugsEditorPlus.typeahead = function(){
     	.replace(_re.common, ' ')
     	.replace(_re.space, ' ')
     	.trim();
-	}
+	};
 
 	var _ta_source = function (query, process) {
 		_scrubbedQuery = crushText(query);
@@ -82,7 +85,7 @@ ugsEditorPlus.typeahead = function(){
 			if (_words[i].length > 0){
 				regGroup += (regGroup.length > 0 ? '|' : '') + _words[i];
 			}
-		};
+		}
 		_regex = new RegExp( '(' + regGroup + ')', 'gi');
 		process(_keysList);
 	};
@@ -114,7 +117,7 @@ ugsEditorPlus.typeahead = function(){
 		$('em, .bigger', $temp).each(function( index ){
 			var $ele = $(this);
 			var text = $ele.html();
-			$ele.html(text.replace( _regex, "<strong>$1</strong>" ))
+			$ele.html(text.replace(_regex, "<strong>$1</strong>"));
 		});
 		return $temp.html();
 	};

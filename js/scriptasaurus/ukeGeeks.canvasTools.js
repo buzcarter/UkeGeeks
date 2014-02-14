@@ -9,13 +9,13 @@ ukeGeeks.canvasTools = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
-	 * @type {Object}
+	 * @type JsonObject
 	 */
 	var _public = {};
 	/**
 	 * @method drawDot
-	 * @param ctx {type} blah
-	 * @param centerPos {type} blah
+	 * @param ctx {CanvasContext} Valid Canvas Context handle
+	 * @param centerPos {XyPositionJson} JSON with two properties: x & y ints, position in pixels, format {x: <int>, y: <int>}
 	 * @param radius {int} Dot's Radius
 	 * @param color {string} Hex color
 	 * @return {void}
@@ -30,8 +30,8 @@ ukeGeeks.canvasTools = (function() {
 
 	/**
 	 * @method drawText
-	 * @param ctx {CanvasContext} Valid Canvas Context Handle
-	 * @param pos {XYPosObject} Object with two properties: x & y ints, position in pixels
+	 * @param ctx {CanvasContext} Valid Canvas Context handle
+	 * @param pos {XYPosObject} JSON with two properties: x & y ints, position in pixels, format {x: <int>, y: <int>}
 	 * @param text {string} Any string to be places at Pos
 	 * @param font {string} Font, CSS-like definition of size and font-family, i.e. 
 	 * @param color {string} Hexadecimal RGB color definition
@@ -39,7 +39,9 @@ ukeGeeks.canvasTools = (function() {
 	 * @return {void}
 	 */
 	_public.drawText = function(ctx, pos, text, font, color, align) {
-		if (!ctx.fillText) return;// IE check
+		if (!ctx.fillText) {
+			return; // IE check
+		}
 		ctx.font = font;
 		ctx.textAlign = (align || 'center');
 		ctx.fillStyle = color;

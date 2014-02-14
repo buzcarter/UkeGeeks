@@ -9,7 +9,7 @@ ugsEditorPlus.actions = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
-	 * @type {Object}
+	 * @type JsonObject
 	 */
 	var _public = {};
 

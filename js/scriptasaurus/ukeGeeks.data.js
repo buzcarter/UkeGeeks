@@ -15,6 +15,7 @@ ukeGeeks.data = (function() {
 	/**
 	 * Chord info sutiable for plotting on Canvas; has name and dot positions
 	 * @class expandedChord
+	 * @constructor
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
@@ -42,6 +43,7 @@ ukeGeeks.data = (function() {
 	/**
 	 * Song object holds all meta info (Title, Subtitles) plus an array of plot
 	 * @class song
+	 * @constructor
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
@@ -108,6 +110,7 @@ ukeGeeks.data = (function() {
 	/**
 	 * A single fretboard fingering "dot" -- the position on the Canvas object that a dot should occupy.
 	 * @class dot
+	 * @constructor
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */
@@ -132,6 +135,14 @@ ukeGeeks.data = (function() {
 		this.finger = finger;
 	};
 
+	/**
+	 * @class instrument
+	 * @constructor
+	 * @param  {string} key
+	 * @param  {string} name
+	 * @param  {string} tuning
+	 * @param  {array} chords
+	 */
 	_public.instrument = function(key, name, tuning, chords) {
 		this.key = key;
 		this.name = name;
@@ -156,7 +167,7 @@ ukeGeeks.data = (function() {
 	 * <br />
 	 * <br />For example, the D7 is often played by laying the index finger across the entire 
 	 * second fret and then placing middle finger on 3rd fret of "A" string like this:
-	 <pre>
+	 &gt;pre&lt;
 	  G C E A  
 	  - - - -  (1st fret)
 		X X X X
@@ -167,6 +178,7 @@ ukeGeeks.data = (function() {
 	 * chord much easier to play.
 	 * 
 	 * @class addInFinger
+	 * @constructor
 	 * @for ukeGeeks.data
 	 * @namespace ukeGeeks.data
 	 */

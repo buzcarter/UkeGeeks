@@ -58,7 +58,7 @@ ukeGeeks.definitions = (function() {
 	 * @return {void}
 	 */
 	_public.useInstrument = function(offset) {
-		offset = (arguments.length > 0) ? arguments[0] : _public.instrument.sopranoUke;
+		offset = (arguments.length > 0) ? offset : _public.instrument.sopranoUke;
 		_offset = parseInt(offset, 10);
 		if (_offset > 0){
 			_map = ukeGeeks.transpose.retune(_offset);
@@ -73,7 +73,8 @@ ukeGeeks.definitions = (function() {
 	 * @return {expandedChord}
 	 */
 	_public.get = function(chordName) {
-		var i;
+		var i, c, chrd, name;
+
 		// try User Defined chords first
 		for (i = 0; i < _userChords.length; i++) {
 			if (chordName == _userChords[i].name){
@@ -87,12 +88,12 @@ ukeGeeks.definitions = (function() {
 
 			// user has retuned the chords, need to find chord name "as-is",
 			// but get the fingering from the mapping
-		var name = _getAlias(chordName);
+		name = _getAlias(chordName);
 		for (i in _map) {
 			if (name == _map[i].original) {
-				var c = _get(_map[i].transposed);
+				c = _get(_map[i].transposed);
 				if (c) {
-						var chrd = new ukeGeeks.data.expandedChord(chordName);
+					chrd = new ukeGeeks.data.expandedChord(chordName);
 					chrd.dots = c.dots;
 					chrd.muted = c.muted;
 						return chrd;
@@ -136,10 +137,11 @@ ukeGeeks.definitions = (function() {
 	 * @return {expandedChord}
 	 */
 	var _get = function(chordName){
-		var name = _getAlias(chordName);
-		for (var i = 0; i < _chords.length; i++) {
+		var i, chrd,
+			name = _getAlias(chordName);
+		for (i = 0; i < _chords.length; i++) {
 			if (name == _chords[i].name) {
-			var chrd = new ukeGeeks.data.expandedChord(chordName);
+				chrd = new ukeGeeks.data.expandedChord(chordName);
 				chrd.dots = _chords[i].dots;
 				chrd.muted = _chords[i].muted;
 			return chrd;
@@ -150,7 +152,7 @@ ukeGeeks.definitions = (function() {
 	
 	/**
 	 * @method add
-	 * @param data {type} array of expanded chord objects
+	 * @param data {array} array of expanded chord objects
 	 * @return {int}
 	 */
 	_public.add = function(data) {
@@ -164,7 +166,7 @@ ukeGeeks.definitions = (function() {
 
 	/**
 	 * @method replace
-	 * @param data {type} array of expanded chord objects
+	 * @param data {array} array of expanded chord objects
 	 * @return {int}
 	 */
 	_public.replace = function(data) {

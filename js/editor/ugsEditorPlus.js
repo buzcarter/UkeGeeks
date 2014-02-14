@@ -1,6 +1,6 @@
 /**
-  * This library implments the editor functions, bridging the page UI and scriptasaurus methods.
-  * @module  UkeGeeksScriptasaurus Editor+
+ * This library implments the UkeGeeks Scriptasaurus Song-a-matic editor functions, bridging the page UI and scriptasaurus methods.
+ * @module  ugsEditorPlus
   * @namespace  ugsEditorPlus
   * @class ugsEditorPlus
   */
@@ -8,7 +8,7 @@ var ugsEditorPlus = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
-	 * @type {Object}
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -55,5 +55,4 @@ var ugsEditorPlus = (function() {
 	// ---------------------------------------
 	return _public;
 
-}()
-);
+}());

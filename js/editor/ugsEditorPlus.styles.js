@@ -2,6 +2,7 @@
  * from: http://www.javascriptkit.com/dhtmltutors/externalcss.shtml
  * @class styles
  * @namespace ugsEditorPlus
+ * @singleton
  */
 ugsEditorPlus.styles = new function(){
 	var _sheet = null;
@@ -17,7 +18,6 @@ ugsEditorPlus.styles = new function(){
 		for (var i = 0; i < document.styleSheets.length; i++){
 			if (document.styleSheets[i].title == title){
 				return document.styleSheets[i];
-				break;
 			}
 		}
 		return null;
@@ -38,9 +38,8 @@ ugsEditorPlus.styles = new function(){
 			}
 			if (this.Rules[i].selectorText.toLowerCase() == selector){
 				return this.Rules[i];
-				break;
 			}
 		}
 		return null;
 	};
-};
+}();

@@ -2,6 +2,7 @@
 /**
  * Doing
  * @class editorUi
+ * @constructor
  * @namespace ugsChordBuilder
  */
 ugsChordBuilder.editorUi = function() {
@@ -47,8 +48,8 @@ ugsChordBuilder.editorUi = function() {
 
 	/**
 	 * A "reverse Enum" dictionary of finger number to description
-	 * @name _fingerNames
-	 * @enum {JSON}
+	 * @attribute _fingerNames
+	 * @type {JSON}
 	 */
 	var _fingerNames = {
 		0: 'None',
@@ -192,8 +193,8 @@ ugsChordBuilder.editorUi = function() {
 		var ugsDots = [];
 		for (var i = 0; i < builderDots.length; i++) {
 			var fret = builderDots[i].fret - offset;
-			ugsDots.push(new ugsChordBuilder.entities.dot(builderDots[i].string, (fret < 0 ? 0 : fret), builderDots[i].finger));
-		};
+			ugsDots.push(new ugsChordBuilder.entities.Dot(builderDots[i].string, (fret < 0 ? 0 : fret), builderDots[i].finger));
+		}
 		return ugsDots;
 	};
 
@@ -209,7 +210,7 @@ ugsChordBuilder.editorUi = function() {
 			if (dots[i].fret > max) {
 				max = dots[i].fret;
 			}
-		};
+		}
 		return max;
 	};
 
@@ -273,7 +274,7 @@ ugsChordBuilder.editorUi = function() {
 		if (dots && dots.length > 0) {
 			for (var i = 0; i < dots.length; i++) {
 				ugsChordBuilder.fretDots.toggleDot(dots[i]);
-			};
+			}
 		}
 
 		// ok, probably done
@@ -317,7 +318,8 @@ ugsChordBuilder.editorUi = function() {
 		if (isSet && !hasClass) {
 			// add
 			element.className += ' ' + className;
-		} else if (!isSet && hasClass) {
+		}
+		else if (!isSet && hasClass) {
 			// remove
 			element.className = element.className.replace(className, '').replace(/\s+/g, ' ');
 		}
@@ -333,7 +335,7 @@ ugsChordBuilder.editorUi = function() {
 		var lastValue = ugsChordBuilder.settings.fretBoard.maxFret - ugsChordBuilder.settings.fretBoard.numFrets + 1;
 		for (var i = 1; i <= lastValue; i++) {
 			s += '<option value="' + i + '">' + i + '</option>';
-		};
+		}
 		ele.innerHTML = s;
 	};
 
@@ -353,7 +355,7 @@ ugsChordBuilder.editorUi = function() {
 	 * @return {void}
 	 */
 	var onFretChange = function(evt) {
-		_startingFret = parseInt(this.value);
+		_startingFret = parseInt(this.value, 10);
 		exportDefinition();
 		redraw();
 	};
@@ -370,7 +372,8 @@ ugsChordBuilder.editorUi = function() {
 		var numSteps = evt.target.getAttribute('data-direction') == 'up' ? -1 : +1;
 		if (ugsChordBuilder.fretDots.slide(numSteps)) {
 			moveAllowed = true;
-		} else {
+		}
+		else {
 			var newStart = _startingFret + numSteps;
 			var lastValue = ugsChordBuilder.settings.fretBoard.maxFret - ugsChordBuilder.settings.fretBoard.numFrets + 1;
 			if ((newStart >= 1) && (newStart <= lastValue)) {
@@ -411,7 +414,8 @@ ugsChordBuilder.editorUi = function() {
 			ugsChordBuilder.fretDots.toggleDot(dot);
 			redraw(pos);
 			exportDefinition();
-		} else if (ugsChordBuilder.fretDots.toggleFinger(dot, _finger)) {
+		}
+		else if (ugsChordBuilder.fretDots.toggleFinger(dot, _finger)) {
 			redraw(pos);
 			exportDefinition();
 		}
@@ -424,7 +428,7 @@ ugsChordBuilder.editorUi = function() {
 	 */
 	var getPosition = function(canvas, evt) {
 		var rect = canvas.getBoundingClientRect();
-		return new ugsChordBuilder.entities.postion(
+		return new ugsChordBuilder.entities.Position(
 			evt.clientX - rect.left,
 			evt.clientY - rect.top
 		);
@@ -436,7 +440,7 @@ ugsChordBuilder.editorUi = function() {
 	 * @return {void}
 	 */
 	var redraw = function(pos) {
-		pos = pos || new ugsChordBuilder.entities.postion(0, 0);
+		pos = pos || new ugsChordBuilder.entities.Position(0, 0);
 		ugsChordBuilder.chordCanvas.draw(pos, _startingFret);
 	};
 

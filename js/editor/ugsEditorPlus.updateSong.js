@@ -7,7 +7,8 @@
 ugsEditorPlus.updateSong = (function() {
 	/**
 	 * attach public members to this object
-	 * @type {Object}
+	 * @property _public
+	 * @type JsonObject
 	 */
 	var _public = {};
 
@@ -16,6 +17,7 @@ ugsEditorPlus.updateSong = (function() {
 
 	/**
 	 * Name / Value pairs for jQuery selectors of HTML elements to be manipulated
+	 * @property _selectors
 	 * @type {JSON}
 	 */
 	var _selectors = {
@@ -28,6 +30,7 @@ ugsEditorPlus.updateSong = (function() {
 
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
+	 * @property _isUpdating
 	 * @type {Boolean}
 	 */
 	var _isUpdating = false;
