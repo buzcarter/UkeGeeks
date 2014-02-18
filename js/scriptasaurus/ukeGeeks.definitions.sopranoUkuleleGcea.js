@@ -209,5 +209,5 @@ ukeGeeks.definitions.sopranoUkuleleGcea = [
 	'{define: G/B frets 0 2 3 2}',
 	'{define: G/F# frets 0 2 2 2}',
 	'{define: G/F frets 0 2 1 2}',
-	'{define: G7/B frets 0 2 1 2}',
+	'{define: G7/B frets 0 2 1 2}'
 ].join("\n");

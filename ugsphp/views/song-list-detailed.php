@@ -41,7 +41,7 @@ function MakeRowHtml($song){
 	<meta charset="utf-8" />
 	<title><?php echo($model->PageTitle); ?></title>
 	<meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
-	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.merged.css" title="ugsEditorCss" />
+	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.min.css" title="ugsEditorCss" />
 	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsphp.css" />
 	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.typeahead.css" />
 </head>
@@ -73,7 +73,7 @@ function MakeRowHtml($song){
 	</ol>
 	</section>
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.merged.js"></script>
+	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.min.js"></script>
 	<?php if ($model->IsNewAllowed) {
 		?>
 		<section class="overlay" style="top:100px; right:40%; display:none;" id="newSongForm">

@@ -1,12 +1,12 @@
 /**
   * <ul>
   * <li>Project: UkeGeeks' Scriptasaurus</li>
-  * <li>Version: 1.4</li>
+  * <li>Version: 1.4.3</li>
   * <li>Homepage: http://ukegeeks.com</li>
   * <li>Project Repository: https://github.com/buzcarter/UkeGeeks</li>
   * <li>Author: Buz Carter</li>
   * <li>Contact: buz@ukegeeks.com</li>
-  * <li>Copyright: Copyright 2010-2013 Buz Carter.</li>
+  * <li>Copyright: Copyright 2010-2014 Buz Carter.</li>
   * <li>License GNU General Public License (http://www.gnu.org/licenses/gpl.html)</li>
   * <ul>
   *

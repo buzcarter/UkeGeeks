@@ -63,7 +63,7 @@ ugsEditorPlus.optionsDlg = (function() {
 		//$('#helpDlg a').click(function(e){console.log('anchor click');});
 
 		$('.overlay').draggable({
-			handle : 'hgroup',
+			handle: 'hgroup'
 			//containParent: true
     });
 	};

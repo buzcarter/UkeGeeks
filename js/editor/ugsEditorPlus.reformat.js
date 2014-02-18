@@ -7,8 +7,6 @@ var ugsEditorPlus = window.ugsEditorPlus || {};
  * @singleton
  */
 ugsEditorPlus.reformat = new function(){
-	var _this = this;
-
 	var _hasChords = false;
 
 	/**
@@ -26,9 +24,10 @@ ugsEditorPlus.reformat = new function(){
 
 	/**
 	 * Line Object Class Definition (sets defaults)
-	 * @class lineObj
+	 * @class LineObj
+	 * @constructor
 	 */
-	var lineObj = function(){
+	var LineObj = function() {
 		this.source = '';
 		this.wordCount = 0;
 		this.spaceCount = 0;
@@ -91,7 +90,7 @@ ugsEditorPlus.reformat = new function(){
 		var lines = text.split('\n');
 		for (var i = 0; i < lines.length; i++) {
 			var words = lines[i].match(_re.words);
-			var l = new lineObj;
+			var l = new LineObj();
 			l.source = lines[i];
 			if ((words != null) && (words.length > 0)){
 				l.wordCount = words.length;
