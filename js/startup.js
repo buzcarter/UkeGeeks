@@ -4,9 +4,8 @@
  * @return {void}
  */
 function checkUrlOpts(){
-	var s = new String(window.location);
 	var re = new RegExp("[?&]inline=([^&]*)", "i");
-	var m = s.match(re)
+	var m = ('' + window.location).match(re);
 	if (!m || m.length < 1){
 		return;
 	}

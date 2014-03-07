@@ -157,7 +157,7 @@ ukeGeeks.definitions.sopranoUkuleleGcea = [
 	// -------------------------------------------------------
 	'{define: F# frets 3 1 2 1 fingers 3 1 2 1 add: string 1 fret 1 finger 1 add: string 3 fret 1 finger 1}',
 	'{define: F#m frets 2 1 2 0 fingers 2 1 3 0}',
-	'{define: F#7 frets 3 4 2 1 fingers 3 4 2 1}',
+	'{define: F#7 frets 3 4 2 4 fingers 2 3 1 4}',
 	'{define: F#7sus4 frets 4 4 2 4 fingers 2 3 1 4}',
 	'{define: F#m7 frets 2 4 2 4 fingers 1 3 2 4}',
 	'{define: F#dim frets 2 3 2 3 fingers 1 3 2 4}',

@@ -106,9 +106,10 @@ ugsChordBuilder.settings = (function() {
 
 	//'Geneva, "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, sans-serif';
 	/**
-	 * San-Serif font stack used on Canvas
-	 * @constant FONT_STACK
-	 * @type {String}
+	 * San-serif font stack used when drawing text on Canvas.
+	 * @property {String} FONT_STACK
+	 * @final
+	 * @constant
 	 */
 	var FONT_STACK = 'Arial, "Helvetica Neue", Helvetica, Verdana, sans-serif';
 
@@ -333,7 +334,8 @@ ugsChordBuilder.fretDots = new function() {
 		var index = find(dot);
 		if (index < 0) {
 			_dots.push(dot);
-		} else {
+		}
+		else {
 			_dots.splice(index, 1);
 		}
 	};
@@ -502,7 +504,8 @@ ugsChordBuilder.cursorCanvas = new function() {
 		erase(_lastPos);
 		if (!_imgOk || _dotCursor) {
 			drawDotCursor(pos);
-		} else {
+		}
+		else {
 			drawHandCursor(pos);
 		}
 		_lastPos = pos;

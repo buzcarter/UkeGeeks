@@ -6,53 +6,63 @@
  * @constructor
  * @namespace ukeGeeks
  */
-ukeGeeks.tabs = function(){};
+ukeGeeks.tabs = function() {
 
-ukeGeeks.tabs.prototype = {
+	/**
+	 * alias for external Settings dependencies (helps with complression, too)
+	 * @property tab_settings
+	 * @private
+	 * @type {JSON}
+	 */
+	var tab_settings = ukeGeeks.settings.tabs;
+
+	// TODO: use ukeGeeks.settings.tuning for NUM_STRINGS and LAST_STRING_NAME??
 	
 	/**
 	 * (Constant) Number of Strings (dashed lines of tablature notation) expected. (For now
 	 * a constant -- ukueleles "always" have four). Making a variable to help support port
 	 * for other instruments.
-	 * @property _numStrings
+	 * @property NUM_STRINGS
 	 * @private
 	 * @type int
 	 */
-	_numStrings: 4,
+	var NUM_STRINGS= 4;
 
 	/**
 	 * (Constant) Last String Name (Note), as above, on Ukulele is a "G". Here for other instruments.
-	 * @property _lastStringName
+	 * @property LAST_STRING_NAME
 	 * @private
 	 * @type string
 	 */
-	_lastStringName: 'G',
+	var LAST_STRING_NAME= 'G';
 
 	/* PUBLIC METHODS
 	  ---------------------------------------------- */
 	/**
 	 * Again this is a constructor replacement
 	 * @method init
+	 * @public
 	 * @return {void}
 	 */
-	init: function() {},
+	var init= function() {};
 	
 	/**
 	 * Races through all &lt;pre&gt; tags within h, any with the CSS class of "ugsTabs" will be replaced with the canvas element.
 	 * @method replace
+	 * @public
 	 * @param h {DOM-element} 
 	 * @return {void} 
 	 */
-	replace: function(h){
+	var replace= function(h) {
 		var tabBlocks = h.getElementsByTagName('pre');
 		for (var i in tabBlocks){
 			if (tabBlocks[i].className == 'ugsTabs'){
 				var s = tabBlocks[i].innerHTML;
 				tabBlocks[i].innerHTML = '';
-				this.loadBlocks(s,tabBlocks[i]);
+				loadBlocks(s, tabBlocks[i]);
 			}
 		}
-	},
+	};
 	
 	/**
 	 * 
@@ -61,7 +71,7 @@ ukeGeeks.tabs.prototype = {
 	 * @param outElement {string or DOM} Either: (string) the Id to a DOM element, or DOM element handle where the canvas/converted text will be placed.
 	 * @return {void}
 	 */
-	loadBlocks: function(text, outElement){
+	var loadBlocks= function(text, outElement) {
 		var lines = text.split('\n');
 		var tab = [];
 		for (var i in lines) {
@@ -69,12 +79,12 @@ ukeGeeks.tabs.prototype = {
 			if (s.length > 0){
 				tab.push(s);
 			}
-			if (tab.length == this._numStrings) {
-				this.redraw(tab, outElement);
+			if (tab.length == NUM_STRINGS) {
+				redraw(tab, outElement);
 				tab = [];
 			}
 		}
-	},
+	};
 	
 	/**
 	 * 
@@ -83,162 +93,172 @@ ukeGeeks.tabs.prototype = {
 	 * @param outElement {string or DOM} Either: (string) the Id to a DOM element, or DOM element handle where the canvas/converted text will be placed.
 	 * @return {void}
 	 */
-	redraw: function(inTabs, outElement){
+	var redraw= function(inTabs, outElement) {
 		// validate inTabs input...
 		// TODO: instead of this if it's text pop the entire processing back to loadBlocks!
 		inTabs = (typeof(inTabs) == 'string') ? (inTabs.split('\n')) : inTabs;
-		if (inTabs.length < this._numStrings) {
+		if (inTabs.length < NUM_STRINGS) {
 			return;
 		}
 		// read tabs
-		var tabInfo = this._readTabs(inTabs);
-		var labelOffset = (tabInfo.hasLabels) ? ukeGeeks.settings.tabs.labelWidth: 0;
+		var tabInfo = readTabs(inTabs);
+		var labelOffset = (tabInfo.hasLabels) ? tab_settings.labelWidth : 0;
 		var tabs = tabInfo.tabs;
 		// how much space?
-		var height = ((this._numStrings - 1) * ukeGeeks.settings.tabs.lineSpacing) + (2 * ukeGeeks.settings.tabs.dotRadius) + ukeGeeks.settings.tabs.bottomPadding;
+		var height = ((NUM_STRINGS - 1) * tab_settings.lineSpacing) + (2 * tab_settings.dotRadius) + tab_settings.bottomPadding;
 		// prep canvas
 		outElement = (typeof(outElement) == 'string') ? document.getElementById(outElement) : outElement;
-		var ctx = ukeGeeks.canvasTools.addCanvas(outElement, this._getWidth(tabs, labelOffset, false), height);
+
+		var ctx = ukeGeeks.canvasTools.addCanvas(outElement, getWidth(tabs, labelOffset, false), height);
 		var pos = {
-			x: ukeGeeks.settings.tabs.dotRadius + labelOffset,
-			y: 1 + ukeGeeks.settings.tabs.dotRadius
+			x: tab_settings.dotRadius + labelOffset,
+			y: 1 + tab_settings.dotRadius
 		};
-		this._drawStaff(ctx, pos, this._getWidth(tabs, labelOffset, true), ukeGeeks.settings.tabs);
-		this._drawNotes(ctx, pos, tabs, ukeGeeks.settings.tabs);
+		var lineWidth = getWidth(tabs, labelOffset, true);
+		drawStaff(ctx, pos, lineWidth, tab_settings);
+		drawNotes(ctx, pos, tabs, tab_settings, lineWidth);
 		if (tabInfo.hasLabels){
-			this._drawLabels(ctx, pos, ukeGeeks.settings.tabs);
+			drawLabels(ctx, pos, tab_settings);
 		}
-	},
+	};
 	
 	/**
 	 * This is insanely long, insanely kludgy, but, insanely, it works. This will read break a block of text into
 	 * four lines (the ukulele strings), then find which frets are used by each. Then, the hard part, pack un-needed
 	 * dashes. Once it's done that a 2-dimentional array (strings X frets) is created and returned.
-	 * @method _readTabs
+	 * @method readTabs
 	 * @private 
 	 * @param ukeStrings {array<string>} Block of tablbabure to be parsed
 	 * @return {2-dimentional array}
 	 */
-	_readTabs: function(ukeStrings){
-		var hasLabels = ukeStrings[this._numStrings - 1][0] == this._lastStringName;
+	var readTabs= function(ukeStrings) {
+		var hasLabels = ukeStrings[NUM_STRINGS - 1][0] == LAST_STRING_NAME;
 		if (hasLabels){
-			this._stripStringLabels(ukeStrings);
+			stripStringLabels(ukeStrings);
 		}
-		var frets = this._getFretNumbers(ukeStrings);
-		var symbols = this._getSymbols(ukeStrings);
-		var minLength = this._getMinLineLength(ukeStrings);
-		var guide = this._getGuideLine(symbols, minLength);
+		var frets = getFretNumbers(ukeStrings);
+		var symbols = getSymbols(ukeStrings);
+		var minLength = getMinLineLength(ukeStrings);
+		var guide = getGuideLine(symbols, minLength);
+
 		return {
-			tabs: this._getPackedLines(frets, symbols, guide, minLength),
+			tabs: getPackedLines(frets, symbols, guide, minLength),
 			hasLabels: hasLabels
 		};
-	},
+	};
 	
 	/**
-	 * @method _getWidth
+	 * @method getWidth
 	 * @private
 	 * @param tabs {2Darray}
 	 * @param labelOffset {int}
 	 * @param isTruncate {bool} If TRUE returns the length of the line, allowing for a terminating "|" character, othwrwise, it's for canvas width
 	 * @return {int}
 	 */
-	_getWidth : function(tabs, labelOffset, isTruncate){
+	var getWidth= function(tabs, labelOffset, isTruncate) {
 		if (!isTruncate){
-			return (ukeGeeks.settings.tabs.noteSpacing * tabs[0].length) + labelOffset + ukeGeeks.settings.tabs.dotRadius;
+			return (tab_settings.noteSpacing * tabs[0].length) + labelOffset + tab_settings.dotRadius;
 		}
 		
 		var len = tabs[0].length;
-		var plusDot = ukeGeeks.settings.tabs.dotRadius;
+		var plusDot = tab_settings.dotRadius;
 		if (tabs[0][len - 1] == '|'){
 			// TODO: too much??? retest
 			len -= 1;
 			plusDot = 0;
 		}
 		
-		return ukeGeeks.settings.tabs.noteSpacing * len + labelOffset + plusDot;
-	},
+		return tab_settings.noteSpacing * len + labelOffset + plusDot;
+	};
 	
 	/**
 	 * Processes ukeStrings stripping the first character from each line
-	 * @method _stripStringLabels
+	 * @method stripStringLabels
 	 * @private
 	 * @param ukeStrings {array<string>} 
 	 * @return {void} 
 	 */
-	_stripStringLabels: function(ukeStrings) {
-		for (var i = 0; i < this._numStrings; i++) {
+	var stripStringLabels= function(ukeStrings) {
+		for (var i = 0; i < NUM_STRINGS; i++) {
 			ukeStrings[i] = ukeStrings[i].substr(1);
 		}
-	},
+	};
 	
 	/**
 	 * Finds the frets in used for each line. In other words, ignoring 
 	 * spacers ("-" or "|") this returns arrays of numbers, the frets
 	 * in use, for each line.
-	 * @method _getFretNumbers
+	 * @method getFretNumbers
 	 * @private
 	 * @param ukeStrings {array<string>} 
 	 * @return {void} 
 	 */
-	_getFretNumbers: function(ukeStrings) {
+	var getFretNumbers= function(ukeStrings) {
 		// first, get the frets
 		var reInts = /([0-9]+)/g;
 		var frets = [];
-		for (var i = 0; i < this._numStrings; i++) {
+		for (var i = 0; i < NUM_STRINGS; i++) {
 			frets[i] = ukeStrings[i].match(reInts);
 		}
 		return frets;
-	},	
+	};
 
 	/**
 	 * Returns array of the strings with placeholders instead of the numbers.
 	 * This helps us pack because "12" and "7" now occupy the same space horizontally.
-	 * @method _getSymbols
+	 * @method getSymbols
 	 * @private
 	 * @param ukeStrings {array<string>} 
 	 * @return {void} 
 	 */
-	_getSymbols: function(ukeStrings) {
+	var getSymbols= function(ukeStrings) {
 		// convert to symbols
 		var reDoubles = /([0-9]{2})/g;
 		var reSingle = /([0-9])/g;
 		var symbols = [];
-		for (var i = 0; i < this._numStrings; i++) {
+		// TODO: verify why using NUM_STRINGS instead of ukeStrings.length (appears in other methods, again, do you recall why?)
+		for (var i = 0; i < NUM_STRINGS; i++) {
 			symbols[i] = ukeStrings[i].replace(reDoubles,'-*');
 			symbols[i] = symbols[i].replace(reSingle,'*');
 		}
 		return symbols;
-	},
+	};
 
 	/**
 	 * Run through all of the strings (array) and return the length of the shortest one.
 	 * would prefer the max length, but then I'd need to pad the shorter ones and ... well, it's complicated.
 	 * this gets a TODO: get max!
-	 * @method _getMinLineLength
+	 * @method getMinLineLength
 	 * @private
 	 * @param ukeStrings {array<string>} 
 	 * @return {void} 
 	 */
-	_getMinLineLength: function(ukeStrings) {
-		var minLength = 10000;
-		for (var i = 0; i < this._numStrings; i++) {
-			minLength = (ukeStrings[i].length < minLength)? ukeStrings[i].length : minLength;
+	var getMinLineLength = function(ukeStrings){
+		var minLength = 0;
+		var line;
+		var re = /-+$/gi;
+
+		for (var i = 0; i < ukeStrings.length; i++) {
+			line = ukeStrings[i].trim().replace(re, '');
+			if (line.length > minLength){
+				minLength = line.length;
+			}
 		}
 		return minLength;
-	},
+	};
 
 	/**
-	 * OK, having created symbolic representations fo the lines in earlier steps
+	 * OK, having created symbolic representations for the lines in earlier steps
 	 * here we go through and "merge" them into a single, master "guide" -- saying
 	 * "somewhere on this beat you'll pluck (or not) one note". This normalized 
 	 * guide will be the master for the next step.
-	 * @method _getGuideLine
+	 * @method getGuideLine
 	 * @private
 	 * @param symbols {undefined}
 	 * @param minLength {int}
 	 * @return {void} 
 	 */
-	_getGuideLine: function(symbols, minLength) {
+	var getGuideLine= function(symbols, minLength) {
 		// Build a master pattern "guide" and eliminate double dashes
 		var guide = '';
 		for(var i=0; i < minLength; i++){
@@ -246,6 +266,7 @@ ukeGeeks.tabs.prototype = {
 				guide += '|';
 			}
 			else{
+				// TODO: assumes 4 strings, use NUM_STRINGS
 				guide += ((symbols[0][i] == '*') || (symbols[1][i] == '*') || (symbols[2][i] == '*') || (symbols[3][i] == '*')) ? '*' : '-';
 			}
 		}
@@ -261,53 +282,57 @@ ukeGeeks.tabs.prototype = {
 			lastGuide = guide;
 		}
 		return guide;
-	},
+	};
 	
 	/**
 	 * Using the packed "guide" line we loop over the strings, rebuilding each string
 	 * with either a space, measure marker, or the note -- as an integer! Now the frets
 	 * are the same regardless of whether they are single or double digit numbers: 
 	 * a "12" occupies no more horizontal space than a "5".
-	 * @method _getPackedLines
+	 * @method getPackedLines
 	 * @private
 	 * @param frets {undefined}
 	 * @param symbols {undefined}
 	 * @param guide {undefined}
-	 * @param minLength {undefined}
+	 * @param minLength {int}
 	 * @return {void} 
 	 */
-	_getPackedLines: function(frets, symbols, guide, minLength) {
+	var getPackedLines= function(frets, symbols, guide, minLength) {
 		// pack it!
-		var packed = [
-			[],
-			[],
-			[],
-			[]
-		];
-		var chrNote = ''; // a temp variable to hold the 'note'
-		for (var j = 0; j < this._numStrings; j++) { // loop over lines
-			var p = 0; // packed counter
-			var f = 0; // fret counter
-			for(var i=0; i < minLength; i++){ // loop over guide
-				if (guide[i] != ' '){
-					if (symbols[j][i] == '*'){
-						chrNote = frets[j][f];
-						f++;
+		var packed = [],
+		chrNote = '', // a temp variable to hold the 'note'
+		guideIdx, // loop index for guide string
+		stringIdx, // loop index for instrument's strings (uke's 4)
+		lineIdx,  // index to single line within packed array (along a string)
+		fretCount; // fret marker counter
+
+		for (stringIdx = 0; stringIdx < NUM_STRINGS; stringIdx++) {
+			packed.push([]);
+		}
+
+		for (stringIdx = 0; stringIdx < NUM_STRINGS; stringIdx++) { // loop over lines
+			lineIdx = 0;
+			fretCount = 0;
+			for (guideIdx = 0; guideIdx < minLength; guideIdx++) { // loop over guide
+				if (guide[guideIdx] != ' ') {
+					if (symbols[stringIdx][guideIdx] == '*') {
+						chrNote = frets[stringIdx][fretCount];
+						fretCount++;
 					}
 					else{
-						chrNote = ((guide[i] == '|')) ? '|' : '-';
+						chrNote = ((guide[guideIdx] == '|')) ? '|' : '-';
 					}
-					packed[j][p] = chrNote;
-					p++;
+					packed[stringIdx][lineIdx] = chrNote;
+					lineIdx++;
 				}
 			}
 		}
 		return packed;
-	},
+	};
 
 	/**
 	 * Create the staff -- really the four tablature strings
-	 * @method _drawStaff
+	 * @method drawStaff
 	 * @private 
 	 * @param ctx {canvasContext} Handle to active canvas context
 	 * @param pos {xyPos} JSON (x,y) position
@@ -315,12 +340,12 @@ ukeGeeks.tabs.prototype = {
 	 * @param settings {settingsObj}
 	 * @return {voie}
 	 */
-	_drawStaff: function(ctx, pos, length, settings){
+	var drawStaff= function(ctx, pos, length, settings) {
 		var offset = settings.lineWidth / 2;
 		var x = pos.x + offset;
 		var y = pos.y + offset;
 		ctx.beginPath();
-		for (var i = 0; i < this._numStrings; i++) {
+		for (var i = 0; i < NUM_STRINGS; i++) {
 			ctx.moveTo(x, y);  
 			ctx.lineTo(x + length, y);
 			y += settings.lineSpacing;
@@ -329,39 +354,39 @@ ukeGeeks.tabs.prototype = {
 		ctx.lineWidth = settings.lineWidth;
 		ctx.stroke();
 		ctx.closePath();
-	},
+	};
 	
 	/**
 	 * Loop over the normalized tabs emitting the dots/fingers on the passed in canvase
-	 * @method _drawNotes
+	 * @method drawNotes
 	 * @private 
 	 * @param ctx {canvasContext} Handle to active canvas context
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param tabs {array} Array of normalized string data -- space (character) or int (fret number)
 	 * @param settings {settingsObj}
+	 * @param lineWidth {int} Length in pixels (used only when line ends with a measure mark)
 	 * @return {void}
 	 */
-	_drawNotes: function(ctx, pos, tabs, settings){
+	var drawNotes= function(ctx, pos, tabs, settings, lineWidth) {
 		var c;
 		var center = {
 			x: 0,
 			y: pos.y
 		};
 
-		for(var i in tabs){
-			if (i > 3) {
+		for (var strIdx in tabs) {
+			if (strIdx > 3) {
 				return;
 			}
 			center.x = pos.x;
-			for (var j in tabs[i]){
-				c = tabs[i][j];
+			for (var chrIdx in tabs[strIdx]) {
+				c = tabs[strIdx][chrIdx];
 				// (c != '-'){
 				if (c == '|'){
-					var jnum = parseInt(j, 10);
-					var heavy = 
-						(((jnum + 1) < (tabs[i].length - 1)) && (tabs[i][jnum + 1] == '|')) || ((jnum == (tabs[i].length - 1)) && (tabs[i][jnum - 1] == '|'));
-					this._drawMeasure(ctx, {
-						x: center.x,
+					var jnum = parseInt(chrIdx, 10);
+					var heavy = (((jnum + 1) < (tabs[strIdx].length - 1)) && (tabs[strIdx][jnum + 1] == '|')) || ((jnum == (tabs[strIdx].length - 1)) && (tabs[strIdx][jnum - 1] == '|'));
+					drawMeasure(ctx, {
+						x: (chrIdx == tabs[strIdx].length - 1) ? pos.x + lineWidth : center.x,
 						y: pos.y
 					}, settings, heavy);
 				}
@@ -376,11 +401,11 @@ ukeGeeks.tabs.prototype = {
 			}
 			center.y += settings.lineSpacing;
 		}
-	},
+	};
 	
 	/**
-	 * Draws a vertical "measure" demarcation line on the convas
-	 * @method _drawMeasure
+	 * Draws a vertical "measure" demarcation line
+	 * @method drawMeasure
 	 * @private 
 	 * @param ctx {canvasContext} Handle to active canvas context
 	 * @param pos {xyPos} JSON (x,y) position
@@ -388,34 +413,40 @@ ukeGeeks.tabs.prototype = {
 	 * @param heavy {bool} if TRUE hevy line
 	 * @return {void}
 	 */
-	_drawMeasure: function(ctx, pos, settings, heavy){
+	var drawMeasure= function(ctx, pos, settings, heavy) {
 		var offset = settings.lineWidth / 2;
 		ctx.beginPath();
 		ctx.moveTo(pos.x + offset, pos.y);  
-		ctx.lineTo(pos.x + offset, pos.y + (this._numStrings - 1) * settings.lineSpacing);
+		ctx.lineTo(pos.x + offset, pos.y + (NUM_STRINGS - 1) * settings.lineSpacing);
 		ctx.strokeStyle = settings.lineColor;
 		ctx.lineWidth = (heavy ? 4.5 : 1) * settings.lineWidth;
 		ctx.stroke();
 		ctx.closePath();
-	},
+	};
 	
 	/**
 	 * Adds the string letters on the left-side of the canvas, before the tablature string lines
-	 * @method _drawLabels
+	 * @method drawLabels
 	 * @private 
 	 * @param ctx {canvasContext} Handle to active canvas context
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param settings {settingsObj}
 	 * @return {void}
 	 */
-	_drawLabels: function(ctx, pos, settings){
+	var drawLabels= function(ctx, pos, settings) {
 		// ['A','E','C','G'];
 		var labels = ukeGeeks.settings.tuning.slice(0).reverse();
-		for (var i = 0; i < this._numStrings; i++) {
+		for (var i = 0; i < NUM_STRINGS; i++) {
 			ukeGeeks.canvasTools.drawText(ctx, {
 				x: 1,
 				y: (pos.y + (i + 0.3) * settings.lineSpacing)
 			}, labels[i], settings.labelFont, settings.lineColor, 'left');
 		}
-	}
+	};
+
+	/* return our public interface */
+	return {
+		init: init,
+		replace: replace
+	};
 };

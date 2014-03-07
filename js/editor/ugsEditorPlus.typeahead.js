@@ -44,8 +44,6 @@ ugsEditorPlus.typeahead = function(){
 			var $this = $(this);
 
 			var plainText = crushText($this.text());
-			plainText = plainText.toLowerCase();
-
 			var href = $this.children('a').attr('href');
 			var key = href.toLowerCase();
 
