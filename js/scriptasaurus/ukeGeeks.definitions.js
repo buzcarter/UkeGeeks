@@ -43,11 +43,15 @@ ukeGeeks.definitions = (function() {
 	/**
 	 * Define an instrument's chord dictionary, this makes this instrument avaiable for showing its chord diagrams.
 	 * @method addInstrument
-	 * @param text {string} Block of CPM text -- specifically looks for instrurment, tuning, and define statements.
+	 * @param definitions {mixed} (Either string or array of strings) Block of CPM text -- specifically looks for instrurment, tuning, and define statements.
 	 * @return {void}
 	 */
-	_public.addInstrument = function(text) {
-		_instruments.push(text);
+	_public.addInstrument = function(definitions) {
+		if (typeof definitions === 'object') {
+			// flatten the array
+			definitions = definitions.join("\n");
+		}
+		_instruments.push(definitions);
 	};
 
 	/**

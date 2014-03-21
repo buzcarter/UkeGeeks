@@ -120,7 +120,7 @@ ukeGeeks.chordImport = (function() {
 	};
 	
 	/**
-	 * TODO:
+	 * TODO: expects FOUR strings.
 	 * @method _getTuning
 	 * @private
 	 * @param text {string} Single statement to be searched
@@ -329,7 +329,7 @@ ukeGeeks.chordImport = (function() {
 	 * @return {ukeGeeks.data.instrument}
 	 */
 	_public.runBlock = function(text) {
-		//TODO: newlines get lost in strings, do I always relya on "{"?
+		//TODO: newlines get lost in strings, do I always rely on "{"?
 		var nL = text.split('\n');
 		if (nL.length < 2){
 			nL = text.split('{');
