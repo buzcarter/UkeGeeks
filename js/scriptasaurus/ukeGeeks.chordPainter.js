@@ -77,6 +77,7 @@ ukeGeeks.chordPainter = function(){
 		handles.diagrams.innerHTML = '';
 		errors = [];
 		ignoreMatchList = [];
+		chords.sort();
 		for (var i=0; i < chords.length; i++){
 			if (_tacet.test(chords[i])) {
 				continue;
@@ -103,7 +104,9 @@ ukeGeeks.chordPainter = function(){
 	 */
 	_public.showInline = function(chords) {
 		var e = handles.text.getElementsByTagName('code');
-		if (e.length < 1) return;
+		if (e.length < 1) {
+			return;
+		}
 		for (var i=0; i < chords.length; i++){
 			var c = ukeGeeks.definitions.get(chords[i]);
 			if (!c){
