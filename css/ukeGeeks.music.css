@@ -29,6 +29,9 @@
 	padding:0;
 	width:auto;
 }
+.ugs-song-wrap pre{
+	background-color: transparent;
+}
 /*
 ,
 .ugs-song-wrap canvas,
@@ -218,6 +221,7 @@
 	margin-left: 0;
 }
 /* SHOW CHORD DIAGRAMS INLINE
+  See also JS class: ukeGeeks.settings.inlineFretBox
   ------------------------------ */
 .ugsInlineDiagrams .ugsChords {
 	line-height:95px;
@@ -243,7 +247,7 @@
 	line-height:1;
 	text-align:center;
 	top:-72px;
-	width:30px;
+	width: 40px;
 }
 .ugsChords code canvas {
 	left:0;
