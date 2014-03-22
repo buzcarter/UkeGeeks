@@ -1473,7 +1473,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	margin: 0;
 	padding: 0;
 }
-/* using jQuery instead: .aceEditorActive #aceEditor{*/
+/* using jQuery instead: .aceEditorActive #aceEditor */
 .aceEditorActive #aceHeader{
 	display: block;
 }
@@ -1511,33 +1511,37 @@ html .diagramsOnTop .ugs-source-wrap {
 	left: 0;
 }
 /*	Show/Hide Sidebar Button
-	------------------------------------------ */
+------------------------------------------ */
 .aceSideBtn {
-    background-color: #F4F4F4;
-    border: 1px solid #444;
-    border-radius: 4px;
-    cursor: pointer;
-    height: 25px;
-    float:left;
-    margin: 7px .8em 0 0;
-    overflow: hidden;
-    padding: 0;
-    width: 25px;
+	background-color: rgba(0, 0, 0, 0);
+	border: 1px solid #DDDDDD;
+	border-radius: 4px;
+	cursor: pointer;
+	float: left;
+	margin: 7px 0.8em 0 0;
+	transition: background-color .3s ease;
 }
 .aceSideBtn span {
-	border-color: #888;
-	border-top-color: #666;
-	border-radius: 2px;
-	border-style: solid;
-	border-width: 1px 0;
-	box-shadow: 0 -1px 0 #FFF;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	background-color: #888888;
+	border-radius: 1px;
 	display: block;
-	height: 0;
-	margin: 3px 0;
+	height: 2px;
+	margin: 4px 2px;
+	width: 16px;
+	transition: background-color .3s ease;
+}
+.aceSideBtn:hover{
+	background-color: #333;
+}
+.aceSideBtn:hover span{
+	background-color: #eee;
 }
 
 /*	Help sidebar
-	------------------------------------------ */
+------------------------------------------ */
 #aceHelp {
 	bottom: 0;
 	left: -350px;
