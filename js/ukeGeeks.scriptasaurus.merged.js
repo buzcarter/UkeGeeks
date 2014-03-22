@@ -65,11 +65,15 @@ ukeGeeks.definitions = (function() {
 	/**
 	 * Define an instrument's chord dictionary, this makes this instrument avaiable for showing its chord diagrams.
 	 * @method addInstrument
-	 * @param text {string} Block of CPM text -- specifically looks for instrurment, tuning, and define statements.
+	 * @param definitions {mixed} (Either string or array of strings) Block of CPM text -- specifically looks for instrurment, tuning, and define statements.
 	 * @return {void}
 	 */
-	_public.addInstrument = function(text) {
-		_instruments.push(text);
+	_public.addInstrument = function(definitions) {
+		if (typeof definitions === 'object') {
+			// flatten the array
+			definitions = definitions.join("\n");
+		}
+		_instruments.push(definitions);
 	};
 
 	/**
@@ -972,7 +976,7 @@ ukeGeeks.chordImport = (function() {
 	};
 
 	/**
-	 * TODO:
+	 * TODO: expects FOUR strings.
 	 * @method _getTuning
 	 * @private
 	 * @param text {string} Single statement to be searched
@@ -1183,7 +1187,7 @@ ukeGeeks.chordImport = (function() {
 	 * @return {ukeGeeks.data.instrument}
 	 */
 	_public.runBlock = function(text) {
-		//TODO: newlines get lost in strings, do I always relya on "{"?
+		//TODO: newlines get lost in strings, do I always rely on "{"?
 		var nL = text.split('\n');
 		if (nL.length < 2) {
 			nL = text.split('{');
@@ -1545,7 +1549,7 @@ ukeGeeks.definitions.sopranoUkuleleGcea = [
 	'{define: G/F# frets 0 2 2 2}',
 	'{define: G/F frets 0 2 1 2}',
 	'{define: G7/B frets 0 2 1 2}'
-].join("\n");
+];
 ;/**
  * Wraps three common canvas actions: adding canvas element to DOM, drawing a dot, adding text.
  * @class canvasTools
@@ -2578,6 +2582,7 @@ ukeGeeks.chordPainter = function() {
 		handles.diagrams.innerHTML = '';
 		errors = [];
 		ignoreMatchList = [];
+		chords.sort();
 		for (var i = 0; i < chords.length; i++) {
 			if (_tacet.test(chords[i])) {
 				continue;
@@ -2604,7 +2609,9 @@ ukeGeeks.chordPainter = function() {
 	 */
 	_public.showInline = function(chords) {
 		var e = handles.text.getElementsByTagName('code');
-		if (e.length < 1) return;
+		if (e.length < 1) {
+			return;
+		}
 		for (var i = 0; i < chords.length; i++) {
 			var c = ukeGeeks.definitions.get(chords[i]);
 			if (!c) {

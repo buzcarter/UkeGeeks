@@ -54,7 +54,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 	</hgroup>
 	<div>
 		<a title="close this" href="#close" class="closeBtn">Close</a>
-		<a title="resize this" href="#resize" class="resizeBtn">Resize</a>
+		<a title="switch to fullscreen editor" href="#resize" class="resizeBtn">Fullscreen</a>
 		<p class="btnBar">
 			<span id="messageBox" class="updateMessage">
 				<em>
@@ -216,7 +216,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		<h3>Use Auto-Formated Version?</h3>
 	</hgroup>
 	<div>
-		<a title="resize this" href="#resize" class="resizeBtn">Resize</a>
+		<!-- <a title="resize this" href="#resize" class="resizeBtn">Resize</a> -->
 		<p class="instructions">Whoa! I didn't find any chords in your song -- it's probably not in ChordPro format. Here's the converted version&hellip;</p>
 		<p class="btnBar">
 			<input type="button" id="reformatYesBtn" class="baseBtn blueBtn" value="OK, Use This!" />
