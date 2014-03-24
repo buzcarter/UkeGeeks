@@ -64,7 +64,7 @@ define('ace/mode/chordpro_highlight_rules', ['require', 'exports', 'module', 'ac
 				caseInsensitive: true
 			}, {
 				token: [tkBrace, tkCommand, tkBrace, "string", tkBrace],
-				regex: reOpenBrace + "(title|t|subtitle|st|artist|album|instrument|tuning)" + reColon + "(.*)" + reCloseBrace,
+				regex: reOpenBrace + "(title|t|subtitle|st|artist|album|instrument|tuning|key|k)" + reColon + "(.*)" + reCloseBrace,
 				caseInsensitive: true
 			}, {
 				token: "constant.numeric",

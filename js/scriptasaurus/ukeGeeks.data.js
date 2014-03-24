@@ -79,6 +79,12 @@ ukeGeeks.data = (function() {
 	   */
 		this.st2= '';
 		/**
+		 * Song's Key ('A', 'C', etc)
+		 * @property key
+		 * @type string
+		 */
+		this.key = '';
+		/**
 		 * 
 		 * @property body
 	   * @type string

@@ -167,7 +167,7 @@ ugsEditorPlus.actions = (function() {
 				setIgnoreCommon(value);
 				break;
 			case 'setCommonChords':
-				setetCommonChordsList(value);
+				setCommonChordsList(value);
 				break;
 			case 'update':
 				doUpdate();
@@ -207,7 +207,8 @@ ugsEditorPlus.actions = (function() {
 			if (isDoBackup || (_sourceOriginal === null)) {
 				_sourceOriginal = _ele.cpmSource.value;
 				_originalChords = _song.chords;
-				resetTranspose(_song.chords.length < 1 ? '' : _song.chords[0]);
+				var key = _song.key !== '' ? _song.key : (_song.chords.length < 1 ? '' : _song.chords[0]);
+				resetTranspose(key);
 			}
 		}
 	};
@@ -304,7 +305,6 @@ ugsEditorPlus.actions = (function() {
 	|* Color Methods
 	|* ----------------------------------------------------------------------------------- */
 
-
 	/**
 	 * Change the color scheme -- requires changing CSS Class and reruning (to regenerate reference chord diagrams)
 	 * @method doColors
@@ -381,6 +381,7 @@ ugsEditorPlus.actions = (function() {
 			bad = '',
 			i;
 
+		// find "shiftable" chords
 		for (i = 0; i < _originalChords.length; i++) {
 			if (_re.safe.test(_originalChords[i])) {
 				safeChords.push(_originalChords[i]);
@@ -398,18 +399,31 @@ ugsEditorPlus.actions = (function() {
 
 		var newChords = ukeGeeks.transpose.shiftChords(safeChords, steps);
 		var s = _sourceOriginal;
-		var r;
+		var regEx;
 
+		// "safe" (temp) rename chords (prepend noise "ugsxx_" so a renamed G will be distinguisable from a new G)
 		for (i = 0; i < safeChords.length; i++) {
-			r = new RegExp('\\[' + safeChords[i] + '\\]', 'g');
-			s = s.replace(r, '[ugsxx_' + i + ']');
+			regEx = new RegExp('\\[' + safeChords[i] + '\\]', 'g');
+			s = s.replace(regEx, '[ugsxx_' + i + ']');
 		}
 
+		// final rename; placeholder names to desired names
 		for (i = 0; i < newChords.length; i++) {
-			r = new RegExp('\\[ugsxx_' + i + '\\]', 'g');
-			s = s.replace(r, '[' + newChords[i] + ']');
+			regEx = new RegExp('\\[ugsxx_' + i + '\\]', 'g');
+			s = s.replace(regEx, '[' + newChords[i] + ']');
 		}
 
+		// find & replace {key} command (if present)
+		regEx = /^\s*\{\s*(key|k)\s*:\s*(\S*?)\s*\}\s*$/im;
+		if (regEx.test(s)) {
+			var m = s.match(regEx);
+			var key = m[2];
+			if ((key !== '') && _re.safe.test(key)) {
+				s = s.replace(regEx, m[0].replace(key, ukeGeeks.transpose.shift(key, steps)));
+			}
+		}
+
+		// manipulations done, ready to...
 		_ele.cpmSource.value = s;
 		_public.run();
 
@@ -419,9 +433,9 @@ ugsEditorPlus.actions = (function() {
 	 * Sets Transpose menu's selected value to "Original"; adds example chord names
 	 * @method resetTranspose
 	 * @private
-	 * @param chord {string}
+	 * @param keyChord {string}
 	 */
-	var resetTranspose = function(chord) {
+	var resetTranspose = function(keyChord) {
 		var ul = document.getElementById('transposeOptions');
 		var items = ul.getElementsByTagName('li');
 		var sample;
@@ -431,9 +445,9 @@ ugsEditorPlus.actions = (function() {
 
 		ugsEditorPlus.submenuUi.resetTransposeLabel();
 
-		for (i = 0; i < items.length; i++) {
+		for (var i = 0; i < items.length; i++) {
 			ukeGeeks.toolsLite.removeClass(items[i], 'checked');
-			sample = (chord.length < 1) ? '' : ukeGeeks.transpose.shift(chord, steps);
+			sample = (keyChord.length < 1) ? '' : ukeGeeks.transpose.shift(keyChord, steps);
 			items[i].getElementsByTagName('em')[0].innerHTML = sample;
 			if (steps === 0) {
 				ukeGeeks.toolsLite.addClass(items[i], 'checked');
@@ -472,12 +486,12 @@ ugsEditorPlus.actions = (function() {
 	/**
 	 * the list of common chords has been change; update UGS setting
 	 * and _possible_ rerun
-	 * @method setetCommonChordsList
+	 * @method setCommonChordsList
 	 * @private
 	 * @param chordCsvList {string} comma seperated values list of chord names
 	 * @return {void}
 	 */
-	var setetCommonChordsList = function(chordCsvList) {
+	var setCommonChordsList = function(chordCsvList) {
 		var inputList = chordCsvList.split(/[ ,]+/);
 		var cleanList = [];
 
@@ -1585,7 +1599,6 @@ ugsEditorPlus.submenuUi = (function() {
 		_open = null;
 		return false;
 	};
-
 
 	/**
 	 * user clicked off the current dialog -- close 'em all
