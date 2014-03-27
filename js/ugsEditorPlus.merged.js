@@ -1752,7 +1752,7 @@ ugsEditorPlus.newSong = (function() {
 		// handle escape key
 		$('#newSongForm').bind('keydown', onEscape);
 
-		$spinner = $("#loadingSpinner");
+		var $spinner = $("#loadingSpinner");
 		$spinner.hide();
 		$(document)
 			.ajaxStart(function() {
