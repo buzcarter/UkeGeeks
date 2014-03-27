@@ -1,25 +1,24 @@
 /**
-  * <ul>
-  * <li>Project: UkeGeeks' Scriptasaurus</li>
-  * <li>Version: 1.4.3</li>
-  * <li>Homepage: http://ukegeeks.com</li>
-  * <li>Project Repository: https://github.com/buzcarter/UkeGeeks</li>
-  * <li>Author: Buz Carter</li>
-  * <li>Contact: buz@ukegeeks.com</li>
-  * <li>Copyright: Copyright 2010-2014 Buz Carter.</li>
-  * <li>License GNU General Public License (http://www.gnu.org/licenses/gpl.html)</li>
-  * <ul>
-  *
-  * <p>== Overview
-  * <p>Reads marked-up music (lyrics + chords) extracting all of the chords used;
-  * Generates a chord diagrams using HTML5 &lt;canvas&gt; and rewrites the music with
-  * standard HTML wrapping the chords.
-  *
-  * @module  scriptasaurus
-  * @namespace  ukeGeeks
-  */
+ * <ul>
+ * <li>Project: UkeGeeks' Scriptasaurus</li>
+ * <li>Version: 1.4.1</li>
+ * <li>Homepage: http://ukegeeks.com</li>
+ * <li>Project Repository: https://github.com/buzcarter/UkeGeeks</li>
+ * <li>Author: Buz Carter</li>
+ * <li>Contact: buz@ukegeeks.com</li>
+ * <li>Copyright: Copyright 2010-2014 Buz Carter.</li>
+ * <li>License GNU General Public License (http://www.gnu.org/licenses/gpl.html)</li>
+ * <ul>
+ *
+ * <p>== Overview
+ * <p>Reads marked-up music (lyrics + chords) extracting all of the chords used;
+ * Generates a chord diagrams using HTML5 &lt;canvas&gt; and rewrites the music with
+ * standard HTML wrapping the chords.
+ *
+ * @module ukeGeeks
+ * @namespace  ukeGeeks
+ */
 var ukeGeeks = window.ukeGeeks || {};
-
 ;/**
  * Defines chords and provides simple lookup (find) tools.
  * @class definitions
@@ -565,6 +564,7 @@ ukeGeeks.data = (function() {
 		 * string, i.e. 'C#6'
 		 * @property name
 		 * @type string
+		 * @for ukeGeeks.data.expandedChord
 		 */
 		this.name = name;
 		/**
@@ -593,6 +593,7 @@ ukeGeeks.data = (function() {
 		 * Song Title
 		 * @property title
 		 * @type string
+		 * @for ukeGeeks.data.song
 		 */
 		this.title = '';
 		/**
@@ -666,6 +667,7 @@ ukeGeeks.data = (function() {
 		 * The ukulele's string, numbered from "top" (1) to "bottom" (4). Sporano uke strings would be ['G' => 1,'C' => 2,'E' => 3,'A' => 4]
 		 * @property string
 		 * @type int
+		 * @for ukeGeeks.data.dot
 		 */
 		this.string = string;
 		/**
@@ -1562,6 +1564,7 @@ ukeGeeks.definitions.sopranoUkuleleGcea = [
  * @namespace ukeGeeks
  * @static
  * @singleton
+ * @module ukeGeeks
  */
 ukeGeeks.canvasTools = (function() {
 	/**
@@ -1883,10 +1886,16 @@ ukeGeeks.chordBrush = function() {
  * @class chordParser
  * @namespace ukeGeeks
  */
-ukeGeeks.chordParser = function() {};
+ukeGeeks.chordParser = function() {
 
-ukeGeeks.chordParser.prototype = {
-	chords: [],
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type {Object}
+	 */
+	var _public = {};
+
+	var _chords = [];
 
 	/////////////////////////////////////////////////////////////////////////////
 	//
@@ -1898,7 +1907,7 @@ ukeGeeks.chordParser.prototype = {
 	 * @method init
 	 * @return {void}
 	 */
-	init: function() {},
+	_public.init = function() {};
 
 	/**
 	 * This does all of the work -- it's a Wrapper method that calls all of this classes other
@@ -1907,21 +1916,21 @@ ukeGeeks.chordParser.prototype = {
 	 * @param text {string} CPM Text Block to be parsed
 	 * @return {string}
 	 */
-	parse: function(text) {
-		this.chords = this._findChords(text);
-		text = this._encloseChords(text, this.chords);
-		text = this._packChords(text);
+	_public.parse = function(text) {
+		_chords = _findChords(text);
+		text = _encloseChords(text, _chords);
+		text = _packChords(text);
 		return text;
-	},
+	};
 
 	/**
-	 * Getter method for chords
+	 * Getter method for _chords
 	 * @method getChords
 	 * @return {Array-chords}
 	 */
-	getChords: function() {
-		return this.chords;
-	},
+	_public.getChords = function() {
+		return _chords;
+	};
 
 	/////////////////////////////////////////////////////////////////////////////
 	//
@@ -1936,11 +1945,13 @@ ukeGeeks.chordParser.prototype = {
 	 * @param text {string} CPM Text Block to be parsed
 	 * @return {StringArray}
 	 */
-	_findChords: function(text) {
+	var _findChords = function(text) {
 		var i, j;
 		var re = /\[(.+?)]/img;
 		var m = text.match(re);
-		if (!m) return [];
+		if (!m) {
+			return [];
+		}
 
 		// why not use associative array?
 		var chords = [];
@@ -1963,7 +1974,7 @@ ukeGeeks.chordParser.prototype = {
 		}
 		// done
 		return chords;
-	},
+	};
 
 	/**
 	 * Returns the input string having replaced all of the "bracketed chord names" (i.e. [D7]) with HTML
@@ -1974,7 +1985,7 @@ ukeGeeks.chordParser.prototype = {
 	 * @param chords {StringArray}
 	 * @return {string}
 	 */
-	_encloseChords: function(text, chords) {
+	var _encloseChords = function(text, chords) {
 		var openBracket = ukeGeeks.settings.opts.retainBrackets ? '[' : ' ';
 		var closeBracket = ukeGeeks.settings.opts.retainBrackets ? ']' : ' ';
 		for (var i in chords) {
@@ -1993,7 +2004,7 @@ ukeGeeks.chordParser.prototype = {
 			text = text.replace(re, '<code data-chordName="' + this.chords[j] + '"><strong>[<em>' + this.chords[j] + '</em>]</strong></code>');
 		}
 		*/
-	},
+	};
 
 	/**
 	 * Looks for consecutive chords and strips the whitespace between them -- thus "packing" the
@@ -2003,7 +2014,7 @@ ukeGeeks.chordParser.prototype = {
 	 * @param text {string}
 	 * @return {string}
 	 */
-	_packChords: function(text) {
+	var _packChords = function(text) {
 		var re;
 
 		if (ukeGeeks.settings.inlineDiagrams) {
@@ -2014,7 +2025,11 @@ ukeGeeks.chordParser.prototype = {
 
 		re = /<\/strong><\/code>[ \t]*<code data-chordName="[^"]*"><strong>/ig;
 		return text.replace(re, ' ');
-	}
+	};
+
+	/* return our public interface
+	 */
+	return _public;
 };
 ;/**
  * Reads a text block and returns an object containing whatever ChordPro elements it recognizes.

@@ -62,6 +62,7 @@ var ugsEditorPlus = (function() {
  * runs Scriptasaurus, etc.
  * @class actions
  * @namespace ugsEditorPlus
+ * @module ugsEditorPlus
  */
 ugsEditorPlus.actions = (function() {
 	/**
@@ -587,13 +588,20 @@ ugsEditorPlus.songUi = (function() {
  * @namespace ugsEditorPlus
  * @singleton
  */
-ugsEditorPlus.styles = new function() {
-	var _sheet = null;
-	this.Rules = null;
+ugsEditorPlus.styles = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
 
-	this.getSheet = function(title) {
+	var _sheet = null;
+	_public.Rules = null;
+
+	_public.getSheet = function(title) {
 		_sheet = _getSheet(title);
-		this.Rules = getRules();
+		_public.Rules = getRules();
 		return this;
 	};
 
@@ -613,19 +621,25 @@ ugsEditorPlus.styles = new function() {
 		return _sheet.cssRules ? _sheet.cssRules : _sheet.rules;
 	};
 
-	this.Find = function(selector) {
+	_public.Find = function(selector) {
 		selector = selector.toLowerCase();
-		for (var i = 0; i < this.Rules.length; i++) {
-			if (!this.Rules[i].selectorText) {
+		for (var i = 0; i < _public.Rules.length; i++) {
+			if (!_public.Rules[i].selectorText) {
 				continue;
 			}
-			if (this.Rules[i].selectorText.toLowerCase() == selector) {
-				return this.Rules[i];
+			if (_public.Rules[i].selectorText.toLowerCase() == selector) {
+				return _public.Rules[i];
 			}
 		}
 		return null;
 	};
-}();
+
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());
 ;/**
  * Changes the song's color scheme ("theme") by changing both the applied body class
  * and the UkeGeek settings used to draw the diagrams.
@@ -633,7 +647,13 @@ ugsEditorPlus.styles = new function() {
  * @namespace ugsEditorPlus
  * @singleton
  */
-ugsEditorPlus.themes = new function() {
+ugsEditorPlus.themes = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
 
 	/**
 	 * available color schemes (see UkeGeeks.settings)
@@ -841,7 +861,7 @@ ugsEditorPlus.themes = new function() {
 	 * @param  {string} themeName
 	 * @return {string}
 	 */
-	this.getDescription = function(themeName) {
+	_public.getDescription = function(themeName) {
 		return _colorSchemes[themeName].selectText;
 	};
 
@@ -851,7 +871,7 @@ ugsEditorPlus.themes = new function() {
 	 * @method loadList
 	 * @param  {string} selector
 	 */
-	this.loadList = function(selector) {
+	_public.loadList = function(selector) {
 		var s = '';
 		for (var key in _colorSchemes) {
 			if (_colorSchemes.hasOwnProperty(key)) {
@@ -867,7 +887,7 @@ ugsEditorPlus.themes = new function() {
 	 * @method set
 	 * @param {string} themeName
 	 */
-	this.set = function(themeName) {
+	_public.set = function(themeName) {
 		setBody(themeName);
 
 		var c = _colorSchemes[themeName];
@@ -877,7 +897,12 @@ ugsEditorPlus.themes = new function() {
 		ukeGeeks.settings.tabs.textColor = c.tabs.text;
 	};
 
-}();
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());
 ;/**
  * UI mechanics of the Other Options dialog
  * @class options
@@ -1005,7 +1030,14 @@ ugsEditorPlus.optionsDlg = (function() {
  * @namespace ugsEditorPlus
  * @singleton
  */
-ugsEditorPlus.reformat = new function() {
+ugsEditorPlus.reformat = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
+
 	var _hasChords = false;
 
 	/**
@@ -1062,7 +1094,7 @@ ugsEditorPlus.reformat = new function() {
 	 * @param text {string} songstring
 	 * @return {string} ChordPro format text block
 	 */
-	this.run = function(text) {
+	_public.run = function(text) {
 		_hasChords = false;
 		var lines = read(text);
 		return merge(lines);
@@ -1073,7 +1105,7 @@ ugsEditorPlus.reformat = new function() {
 	 * @method hasChords
 	 * @return {bool}
 	 */
-	this.hasChords = function() {
+	_public.hasChords = function() {
 		return _hasChords;
 	};
 
@@ -1251,7 +1283,12 @@ ugsEditorPlus.reformat = new function() {
 		return s;
 	};
 
-}();
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());
 ;/**
  *
  * @class autoReformat
@@ -2066,7 +2103,19 @@ ugsEditorPlus.resize = (function() {
 	var $help = null;
 	var editor = null;
 
+	/**
+	 * miliseconds to fade in/out editor
+	 * @property FADE_SPEED
+	 * @final
+	 * @type {Number}
+	 */
 	var FADE_SPEED = 550;
+	/**
+	 * miliseconds to slide in/out sidebar (help) panel
+	 * @property SLIDE_SPEED
+	 * @final
+	 * @type {Number}
+	 */
 	var SLIDE_SPEED = 400;
 
 	/**
@@ -2487,10 +2536,17 @@ ugsChordBuilder.settings = (function() {
  * @static
  * @singleton
  */
-ugsChordBuilder.tracking = new function() {
+ugsChordBuilder.tracking = (function() {
 	// dependencies:
 	var ents = ugsChordBuilder.entities,
 		settings = ugsChordBuilder.settings;
+
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
 
 	var targetBox = null;
 
@@ -2524,7 +2580,7 @@ ugsChordBuilder.tracking = new function() {
 	 * @param  {position} pos
 	 * @return {dot}
 	 */
-	this.toDot = function(pos) {
+	_public.toDot = function(pos) {
 		var cursorBox = new ents.BoundingBox(pos);
 		var box = getTarget();
 		if (!collision(cursorBox, box)) {
@@ -2537,7 +2593,13 @@ ugsChordBuilder.tracking = new function() {
 			Math.floor((pos.y - box.y) / dimensions.height)
 		);
 	};
-}();
+
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());
 
 /**
  * Did I overlook this or was it deliberate? Either case, the "fret" in the dot object is
@@ -2550,21 +2612,28 @@ ugsChordBuilder.tracking = new function() {
  * @static
  * @singleton
  */
-ugsChordBuilder.fretDots = new function() {
+ugsChordBuilder.fretDots = (function() {
 	// dependencies:
 	var ents = ugsChordBuilder.entities,
 		anchor_pos = ugsChordBuilder.settings.anchorPos,
 		opts_board = ugsChordBuilder.settings.fretBoard,
 		opts_dot = ugsChordBuilder.settings.dot;
 
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
+
 	// locals
 	var _dots = [];
 
-	this.getDots = function() {
+	_public.getDots = function() {
 		return _dots.slice();
 	};
 
-	this.slide = function(numSteps) {
+	_public.slide = function(numSteps) {
 		if (!inRange(numSteps)) {
 			return false;
 		}
@@ -2583,7 +2652,7 @@ ugsChordBuilder.fretDots = new function() {
 		return true;
 	};
 
-	this.toggleDot = function(dot) {
+	_public.toggleDot = function(dot) {
 		if (dot.fret == 0) {
 			clearColumn(dot.string);
 			return;
@@ -2598,7 +2667,7 @@ ugsChordBuilder.fretDots = new function() {
 		}
 	};
 
-	this.toggleFinger = function(dot, finger) {
+	_public.toggleFinger = function(dot, finger) {
 		var index = find(dot);
 		if (index < 0) {
 			return false;
@@ -2612,7 +2681,7 @@ ugsChordBuilder.fretDots = new function() {
 	 * Clears all saved dots.
 	 * @method reset
 	 */
-	this.reset = function() {
+	_public.reset = function() {
 		for (var i = 0; i < opts_board.stringNames.length; i++) {
 			clearColumn(i);
 		}
@@ -2671,7 +2740,7 @@ ugsChordBuilder.fretDots = new function() {
 		context.fillText(text, pos.x, pos.y + 0.3 * opts_dot.fontSize);
 	};
 
-	this.draw = function(context) {
+	_public.draw = function(context) {
 		for (var i = _dots.length - 1; i >= 0; i--) {
 			var pos = getPosition(_dots[i]);
 			drawDot(context, pos);
@@ -2680,7 +2749,13 @@ ugsChordBuilder.fretDots = new function() {
 			}
 		}
 	};
-}();
+
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());
 
 /**
  * Plots cursor moving across its own canvas context.
@@ -2689,10 +2764,17 @@ ugsChordBuilder.fretDots = new function() {
  * @static
  * @singleton
  */
-ugsChordBuilder.cursorCanvas = new function() {
+ugsChordBuilder.cursorCanvas = (function() {
 	// dependencies
 	var opts_cursor = ugsChordBuilder.settings.cursor,
 		opts_dot = ugsChordBuilder.settings.dot;
+
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
 
 	var _context = null;
 
@@ -2707,7 +2789,7 @@ ugsChordBuilder.cursorCanvas = new function() {
 		y: 0
 	};
 
-	this.init = function(ctx) {
+	_public.init = function(ctx) {
 		_context = ctx;
 		loadImage();
 	};
@@ -2753,12 +2835,12 @@ ugsChordBuilder.cursorCanvas = new function() {
 		_context.stroke();
 	};
 
-	this.setCursor = function(isDot, finger) {
+	_public.setCursor = function(isDot, finger) {
 		_dotCursor = isDot;
 		_finger = finger;
 	};
 
-	this.draw = function(pos) {
+	_public.draw = function(pos) {
 		erase(_lastPos);
 		if (!_imgOk || _dotCursor) {
 			drawDotCursor(pos);
@@ -2768,7 +2850,13 @@ ugsChordBuilder.cursorCanvas = new function() {
 		}
 		_lastPos = pos;
 	};
-}();
+
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());
 
 /**
  * Plots chord diagram (fretboard with fret labels) on its canvas context.
@@ -2777,7 +2865,8 @@ ugsChordBuilder.cursorCanvas = new function() {
  * @static
  * @singleton
  */
-ugsChordBuilder.chordCanvas = new function() {
+ugsChordBuilder.chordCanvas = (function() {
+
 	// dependencies
 	var ents = ugsChordBuilder.entities,
 		center_anchor = ugsChordBuilder.settings.centerAnchor,
@@ -2786,10 +2875,17 @@ ugsChordBuilder.chordCanvas = new function() {
 		opt_sLabel = ugsChordBuilder.settings.stringLabel,
 		opts_board = ugsChordBuilder.settings.fretBoard;
 
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
+
 	var _context = null,
 		_canvas = null;
 
-	this.init = function(ctx, ele) {
+	_public.init = function(ctx, ele) {
 		_context = ctx;
 		_canvas = ele;
 		center_anchor(_canvas);
@@ -2869,7 +2965,7 @@ ugsChordBuilder.chordCanvas = new function() {
 		_context.closePath();
 	};
 
-	this.draw = function(pos, startingFret) {
+	_public.draw = function(pos, startingFret) {
 		erase();
 		// ugsChordBuilder.debugTargets.drawTargets(_context);
 		addLabels(startingFret);
@@ -2877,7 +2973,13 @@ ugsChordBuilder.chordCanvas = new function() {
 		drawFretboard();
 		ugsChordBuilder.fretDots.draw(_context);
 	};
-}();
+
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());
 
 /**
  *
@@ -2886,23 +2988,30 @@ ugsChordBuilder.chordCanvas = new function() {
  * @static
  * @singleton
  */
-ugsChordBuilder.export = new function() {
+ugsChordBuilder.export = (function() {
 	// dependencies
 	var opts_board = ugsChordBuilder.settings.fretBoard,
 		opts_chord = ugsChordBuilder.settings.chord;
+
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
 
 	var _fretOffset = null;
 
 	/**
 	 * Class for "reorganized" dots, think of this as a necklace where the
 	 * thread, the instrument string, has zero or more beads, or dots -- fret plus finger
-	 * @class  stringDots
+	 * @class  StringDots
 	 * @constructor
 	 * @private
 	 * @param  {int} string
 	 * @param  {dot_Array} dots
 	 */
-	var stringDots = function(string, dots) {
+	var StringDots = function(string, dots) {
 		this.string = string;
 		this.dots = dots ? dots : [];
 		//this.fingers = fingers ? fingers : [];
@@ -2913,7 +3022,7 @@ ugsChordBuilder.export = new function() {
 		var stringNumber,
 			aryStringDots = [];
 		for (stringNumber = 1; stringNumber <= opts_board.stringNames.length; stringNumber++) {
-			aryStringDots.push(new stringDots(stringNumber));
+			aryStringDots.push(new StringDots(stringNumber));
 		}
 
 		// add dots
@@ -2986,7 +3095,7 @@ ugsChordBuilder.export = new function() {
 	 * @param  {int} startingFret
 	 * @return {int}
 	 */
-	this.getPrimaryFrets = function(startingFret) {
+	_public.getPrimaryFrets = function(startingFret) {
 		_fretOffset = startingFret - 1;
 		var dotsPerString = getStringDots();
 		var primaries = [];
@@ -3004,7 +3113,7 @@ ugsChordBuilder.export = new function() {
 	 * @param  {int} startingFret
 	 * @return {string}
 	 */
-	this.getDefinition = function(chordName, startingFret) {
+	_public.getDefinition = function(chordName, startingFret) {
 		chordName = scrub(chordName);
 		var name = (chordName && chordName.length > 0) ? chordName : 'CHORDNAME';
 		var fretsStr = '';
@@ -3033,12 +3142,12 @@ ugsChordBuilder.export = new function() {
 	 * @param  {int} startingFret
 	 * @return {string}
 	 */
-	this.getDefinitionHtml = function(chordName, startingFret) {
+	_public.getDefinitionHtml = function(chordName, startingFret) {
 		chordName = scrub(chordName);
 		// Keep regexs simple by a couple cheats:
 		// First, using 'X07MX001' as my CSS clasname prefix to avoid collisions.
 		// We temporarily remove the name, then put it back in the very last step.
-		var html = this.getDefinition(chordName, startingFret);
+		var html = _public.getDefinition(chordName, startingFret);
 		html = html.replace(' ' + chordName, ' ' + 'X07Myq791wso01');
 		html = html.replace(/\b(\d+)\b/g, '<span class="chordPro-X07MX001number">$1</span>');
 		html = html.replace(/\b(frets?|fingers?|string)\b/g, '<span class="chordPro-X07MX001attribute">$1</span>');
@@ -3065,7 +3174,13 @@ ugsChordBuilder.export = new function() {
 		}
 		return cleaned.substring(0, opts_chord.nameMaxLength);
 	};
-}();
+
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());
 ;/**
  *
  * @class chooserList
@@ -3073,7 +3188,14 @@ ugsChordBuilder.export = new function() {
  * @static
  * @singleton
  */
-ugsChordBuilder.chooserList = new function() {
+ugsChordBuilder.chooserList = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
+
 	// array of custom chords defined in this song
 	var _chordDictionary = [];
 	// handle to HTML UL element
@@ -3111,12 +3233,6 @@ ugsChordBuilder.chooserList = new function() {
 	 * @attribute _setChordMethod
 	 */
 	var _setChordMethod = function() {};
-
-	/**
-	 * "safe" this handle for buried references.
-	 * @attribute _that
-	 */
-	var _that = this;
 
 	/**
 	 * Hanlde to instance of Scriptasaurus chord brush class, to paint the wee little
@@ -3178,7 +3294,7 @@ ugsChordBuilder.chooserList = new function() {
 	 * @method init
 	 * @param  {function} setChordFunction
 	 */
-	this.init = function(setChordFunction) {
+	_public.init = function(setChordFunction) {
 		_setChordMethod = setChordFunction;
 		_eleChordList = document.getElementById(_ids.chordList);
 		// attach click handler to the UL avoids need to attach to individual LI items (these get added & deleted frequently)
@@ -3191,7 +3307,7 @@ ugsChordBuilder.chooserList = new function() {
 		listLoad(_eleChordList, _chordDictionary);
 	};
 
-	this.reset = function() {
+	_public.reset = function() {
 		_chordDictionary = [];
 		document.getElementById(_ids.chordList).innerHTML = '';
 		_nextId = 0;
@@ -3205,7 +3321,7 @@ ugsChordBuilder.chooserList = new function() {
 	 * @public
 	 * @param {bool} isChooserPanel
 	 */
-	this.show = function(isChooserPanel) {
+	_public.show = function(isChooserPanel) {
 		document.getElementById(_ids.chooserPanel).style.display = isChooserPanel ? 'block' : 'none';
 		document.getElementById(_ids.builderPanel).style.display = !isChooserPanel ? 'block' : 'none';
 		$('#' + _ids.chooserPanel).closest('.overlay').toggleClass('chordBuilderNarrow', isChooserPanel);
@@ -3217,7 +3333,7 @@ ugsChordBuilder.chooserList = new function() {
 	 * @param  {JSON} data
 	 * @return {bool}
 	 */
-	this.save = function(data) {
+	_public.save = function(data) {
 		if (dictionaryFindDupes(_currentChord == null ? -1 : _currentChord.id, data.name) >= 0) {
 			alert('Hey, this chord name is already being used.');
 			return false;
@@ -3241,7 +3357,7 @@ ugsChordBuilder.chooserList = new function() {
 			songReplace(oldDefinition, _chordDictionary[i].definition);
 		}
 		listUpdate(id);
-		this.show(true);
+		_public.show(true);
 		return true;
 	};
 
@@ -3285,7 +3401,7 @@ ugsChordBuilder.chooserList = new function() {
 			}
 		}
 		_setChordMethod(chord);
-		_that.show(false);
+		_public.show(false);
 	};
 
 	/**
@@ -3458,9 +3574,9 @@ ugsChordBuilder.chooserList = new function() {
 	 * @param {string} definition
 	 */
 	var songAddDefinition = function(definition) {
-		var e = document.getElementById(_ids.source);
+		var choProText = document.getElementById(_ids.source);
 		var instructionRegEx = /\s*\{\s*(title|t|artist|subtitle|st|album|define):.*?\}/im;
-		var lines = e.value.split('\n');
+		var lines = choProText.value.split('\n');
 		var html = '';
 		var inserted = false;
 		for (var i = lines.length - 1; i >= 0; i--) {
@@ -3470,7 +3586,10 @@ ugsChordBuilder.chooserList = new function() {
 			}
 			html = lines[i] + '\n' + html;
 		}
-		e.value = html;
+		if (!inserted) {
+			html = definition + '\n' + choProText.value;
+		}
+		choProText.value = html;
 		ugsEditorPlus.actions.run();
 	};
 
@@ -3534,7 +3653,12 @@ ugsChordBuilder.chooserList = new function() {
 		return chord.id;
 	};
 
-}();
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());
 ;/**
  * Doing
  * @class editorUi
@@ -3569,7 +3693,7 @@ ugsChordBuilder.editorUi = function() {
 		outputBox: 'cdBldOutputBox',
 		cancelBtn: 'cdBldCancelBtn',
 		saveBtn: 'cdBldSaveBtn'
-		// 		openBtn: 'cdBldOpenBtn'
+		// openBtn: 'cdBldOpenBtn'
 	};
 
 	var _cursorCanvas = null,
