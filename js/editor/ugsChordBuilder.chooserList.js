@@ -5,7 +5,14 @@
  * @static
  * @singleton
  */
-ugsChordBuilder.chooserList = new function() {
+ugsChordBuilder.chooserList = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
+
 	// array of custom chords defined in this song
 	var _chordDictionary = [];
 	// handle to HTML UL element
@@ -43,12 +50,6 @@ ugsChordBuilder.chooserList = new function() {
 	 * @attribute _setChordMethod
 	 */
 	var _setChordMethod = function() {};
-
-	/**
-	 * "safe" this handle for buried references.
-	 * @attribute _that
-	 */
-	var _that = this;
 
 	/**
 	 * Hanlde to instance of Scriptasaurus chord brush class, to paint the wee little
@@ -110,7 +111,7 @@ ugsChordBuilder.chooserList = new function() {
 	 * @method init
 	 * @param  {function} setChordFunction
 	 */
-	this.init = function(setChordFunction) {
+	_public.init = function(setChordFunction) {
 		_setChordMethod = setChordFunction;
 		_eleChordList = document.getElementById(_ids.chordList);
 		// attach click handler to the UL avoids need to attach to individual LI items (these get added & deleted frequently)
@@ -123,7 +124,7 @@ ugsChordBuilder.chooserList = new function() {
 		listLoad(_eleChordList, _chordDictionary);
 	};
 
-	this.reset = function() {
+	_public.reset = function() {
 		_chordDictionary = [];
 		document.getElementById(_ids.chordList).innerHTML = '';
 		_nextId = 0;
@@ -137,7 +138,7 @@ ugsChordBuilder.chooserList = new function() {
 	 * @public
 	 * @param {bool} isChooserPanel
 	 */
-	this.show = function(isChooserPanel) {
+	_public.show = function(isChooserPanel) {
 		document.getElementById(_ids.chooserPanel).style.display = isChooserPanel ? 'block' : 'none';
 		document.getElementById(_ids.builderPanel).style.display = !isChooserPanel ? 'block' : 'none';
 		$('#' + _ids.chooserPanel).closest('.overlay').toggleClass('chordBuilderNarrow', isChooserPanel);
@@ -149,7 +150,7 @@ ugsChordBuilder.chooserList = new function() {
 	 * @param  {JSON} data
 	 * @return {bool}
 	 */
-	this.save = function(data) {
+	_public.save = function(data) {
 		if (dictionaryFindDupes(_currentChord == null ? -1 : _currentChord.id, data.name) >= 0) {
 			alert('Hey, this chord name is already being used.');
 			return false;
@@ -173,7 +174,7 @@ ugsChordBuilder.chooserList = new function() {
 			songReplace(oldDefinition, _chordDictionary[i].definition);
 		}
 		listUpdate(id);
-		this.show(true);
+		_public.show(true);
 		return true;
 	};
 
@@ -217,7 +218,7 @@ ugsChordBuilder.chooserList = new function() {
 			}
 		}
 		_setChordMethod(chord);
-		_that.show(false);
+		_public.show(false);
 	};
 
 	/**
@@ -390,9 +391,9 @@ ugsChordBuilder.chooserList = new function() {
 	 * @param {string} definition
 	 */
 	var songAddDefinition = function(definition) {
-		var e = document.getElementById(_ids.source);
+		var choProText = document.getElementById(_ids.source);
 		var instructionRegEx = /\s*\{\s*(title|t|artist|subtitle|st|album|define):.*?\}/im;
-		var lines = e.value.split('\n');
+		var lines = choProText.value.split('\n');
 		var html = '';
 		var inserted = false;
 		for (var i = lines.length - 1; i >= 0; i--) {
@@ -402,7 +403,10 @@ ugsChordBuilder.chooserList = new function() {
 			}
 			html = lines[i] + '\n' + html;
 		}
-		e.value = html;
+		if (!inserted) {
+			html = definition + '\n' + choProText.value;
+		}
+		choProText.value = html;
 		ugsEditorPlus.actions.run();
 	};
 
@@ -466,4 +470,9 @@ ugsChordBuilder.chooserList = new function() {
 		return chord.id;
 	};
 
-}();
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());

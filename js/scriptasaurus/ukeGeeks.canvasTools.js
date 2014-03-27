@@ -4,6 +4,7 @@
  * @namespace ukeGeeks
  * @static
  * @singleton
+ * @module ukeGeeks
  */
 ukeGeeks.canvasTools = (function() {
 	/**
@@ -12,6 +13,7 @@ ukeGeeks.canvasTools = (function() {
 	 * @type JsonObject
 	 */
 	var _public = {};
+
 	/**
 	 * @method drawDot
 	 * @param ctx {CanvasContext} Valid Canvas Context handle

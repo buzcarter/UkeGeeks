@@ -42,9 +42,15 @@ $errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
 </div>
 </section>
 <script type="text/javascript">
-ugsLogin = new function(){
+ugsLogin = (function(){
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
 
-	this.init = function(){
+	_public.init = function(){
 		window.onload = readyForm;
 		document.getElementById('loginForm').onsubmit = function(){ return doSubmit(); };
 	};
@@ -69,7 +75,13 @@ ugsLogin = new function(){
 		err.style.display = ok ? 'none' : 'block';
 		return ok;
 	};
-};
+
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());
 
 ugsLogin.init();
 

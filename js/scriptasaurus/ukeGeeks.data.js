@@ -24,6 +24,7 @@ ukeGeeks.data = (function() {
 		 * string, i.e. 'C#6'
 		 * @property name
 	   * @type string
+		 * @for ukeGeeks.data.expandedChord
 	   */
 		this.name= name;
 		/**
@@ -52,6 +53,7 @@ ukeGeeks.data = (function() {
 		 * Song Title
 		 * @property title
 	   * @type string
+		 * @for ukeGeeks.data.song
 	   */
 		this.title= '';
 		/**
@@ -125,6 +127,7 @@ ukeGeeks.data = (function() {
 		 * The ukulele's string, numbered from "top" (1) to "bottom" (4). Sporano uke strings would be ['G' => 1,'C' => 2,'E' => 3,'A' => 4]
 		 * @property string
 	   * @type int
+		 * @for ukeGeeks.data.dot
 	   */
 		this.string= string;
 		/**

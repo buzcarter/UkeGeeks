@@ -6,7 +6,14 @@ var ugsEditorPlus = window.ugsEditorPlus || {};
  * @namespace ugsEditorPlus
  * @singleton
  */
-ugsEditorPlus.reformat = new function(){
+ugsEditorPlus.reformat = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
+
 	var _hasChords = false;
 
 	/**
@@ -63,7 +70,7 @@ ugsEditorPlus.reformat = new function(){
 	 * @param text {string} songstring
 	 * @return {string} ChordPro format text block
 	 */
-	this.run = function(text){
+	_public.run = function(text) {
 		_hasChords = false;
 		var lines = read(text);
 		return merge(lines);
@@ -74,7 +81,7 @@ ugsEditorPlus.reformat = new function(){
 	 * @method hasChords
 	 * @return {bool}
 	 */
-	this.hasChords = function(){
+	_public.hasChords = function() {
 		return _hasChords;
 	};
 
@@ -252,4 +259,9 @@ ugsEditorPlus.reformat = new function(){
 		return s;
 	};
 
-}();
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());

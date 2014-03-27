@@ -4,13 +4,20 @@
  * @namespace ugsEditorPlus
  * @singleton
  */
-ugsEditorPlus.styles = new function(){
+ugsEditorPlus.styles = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
+
 	var _sheet = null;
-	this.Rules = null;
+	_public.Rules = null;
 	
-	this.getSheet = function(title){
+	_public.getSheet = function(title) {
 		_sheet = _getSheet(title);
-		this.Rules = getRules();
+		_public.Rules = getRules();
 		return this;
 	};
 	
@@ -30,16 +37,22 @@ ugsEditorPlus.styles = new function(){
 		return _sheet.cssRules ? _sheet.cssRules : _sheet.rules;
 	};
 	
-	this.Find = function(selector){
+	_public.Find = function(selector) {
 		selector = selector.toLowerCase();
-		for (var i = 0; i < this.Rules.length; i++) {
-			if (!this.Rules[i].selectorText){
+		for (var i = 0; i < _public.Rules.length; i++) {
+			if (!_public.Rules[i].selectorText) {
 				continue;
 			}
-			if (this.Rules[i].selectorText.toLowerCase() == selector){
-				return this.Rules[i];
+			if (_public.Rules[i].selectorText.toLowerCase() == selector) {
+				return _public.Rules[i];
 			}
 		}
 		return null;
 	};
-}();
+
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());

@@ -16,7 +16,19 @@ ugsEditorPlus.resize = (function(){
 	var $help = null;
 	var editor = null;
 
+	/**
+	 * miliseconds to fade in/out editor
+	 * @property FADE_SPEED
+	 * @final
+	 * @type {Number}
+	 */
 	var FADE_SPEED = 550;
+	/**
+	 * miliseconds to slide in/out sidebar (help) panel
+	 * @property SLIDE_SPEED
+	 * @final
+	 * @type {Number}
+	 */
 	var SLIDE_SPEED = 400;
 
 	/**

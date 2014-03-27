@@ -5,7 +5,13 @@
  * @namespace ugsEditorPlus
  * @singleton
  */
-ugsEditorPlus.themes = new function() {
+ugsEditorPlus.themes = (function() {
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
 
 	/**
 	 * available color schemes (see UkeGeeks.settings)
@@ -213,7 +219,7 @@ ugsEditorPlus.themes = new function() {
 	 * @param  {string} themeName
 	 * @return {string}
 	 */
-	this.getDescription = function(themeName) {
+	_public.getDescription = function(themeName) {
 		return _colorSchemes[themeName].selectText;
 	};
 
@@ -223,7 +229,7 @@ ugsEditorPlus.themes = new function() {
 	 * @method loadList
 	 * @param  {string} selector
 	 */
-	this.loadList = function(selector) {
+	_public.loadList = function(selector) {
 		var s = '';
 		for (var key in _colorSchemes) {
 			if (_colorSchemes.hasOwnProperty(key)) {
@@ -239,7 +245,7 @@ ugsEditorPlus.themes = new function() {
 	 * @method set
 	 * @param {string} themeName
 	 */
-	this.set = function(themeName) {
+	_public.set = function(themeName) {
 		setBody(themeName);
 
 		var c = _colorSchemes[themeName];
@@ -249,4 +255,9 @@ ugsEditorPlus.themes = new function() {
 		ukeGeeks.settings.tabs.textColor = c.tabs.text;
 	};
 
-}();
+	// ---------------------------------------
+	// return public interface
+	// ---------------------------------------
+	return _public;
+
+}());

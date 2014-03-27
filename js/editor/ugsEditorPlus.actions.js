@@ -4,6 +4,7 @@
  * runs Scriptasaurus, etc.
  * @class actions
  * @namespace ugsEditorPlus
+ * @module ugsEditorPlus
  */
 ugsEditorPlus.actions = (function() {
 	/**
@@ -355,6 +356,7 @@ ugsEditorPlus.actions = (function() {
 			regEx = new RegExp('\\[ugsxx_' + i + '\\]', 'g');
 			s = s.replace(regEx, '[' + newChords[i] + ']');
 		}
+
 		// find & replace {key} command (if present)
 		regEx = /^\s*\{\s*(key|k)\s*:\s*(\S*?)\s*\}\s*$/im;
 		if (regEx.test(s)) {
