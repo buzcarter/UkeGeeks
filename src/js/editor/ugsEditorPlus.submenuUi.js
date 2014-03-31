@@ -17,20 +17,12 @@ ugsEditorPlus.submenuUi = (function(){
 	var _open = null;
 
 	/**
-	 * borrow the "doAction" method from Actions class
-	 * @property _doAction
-	 * @type {function}
-	 */
-	var _doAction = null;
-
-	/**
 	 * attaches event handlers
 	 * @method init
 	 * @public
 	 * @return {[type]} [description]
 	 */
-	_public.init = function(doAction){
-		_doAction = doAction;
+	_public.init = function() {
 		ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect');
 		$('.enablePseudoSelects label').click(onLabelClick);
 		$('.pseudoSelect li').click(onOptionClick);
@@ -69,7 +61,10 @@ ugsEditorPlus.submenuUi = (function(){
 		$('label[for=' + id + ']').parents('dt').removeClass('active');
 
 		// lastly, execute the action
-		_doAction(actionName, hrefValue);
+		$.event.trigger('option:click', {
+			action: actionName,
+			value: hrefValue
+		});
 
 		// prevent event bubbling
 		return false;
@@ -145,7 +140,6 @@ ugsEditorPlus.submenuUi = (function(){
 		_open = null;
 		return false;
 	};
-
 
 	/**
 	 * user clicked off the current dialog -- close 'em all

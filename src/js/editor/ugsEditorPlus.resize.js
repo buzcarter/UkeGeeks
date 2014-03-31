@@ -88,14 +88,44 @@ ugsEditorPlus.resize = (function(){
 		}
 	};
 
+	/**
+	 * Returns the path of a linked script file (src) up to the starting position of fileName
+	 * @method getPath
+	 * @param  {string} fileName
+	 * @return {string}
+	 */
+	var getPath = function(fileName) {
+		var path = '',
+			lower, pos;
+
+		fileName = fileName.toLowerCase();
+
+		$('script').each(function(index, item) {
+			lower = item.src.toLowerCase();
+			pos = lower.indexOf(fileName);
+			if (pos > 0) {
+				path = item.src.substr(0, pos);
+			}
+		});
+		return path;
+	};
+
 	var showAce = function() {
 		isBig = true;
 
 		$('html').addClass('aceEditorActive');
 		$('.overlay').fadeOut(300);
 
-		if (editor === null) {
-			LazyLoad.js('/js/ace/ace.js', function() {
+		if (editor !== null) {
+			// editor has already been initialized, safe to continue
+			copySongToAce();
+			return;
+		}
+
+		// only execute this block once (thus the null check)
+		var path = getPath('ugsEditorPlus');
+
+		LazyLoad.js(path + '/ace/ace.js', function() {
 				editor = ace.edit("aceEditor");
 				editor.setTheme("ace/theme/idle_fingers");
 				editor.getSession().setMode("ace/mode/chordpro");
@@ -109,11 +139,6 @@ ugsEditorPlus.resize = (function(){
 				$help.html(ugsAce.helpHtml);
 
 			});
-		}
-		else {
-			copySongToAce();
-		}
-
 	};
 
 	var copySongToAce = function() {

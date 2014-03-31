@@ -10,14 +10,15 @@ ugsEditorPlus.styles = (function() {
 	 * @property _public
 	 * @type JsonObject
 	 */
-	var _public = {};
+	var _public = {
+		Rules: null
+	};
 
 	var _sheet = null;
-	_public.Rules = null;
 	
 	_public.getSheet = function(title) {
 		_sheet = _getSheet(title);
-		_public.Rules = getRules();
+		_public.Rules = _getRules();
 		return this;
 	};
 	
@@ -30,14 +31,14 @@ ugsEditorPlus.styles = (function() {
 		return null;
 	};
 	
-	var getRules = function(){
+	var _getRules = function() {
 		if (_sheet == null){
 			return [];
 		}
 		return _sheet.cssRules ? _sheet.cssRules : _sheet.rules;
 	};
 	
-	_public.Find = function(selector) {
+	_public.find = function(selector) {
 		selector = selector.toLowerCase();
 		for (var i = 0; i < _public.Rules.length; i++) {
 			if (!_public.Rules[i].selectorText) {

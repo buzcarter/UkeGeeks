@@ -11,13 +11,6 @@ ugsEditorPlus.optionsDlg = (function() {
 	 */
 	var _public = {};
 
-	/**
-	 * borrow the "doAction" method from Actions class
-	 * @property _doAction
-	 * @type {function}
-	 */
-	var _doAction = null;
-
 	// DOM handles (mostly for options dialog elements only)
 	var _ele = {};
 
@@ -25,11 +18,8 @@ ugsEditorPlus.optionsDlg = (function() {
 	 * Sets up this class by attaching event handlers to form elements;
 	 * @method init
 	 * @public
-	 * @param doAction {function} handle to method to actually DO the job
 	 */
-	_public.init = function(doAction){
-		_doAction = doAction;
-
+	_public.init = function() {
 		_ele = {
 			inputIgnoreList : document.getElementById('commonChordList'),
 			chkIgnore : document.getElementById('chkIgnoreCommon'),
@@ -41,19 +31,27 @@ ugsEditorPlus.optionsDlg = (function() {
 
 		// button clicks
 		document.getElementById('updateBtn').onclick = function() {
-			onUpdateBtnClick();
+			triggerNotify('update', '');
 			return false;
 		};
 
 		//_ele.pageWidth.onchange = function(){doSetWidth(this.value); };
+
+		// Change whether to show/hide the bracket characters
 		_ele.chkEnclosures.onclick = function() {
-			onSetEnclosureClick(!this.checked);
+			// Boolean "isVisible"
+			triggerNotify('showEnclosures', !this.checked);
 		};
+
+		// the list of common chords has been change; update UGS setting and _possibly_ rerun
 		_ele.inputIgnoreList.onchange = function() {
-			onCommonChordFieldChange();
+			triggerNotify('setCommonChords', _ele.inputIgnoreList.value);
 		};
+
+		// "Ignore Common" was checked, need to update master chord diagrams
 		_ele.chkIgnore.onclick = function() {
-			onIgnoreCommonClick(this.checked);
+			// Boolean for "isIgnore"
+			triggerNotify('hideCommonChords', this.checked);
 		};
 
 		// ugh! Event bubbling!
@@ -68,47 +66,19 @@ ugsEditorPlus.optionsDlg = (function() {
     });
 	};
 
+	var triggerNotify = function(action, value) {
+		$.event.trigger('option:click', {
+			action: action,
+			value: value
+		});
+	};
+
 	var restoreDefaults = function(){
 		// initialize the common list
 		_ele.inputIgnoreList.value = ukeGeeks.settings.commonChords.join(", ");
 		//_ele.pageWidth.value = 'letter';
 		_ele.chkIgnore.checked = ukeGeeks.settings.opts.ignoreCommonChords;
 		_ele.chkEnclosures.checked = !ukeGeeks.settings.opts.retainBrackets;
-	};
-
-	var onUpdateBtnClick = function(){
-		_doAction( 'update', null);
-	};
-
-	/**
-	 * (option dialog) change whether to show/hide the bracket characters
-	 * @method onSetEnclosureClick
-	 * @private
-	 * @param isVisible {bool}
-	 */
-	var onSetEnclosureClick = function(isVisible){
-		_doAction( 'showEnclosures', isVisible);
-	};
-
-	/**
-	 * "Ignore Common" was checked, need to update master chord diagrams
-	 * @method onIgnoreCommonClick
-	 * @private
-	 * @param isIgnore {bool}
-	 */
-	var onIgnoreCommonClick = function(isIgnore){
-		_doAction( 'hideCommonChords', isIgnore);
-	};
-
-	/**
-	 * the list of common chords has been change; update UGS setting
-	 * and _possible_ rerun
-	 * @method onCommonChordFieldChange
-	 * @private
-	 * @return {void}
-	 */
-	var onCommonChordFieldChange = function(){
-		_doAction( 'setCommonChords', _ele.inputIgnoreList.value);
 	};
 
 	// ---------------------------------------

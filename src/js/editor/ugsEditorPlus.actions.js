@@ -64,6 +64,9 @@ ugsEditorPlus.actions = (function() {
 			scalableArea : document.getElementById('scalablePrintArea')
 		};
 
+		$(document).on('option:click', function(e, data) {
+			doAction(data.action, data.value);
+		});
 	};
 
 	/* ----------------------------------------------------------------------------------- *|
@@ -77,7 +80,7 @@ ugsEditorPlus.actions = (function() {
 	 * @param action {string} Action's name; must match one of those defined in the switch below
 	 * @param value {string} Value used by Action (OK, a couple methods assume this is boolean/falsy)
 	 */
-	_public.doAction = function(action, value){
+	var doAction = function(action, value) {
 		switch (action){
 			case 'zoomFonts':
 				zoomFonts(value);
@@ -183,14 +186,14 @@ ugsEditorPlus.actions = (function() {
 		var columnWidth = Math.round(prct * 225);
 
 		var s = ugsEditorPlus.styles.getSheet('ugsEditorCss');
-		var m = s.Find('.scalablePrintArea .ugs-diagrams-wrap canvas');
+		var m = s.find('.scalablePrintArea .ugs-diagrams-wrap canvas');
 		m.style.width = Math.round(prct * ukeGeeks.settings.fretBox.width) +'px';
 		m.style.height = Math.round(prct * ukeGeeks.settings.fretBox.height) +'px';
 
-		m = s.Find('.scalablePrintArea .ugs-diagrams-wrap');
+		m = s.find('.scalablePrintArea .ugs-diagrams-wrap');
 		m.style.width = columnWidth +'px';
 
-		m = s.Find('.scalablePrintArea .ugs-source-wrap');
+		m = s.find('.scalablePrintArea .ugs-source-wrap');
 		m.style.marginLeft = (25 + columnWidth) +'px';
 	};
 
@@ -247,7 +250,6 @@ ugsEditorPlus.actions = (function() {
 	/* ----------------------------------------------------------------------------------- *|
 	|* Color Methods
 	|* ----------------------------------------------------------------------------------- */
-
 
 	/**
 	 * Change the color scheme -- requires changing CSS Class and reruning (to regenerate reference chord diagrams)

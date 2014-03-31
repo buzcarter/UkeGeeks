@@ -6,36 +6,30 @@
  * @namespace ugsEditorPlus
  */
 ugsEditorPlus.topMenus = (function(){
-	/**
-	 * attach public members to this object
-	 * @property _public
-	 * @type JsonObject
-	 */
-	var _public = {};
 
 	/**
 	 * attaches events...
-	 * @method init
+	 * @method _init
+	 * @public
 	 * @return {void}
 	 */
-	_public.init = function(){
+	var _init = function() {
 		// $('#ugsAppToolbar > ul a')
-		$('#ugsAppToolbar > ul  li').not('[data-dialog]').children('a').click(onMenuItemClick);
-  	$('.showOptionsBox a').click(onShowOptionsClick);
+		$('#ugsAppToolbar > ul li').not('[data-dialog]').children('a').click(_onMenuItemClick);
+		$('.showOptionsBox a').click(_onShowOptionsClick);
 
-		$('#ugsAppToolbar > ul  li[data-dialog]').click(onShowDlgBtnClick);
-		$('.closeBtn').click(onCloseBtnClick);
-		$('.resizeBtn').click(onResizeBtnClick);
-
+		$('#ugsAppToolbar > ul li[data-dialog]').click(_onShowDlgBtnClick);
+		$('.closeBtn').click(_onCloseBtnClick);
+		$('.resizeBtn').click(_onResizeBtnClick);
  	};
 
 	/**
-	 * DESCRIPTION
+	 * Click handler for nav items that are NOT attached to a dialog box.
+	 * @method _onMenuItemClick
 	 * @private
-	 * @method onMenuItemClick
 	 * @return {void}
 	 */
-	var onMenuItemClick = function(){
+	var _onMenuItemClick = function() {
 		// the clicked anchor tag
 		var $parent = $(this).parent();
 		var isOpen = $parent.hasClass('active');
@@ -47,7 +41,7 @@ ugsEditorPlus.topMenus = (function(){
 	};
 
 	/**
-	 * DESCRIPTION
+	 * Deselects all items in app's top menu/nav bar (just removes active state from all items)
 	 * @method _makeAllInactive
 	 * @private
 	 * @return {void}
@@ -57,15 +51,30 @@ ugsEditorPlus.topMenus = (function(){
 	};
 
 	/**
+	 * Same as _makeAllInactive method PLUS closes any open drop down/arrow boxes.
+	 * @method _closeAll
+	 * @private
+	 * @return {void}
+	 */
+	var _closeAll = function() {
+		// hide any drop-down/arrow boxes currently open
+		_makeAllInactive();
+		$('.arrowBox').hide();
+	};
+
+	/**
 	 * handles nav menu/toolbar click event. The data-dialog="X" attribute
 	 * on the element assocaites the menu item with the dialog box (the
 	 * box's id)
-	 * @method onShowDlgBtnClick
+	 * @method _onShowDlgBtnClick
 	 * @private
 	 * @param e {event}
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onShowDlgBtnClick = function(e){
+	var _onShowDlgBtnClick = function(e) {
+		_closeAll();
+
+		// now show dialog associated with the clicked button
 		var id = $(this).data('dialog');
 		$('#' + id).fadeIn();
 		// prevent event bubbling
@@ -75,18 +84,19 @@ ugsEditorPlus.topMenus = (function(){
 	/**
 	 * dialog box's close button's click handler. Hides the first parent
 	 * with class.
-	 * @method onCloseBtnClick
+	 * @method _onCloseBtnClick
 	 * @private
 	 * @param e {event}
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onCloseBtnClick = function(e){
+	var _onCloseBtnClick = function(e) {
 		$(this).parents('.overlay').fadeOut();
 		// prevent event bubbling
 		return false;
 	};
 
-	var onResizeBtnClick = function(e){
+	var _onResizeBtnClick = function(e) {
+		_closeAll();
 		var dlg = $(this).parents('.overlay');
 		ugsEditorPlus.resize.toggle(dlg);
 		return false;
@@ -94,11 +104,12 @@ ugsEditorPlus.topMenus = (function(){
 
 	/**
 	 * display a "tooltip" options dialog
-	 * @method onShowOptionsClick
-	 * @param  {[type]} e [description]
+	 * @method _onShowOptionsClick
+	 * @private
+	 * @param e {event}
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onShowOptionsClick = function(e){
+	var _onShowOptionsClick = function(e) {
 		var id = $(this).attr('href');
 		$('.arrowBox').not(id).hide();
 		var $dlg = $(id);
@@ -111,11 +122,12 @@ ugsEditorPlus.topMenus = (function(){
 		return false;
 	};
 
-	_public.makeAllInactive = _makeAllInactive;
-
 	// ---------------------------------------
-	// return public interface "JSON handle"
+	// return public interface
 	// ---------------------------------------
-	return _public;
+	return {
+		init: _init,
+		makeAllInactive: _makeAllInactive
+	};
 
 }());

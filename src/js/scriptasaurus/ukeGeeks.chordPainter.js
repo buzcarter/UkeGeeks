@@ -1,5 +1,5 @@
 /**
- * Draws large chord diagram grid on canvas
+ * Draws large chord diagram grid (aka "reference" diagrams) on canvas
  * @class chordPainter
  * @namespace ukeGeeks
  * @project UkeGeeks' Scriptasaurus
@@ -15,21 +15,38 @@ ukeGeeks.chordPainter = function(){
 
 	/**
 	 * ukeGeeks.canvas object handle
-	 * @property brush
+	 * @property _brush
 	 * @type ukeGeeks.chordBrush instance handle
 	 * @private
 	 */
-	var brush = null;
+	var _brush = null;
 
 	/**
 	 * keep an array of missing chords (strings)
-	 * @property errors
+	 * @property _errors
 	 * @type array
 	 * @private
 	 */
-	var errors = [];
+	var _errors = [];
 
-	var handles = null;
+	var _handles = null;
+
+	/**
+	 * If ignoreCommonChords option is true then this will contain list of
+	 * matched chords: ones defined in the ignore list that were also found in the song
+	 * @property _ignoreMatchList
+	 * @type {Array}
+	 * @private
+	 */
+	var _ignoreMatchList = [];
+
+		/**
+	 * Ignore "tacet" or "no chord" chords
+	 * @property _tacet
+	 * @type {RegExp}
+	 * @private
+	 */
+	var _tacet = /^(n.?\/?c.?|tacet)$/i;
 
 	/**
 	 * Again this is a constructor replacement
@@ -38,19 +55,10 @@ ukeGeeks.chordPainter = function(){
 	 * @return {void}
 	 */
 	_public.init = function(htmlHandles) {
-		brush = new ukeGeeks.chordBrush();
-		brush.init();
-		handles = htmlHandles;
+		_brush = new ukeGeeks.chordBrush();
+		_brush.init();
+		_handles = htmlHandles;
 	};
-
-	var	ignoreMatchList = [];
-
-		/**
-	 * Ignore "tacet" or "no chord" chords
-	 * @property _tacet
-	 * @type {RegExp}
-	 */
-	var _tacet = /^(n.?\/?c.?|tacet)$/i;
 
 	/**
 		 * Checks whether speicified chord (name) is on the ignore list.
@@ -74,24 +82,28 @@ ukeGeeks.chordPainter = function(){
 	 * @return {void}
 	 */
 	_public.show = function(chords) {
-		handles.diagrams.innerHTML = '';
-		errors = [];
-		ignoreMatchList = [];
+		_handles.diagrams.innerHTML = '';
+		_errors = [];
+		_ignoreMatchList = [];
+
+		if (ukeGeeks.settings.opts.sortAlphabetical) {
 		chords.sort();
+		}
+
 		for (var i=0; i < chords.length; i++){
 			if (_tacet.test(chords[i])) {
 				continue;
 			}
 			if (ukeGeeks.settings.opts.ignoreCommonChords && ignoreChord(chords[i])){
-				ignoreMatchList.push(chords[i]);
+				_ignoreMatchList.push(chords[i]);
 				continue;
 			}
 			var c = ukeGeeks.definitions.get(chords[i]);
 			if (!c){
-				errors.push(chords[i]);
+				_errors.push(chords[i]);
 				continue;
 			}
-			brush.plot(handles.diagrams,c,ukeGeeks.settings.fretBox);
+			_brush.plot(_handles.diagrams, c, ukeGeeks.settings.fretBox);
 		}
 	};
 
@@ -103,7 +115,7 @@ ukeGeeks.chordPainter = function(){
 	 * @return {void}
 	 */
 	_public.showInline = function(chords) {
-		var e = handles.text.getElementsByTagName('code');
+		var e = _handles.text.getElementsByTagName('code');
 		if (e.length < 1) {
 			return;
 		}
@@ -111,12 +123,12 @@ ukeGeeks.chordPainter = function(){
 			var c = ukeGeeks.definitions.get(chords[i]);
 			if (!c){
 				/* TODO: error reporting if not found */
-				// errors.push(chords[i]);
+				// _errors.push(chords[i]);
 				continue;
 			}
 			for (var j=0; j < e.length; j++){
 				if (e[j].getAttribute('data-chordName') == c.name){
-					brush.plot(e[j], c, ukeGeeks.settings.inlineFretBox, ukeGeeks.settings.inlineFretBox.fonts);
+					_brush.plot(e[j], c, ukeGeeks.settings.inlineFretBox, ukeGeeks.settings.inlineFretBox.fonts);
 				}
 			}
 		}
@@ -128,7 +140,7 @@ ukeGeeks.chordPainter = function(){
 	 * @return {array}
 	 */
 	_public.getErrors = function() {
-		return errors;
+		return _errors;
 	};
 
 	/**
@@ -137,11 +149,10 @@ ukeGeeks.chordPainter = function(){
 	 * @return {array} array of strings
 	 */
 	_public.getIgnoredChords = function() {
-		return ignoreMatchList;
+		return _ignoreMatchList;
 	};
 
 	/* return our public interface
-	 *
 	 */
 	return _public;
 };

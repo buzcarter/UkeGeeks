@@ -185,6 +185,13 @@ ukeGeeks.settings = (function() {
 		 */
 		ignoreCommonChords : false,
 		/**
+		 * If true chord reference diagrams are sorted alphabetically, otherwise chords are shown in the
+		 * order in which they appear within the song.
+		 * @property opts.sortAlphabetical
+		 * @type Boolean
+		 */
+		sortAlphabetical: true,
+		/**
 		 * if TRUE chords that overlap each other (in the music area) will have their spacing adjuste
 		 * to prevent overlapping.
 		 * @property opts.autoFixOverlaps
@@ -280,7 +287,7 @@ ukeGeeks.settings = (function() {
 		return node;
 	};
 
-	var sizeRe = /\b(\d+)(pt|px)\b/;
+	var _sizeRe = /\b(\d+)(pt|px)\b/;
 
 	/**
 	 * TODO: determine minimum font size... 5pt/px?
@@ -291,12 +298,12 @@ ukeGeeks.settings = (function() {
 	 * @return {void}
 	 */
 	var _scaleFont = function(font, mulitplier){
-		var bits = font.match(sizeRe);
+		var bits = font.match(_sizeRe);
 		if (bits.length < 2){
 			return font;
 		}
 		var size = parseInt(bits[1], 10) * mulitplier;
-		return font.replace(sizeRe, size + bits[2]);
+		return font.replace(_sizeRe, size + bits[2]);
 	};
 
 	/**
@@ -320,5 +327,7 @@ ukeGeeks.settings = (function() {
 		this.fretBox = _scaleNode(this.fretBox, mulitplier);
 	};
 
+	/* return our public interface
+	 */
 	return _public;
 }());
