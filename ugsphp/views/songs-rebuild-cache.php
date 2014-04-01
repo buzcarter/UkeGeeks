@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>RebuildIndex .All Songs</title>
+	<title>Song Index Rebuilt</title>
+	<meta http-equiv="refresh" content="4;URL=<?php echo($model->SongbooktUri) ?>" />
 </head>
 <body>
 	<h1>Cache Rebuilt</h1>
-	<p><?php echo($model->SongCount); ?> songs indexed in <?php echo($model->ElapsedTime); ?> seconds.</p>
+	<h3><?php echo($model->SongCount); ?> songs indexed in <?php echo($model->ElapsedTime); ?> seconds.</h3>
+	<p>(you'll be redirected to the songbook in a few seconds, if you're impatient <a href="<?php echo($model->SongbooktUri) ?>">click here</a>)</p>
 </body>
 </html>
