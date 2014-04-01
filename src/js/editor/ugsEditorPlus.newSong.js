@@ -80,6 +80,9 @@ ugsEditorPlus.newSong = (function() {
 				data: JSON.stringify(data),
 				success: function(data) {
 					doAjaxOk(data);
+			},
+			error: function(data) {
+				showErrors(true, 'Failed to create the song file.<br/>Please have your admin check the CPM directory permissions.');
 				}
 			});
 		};

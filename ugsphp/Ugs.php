@@ -54,6 +54,9 @@ class Ugs{
 	 */
 	private function RenderJson( $model ) {
 		header( 'Content-Type: application/json' );
+		if ( isset( $model->HasErrors ) && $model->HasErrors ) {
+			header( 'HTTP/1.1 500' );
+		}
 		unset($model->IsJson);
 		echo json_encode( $model );
 	}
@@ -204,6 +207,7 @@ class Ugs{
 	/**
 	 * The rather quirky way to interface with jQuery.ajax with serialize,
 	 * returns a PHP Object version of the posted JSON.
+	 *
 	 * @return Object
 	 */
 	public static function GetJsonObject(){

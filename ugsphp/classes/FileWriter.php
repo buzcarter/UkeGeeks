@@ -29,6 +29,7 @@ class FileWriter {
 	 * @return string final file name
 	 */
 	private function UniqueFilename( $directory, $baseFilename, $extenstion = '.txt' ) {
+		try {
 		$filename = '';
 		while ( true ) {
 			$m = microtime();
@@ -39,6 +40,10 @@ class FileWriter {
 		}
 
 		return $filename;
+	}
+		catch ( Exception $e ) {
+			return '';
+		}
 	}
 
 	/**
@@ -63,9 +68,10 @@ class FileWriter {
 	/**
 	 * Generates a unique filename (within a given directory)
 	 * If name is omitted uses "untitled".
+	 *
 	 * @param [string] $title
 	 * @param [string] $artist
-	 * @return string [description]
+	 * @return string
 	 */
 	public function MakeFile( $title, $artist ) {
 		$f = $this->ScrubForFilename( $title, self::MAX_TITLE_LENGTH );
@@ -78,13 +84,24 @@ class FileWriter {
 			$f .= '.' . $a;
 		}
 
-		$filename = $this->UniqueFilename( Config::$SongDirectory, $f, Config::FileExtension );
-
 		$content = $this->MakeChordProStub( $title, $artist );
+
+		try {
+			if (!is_writable(Config::$SongDirectory)){
+				return '';
+			}
+		$filename = $this->UniqueFilename( Config::$SongDirectory, $f, Config::FileExtension );
+			if (strlen($filename) < 1){
+				return '';
+			}
+
 		$filesize = file_put_contents( Config::$SongDirectory . $filename, $content );
 
 		return ( $filesize > 0 ) ? $filename : '';
-
+		}
+		catch ( Exception $e ) {
+			return '';
+		}
 	}
 
 	/**
@@ -92,7 +109,7 @@ class FileWriter {
 	 *
 	 * @param [string] $title  song title
 	 * @param [string] $artist song's artist (optional)
-	 * @return string [description]
+	 * @return string
 	 */
 	private function MakeChordProStub( $title = '', $artist = '' ) {
 		$title = trim( $title );

@@ -27,12 +27,17 @@ class Ajax_NewSong_Vmb extends _base_Vmb{
 			$viewModel->Message = 'Song title is required, sorry.';
 			return false;
 		}
-
+		try {
 		$fWriter = new FileWriter();
 		$viewModel->Id = $fWriter->MakeFile($title, $artist);
 		$viewModel->HasErrors = (strlen($viewModel->Id) < 1);
 		if ($viewModel->HasErrors){
-			$viewModel->Message = 'Something\'s gone wrong whilst saving.';
+				$viewModel->Message = '(e:803) Something\'s gone wrong whilst saving.';
+			return false;
+		}
+		}
+		catch ( Exception $e ) {
+			$viewModel->Message = '(e:805) Something\'s gone wrong whilst saving.';
 			return false;
 		}
 
