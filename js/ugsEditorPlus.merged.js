@@ -26,8 +26,8 @@ var ugsEditorPlus = (function() {
 
 		ugsEditorPlus.actions.init(isLegacyIe);
 		ugsEditorPlus.topMenus.init();
-		ugsEditorPlus.submenuUi.init(ugsEditorPlus.actions.doAction);
-		ugsEditorPlus.optionsDlg.init(ugsEditorPlus.actions.doAction);
+		ugsEditorPlus.submenuUi.init();
+		ugsEditorPlus.optionsDlg.init();
 		ugsEditorPlus.chordBuilder.init();
 		ugsEditorPlus.actions.run();
 	};
@@ -122,6 +122,9 @@ ugsEditorPlus.actions = (function() {
 			scalableArea: document.getElementById('scalablePrintArea')
 		};
 
+		$(document).on('option:click', function(e, data) {
+			doAction(data.action, data.value);
+		});
 	};
 
 	/* ----------------------------------------------------------------------------------- *|
@@ -135,7 +138,7 @@ ugsEditorPlus.actions = (function() {
 	 * @param action {string} Action's name; must match one of those defined in the switch below
 	 * @param value {string} Value used by Action (OK, a couple methods assume this is boolean/falsy)
 	 */
-	_public.doAction = function(action, value) {
+	var doAction = function(action, value) {
 		switch (action) {
 			case 'zoomFonts':
 				zoomFonts(value);
@@ -241,14 +244,14 @@ ugsEditorPlus.actions = (function() {
 		var columnWidth = Math.round(prct * 225);
 
 		var s = ugsEditorPlus.styles.getSheet('ugsEditorCss');
-		var m = s.Find('.scalablePrintArea .ugs-diagrams-wrap canvas');
+		var m = s.find('.scalablePrintArea .ugs-diagrams-wrap canvas');
 		m.style.width = Math.round(prct * ukeGeeks.settings.fretBox.width) + 'px';
 		m.style.height = Math.round(prct * ukeGeeks.settings.fretBox.height) + 'px';
 
-		m = s.Find('.scalablePrintArea .ugs-diagrams-wrap');
+		m = s.find('.scalablePrintArea .ugs-diagrams-wrap');
 		m.style.width = columnWidth + 'px';
 
-		m = s.Find('.scalablePrintArea .ugs-source-wrap');
+		m = s.find('.scalablePrintArea .ugs-source-wrap');
 		m.style.marginLeft = (25 + columnWidth) + 'px';
 	};
 
@@ -594,14 +597,15 @@ ugsEditorPlus.styles = (function() {
 	 * @property _public
 	 * @type JsonObject
 	 */
-	var _public = {};
+	var _public = {
+		Rules: null
+	};
 
 	var _sheet = null;
-	_public.Rules = null;
 
 	_public.getSheet = function(title) {
 		_sheet = _getSheet(title);
-		_public.Rules = getRules();
+		_public.Rules = _getRules();
 		return this;
 	};
 
@@ -614,14 +618,14 @@ ugsEditorPlus.styles = (function() {
 		return null;
 	};
 
-	var getRules = function() {
+	var _getRules = function() {
 		if (_sheet == null) {
 			return [];
 		}
 		return _sheet.cssRules ? _sheet.cssRules : _sheet.rules;
 	};
 
-	_public.Find = function(selector) {
+	_public.find = function(selector) {
 		selector = selector.toLowerCase();
 		for (var i = 0; i < _public.Rules.length; i++) {
 			if (!_public.Rules[i].selectorText) {
@@ -823,7 +827,6 @@ ugsEditorPlus.themes = (function() {
 			}
 		},
 
-
 		'zombie': {
 			name: 'Zombies!!!',
 			selectText: 'Zombies!!!',
@@ -864,7 +867,6 @@ ugsEditorPlus.themes = (function() {
 	_public.getDescription = function(themeName) {
 		return _colorSchemes[themeName].selectText;
 	};
-
 
 	/**
 	 * Populates the UL (identified via CSS/jQuery selector) with the color scheme List Items (LIs)
@@ -916,13 +918,6 @@ ugsEditorPlus.optionsDlg = (function() {
 	 */
 	var _public = {};
 
-	/**
-	 * borrow the "doAction" method from Actions class
-	 * @property _doAction
-	 * @type {function}
-	 */
-	var _doAction = null;
-
 	// DOM handles (mostly for options dialog elements only)
 	var _ele = {};
 
@@ -930,11 +925,8 @@ ugsEditorPlus.optionsDlg = (function() {
 	 * Sets up this class by attaching event handlers to form elements;
 	 * @method init
 	 * @public
-	 * @param doAction {function} handle to method to actually DO the job
 	 */
-	_public.init = function(doAction) {
-		_doAction = doAction;
-
+	_public.init = function() {
 		_ele = {
 			inputIgnoreList: document.getElementById('commonChordList'),
 			chkIgnore: document.getElementById('chkIgnoreCommon'),
@@ -946,19 +938,27 @@ ugsEditorPlus.optionsDlg = (function() {
 
 		// button clicks
 		document.getElementById('updateBtn').onclick = function() {
-			onUpdateBtnClick();
+			triggerNotify('update', '');
 			return false;
 		};
 
 		//_ele.pageWidth.onchange = function(){doSetWidth(this.value); };
+
+		// Change whether to show/hide the bracket characters
 		_ele.chkEnclosures.onclick = function() {
-			onSetEnclosureClick(!this.checked);
+			// Boolean "isVisible"
+			triggerNotify('showEnclosures', !this.checked);
 		};
+
+		// the list of common chords has been change; update UGS setting and _possibly_ rerun
 		_ele.inputIgnoreList.onchange = function() {
-			onCommonChordFieldChange();
+			triggerNotify('setCommonChords', _ele.inputIgnoreList.value);
 		};
+
+		// "Ignore Common" was checked, need to update master chord diagrams
 		_ele.chkIgnore.onclick = function() {
-			onIgnoreCommonClick(this.checked);
+			// Boolean for "isIgnore"
+			triggerNotify('hideCommonChords', this.checked);
 		};
 
 		// ugh! Event bubbling!
@@ -973,47 +973,19 @@ ugsEditorPlus.optionsDlg = (function() {
 		});
 	};
 
+	var triggerNotify = function(action, value) {
+		$.event.trigger('option:click', {
+			action: action,
+			value: value
+		});
+	};
+
 	var restoreDefaults = function() {
 		// initialize the common list
 		_ele.inputIgnoreList.value = ukeGeeks.settings.commonChords.join(", ");
 		//_ele.pageWidth.value = 'letter';
 		_ele.chkIgnore.checked = ukeGeeks.settings.opts.ignoreCommonChords;
 		_ele.chkEnclosures.checked = !ukeGeeks.settings.opts.retainBrackets;
-	};
-
-	var onUpdateBtnClick = function() {
-		_doAction('update', null);
-	};
-
-	/**
-	 * (option dialog) change whether to show/hide the bracket characters
-	 * @method onSetEnclosureClick
-	 * @private
-	 * @param isVisible {bool}
-	 */
-	var onSetEnclosureClick = function(isVisible) {
-		_doAction('showEnclosures', isVisible);
-	};
-
-	/**
-	 * "Ignore Common" was checked, need to update master chord diagrams
-	 * @method onIgnoreCommonClick
-	 * @private
-	 * @param isIgnore {bool}
-	 */
-	var onIgnoreCommonClick = function(isIgnore) {
-		_doAction('hideCommonChords', isIgnore);
-	};
-
-	/**
-	 * the list of common chords has been change; update UGS setting
-	 * and _possible_ rerun
-	 * @method onCommonChordFieldChange
-	 * @private
-	 * @return {void}
-	 */
-	var onCommonChordFieldChange = function() {
-		_doAction('setCommonChords', _ele.inputIgnoreList.value);
 	};
 
 	// ---------------------------------------
@@ -1377,36 +1349,30 @@ ugsEditorPlus.autoReformat = (function() {
  * @namespace ugsEditorPlus
  */
 ugsEditorPlus.topMenus = (function() {
-	/**
-	 * attach public members to this object
-	 * @property _public
-	 * @type JsonObject
-	 */
-	var _public = {};
 
 	/**
 	 * attaches events...
-	 * @method init
+	 * @method _init
+	 * @public
 	 * @return {void}
 	 */
-	_public.init = function() {
+	var _init = function() {
 		// $('#ugsAppToolbar > ul a')
-		$('#ugsAppToolbar > ul li').not('[data-dialog]').children('a').click(onMenuItemClick);
-		$('.showOptionsBox a').click(onShowOptionsClick);
+		$('#ugsAppToolbar > ul li').not('[data-dialog]').children('a').click(_onMenuItemClick);
+		$('.showOptionsBox a').click(_onShowOptionsClick);
 
-		$('#ugsAppToolbar > ul li[data-dialog]').click(onShowDlgBtnClick);
-		$('.closeBtn').click(onCloseBtnClick);
-		$('.resizeBtn').click(onResizeBtnClick);
-
+		$('#ugsAppToolbar > ul li[data-dialog]').click(_onShowDlgBtnClick);
+		$('.closeBtn').click(_onCloseBtnClick);
+		$('.resizeBtn').click(_onResizeBtnClick);
 	};
 
 	/**
-	 * DESCRIPTION
+	 * Click handler for nav items that are NOT attached to a dialog box.
+	 * @method _onMenuItemClick
 	 * @private
-	 * @method onMenuItemClick
 	 * @return {void}
 	 */
-	var onMenuItemClick = function() {
+	var _onMenuItemClick = function() {
 		// the clicked anchor tag
 		var $parent = $(this).parent();
 		var isOpen = $parent.hasClass('active');
@@ -1418,7 +1384,7 @@ ugsEditorPlus.topMenus = (function() {
 	};
 
 	/**
-	 * DESCRIPTION
+	 * Deselects all items in app's top menu/nav bar (just removes active state from all items)
 	 * @method _makeAllInactive
 	 * @private
 	 * @return {void}
@@ -1428,17 +1394,33 @@ ugsEditorPlus.topMenus = (function() {
 	};
 
 	/**
+	 * Same as _makeAllInactive method PLUS closes any open drop down/arrow boxes.
+	 * @method _closeAll
+	 * @private
+	 * @return {void}
+	 */
+	var _closeAll = function() {
+		// hide any drop-down/arrow boxes currently open
+		_makeAllInactive();
+		$('.arrowBox').hide();
+	};
+
+	/**
 	 * handles nav menu/toolbar click event. The data-dialog="X" attribute
 	 * on the element assocaites the menu item with the dialog box (the
 	 * box's id)
-	 * @method onShowDlgBtnClick
+	 * @method _onShowDlgBtnClick
 	 * @private
 	 * @param e {event}
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onShowDlgBtnClick = function(e) {
+	var _onShowDlgBtnClick = function(e) {
+		_closeAll();
+
+		// now show dialog associated with the clicked button
 		var id = $(this).data('dialog');
 		$('#' + id).fadeIn();
+
 		// prevent event bubbling
 		return false;
 	};
@@ -1446,18 +1428,19 @@ ugsEditorPlus.topMenus = (function() {
 	/**
 	 * dialog box's close button's click handler. Hides the first parent
 	 * with class.
-	 * @method onCloseBtnClick
+	 * @method _onCloseBtnClick
 	 * @private
 	 * @param e {event}
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onCloseBtnClick = function(e) {
+	var _onCloseBtnClick = function(e) {
 		$(this).parents('.overlay').fadeOut();
 		// prevent event bubbling
 		return false;
 	};
 
-	var onResizeBtnClick = function(e) {
+	var _onResizeBtnClick = function(e) {
+		_closeAll();
 		var dlg = $(this).parents('.overlay');
 		ugsEditorPlus.resize.toggle(dlg);
 		return false;
@@ -1465,13 +1448,16 @@ ugsEditorPlus.topMenus = (function() {
 
 	/**
 	 * display a "tooltip" options dialog
-	 * @method onShowOptionsClick
-	 * @param  {[type]} e [description]
+	 * @method _onShowOptionsClick
+	 * @private
+	 * @param e {event}
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onShowOptionsClick = function(e) {
+	var _onShowOptionsClick = function(e) {
 		var id = $(this).attr('href');
+
 		$('.arrowBox').not(id).hide();
+
 		var $dlg = $(id);
 		$dlg.find('dd').hide();
 		$dlg.fadeToggle();
@@ -1482,12 +1468,13 @@ ugsEditorPlus.topMenus = (function() {
 		return false;
 	};
 
-	_public.makeAllInactive = _makeAllInactive;
-
 	// ---------------------------------------
-	// return public interface "JSON handle"
+	// return public interface
 	// ---------------------------------------
-	return _public;
+	return {
+		init: _init,
+		makeAllInactive: _makeAllInactive
+	};
 
 }());
 ;/**
@@ -1508,20 +1495,12 @@ ugsEditorPlus.submenuUi = (function() {
 	var _open = null;
 
 	/**
-	 * borrow the "doAction" method from Actions class
-	 * @property _doAction
-	 * @type {function}
-	 */
-	var _doAction = null;
-
-	/**
 	 * attaches event handlers
 	 * @method init
 	 * @public
 	 * @return {[type]} [description]
 	 */
-	_public.init = function(doAction) {
-		_doAction = doAction;
+	_public.init = function() {
 		ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect');
 		$('.enablePseudoSelects label').click(onLabelClick);
 		$('.pseudoSelect li').click(onOptionClick);
@@ -1560,7 +1539,10 @@ ugsEditorPlus.submenuUi = (function() {
 		$('label[for=' + id + ']').parents('dt').removeClass('active');
 
 		// lastly, execute the action
-		_doAction(actionName, hrefValue);
+		$.event.trigger('option:click', {
+			action: actionName,
+			value: hrefValue
+		});
 
 		// prevent event bubbling
 		return false;
@@ -2175,32 +2157,57 @@ ugsEditorPlus.resize = (function() {
 		}
 	};
 
+	/**
+	 * Returns the path of a linked script file (src) up to the starting position of fileName
+	 * @method getPath
+	 * @param  {string} fileName
+	 * @return {string}
+	 */
+	var getPath = function(fileName) {
+		var path = '',
+			lower, pos;
+
+		fileName = fileName.toLowerCase();
+
+		$('script').each(function(index, item) {
+			lower = item.src.toLowerCase();
+			pos = lower.indexOf(fileName);
+			if (pos > 0) {
+				path = item.src.substr(0, pos);
+			}
+		});
+		return path;
+	};
+
 	var showAce = function() {
 		isBig = true;
 
 		$('html').addClass('aceEditorActive');
 		$('.overlay').fadeOut(300);
 
-		if (editor === null) {
-			LazyLoad.js('/js/ace/ace.js', function() {
-				editor = ace.edit("aceEditor");
-				editor.setTheme("ace/theme/idle_fingers");
-				editor.getSession().setMode("ace/mode/chordpro");
-				editor.setOptions({
-					enableBasicAutocompletion: true,
-					enableSnippets: true
-				});
-				editor.completers = [ugsAce.chordCompleter];
-				copySongToAce();
-
-				$help.html(ugsAce.helpHtml);
-
-			});
-		}
-		else {
+		if (editor !== null) {
+			// editor has already been initialized, safe to continue
 			copySongToAce();
+			return;
 		}
 
+		// only execute this block once (thus the null check)
+		var path = getPath('ugsEditorPlus');
+
+		LazyLoad.js(path + '/ace/ace.js', function() {
+			editor = ace.edit("aceEditor");
+			editor.setTheme("ace/theme/idle_fingers");
+			editor.getSession().setMode("ace/mode/chordpro");
+			editor.setOptions({
+				enableBasicAutocompletion: true,
+				enableSnippets: true
+			});
+			editor.completers = [ugsAce.chordCompleter];
+			copySongToAce();
+
+			$help.html(ugsAce.helpHtml);
+
+		});
 	};
 
 	var copySongToAce = function() {
