@@ -3,7 +3,6 @@
  * text written in CPM syntax (looks for instrument, tuning, and define statements). 
  * @class chordImport
  * @namespace ukeGeeks
- * @project UkeGeeks' Scriptasaurus 
  * @singleton
  */
 ukeGeeks.chordImport = (function() {
@@ -305,6 +304,7 @@ ukeGeeks.chordImport = (function() {
 		_errs.push(msg);
 	};
 	var _errs = [];
+
 	var _echoLog = function(){
 		for(var i in _errs){
 			console.log(i + '. ' + _errs[i]);

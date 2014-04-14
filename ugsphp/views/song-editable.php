@@ -191,6 +191,12 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			</label>
 		</p>
 		<p class="checkboxBlock">
+			<input type="checkbox" value="true" id="chkSortAlpha" checked="checked" />
+			<label for="chkSortAlpha">Sort reference diagrams alphabetically
+				<span class="checkBoxFinePrint">otherwise &ldquo;song order&rdquo; is used</span>
+			</label>
+		</p>
+		<p class="checkboxBlock">
 			<input type="checkbox" value="true" id="chkIgnoreCommon" checked="checked" />
 			<label for="chkIgnoreCommon">Ignore common chords
 				<span class="checkBoxFinePrint">don't create master chord diagrams for these chords:</span>
@@ -284,20 +290,19 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ukeGeeks.scriptasaurus.min.js"></script>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.min.js"></script>
 <script type="text/javascript">
-if (isLegacyIe){
-	window.attachEvent('onload', ugsEditorPlus.attachIe);
-}
-else{
-	window.onload = ugsEditorPlus.attach;
-}
-</script>
+$(function() {
+	ugsEditorPlus.init({
+		// best to leave this line as-is:
+		useLegacyIe: isLegacyIe
+		// put your options below:
+	});
 <?php if ($model->IsUpdateAllowed) {
 	?>
-	<script type="text/javascript">
 	ugsEditorPlus.updateSong.init("<?php echo($model->UpdateAjaxUri); ?>", "<?php echo($model->Id); ?>");
-	</script>
 	<?php
 	}
 ?>
+});
+</script>
 </body>
 </html>

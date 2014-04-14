@@ -6,7 +6,7 @@
  * @class settings
  * @namespace ukeGeeks
  * @static
-_public * @singleton
+ * @singleton
  */
 ukeGeeks.settings = (function() {
 	/**
@@ -50,50 +50,50 @@ ukeGeeks.settings = (function() {
 		 * By default normal chord diagrams have text (TRUE) whereas inlineDiagrams
 		 * (i.e. chord diagrams shown above lyrics) do NOT as they are too small
 		 * (thus inlineFretbox.showText is FALSE)
-		 * @property settings.fretBox.showText
+		 * @property fretBox.showText
 		 * @type bool
 		 */
 		showText: true,
 		/**
 		 * Chord Box's Bounding height
-		 * @property settings.fretBox.height
+		 * @property fretBox.height
 		 * @type int
 		 */
 		height: 150,
 		/**
 		 * Chord Box's Bounding width
-		 * @property settings.fretBox.width
+		 * @property fretBox.width
 		 * @type int
 		 */
 		width: 100,
 		/**
 		 * Row Height -- vertical height between frets (pixels)
-		 * @property settings.fretBox.fretSpace
+		 * @property fretBox.fretSpace
 		 * @type int
 		 */
 		fretSpace: 20,
 		/**
 		 * String Spacing -- horizontal distance between strings (pixels)
-		 * @property settings.fretBox.stringSpace
+		 * @property fretBox.stringSpace
 		 * @type int
 		 */
 		stringSpace: 20,
 		/**
 		 * Dot (finger position) radius in pixels
-		 * @property settings.fretBox.dotRadius
+		 * @property fretBox.dotRadius
 		 * @type int
 		 */
 		dotRadius: 8,
 		/**
 		 * Fretboard line width in pixels
-		 * @property settings.fretBox.lineWidth
+		 * @property fretBox.lineWidth
 		 * @type decimal
 		 */
 		lineWidth: 1.6,
 		/**
 		 * top-left position -- the offset for chord box. Doing this programatically
 		 * had "issues", decided to make this adjustment manual.
-		 * @property settings.fretBox.topLeftPos
+		 * @property fretBox.topLeftPos
 		 * @type JSON
 		 */
 		topLeftPos: {
@@ -102,13 +102,13 @@ ukeGeeks.settings = (function() {
 		},
 		/**
 		 * muted string "X" width of the 'X' crossbars. Recommend this be about 0.5 to 0.9 relative to stringSpace.
-		 * @property settings.fretBox.xWidth
+		 * @property fretBox.xWidth
 		 * @type decimal
 		 */
 		xWidth: 0.45 * 20,
 		/**
 		 * muted string "X" stroke thickness. Recommend this be about 1.3 to 2.1 relative to lineWidth
-		 * @property settings.fretBox.xStroke
+		 * @property fretBox.xStroke
 		 * @type decimal
 		 */
 		xStroke: 1.6 * 1.6
@@ -176,7 +176,7 @@ ukeGeeks.settings = (function() {
 		 * @property opts.retainBrackets
 		 * @type Boolean
 		 */
-		retainBrackets: true,
+		retainBrackets: false,
 		/**
 		 * if TRUE chords in the "commonChords" list will be ignored (excluded) from having thier
 		 * master chord diagram drawn
@@ -190,7 +190,7 @@ ukeGeeks.settings = (function() {
 		 * @property opts.sortAlphabetical
 		 * @type Boolean
 		 */
-		sortAlphabetical: true,
+		sortAlphabetical: false,
 		/**
 		 * if TRUE chords that overlap each other (in the music area) will have their spacing adjuste
 		 * to prevent overlapping.
@@ -252,12 +252,11 @@ ukeGeeks.settings = (function() {
 	_public.environment = {
 		/**
 		 * set in scriptasaurus. True if UserAgent is Internet Explorer
-		 * @property settings.environment.isIe
+		 * @property environment.isIe
 		 * @type bool
 		 */
 		isIe : false
 	};
-
 
 	/**
 	 * List of common chords to be "ignored" (won't show master chord diagrams)

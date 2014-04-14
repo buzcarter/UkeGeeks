@@ -1,11 +1,10 @@
-
 /**
  * Handles Top Menu UI -- includes the show/hide dialogs (why? cuz they're attached to top menu buttons)
  * Shows (a) dialongs (such as Edit) and (b) those tool-tippy options thingies.
  * @class topMenus
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.topMenus = (function(){
+ugsEditorPlus.topMenus = (function() {
 
 	/**
 	 * attaches events...
@@ -21,7 +20,7 @@ ugsEditorPlus.topMenus = (function(){
 		$('#ugsAppToolbar > ul li[data-dialog]').click(_onShowDlgBtnClick);
 		$('.closeBtn').click(_onCloseBtnClick);
 		$('.resizeBtn').click(_onResizeBtnClick);
- 	};
+	};
 
 	/**
 	 * Click handler for nav items that are NOT attached to a dialog box.
@@ -46,7 +45,7 @@ ugsEditorPlus.topMenus = (function(){
 	 * @private
 	 * @return {void}
 	 */
-	var _makeAllInactive = function(){
+	var _makeAllInactive = function() {
 		$('#ugsAppToolbar > ul > li').removeClass('active');
 	};
 
@@ -77,6 +76,7 @@ ugsEditorPlus.topMenus = (function(){
 		// now show dialog associated with the clicked button
 		var id = $(this).data('dialog');
 		$('#' + id).fadeIn();
+
 		// prevent event bubbling
 		return false;
 	};
@@ -111,7 +111,9 @@ ugsEditorPlus.topMenus = (function(){
 	 */
 	var _onShowOptionsClick = function(e) {
 		var id = $(this).attr('href');
+
 		$('.arrowBox').not(id).hide();
+
 		var $dlg = $(id);
 		$dlg.find('dd').hide();
 		$dlg.fadeToggle();

@@ -1,30 +1,194 @@
 /**
+ * <ul>
+ * <li>Project: UkeGeeks' Song-a-matic Editor</li>
+ * <li>Homepage: http://ukegeeks.com</li>
+ * <li>Project Repository: https://github.com/buzcarter/UkeGeeks</li>
+ * <li>Author: Buz Carter</li>
+ * <li>Contact: buz@ukegeeks.com</li>
+ * <li>Copyright: Copyright 2010-2014 Buz Carter.</li>
+ * <li>License GNU General Public License (http://www.gnu.org/licenses/gpl.html)</li>
+ * </ul>
+ *
+ * <h3>Overview</h3>
  * This library implments the UkeGeeks Scriptasaurus Song-a-matic editor functions, bridging the page UI and scriptasaurus methods.
- * @module  ugsEditorPlus
- * @namespace  ugsEditorPlus
- * @class ugsEditorPlus
+ *
+ * @module ugsEditorPlus
+ * @main ugsEditorPlus
+ **/
+;/**
+ * Exposes the only method required to attach UkeGeeks Scriptasaurus Song-a-matic editor functionality.
+ * @namespace ugsEditorPlus
+ * @class _ROOT_
+ * @for ugsEditorPlus._ROOT_
  */
 var ugsEditorPlus = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
+	 * @private
 	 * @type JsonObject
 	 */
 	var _public = {};
 
 	/**
+	 * Options (Features) you can turn on or off. Where available defaults to values defined in UkeGeeks.settings
+	 * @class options
+	 * @public
+	 * @type JSON Object
+	 * @for _ROOT_
+	 */
+	_public.options = {
+		/**
+		 * If true attempts compatibility for versions of Microsoft Internet Explorer prior to IE9
+		 * @example
+		 *  Allowed values: true, false
+		 * @property useLegacyIe
+		 * @for  options
+		 * @type Boolean
+		 * @default false
+		 */
+		useLegacyIe: false,
+
+		/**
+		 * If true the Edit Song box is shown when the page loads; false hides it.
+		 * @example
+		 *  Allowed values: true, false
+		 * @property showEditOnLoad
+		 * @type Boolean
+		 * @default true
+		 */
+		showEditOnLoad: true,
+
+		/**
+		 * Lyric's font size (pts)
+		 * @example
+		 *  Allowed values: 6, 6.5, 7, 7.5, 8, 8.5, 9, 10, 11, 12, 13, 14
+		 * @property fontSize
+		 * @type Number
+		 * @default 12
+		 */
+		fontSize: 12,
+
+		/**
+		 * Reference diagram size expressed as a percentage (100% being max)
+		 * @example
+		 *  Allowed values: 40 ("tiny"), 65 ("small"), 80 ("medium"), 90 ("large"), 100 ("x-large")
+		 * @property diagramSize
+		 * @type Integer
+		 * @default 100
+		 */
+		diagramSize: 100,
+
+		/**
+		 * Specify where reference diagrams should be show
+		 * @example
+		 *  Allowed values: left, top, or none
+		 * @property diagramPosition
+		 * @type Text
+		 * @default left
+		 */
+		diagramPosition: "left",
+
+		/**
+		 * Specify how chord names within lyrics should be shown
+		 * @example
+		 *  Allowed values: inline, above, or miniDiagrams
+		 * @property lyricStyle
+		 * @type Text
+		 * @default above
+		 */
+		lyricStyle: "above",
+
+		/**
+		 * Specify width (mock paper)
+		 * @example
+		 *  Allowed values: letter, a4, screen
+		 * @property paper
+		 * @type Text
+		 * @default letter
+		 */
+		paper: "letter",
+
+		/**
+		 * Shortname for the default theme to be applied.
+		 * Default: normal
+		 * @example
+		 *  Allowed values: frosty, jellyBean, justBlack, krampus, normal, notebook, pumpkin, reversed, western, zombie
+		 * @property theme
+		 * @type Text
+		 * @default normal
+		 */
+		theme: "normal",
+
+		/**
+		 * Affects chord diagrams pick your ukulele tuning (aka "instrument") (see: ukeGeeks.settings.defaultInstrument)
+		 * @example
+		 *  Allowed values: soprano or baritone
+		 * @property tuning
+		 * @type Text
+		 * @default soprano
+		 */
+		tuning: "soprano",
+
+		/**
+		 * Show/hide the square brackets around chord names within lyrics
+		 * @example
+		 *  Allowed values: true, false
+		 * @property hideChordEnclosures
+		 * @type Boolean
+		 * @default see UkeGeeks.settings
+		 */
+		hideChordEnclosures: !ukeGeeks.settings.opts.retainBrackets,
+
+		/**
+		 * Order in which the reference diagrams are sorted, either alphabetically (true) or order
+		 * in which they appear within the song (false).
+		 * @example
+		 * Allowed values: true, false
+		 * @property sortAlphabetical
+		 * @type Boolean
+		 * @default see UkeGeeks.settings
+		 */
+		sortAlphabetical: ukeGeeks.settings.opts.sortAlphabetical,
+
+		/**
+		 * if TRUE chords in the "commonChords" list will be ignored (excluded) from having thier
+		 * master chord diagram drawn
+		 * @example
+		 * Allowed values: true, false
+		 * @property ignoreCommonChords
+		 * @type Boolean
+		 * @default see UkeGeeks.settings
+		 */
+		ignoreCommonChords: ukeGeeks.settings.opts.ignoreCommonChords,
+
+		/**
+		 * array of chord names to be ignored (if option is enabled)
+		 * @example
+		 *  Can be either an array of strings: ["A", "G"] or comma delimited list: "A, G"
+		 * @property commonChords
+		 * @type mixed
+		 * @default see UkeGeeks.settings
+		 */
+		commonChords: ukeGeeks.settings.commonChords
+	};
+
+	/**
 	 * attaches event handlers, preps variables, and runs UGS
 	 * @method init
-	 * @private
-	 * @param isLegacyIe {bool} pre-IE 9 versions
+	 * @for  _ROOT_
+	 * @public
+	 * @param options {OBJECT} (optional) Object/JSON with any of the ugsEditorPlus.options
 	 */
-	var init = function(isLegacyIe) {
-		// ukeGeeks.tumblr.opts.diagramResizeTo = 1;
-		ukeGeeks.settings.opts.retainBrackets = false;
+	_public.init = function(options) {
+		var opts = $.extend(_public.options, (typeof options === "object") ? options : {});
 
-		ukeGeeks.scriptasaurus.init(isLegacyIe);
+		ukeGeeks.settings.opts.retainBrackets = !opts.hideChordEnclosures;
+		$('#songSourceDlg').toggle(opts.showEditOnLoad);
 
-		ugsEditorPlus.actions.init(isLegacyIe);
+		ukeGeeks.scriptasaurus.init(opts.useLegacyIe);
+
+		ugsEditorPlus.actions.init();
 		ugsEditorPlus.topMenus.init();
 		ugsEditorPlus.submenuUi.init();
 		ugsEditorPlus.optionsDlg.init();
@@ -33,21 +197,27 @@ var ugsEditorPlus = (function() {
 	};
 
 	/**
-	 * wraps the private Init method for modern browsers
+	 * Use init method instead. Wraps the Init method for modern browsers
 	 * @method attach
+	 * @deprecated Use init instead
 	 * @public
 	 */
 	_public.attach = function() {
-		init(false);
+		_public.init({
+			useLegacyIe: false
+		});
 	};
 
 	/**
-	 * wraps the private Init method, required for Legacy Internet Exploere (pre-9)
-	 * @method attach
+	 * Use init method instead. Wraps the Init method, required for Legacy Internet Exploere (pre-9).
+	 * @method attachIe
+	 * @deprecated Use init instead
 	 * @public
 	 */
 	_public.attachIe = function() {
-		init(true);
+		_public.init({
+			useLegacyIe: true
+		});
 	};
 
 	// ---------------------------------------
@@ -68,16 +238,15 @@ ugsEditorPlus.actions = (function() {
 	/**
 	 * attach public members to this object
 	 * @property _public
+	 * @public
 	 * @type JsonObject
 	 */
 	var _public = {};
 
-	// legacy IE flag
-	var _isCrap = false;
-
 	/**
 	 * associative array/JSON handles to key/frequently accessed DOM Elements (see init()
 	 * @property _ele
+	 * @private
 	 * @type {JSON}
 	 */
 	var _ele = {};
@@ -85,10 +254,10 @@ ugsEditorPlus.actions = (function() {
 	// misc
 	var _song = null;
 	//
-	var _sourceOriginal = null;
+	var _originalSource = null;
 	var _originalChords = [];
 
-	var _re = {
+	var _regEx = {
 		safe: /^([A-G][#b]?)(m|m6|7|m7|dim|maj7|6|sus2|sus4|aug|9)?$/
 	};
 
@@ -99,9 +268,6 @@ ugsEditorPlus.actions = (function() {
 	 * @type {JSON}
 	 */
 	var _prevValues = {
-		//'colors' : 'normal',
-		//'layout' : 'left',
-		//'tuning' : 'soprano',
 		'placement': 'above',
 		'transpose': 'up_0'
 	};
@@ -110,11 +276,8 @@ ugsEditorPlus.actions = (function() {
 	 * Sets up this class; modifies form elements; attaches event handlers, etc
 	 * @method init
 	 * @public
-	 * @param isLegacyIe {bool} true if using pre-Internet Explorer v8 or 9 (sorry, I've forgotten or don't care)
 	 */
-	_public.init = function(isLegacyIe) {
-		_isCrap = isLegacyIe;
-
+	_public.init = function() {
 		_ele = {
 			songText: document.getElementById('ukeSongText'),
 			songContainer: document.getElementById('ukeSongContainer'),
@@ -125,6 +288,8 @@ ugsEditorPlus.actions = (function() {
 		$(document).on('option:click', function(e, data) {
 			doAction(data.action, data.value);
 		});
+
+		syncOptions(ugsEditorPlus.options);
 	};
 
 	/* ----------------------------------------------------------------------------------- *|
@@ -134,29 +299,34 @@ ugsEditorPlus.actions = (function() {
 	/**
 	 * Executes the requested Action using passed in Value
 	 * @method doAction
-	 * @public
+	 * @private
 	 * @param action {string} Action's name; must match one of those defined in the switch below
 	 * @param value {string} Value used by Action (OK, a couple methods assume this is boolean/falsy)
 	 */
 	var doAction = function(action, value) {
+		// actions that modify song's HTML or reference diagrams require rerunning Scriptasaurus
+		var runRequired = false;
+
 		switch (action) {
 			case 'zoomFonts':
-				zoomFonts(value);
+				doSetFontSize(value);
 				break;
 			case 'zoomDiagrams':
-				zoomDiagrams(value);
+				doSetDiagramSize(value);
 				break;
 			case 'layout':
 				doLayout(value);
 				break;
 			case 'placement':
-				doPlacement(value);
+				runRequired = doPlacement(value);
 				break;
 			case 'tuning':
 				doTuning(value);
+				runRequired = true;
 				break;
 			case 'colors':
-				doColors(value);
+				doSetTheme(value);
+				runRequired = true;
 				break;
 			case 'transpose':
 				doTranspose(value);
@@ -166,12 +336,19 @@ ugsEditorPlus.actions = (function() {
 				break;
 			case 'showEnclosures':
 				setEnclosureVisible(value);
+				runRequired = true;
 				break;
 			case 'hideCommonChords':
 				setIgnoreCommon(value);
+				runRequired = true;
+				break;
+			case 'sortAlphabetical':
+				setSortAlphabetical(value);
+				runRequired = true;
 				break;
 			case 'setCommonChords':
 				setCommonChordsList(value);
+				runRequired = ukeGeeks.settings.opts.ignoreCommonChords;
 				break;
 			case 'update':
 				doUpdate();
@@ -179,6 +356,27 @@ ugsEditorPlus.actions = (function() {
 			default:
 				console.log('Unrecognized ' + action + ' > ' + value);
 		}
+
+		if (runRequired) {
+			_public.run();
+		}
+	};
+
+	var syncOptions = function(options) {
+		// direct menus
+		doSetFontSize(options.fontSize);
+		doSetDiagramSize(options.diagramSize);
+		doLayout(options.diagramPosition);
+		doSetPageWidth(options.paper);
+		doSetTheme(options.theme);
+		doTuning(options.tuning);
+		doPlacement(options.lyricStyle);
+
+		// advanced options
+		setEnclosureVisible(!options.hideChordEnclosures);
+		setIgnoreCommon(options.ignoreCommonChords);
+		setCommonChordsList(options.commonChords);
+		setSortAlphabetical(options.sortAlphabetical);
 	};
 
 	/**
@@ -208,8 +406,8 @@ ugsEditorPlus.actions = (function() {
 			ugsEditorPlus.songUi.update(_song);
 
 			// maintains last copy of USER edited song -- used for transpose etc
-			if (isDoBackup || (_sourceOriginal === null)) {
-				_sourceOriginal = _ele.cpmSource.value;
+			if (isDoBackup || (_originalSource === null)) {
+				_originalSource = _ele.cpmSource.value;
 				_originalChords = _song.chords;
 				var key = _song.key !== '' ? _song.key : (_song.chords.length < 1 ? '' : _song.chords[0]);
 				resetTranspose(key);
@@ -223,22 +421,22 @@ ugsEditorPlus.actions = (function() {
 
 	/**
 	 * Zooms (scales) fonts
-	 * @method zoomFonts
+	 * @method doSetFontSize
 	 * @private
 	 * @param value {string} point-size; value of the clicked value item
 	 */
-	var zoomFonts = function(value) {
+	var doSetFontSize = function(value) {
 		var pt = parseFloat(value, 10);
 		_ele.scalableArea.style.fontSize = pt + 'pt';
 	};
 
 	/**
 	 * Zooms (scales) chord diagrams
-	 * @method zoomDiagrams
+	 * @method doSetDiagramSize
 	 * @private
 	 * @param value {string} percentage, integer between 0 and, well, 100?; value of the clicked value item
 	 */
-	var zoomDiagrams = function(value) {
+	var doSetDiagramSize = function(value) {
 		var prct = parseInt(value, 10) / 100;
 		// apologies for the magic number...
 		var columnWidth = Math.round(prct * 225);
@@ -277,12 +475,14 @@ ugsEditorPlus.actions = (function() {
 	|* ----------------------------------------------------------------------------------- */
 
 	/**
-	 * Chord Name placement (&amp; "Mini-chord diagrams")
+	 * Chord Name placement (&amp; "Mini-chord diagrams"). Returns true if Scriptasaurus should be rerun.
 	 * @method doPlacement
 	 * @private
 	 * @param value {string} value of the clicked value item
+	 * @return {Boolean}
 	 */
 	var doPlacement = function(value) {
+		var isRunRequired = false;
 		ukeGeeks.toolsLite.setClass(_ele.songContainer, 'ugsInline', (value == 'inline'));
 
 		// NOTE: ugs already adds the "chord diagrams above" class based on setting,
@@ -294,7 +494,7 @@ ugsEditorPlus.actions = (function() {
 
 		if (isMiniDiagrams || (_prevValues.placement == 'miniDiagrams')) {
 			ukeGeeks.settings.inlineDiagrams = isMiniDiagrams;
-			_public.run();
+			isRunRequired = true;
 		}
 		else if (!isMiniDiagrams && (_prevValues.placement != 'miniDiagrams')) {
 			// we're jumping between "above" and "inline", either way we need to
@@ -303,6 +503,8 @@ ugsEditorPlus.actions = (function() {
 		}
 
 		_prevValues.placement = value;
+
+		return isRunRequired;
 	};
 
 	/* ----------------------------------------------------------------------------------- *|
@@ -311,13 +513,12 @@ ugsEditorPlus.actions = (function() {
 
 	/**
 	 * Change the color scheme -- requires changing CSS Class and reruning (to regenerate reference chord diagrams)
-	 * @method doColors
+	 * @method doSetTheme
 	 * @private
 	 * @param value {string} value of the clicked value item
 	 */
-	var doColors = function(value) {
+	var doSetTheme = function(value) {
 		ugsEditorPlus.themes.set(value);
-		_public.run();
 	};
 
 	/* ----------------------------------------------------------------------------------- *|
@@ -360,7 +561,6 @@ ugsEditorPlus.actions = (function() {
 
 		$('#footTuningInfo').html(msg);
 		ukeGeeks.scriptasaurus.setTuningOffset(tuning);
-		_public.run();
 	};
 
 	/**
@@ -387,7 +587,7 @@ ugsEditorPlus.actions = (function() {
 
 		// find "shiftable" chords
 		for (i = 0; i < _originalChords.length; i++) {
-			if (_re.safe.test(_originalChords[i])) {
+			if (_regEx.safe.test(_originalChords[i])) {
 				safeChords.push(_originalChords[i]);
 			}
 			else {
@@ -402,28 +602,28 @@ ugsEditorPlus.actions = (function() {
 		}
 
 		var newChords = ukeGeeks.transpose.shiftChords(safeChords, steps);
-		var s = _sourceOriginal;
-		var regEx;
+		var s = _originalSource;
+		var rEx;
 
 		// "safe" (temp) rename chords (prepend noise "ugsxx_" so a renamed G will be distinguisable from a new G)
 		for (i = 0; i < safeChords.length; i++) {
-			regEx = new RegExp('\\[' + safeChords[i] + '\\]', 'g');
-			s = s.replace(regEx, '[ugsxx_' + i + ']');
+			rEx = new RegExp('\\[' + safeChords[i] + '\\]', 'g');
+			s = s.replace(rEx, '[ugsxx_' + i + ']');
 		}
 
 		// final rename; placeholder names to desired names
 		for (i = 0; i < newChords.length; i++) {
-			regEx = new RegExp('\\[ugsxx_' + i + '\\]', 'g');
-			s = s.replace(regEx, '[' + newChords[i] + ']');
+			rEx = new RegExp('\\[ugsxx_' + i + '\\]', 'g');
+			s = s.replace(rEx, '[' + newChords[i] + ']');
 		}
 
 		// find & replace {key} command (if present)
-		regEx = /^\s*\{\s*(key|k)\s*:\s*(\S*?)\s*\}\s*$/im;
-		if (regEx.test(s)) {
-			var m = s.match(regEx);
+		rEx = /^\s*\{\s*(key|k)\s*:\s*(\S*?)\s*\}\s*$/im;
+		if (rEx.test(s)) {
+			var m = s.match(rEx);
 			var key = m[2];
-			if ((key !== '') && _re.safe.test(key)) {
-				s = s.replace(regEx, m[0].replace(key, ukeGeeks.transpose.shift(key, steps)));
+			if ((key !== '') && _regEx.safe.test(key)) {
+				s = s.replace(rEx, m[0].replace(key, ukeGeeks.transpose.shift(key, steps)));
 			}
 		}
 
@@ -473,7 +673,16 @@ ugsEditorPlus.actions = (function() {
 	 */
 	var setEnclosureVisible = function(isVisible) {
 		ukeGeeks.settings.opts.retainBrackets = isVisible;
-		_public.run();
+	};
+
+	/**
+	 * (option dialog) change whether reference diagrams are sorted alphabetically or by their "song order"
+	 * @method setSortAlphabetical
+	 * @private
+	 * @param isAlphabetical {bool}
+	 */
+	var setSortAlphabetical = function(isAlphabetical) {
+		ukeGeeks.settings.opts.sortAlphabetical = isAlphabetical;
 	};
 
 	/**
@@ -484,33 +693,31 @@ ugsEditorPlus.actions = (function() {
 	 */
 	var setIgnoreCommon = function(isIgnore) {
 		ukeGeeks.settings.opts.ignoreCommonChords = isIgnore;
-		_public.run();
 	};
 
 	/**
 	 * the list of common chords has been change; update UGS setting
-	 * and _possible_ rerun
 	 * @method setCommonChordsList
 	 * @private
-	 * @param chordCsvList {string} comma seperated values list of chord names
+	 * @param chordList {mixed} Either string, as comma seperated values list, or array of chord names
 	 * @return {void}
 	 */
-	var setCommonChordsList = function(chordCsvList) {
-		var inputList = chordCsvList.split(/[ ,]+/);
-		var cleanList = [];
+	var setCommonChordsList = function(chordList) {
+		if (typeof chordList == 'string') {
+			var inputList = chordList.split(/[ ,]+/);
+			var cleanList = [];
 
-		for (var i = 0; i < inputList.length; i++) {
-			var c = ukeGeeks.toolsLite.trim(inputList[i]);
-			if (c.length > 0) {
-				cleanList.push(c);
+			for (var i = 0; i < inputList.length; i++) {
+				var c = ukeGeeks.toolsLite.trim(inputList[i]);
+				if (c.length > 0) {
+					cleanList.push(c);
+				}
 			}
+
+			chordList = cleanList;
 		}
 
-		ukeGeeks.settings.commonChords = cleanList;
-
-		if (ukeGeeks.settings.opts.ignoreCommonChords) {
-			_public.run();
-		}
+		ukeGeeks.settings.commonChords = chordList;
 	};
 
 	// ---------------------------------------
@@ -871,13 +1078,14 @@ ugsEditorPlus.themes = (function() {
 	/**
 	 * Populates the UL (identified via CSS/jQuery selector) with the color scheme List Items (LIs)
 	 * @method loadList
-	 * @param  {string} selector
+	 * @param {string} selector
+	 * @param {string} selectedValue value that should be "checked"
 	 */
-	_public.loadList = function(selector) {
+	_public.loadList = function(selector, selectedValue) {
 		var s = '';
 		for (var key in _colorSchemes) {
 			if (_colorSchemes.hasOwnProperty(key)) {
-				var cssClass = (key == 'normal') ? 'checked' : '';
+				var cssClass = (key == selectedValue) ? 'checked' : '';
 				s += '<li class="' + cssClass + '"><a href="#' + key + '" title="' + _colorSchemes[key].description + '">' + _colorSchemes[key].name + '</a></li>';
 			}
 		}
@@ -906,8 +1114,10 @@ ugsEditorPlus.themes = (function() {
 
 }());
 ;/**
- * UI mechanics of the Other Options dialog
- * @class options
+ * UI mechanics of the Other Options "dialog"'s checkboxes and input
+ * fields (does NOT manage "pageWidth" since its standard submenu behavior
+ * is already handled in that class)
+ * @class optionsDlg
  * @namespace ugsEditorPlus
  */
 ugsEditorPlus.optionsDlg = (function() {
@@ -918,45 +1128,49 @@ ugsEditorPlus.optionsDlg = (function() {
 	 */
 	var _public = {};
 
-	// DOM handles (mostly for options dialog elements only)
-	var _ele = {};
-
 	/**
 	 * Sets up this class by attaching event handlers to form elements;
 	 * @method init
 	 * @public
 	 */
 	_public.init = function() {
-		_ele = {
-			inputIgnoreList: document.getElementById('commonChordList'),
-			chkIgnore: document.getElementById('chkIgnoreCommon'),
-			//pageWidth : document.getElementById('pageWidth'),
-			chkEnclosures: document.getElementById('chkEnclosures')
-		};
+		var ele,
+			options = ugsEditorPlus.options;
 
-		restoreDefaults();
-
-		// button clicks
+		// Update Button
 		document.getElementById('updateBtn').onclick = function() {
 			triggerNotify('update', '');
 			return false;
 		};
 
-		//_ele.pageWidth.onchange = function(){doSetWidth(this.value); };
-
-		// Change whether to show/hide the bracket characters
-		_ele.chkEnclosures.onclick = function() {
+		// show/hide square bracket (chord enclosure)
+		ele = document.getElementById('chkEnclosures');
+		ele.checked = options.hideChordEnclosures;
+		ele.onclick = function() {
 			// Boolean "isVisible"
 			triggerNotify('showEnclosures', !this.checked);
 		};
 
-		// the list of common chords has been change; update UGS setting and _possibly_ rerun
-		_ele.inputIgnoreList.onchange = function() {
-			triggerNotify('setCommonChords', _ele.inputIgnoreList.value);
+		// list of chord names to ignore
+		ele = document.getElementById('commonChordList');
+		ele.value = (typeof options.commonChords == 'string') ? options.commonChords : options.commonChords.join(", ");
+		ele.onchange = function() {
+			triggerNotify('setCommonChords', this.value);
 		};
 
-		// "Ignore Common" was checked, need to update master chord diagrams
-		_ele.chkIgnore.onclick = function() {
+		// toggle order of reference diagrams
+		ele = document.getElementById('chkSortAlpha');
+		if (ele) {
+			ele.checked = options.sortAlphabetical;
+			ele.onclick = function() {
+				triggerNotify('sortAlphabetical', this.checked);
+			};
+		}
+
+		// toggle ignore common chords
+		ele = document.getElementById('chkIgnoreCommon');
+		ele.checked = options.ignoreCommonChords;
+		ele.onclick = function() {
 			// Boolean for "isIgnore"
 			triggerNotify('hideCommonChords', this.checked);
 		};
@@ -965,7 +1179,6 @@ ugsEditorPlus.optionsDlg = (function() {
 		$('.checkboxBlock label, input[type=checkbox]').click(function(e) {
 			e.stopPropagation();
 		});
-		//$('#helpDlg a').click(function(e){console.log('anchor click');});
 
 		$('.overlay').draggable({
 			handle: 'hgroup'
@@ -980,14 +1193,6 @@ ugsEditorPlus.optionsDlg = (function() {
 		});
 	};
 
-	var restoreDefaults = function() {
-		// initialize the common list
-		_ele.inputIgnoreList.value = ukeGeeks.settings.commonChords.join(", ");
-		//_ele.pageWidth.value = 'letter';
-		_ele.chkIgnore.checked = ukeGeeks.settings.opts.ignoreCommonChords;
-		_ele.chkEnclosures.checked = !ukeGeeks.settings.opts.retainBrackets;
-	};
-
 	// ---------------------------------------
 	// return public interface "JSON handle"
 	// ---------------------------------------
@@ -997,7 +1202,7 @@ ugsEditorPlus.optionsDlg = (function() {
 ;var ugsEditorPlus = window.ugsEditorPlus || {};
 
 /**
- *
+ * TK
  * @class reformat
  * @namespace ugsEditorPlus
  * @singleton
@@ -1014,7 +1219,8 @@ ugsEditorPlus.reformat = (function() {
 
 	/**
 	 *
-	 * @class _enums
+	 * @property _enums
+	 * @private
 	 */
 	var _enums = {
 		lineTypes: {
@@ -1027,8 +1233,10 @@ ugsEditorPlus.reformat = (function() {
 
 	/**
 	 * Line Object Class Definition (sets defaults)
-	 * @class LineObj
+	 * @class reformat.LineObj
+	 * @private
 	 * @constructor
+	 * @for reformat
 	 */
 	var LineObj = function() {
 		this.source = '';
@@ -1062,9 +1270,11 @@ ugsEditorPlus.reformat = (function() {
 
 	/**
 	 * Accepts a text block, returns "ChordPro" text block with chord lines merged into lyric lines with chords enclosed in square-brackets (i.e. [Cdim])
-	 * @method reformat
+	 * @method run
+	 * @public
 	 * @param text {string} songstring
 	 * @return {string} ChordPro format text block
+	 * @for reformat
 	 */
 	_public.run = function(text) {
 		_hasChords = false;
@@ -1501,11 +1711,13 @@ ugsEditorPlus.submenuUi = (function() {
 	 * @return {[type]} [description]
 	 */
 	_public.init = function() {
-		ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect');
+		ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect', ugsEditorPlus.options.theme);
 		$('.enablePseudoSelects label').click(onLabelClick);
 		$('.pseudoSelect li').click(onOptionClick);
 		$('body').bind('click', closeAll);
 		$('.arrowBox').click(doCollapseAllLists);
+
+		syncOptions(ugsEditorPlus.options);
 	};
 
 	/**
@@ -1516,36 +1728,75 @@ ugsEditorPlus.submenuUi = (function() {
 	 */
 	var onOptionClick = function(e) {
 		var $optionItem = $(this);
-		var hrefValue = stripHash($optionItem.children().attr('href'));
+		var value = stripHash($optionItem.children().attr('href'));
 
 		// the element holding the "pseudo-select"
 		var $select = $optionItem.parents('dd');
 		var id = $select.attr('id');
 		var actionName = $select.data('action');
 
-		// a selection's been made so we reset ("uncheck" all items) and hide the select list
-		$('#' + id)
-			.hide()
-			.find('li').removeClass('checked');
-
-		// check ("highlight") this selected item
-		$optionItem.addClass('checked');
+		// a selection's been made so we hide the (sub) select list
+		$('#' + id).hide();
+		// ...and reset ("uncheck") all items and check ("highlight") this selected item
+		setChecked($optionItem);
 
 		onListActive(this, false);
 		_open = null;
 
 		// now bubble out the info -- update display to show selected value ...
-		$('label[for=' + id + '] span').text(getLabelText(actionName, hrefValue, $optionItem));
+		$('label[for=' + id + '] span').text(getLabelText(actionName, value, $optionItem));
 		$('label[for=' + id + ']').parents('dt').removeClass('active');
 
 		// lastly, execute the action
 		$.event.trigger('option:click', {
 			action: actionName,
-			value: hrefValue
+			value: value
 		});
 
 		// prevent event bubbling
 		return false;
+	};
+
+	var setChecked = function($item) {
+		if (!$item) {
+			//console.log('item for option not found');
+			return;
+		}
+		$item.siblings().removeClass('checked');
+		$item.addClass('checked');
+	};
+
+	var syncOptions = function(options) {
+		var $item, id,
+			map = [{
+				action: 'zoomFonts',
+				value: options.fontSize
+			}, {
+				action: 'zoomDiagrams',
+				value: options.diagramSize
+			}, {
+				action: 'layout',
+				value: options.diagramPosition
+			}, {
+				action: 'paper',
+				value: options.paper
+			}, {
+				action: 'colors',
+				value: options.theme
+			}, {
+				action: 'tuning',
+				value: options.tuning
+			}, {
+				action: 'placement',
+				value: options.lyricStyle
+			}];
+
+		for (var i = map.length - 1; i >= 0; i--) {
+			$item = $('[data-action=' + map[i].action + '] a[href=#' + map[i].value + ']').closest('li');
+			id = $item.closest('dd').attr('id');
+			setChecked($item);
+			$('label[for=' + id + '] span').text(getLabelText(map[i].action, map[i].value, $item));
+		}
 	};
 
 	/**
@@ -1561,10 +1812,10 @@ ugsEditorPlus.submenuUi = (function() {
 		setActiveLabel($thisLabel);
 		$('#' + id).show();
 		onListActive(this, true);
-		if (_open != null) {
+		if (_open !== null) {
 			$('#' + _open.id).hide();
 		}
-		if (_open != null && _open.id == id) {
+		if (_open !== null && _open.id == id) {
 			_open = null;
 		}
 		else {
@@ -1580,10 +1831,6 @@ ugsEditorPlus.submenuUi = (function() {
 	_public.reset = function($dlg) {
 		$dlg.find('dt').removeClass('active');
 		$dlg.find('.event-userSelecting').removeClass('event-userSelecting');
-	};
-
-	var clearActiveLabels = function($parent) {
-		$parent.closest('dl').children('dt').removeClass('active');
 	};
 
 	var setActiveLabel = function($label) {
@@ -1612,8 +1859,6 @@ ugsEditorPlus.submenuUi = (function() {
 		if ($(e.target).is('a')) {
 			return;
 		}
-		//console.log('doCollapseAllLists');
-		//console.log();
 		$(this).find('dd').hide();
 		_open = null;
 		return false;
@@ -1707,7 +1952,7 @@ ugsEditorPlus.newSong = (function() {
 
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
-	 *  @attribute _isUpdating
+	 * @attribute _isUpdating
 	 * @type {Boolean}
 	 */
 	var _isUpdating = false;
@@ -1913,6 +2158,9 @@ ugsEditorPlus.updateSong = (function() {
 			data: JSON.stringify(data),
 			success: function(data) {
 				doAjaxOk(data);
+			},
+			error: function(data) {
+				alert('Encountered a problem saving your Song. Please copy your song to another program until this issue is resolved.');
 			}
 		});
 	};
@@ -2319,6 +2567,7 @@ ugsEditorPlus.chordBuilder = (function() {
  * Library for an HTML5 WYSIWYG editor to build ChordPro chord define tags.
  * @module  ugsChordBuilder
  * @namespace ugsChordBuilder
+ * @main  ugsChordBuilder
  */
 var ugsChordBuilder = window.ugsChordBuilder || {};
 

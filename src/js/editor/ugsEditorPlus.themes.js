@@ -228,12 +228,13 @@ ugsEditorPlus.themes = (function() {
 	 * Populates the UL (identified via CSS/jQuery selector) with the color scheme List Items (LIs)
 	 * @method loadList
 	 * @param  {string} selector
+	 * @param {string} selectedValue value that should be "checked"
 	 */
-	_public.loadList = function(selector) {
+	_public.loadList = function(selector, selectedValue) {
 		var s = '';
 		for (var key in _colorSchemes) {
 			if (_colorSchemes.hasOwnProperty(key)) {
-				var cssClass = (key == 'normal') ? 'checked' : '';
+				var cssClass = (key == selectedValue) ? 'checked' : '';
 				s += '<li class="' + cssClass + '"><a href="#' + key + '" title="' + _colorSchemes[key].description + '">' + _colorSchemes[key].name + '</a></li>';
 			}
 		}

@@ -3,7 +3,6 @@
  * if you do want to use jQuery (and why wouldn't you) I'm not offended if you yank this out.
  * @class toolsLite
  * @namespace ukeGeeks
- * @project UkeGeeks' Scriptasaurus 
  * @singleton
  */
 ukeGeeks.toolsLite = (function() {

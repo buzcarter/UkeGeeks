@@ -1,7 +1,7 @@
 var ugsEditorPlus = window.ugsEditorPlus || {};
 
 /**
- *
+ * TK
  * @class reformat
  * @namespace ugsEditorPlus
  * @singleton
@@ -18,7 +18,8 @@ ugsEditorPlus.reformat = (function() {
 
 	/**
 	 *
-	 * @class _enums
+	 * @property _enums
+	 * @private
 	 */
 	var _enums = {
 		lineTypes : {
@@ -31,8 +32,10 @@ ugsEditorPlus.reformat = (function() {
 
 	/**
 	 * Line Object Class Definition (sets defaults)
-	 * @class LineObj
+	 * @class reformat.LineObj
+	 * @private
 	 * @constructor
+	 * @for reformat
 	 */
 	var LineObj = function() {
 		this.source = '';
@@ -66,9 +69,11 @@ ugsEditorPlus.reformat = (function() {
 
 	/**
 	 * Accepts a text block, returns "ChordPro" text block with chord lines merged into lyric lines with chords enclosed in square-brackets (i.e. [Cdim])
-	 * @method reformat
+	 * @method run
+	 * @public
 	 * @param text {string} songstring
 	 * @return {string} ChordPro format text block
+	 * @for reformat
 	 */
 	_public.run = function(text) {
 		_hasChords = false;

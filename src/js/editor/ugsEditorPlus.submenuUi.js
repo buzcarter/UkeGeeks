@@ -23,11 +23,13 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @return {[type]} [description]
 	 */
 	_public.init = function() {
-		ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect');
+		ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect', ugsEditorPlus.options.theme);
 		$('.enablePseudoSelects label').click(onLabelClick);
 		$('.pseudoSelect li').click(onOptionClick);
 		$('body').bind('click', closeAll);
 		$('.arrowBox').click(doCollapseAllLists);
+
+		syncOptions(ugsEditorPlus.options);
 	};
 
 	/**
@@ -38,36 +40,75 @@ ugsEditorPlus.submenuUi = (function(){
 	 */
 	var onOptionClick = function(e){
 		var $optionItem = $(this);
-		var hrefValue = stripHash($optionItem.children().attr('href'));
+		var value = stripHash($optionItem.children().attr('href'));
 
 		// the element holding the "pseudo-select"
 		var $select = $optionItem.parents('dd');
 		var id = $select.attr('id');
 		var actionName = $select.data('action');
 
-		// a selection's been made so we reset ("uncheck" all items) and hide the select list
-		$('#'+id)
-			.hide()
-			.find('li').removeClass('checked');
-
-		// check ("highlight") this selected item
-		$optionItem.addClass('checked');
+		// a selection's been made so we hide the (sub) select list
+		$('#' + id).hide();
+		// ...and reset ("uncheck") all items and check ("highlight") this selected item
+		setChecked($optionItem);
 
 		onListActive(this, false);
 		_open = null;
 
 		// now bubble out the info -- update display to show selected value ...
-		$('label[for=' + id + '] span').text(getLabelText(actionName, hrefValue, $optionItem));
+		$('label[for=' + id + '] span').text(getLabelText(actionName, value, $optionItem));
 		$('label[for=' + id + ']').parents('dt').removeClass('active');
 
 		// lastly, execute the action
 		$.event.trigger('option:click', {
 			action: actionName,
-			value: hrefValue
+			value: value
 		});
 
 		// prevent event bubbling
 		return false;
+	};
+
+	var setChecked = function($item) {
+		if (!$item) {
+			//console.log('item for option not found');
+			return;
+		}
+		$item.siblings().removeClass('checked');
+		$item.addClass('checked');
+	};
+
+	var syncOptions = function(options) {
+		var $item, id,
+			map = [{
+				action: 'zoomFonts',
+				value: options.fontSize
+			}, {
+				action: 'zoomDiagrams',
+				value: options.diagramSize
+			}, {
+				action: 'layout',
+				value: options.diagramPosition
+			}, {
+				action: 'paper',
+				value: options.paper
+			}, {
+				action: 'colors',
+				value: options.theme
+			}, {
+				action: 'tuning',
+				value: options.tuning
+			}, {
+				action: 'placement',
+				value: options.lyricStyle
+			}];
+
+		for (var i = map.length - 1; i >= 0; i--) {
+			$item = $('[data-action=' + map[i].action + '] a[href=#' + map[i].value + ']').closest('li');
+			id = $item.closest('dd').attr('id');
+			setChecked($item);
+			$('label[for=' + id + '] span').text(getLabelText(map[i].action, map[i].value, $item));
+		}
 	};
 
 	/**
@@ -83,10 +124,10 @@ ugsEditorPlus.submenuUi = (function(){
 		setActiveLabel($thisLabel);
 		$('#'+id).show();
 		onListActive(this, true);
-		if (_open != null){
+		if (_open !== null) {
 			$('#' + _open.id).hide();
 		}
-		if (_open != null && _open.id == id){
+		if (_open !== null && _open.id == id) {
 			_open = null;
 		}
 		else {
@@ -102,10 +143,6 @@ ugsEditorPlus.submenuUi = (function(){
 	_public.reset = function($dlg){
 		$dlg.find('dt').removeClass('active');
 		$dlg.find('.event-userSelecting').removeClass('event-userSelecting');
-	};
-
-	var clearActiveLabels = function($parent){
-		$parent.closest('dl').children('dt').removeClass('active');
 	};
 
 	var setActiveLabel = function($label){
@@ -134,8 +171,6 @@ ugsEditorPlus.submenuUi = (function(){
 		if ($(e.target).is('a')){
 			return;
 		}
-		//console.log('doCollapseAllLists');
-		//console.log();
 		$(this).find('dd').hide();
 		_open = null;
 		return false;

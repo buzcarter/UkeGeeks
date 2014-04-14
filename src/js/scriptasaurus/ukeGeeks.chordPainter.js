@@ -2,7 +2,6 @@
  * Draws large chord diagram grid (aka "reference" diagrams) on canvas
  * @class chordPainter
  * @namespace ukeGeeks
- * @project UkeGeeks' Scriptasaurus
  */
 ukeGeeks.chordPainter = function(){
 

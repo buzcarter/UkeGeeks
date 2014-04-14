@@ -92,6 +92,9 @@ ugsEditorPlus.updateSong = (function() {
 			data: JSON.stringify(data),
 			success: function(data) {
 				doAjaxOk(data);
+			},
+			error: function(data) {
+				alert('Encountered a problem saving your Song. Please copy your song to another program until this issue is resolved.');
 			}
 		});
 	};
