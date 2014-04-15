@@ -18,6 +18,18 @@ Lastly, the blog includes a [technical discussion and tips section](http://blog.
 
 ## What's New...
 
+#### V1.4.3
+* General
+  * Minified JS files now use closure compression
+  * Moved source files under "src" directory (may be safely discarded for deployment)
+* "Song-a-matic" editor additions:
+  * _Change to ugsphp/Config.php_ -- now sets application AppDirectory. Important that folks upgrading merge this change.
+  * Set sort order of reference diagrams
+  * User-defined settings via settings.json file
+  * Refactor some methods to use events in order to lessen tight module coupling
+* Scriptasaurus Core
+  * Minor YuiDoc fixes, naming convention applied;
+
 #### V1.14
 * "Song-a-matic" editor additions:
   * **Chord Builder**. A point-n-click way to generate ChordPro define tags. The "mechanics" and "UI wireup" live in separate JS namespaces (new "chordBuilder" and existing "ugsEditorPlus", respectively)
@@ -37,7 +49,6 @@ Lastly, the blog includes a [technical discussion and tips section](http://blog.
   * option to ignore common chords
 
 #### V1.12
-
 * Includes "Song-a-matic" editor for easy printing & transposing
   * Reads both "plain text" or ChordPro markup
   * Transpose and switch between Soprano or Baritone tuning

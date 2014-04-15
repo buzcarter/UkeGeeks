@@ -13,7 +13,7 @@ class SongListCacheManager {
 	// -----------------------------------------
 	function SongListCacheManager(){
 		$this->cache = new SimpleCache();
-		$this->cache->setCacheDir(Config::$CachePath);
+		$this->cache->setCacheDir(Config::$AppDirectory . 'cache/');
 	}
 
 	/**

@@ -32,9 +32,24 @@ class Song_Vmb extends _base_Vmb {
 		$viewModel->Id = $filename;
 		$viewModel->IsUpdateAllowed = $this->SiteUser->MayEdit && $this->SiteUser->IsAuthenticated;
 
+		$viewModel->EditorSettingsJson = $this->getSettings();
 		return $viewModel;
 	}
 
+	/**
+	 * @return string
+	 */
+	private function getSettings() {
+		$settings = FileHelper::getFile(Config::$AppDirectory . 'settings.json');
+		return $settings === null ? '{}' : $settings;
+	}
+
+	/**
+	 * Uses either Title(s) from Song or the file name
+	 * @param string $song
+	 * @param string $filename
+	 * @return string
+	 */
 	private function MakePageTitle($song, $filename){
 		$title = '';
 
@@ -43,8 +58,7 @@ class Song_Vmb extends _base_Vmb {
 
 			if (strlen($song->artist) > 0){
 				$title .= ' - '	. $song->artist;
-			}
-			else if (strlen($song->subtitle) > 0){
+			} else if (strlen($song->subtitle) > 0) {
 				$title .= ' - ' . $song->subtitle;
 			}
 

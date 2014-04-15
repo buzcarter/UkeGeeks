@@ -17,8 +17,7 @@ class Config {
 	// file paths/directories (DO NOT DIRECTLY EDIT THESE... see Init method below)
 	// --------------------------------------
 	static public $SongDirectory = '';
-	static public $CachePath = '';
-	static public $ViewsPath = '';
+	static public $AppDirectory = '';
 
 	// --------------------------------------
 	// Alternate directory or path locations
@@ -122,10 +121,7 @@ class Config {
 	 * any dynamic setup happens here
 	 */
 	public static function Init() {
-		$appRoot = dirname(__FILE__);
-
 		self::$SongDirectory = getcwd() . '/cpm/';
-		self::$CachePath = $appRoot . '/cache/';
-		self::$ViewsPath = $appRoot . '/views/';
+		self::$AppDirectory = dirname(__FILE__) . '/';
 	}
 }

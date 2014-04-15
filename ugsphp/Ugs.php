@@ -43,7 +43,7 @@ class Ugs{
 	 */
 	private function RenderView( $model, $action ) {
 		header('X-Powered-By: ' . Config::PoweredBy);
-		include_once Config::$ViewsPath . $this->GetViewName( $action );
+		include_once Config::$AppDirectory . 'views/' . $this->GetViewName( $action );
 	}
 
 

@@ -9,6 +9,7 @@ class Song_Vm extends _base_Vm {
 	public $UgsMeta = null;
 	public $SourceUri = '';
 	public $EditUri = '';
+	public $EditorSettingsJson = '';
 
 	public $Id = '';
 

@@ -36,13 +36,11 @@ ugsEditorPlus.typeahead = function(){
 	 * Scrapes HTML to build our list of
 	 * keys, searchable text, and display text
 	 * @method listFromHtml
-	 * @return {[type]} [description]
 	 */
 	var listFromHtml = function(){
 
 		$( 'li' ).each(function( index ) {
 			var $this = $(this);
-
 			var plainText = crushText($this.text());
 			var href = $this.children('a').attr('href');
 			var key = href.toLowerCase();

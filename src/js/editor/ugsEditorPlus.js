@@ -83,7 +83,7 @@ var ugsEditorPlus = (function() {
 		lyricStyle: "above",
 
 		/**
-		 * Specify width (mock paper)
+		 * Specify page width (mock paper)
 		 * @example
 		 *  Allowed values: letter, a4, screen
 		 * @property paper
@@ -93,8 +93,7 @@ var ugsEditorPlus = (function() {
 		paper: "letter",
 
 		/**
-		 * Shortname for the default theme to be applied.
-		 * Default: normal
+		 * Theme shortname applied on page load.
 		 * @example
 		 *  Allowed values: frosty, jellyBean, justBlack, krampus, normal, notebook, pumpkin, reversed, western, zombie
 		 * @property theme
@@ -104,7 +103,7 @@ var ugsEditorPlus = (function() {
 		theme: "normal",
 
 		/**
-		 * Affects chord diagrams pick your ukulele tuning (aka "instrument") (see: ukeGeeks.settings.defaultInstrument)
+		 * Ukulele tuning ("instrument") for drawing diagrams.
 		 * @example
 		 *  Allowed values: soprano or baritone
 		 * @property tuning
@@ -114,17 +113,17 @@ var ugsEditorPlus = (function() {
 		tuning: "soprano",
 
 		/**
-		 * Show/hide the square brackets around chord names within lyrics
+		 * Show/hide the square brackets around chord names within lyrics, ex: [Am]
 		 * @example
 		 *  Allowed values: true, false
 		 * @property hideChordEnclosures
 		 * @type Boolean
 		 * @default see UkeGeeks.settings
 		 */
-		hideChordEnclosures: !ukeGeeks.settings.opts.retainBrackets,
+		hideChordEnclosures: false,
 
 		/**
-		 * Order in which the reference diagrams are sorted, either alphabetically (true) or order
+		 * Order in which reference diagrams are sorted, either alphabetically (true) or order
 		 * in which they appear within the song (false).
 		 * @example
 		 * Allowed values: true, false
@@ -132,28 +131,27 @@ var ugsEditorPlus = (function() {
 		 * @type Boolean
 		 * @default see UkeGeeks.settings
 		 */
-		sortAlphabetical: ukeGeeks.settings.opts.sortAlphabetical,
+		sortAlphabetical: false,
 
 		/**
-		 * if TRUE chords in the "commonChords" list will be ignored (excluded) from having thier
-		 * master chord diagram drawn
+		 * If TRUE chords in the "commonChords" list will be ignored (excluded from reference chord diagrams)
 		 * @example
 		 * Allowed values: true, false
 		 * @property ignoreCommonChords
 		 * @type Boolean
 		 * @default see UkeGeeks.settings
 		 */
-		ignoreCommonChords: ukeGeeks.settings.opts.ignoreCommonChords,
+		ignoreCommonChords: false,
 
 		/**
-		 * array of chord names to be ignored (if option is enabled)
+		 * Array of chords to be ignored when drawing reference diagrams (if "ignoreCommonChords" is enabled)
 		 * @example
-		 *  Can be either an array of strings: ["A", "G"] or comma delimited list: "A, G"
+		 *  (string or array of strings): as an  array of strings: ["A", "G"] or comma delimited list: "A, G"
 		 * @property commonChords
 		 * @type mixed
 		 * @default see UkeGeeks.settings
 		 */
-		commonChords: ukeGeeks.settings.commonChords
+		commonChords: []
 	};
 
 	/**
@@ -164,7 +162,7 @@ var ugsEditorPlus = (function() {
 	 * @param options {OBJECT} (optional) Object/JSON with any of the ugsEditorPlus.options
 	 */
 	_public.init = function(options) {
-		var opts = $.extend(_public.options, (typeof options === "object") ? options : {});
+		var opts = mergeOptions(options);
 
 		ukeGeeks.settings.opts.retainBrackets = !opts.hideChordEnclosures;
 		$('#songSourceDlg').toggle(opts.showEditOnLoad);
@@ -177,6 +175,17 @@ var ugsEditorPlus = (function() {
 		ugsEditorPlus.optionsDlg.init();
 		ugsEditorPlus.chordBuilder.init();
 		ugsEditorPlus.actions.run();
+	};
+
+	var mergeOptions = function(options) {
+		var opts = {
+			hideChordEnclosures: !ukeGeeks.settings.opts.retainBrackets,
+			sortAlphabetical: ukeGeeks.settings.opts.sortAlphabetical,
+			ignoreCommonChords: ukeGeeks.settings.opts.ignoreCommonChords,
+			commonChords: ukeGeeks.settings.commonChords
+		};
+
+		return $.extend(_public.options, opts, (typeof options === "object") ? options : {});
 	};
 
 	/**

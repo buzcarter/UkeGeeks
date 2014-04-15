@@ -290,12 +290,14 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ukeGeeks.scriptasaurus.min.js"></script>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.min.js"></script>
 <script type="text/javascript">
+var ugs_settings = <?php echo($model->EditorSettingsJson); ?>;
+</script>
+<script type="text/javascript">
 $(function() {
-	ugsEditorPlus.init({
-		// best to leave this line as-is:
-		useLegacyIe: isLegacyIe
-		// put your options below:
-	});
+	var ugs_settings = window.ugs_settings || {};
+	ugs_settings.useLegacyIe = isLegacyIe;
+	ugsEditorPlus.init(ugs_settings);
+
 <?php if ($model->IsUpdateAllowed) {
 	?>
 	ugsEditorPlus.updateSong.init("<?php echo($model->UpdateAjaxUri); ?>", "<?php echo($model->Id); ?>");

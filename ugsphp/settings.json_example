@@ -1,0 +1,64 @@
+{
+	// Remove the double-slashes (line comment marker) preceeding any option you wish to change
+
+	/* If true the Edit Song box is shown when the page loads; false hides it.
+	 * Allowed values: true, false
+	 */
+	// "showEditOnLoad": true,
+
+	/* Lyric's font size (pts)
+	 * Allowed values (number): 6, 6.5, 7, 7.5, 8, 8.5, 9, 10, 11, 12, 13, 14
+	 */
+	// "fontSize": 12,
+
+	/* Reference diagram size expressed as a percentage (100% being max)
+	 * Allowed values (integer): 40 ("tiny"), 65 ("small"), 80 ("medium"), 90 ("large"), 100 ("x-large")
+	 */
+	// "diagramSize": 100,
+
+	/* Specify where reference diagrams should be shown
+	 * Allowed values (text): left, top, or none
+	 */
+	// "diagramPosition": "left",
+
+	/* Specify how chord names within lyrics should be shown
+	 * Allowed values (text): inline, above, or miniDiagrams
+	 */
+	// "lyricStyle": "above",
+
+	/* Specify page width (mock paper)
+	 * Allowed values (text): letter, a4, screen
+	 */
+	// "paper": "letter",
+
+	/* Theme shortname applied on page load.
+	 * Allowed values (text): frosty, jellyBean, justBlack, krampus, normal, notebook, pumpkin, reversed, western, zombie
+	 */
+	// "theme": "normal",
+
+	/* Ukulele tuning ("instrument") for drawing diagrams.
+	 * Allowed values (text): soprano or baritone
+	 */
+	// "tuning": "soprano",
+
+	/* Show/hide the square brackets around chord names within lyrics, ex: [Am]
+	 * Allowed values: true, false
+	 */
+	// "hideChordEnclosures": true,
+
+	/* Order in which reference diagrams are sorted, either alphabetically (true) or order
+	 * in which they appear within the song (false).
+	 * Allowed values: true, false
+	 */
+	// "sortAlphabetical": false,
+
+	/* If TRUE chords in the "commonChords" list will be ignored (excluded from reference chord diagrams)
+	 * Allowed values: true, false
+	 */
+	// "ignoreCommonChords": false,
+
+	/* Array of chords to be ignored when drawing reference diagrams (if "ignoreCommonChords" is enabled)
+	 * Allowed values (string or array of strings): as an  array of strings: ["A", "G"] or comma delimited list: "A, G"
+	 */
+	// "commonChords": ["A", "B", "C", "D", "E", "F", "G", "Am"]
+}
