@@ -296,7 +296,7 @@ var ugs_settings = <?php echo($model->EditorSettingsJson); ?>;
 $(function() {
 	var ugs_settings = window.ugs_settings || {};
 	ugs_settings.useLegacyIe = isLegacyIe;
-	ugsEditorPlus.init(ugs_settings);
+	ugsEditorPlus.songAmatic.init(ugs_settings);
 
 <?php if ($model->IsUpdateAllowed) {
 	?>
