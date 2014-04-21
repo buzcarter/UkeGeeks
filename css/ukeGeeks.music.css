@@ -74,6 +74,11 @@
 	float:left;
 	margin-right:5px;
 }
+.ugsIgnoredChords {
+	clear: left;
+	font-size: 0.9em;
+	padding: 0 0 0.5em;
+}
 /*
   ------------------------------ */
 .ugs-source-wrap h5,

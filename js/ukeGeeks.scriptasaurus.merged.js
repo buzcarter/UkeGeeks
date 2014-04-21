@@ -657,7 +657,7 @@ ukeGeeks.data = (function() {
 
 		/**
 		 * array of chord names found in current song
-		 * @property chordNames
+		 * @property chords
 		 * @type array(strings)
 		 */
 		this.chords = [];
@@ -1202,17 +1202,17 @@ ukeGeeks.chordImport = (function() {
 	 */
 	_public.runBlock = function(text) {
 		//TODO: newlines get lost in strings, do I always rely on "{"?
-		var nL = text.split('\n');
-		if (nL.length < 2) {
-			nL = text.split('{');
+		var linesAry = text.split('\n');
+		if (linesAry.length < 2) {
+			linesAry = text.split('{');
 		}
-		var parts = _textToParts(nL);
-		var n = _getInstrument(text);
-		var t = _getTuning(text);
+		var parts = _textToParts(linesAry);
+		var name = _getInstrument(text);
+		var tuning = _getTuning(text);
 		return new ukeGeeks.data.instrument(
-			_getKey(n, t), // key
-			n, // name
-			t, // tuning
+			_getKey(name, tuning), // key
+			name, // name
+			tuning, // tuning
 			_partsToChords(parts) // chords
 		);
 	};
@@ -2660,15 +2660,24 @@ ukeGeeks.chordPainter = function() {
 				continue;
 			}
 			if (ukeGeeks.settings.opts.ignoreCommonChords && ignoreChord(chords[i])) {
-				_ignoreMatchList.push(chords[i]);
+				if ((typeof Array.prototype.indexOf === 'function') && (_ignoreMatchList.indexOf(chords[i]) == -1)) {
+					_ignoreMatchList.push(chords[i]);
+				}
 				continue;
 			}
-			var c = ukeGeeks.definitions.get(chords[i]);
-			if (!c) {
+			var chord = ukeGeeks.definitions.get(chords[i]);
+			if (!chord) {
 				_errors.push(chords[i]);
 				continue;
 			}
-			_brush.plot(_handles.diagrams, c, ukeGeeks.settings.fretBox);
+			_brush.plot(_handles.diagrams, chord, ukeGeeks.settings.fretBox);
+		}
+
+		if (_ignoreMatchList.length > 0) {
+			var para = document.createElement('p');
+			para.className = 'ugsIgnoredChords';
+			para.innerHTML = 'Also uses: ' + _ignoreMatchList.sort().join(', ');
+			_handles.diagrams.appendChild(para);
 		}
 	};
 
@@ -2685,15 +2694,15 @@ ukeGeeks.chordPainter = function() {
 			return;
 		}
 		for (var i = 0; i < chords.length; i++) {
-			var c = ukeGeeks.definitions.get(chords[i]);
-			if (!c) {
+			var chord = ukeGeeks.definitions.get(chords[i]);
+			if (!chord) {
 				/* TODO: error reporting if not found */
 				// _errors.push(chords[i]);
 				continue;
 			}
 			for (var j = 0; j < e.length; j++) {
-				if (e[j].getAttribute('data-chordName') == c.name) {
-					_brush.plot(e[j], c, ukeGeeks.settings.inlineFretBox, ukeGeeks.settings.inlineFretBox.fonts);
+				if (e[j].getAttribute('data-chordName') == chord.name) {
+					_brush.plot(e[j], chord, ukeGeeks.settings.inlineFretBox, ukeGeeks.settings.inlineFretBox.fonts);
 				}
 			}
 		}
@@ -3451,12 +3460,7 @@ ukeGeeks.scriptasaurus = (function() {
 
 		var container = handles.wrap;
 		if (container) {
-			if (!song.hasChords) {
-				ukeGeeks.toolsLite.addClass(container, 'ugsNoChords');
-			}
-			else {
-				ukeGeeks.toolsLite.removeClass(container, 'ugsNoChords');
-			}
+			ukeGeeks.toolsLite.setClass(container, 'ugsNoChords', !song.hasChords);
 		}
 
 		if (ukeGeeks.settings.opts.autoFixOverlaps) {

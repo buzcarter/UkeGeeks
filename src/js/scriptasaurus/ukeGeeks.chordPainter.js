@@ -94,15 +94,24 @@ ukeGeeks.chordPainter = function(){
 				continue;
 			}
 			if (ukeGeeks.settings.opts.ignoreCommonChords && ignoreChord(chords[i])){
+				if ((typeof Array.prototype.indexOf === 'function') && (_ignoreMatchList.indexOf(chords[i]) == -1)) {
 				_ignoreMatchList.push(chords[i]);
+				}
 				continue;
 			}
-			var c = ukeGeeks.definitions.get(chords[i]);
-			if (!c){
+			var chord = ukeGeeks.definitions.get(chords[i]);
+			if (!chord) {
 				_errors.push(chords[i]);
 				continue;
 			}
-			_brush.plot(_handles.diagrams, c, ukeGeeks.settings.fretBox);
+			_brush.plot(_handles.diagrams, chord, ukeGeeks.settings.fretBox);
+		}
+
+		if (_ignoreMatchList.length > 0) {
+			var para = document.createElement('p');
+			para.className = 'ugsIgnoredChords';
+			para.innerHTML = 'Also uses: ' + _ignoreMatchList.sort().join(', ');
+			_handles.diagrams.appendChild(para);
 		}
 	};
 
@@ -119,15 +128,15 @@ ukeGeeks.chordPainter = function(){
 			return;
 		}
 		for (var i=0; i < chords.length; i++){
-			var c = ukeGeeks.definitions.get(chords[i]);
-			if (!c){
+			var chord = ukeGeeks.definitions.get(chords[i]);
+			if (!chord) {
 				/* TODO: error reporting if not found */
 				// _errors.push(chords[i]);
 				continue;
 			}
 			for (var j=0; j < e.length; j++){
-				if (e[j].getAttribute('data-chordName') == c.name){
-					_brush.plot(e[j], c, ukeGeeks.settings.inlineFretBox, ukeGeeks.settings.inlineFretBox.fonts);
+				if (e[j].getAttribute('data-chordName') == chord.name) {
+					_brush.plot(e[j], chord, ukeGeeks.settings.inlineFretBox, ukeGeeks.settings.inlineFretBox.fonts);
 				}
 			}
 		}

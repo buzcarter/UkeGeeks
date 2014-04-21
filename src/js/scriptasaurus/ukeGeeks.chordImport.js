@@ -330,17 +330,17 @@ ukeGeeks.chordImport = (function() {
 	 */
 	_public.runBlock = function(text) {
 		//TODO: newlines get lost in strings, do I always rely on "{"?
-		var nL = text.split('\n');
-		if (nL.length < 2){
-			nL = text.split('{');
+		var linesAry = text.split('\n');
+		if (linesAry.length < 2) {
+			linesAry = text.split('{');
 		}
-		var parts = _textToParts(nL);
-		var n = _getInstrument(text);
-		var t = _getTuning(text);
+		var parts = _textToParts(linesAry);
+		var name = _getInstrument(text);
+		var tuning = _getTuning(text);
 		return new ukeGeeks.data.instrument(
-			_getKey(n, t), // key
-			n, // name
-			t, // tuning
+			_getKey(name, tuning), // key
+			name, // name
+			tuning, // tuning
 			_partsToChords(parts) // chords
 		);
 	};

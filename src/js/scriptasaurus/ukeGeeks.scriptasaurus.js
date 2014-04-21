@@ -122,12 +122,7 @@ ukeGeeks.scriptasaurus = (function() {
 
 		var container = handles.wrap;
 		if (container){
-			if (!song.hasChords){
-				ukeGeeks.toolsLite.addClass(container, 'ugsNoChords');
-			}
-			else{
-				ukeGeeks.toolsLite.removeClass(container, 'ugsNoChords');
-			}
+			ukeGeeks.toolsLite.setClass(container, 'ugsNoChords', !song.hasChords);
 		}
 
 		if (ukeGeeks.settings.opts.autoFixOverlaps){

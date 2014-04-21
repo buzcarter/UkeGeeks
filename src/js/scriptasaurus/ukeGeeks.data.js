@@ -109,7 +109,7 @@ ukeGeeks.data = (function() {
 		
 		/**
 		 * array of chord names found in current song
-		 * @property chordNames
+		 * @property chords
 	   * @type array(strings)
 	   */
 		this.chords= [];
