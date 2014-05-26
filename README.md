@@ -18,6 +18,10 @@ Lastly, the blog includes a [technical discussion and tips section](http://blog.
 
 ## What's New...
 
+#### V1.4.4
+* "Song-a-matic" editor additions:
+  * Settings. Override Song Editor's default settings by creating a single JSON file.
+
 #### V1.4.3
 * General
   * Minified JS files now use closure compression
@@ -198,6 +202,25 @@ And, of course, restart apache
 ```
 $ sudo /usr/sbin/apachectl restart
 ```
+
+##### Overriding Song-A-Matic's Default Settings
+
+There's a good chance that your prefered editor appearance differs from mine -- perhaps you'd like the initial font size much bigger, or you need baritone tuning, or you'd just like a different theme applied. You can easily change all these by creating a settings file that includes whichever values you want.
+
+In the "ugsphp" folder you'll find a file named "settings.json_example" copy this file as "settings.json" and open it in your editor of choice. This file contains a small bit of JSON (JavaScript Object Notation) and a lot of comments. In here you'll see all of the available settings you're able to change along with their default and allowed values. Uncomment the ones you want by removing the double-slashes (line comment marker) at the beginning of the line:
+
+````
+{
+/* If true the Edit Song box is shown when the page loads; false hides it.
+ * Allowed values (number): 6, 6.5, 7, 7.5, 8, 8.5, 9, 10, 11, 12, 13, 14
+ */
+"fontSize": 9
+}
+````
+
+Back in your web browser reload your song to see your settings applied. If they are not then the odds are that you have a minor typo -- a misplaced comma, an extra semicolon, or a missing closing quote. The app (tries) to display an alert box if there's a problem. If you get this error and cannot quickly resolve the issue then look online for a "JSON validator".
+
+You may safely delete any unused options and comment blocks from your JSON settings, however, retain the original, unedited settings.json_example for future reference.
 
 ### Installing In A Different Directory
 

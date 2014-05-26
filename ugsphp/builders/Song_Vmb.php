@@ -37,11 +37,26 @@ class Song_Vmb extends _base_Vmb {
 	}
 
 	/**
+	 * Does not validate values, but does ensure only valid JSON was provided.
+	 * @method getSettings
 	 * @return string
 	 */
 	private function getSettings() {
 		$settings = FileHelper::getFile(Config::$AppDirectory . 'settings.json');
-		return $settings === null ? '{}' : $settings;
+		if ($settings === null){
+			return '{}';
+		}
+
+		if (!function_exists('json_decode')){
+			return $settings;
+		}
+
+		$json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '', $settings);
+		if (json_decode($json)){
+			return $settings;
+		}
+
+		return '{"invalidJson": "There is a problem with your settings: invalid JSON. Please check for typos."}';
 	}
 
 	/**

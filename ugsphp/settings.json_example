@@ -1,5 +1,5 @@
 {
-	// Remove the double-slashes (line comment marker) preceeding any option you wish to change
+	// Remove the double-slashes (the "//" are JavaScript line comment markers) preceeding any option you wish to change
 
 	/* If true the Edit Song box is shown when the page loads; false hides it.
 	 * Allowed values: true, false

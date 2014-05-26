@@ -291,6 +291,10 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.min.js"></script>
 <script type="text/javascript">
 var ugs_settings = <?php echo($model->EditorSettingsJson); ?>;
+if (ugs_settings && ugs_settings.invalidJson){
+	alert(ugs_settings.invalidJson);
+	ugs_settings = {};
+}
 </script>
 <script type="text/javascript">
 $(function() {
