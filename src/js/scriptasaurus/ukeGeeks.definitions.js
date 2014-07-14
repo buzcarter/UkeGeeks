@@ -34,8 +34,8 @@ ukeGeeks.definitions = (function() {
 	 * @type JSON
 	 */
 	_public.instrument = {
-		sopranoUke: 0, // GCEA
-		baritoneUke: 5 // DGBA -- Baritone's "A" fingering is the Soprano's "D"
+		sopranoUke: 0, // GCEA -- standard tuning G4 (or G3)-C4-E4-A4
+		baritoneUke: 5 // DGBE -- 5 steps lower than standard Soprano tuning: D3-G3-B3-E4
 	};
 	
 	/* PUBLIC METHODS
