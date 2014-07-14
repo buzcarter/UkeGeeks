@@ -1,5 +1,6 @@
 {
 	// Remove the double-slashes (the "//" are JavaScript line comment markers) preceeding any option you wish to change
+	// Make sure you don't have a trailing comma after the last enabled option
 
 	/* If true the Edit Song box is shown when the page loads; false hides it.
 	 * Allowed values: true, false
