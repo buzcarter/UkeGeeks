@@ -1,11 +1,15 @@
+/*! UkeGeeks Songbook Editor page
+ * Author: Buz Carter
+ * Engine: LessCSS
+ */
 /*
  * Document   : ugsEditorPlus
  * Created on : July 2013
  * Author     : Buz
  * Description: Classes used by UkeGeeks "Song-a-Matic" Editor.
  */
-.salt_8873ySp {
-	color:#0f0;
+.salt_8873ySp8 {
+  color: #0ff;
 }
 /*
  *	Document   : ugsEditorPlus.arrowBox.css
@@ -83,11 +87,6 @@
 	border-radius: 7px;
 	padding: 0.5em;
 }
-.enablePseudoSelects label em{
-	color: #898989;
-	float: right;
-	font-family: Arial;
-}
 .enablePseudoSelects label:hover{
 	color:#fff;
 	background-color: #2A2A2A;
@@ -97,6 +96,11 @@
 }
 .enablePseudoSelects label:hover em{
 	color:#E4E4E4;
+}
+.enablePseudoSelects label em {
+  color: #898989;
+  float: right;
+  font-family: Arial;
 }
 .event-userSelecting label{
 	color:#B9B9B9;
@@ -120,10 +124,6 @@ html .active label{
 	cursor: pointer;
 	width: 17em;
 }
-.pseudoSelect li {
-	display: block;
-	padding: 0.1em;
-}
 .pseudoSelect a{
 	border: 2px solid transparent;
 	border-radius: 10px;
@@ -132,6 +132,13 @@ html .active label{
 	padding: 0.5em 0.5em 0.5em 30px;
 	text-decoration: none;
 }
+.pseudoSelect li {
+  display: block;
+  float: none;
+  margin: 0;
+  padding: 0.1em;
+  text-align: inherit;
+}
 .pseudoSelect li:hover{
 	color: #fff;
 }
@@ -139,14 +146,8 @@ html .active label{
 	background-color: #000;
 	border-color: #676767;
 }
-/* undo */
-.pseudoSelect li {
-	float: none;
-	margin: 0;
-	text-align: inherit;
-}
 .pseudoSelect .checked a {
-	background: url("../img/editor/checked.png") no-repeat scroll 10px center #2A2A2A;
+  background: url("../img/editor/checked.png") no-repeat scroll 10px center #2a2a2a;
 	border-color: #C5C5C5;
 	color: #FFFFFF;
 	text-shadow:1px 2px 1px #000;
@@ -156,7 +157,7 @@ html .active label{
 -------------------------------- */
 .checkboxBlock {
 	border-top: 1px solid #575757;
-	box-shadow: 0 -1px 0 #000;
+  box-shadow: 0 -1px 0 #000000;
 	font-size: 0.81em;
 	padding: 0.75em 0;
 }
@@ -178,7 +179,9 @@ html .active label{
 /* list of links (duh)
  * ...undoing some spill-over styles, when will I learn
  -------------------------------- */
- .linksList{ font-size: .85em;}
+.linksList {
+  font-size: .85em;
+}
  .linksList li {
  	margin: 0;
  	padding: 0.1em;
@@ -217,7 +220,8 @@ html .active label{
 	display: block;
 	height: 100%;
 	padding: 0.2em;
-}/*
+}
+/*
  *	Document   : ugsEditorPlus.buttons.css
  * Author     : Buz
  * Description: All editor's buttons and button-like links.
@@ -262,7 +266,7 @@ html .active label{
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #4c85e8), color-stop(1, #2f5493));
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4c85e8', endColorstr='#2f5493');
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#4c85e8', EndColorStr='#2f5493')";
-	text-shadow: black 0px 1px 0, #3765b7 0 -1px 0;
+  text-shadow: #000000 0px 1px 0, #3765b7 0 -1px 0;
 }
 
 /* orange */
@@ -324,9 +328,6 @@ html .active label{
 }
 .noThanks:hover {
 	background-color: #F2E2C1;
-}
-.alternateBtn{
-
 }
 /*
  *	Document   : ugsEditorPlus.chordBuilder.css
@@ -391,7 +392,8 @@ html body .editorSurface {
 /* -- toolbox and its contents -- */
 .chordToolbox{
 	border: 0 solid #ccc;
-	background-color: #F0EEF0;/*464646;*/
+  background-color: #F0EEF0;
+  /*464646;*/
 	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 	height: 250px;
 	position: absolute;
@@ -547,7 +549,8 @@ html .arrowUp,
 html .arrowDown{
 	min-height: 52px;
 }
-html .arrowUp, html .arrowDown {
+html .arrowUp,
+html .arrowDown {
 	background-repeat: no-repeat;
 	background-position: center 29px;
 }
@@ -599,7 +602,8 @@ html .arrowDown {
 .ugsChordChooser{
 	background-color: #eed18e;
 	border-radius: 10px;
-	color: #551d00;/* #f4e19d; */
+  color: #551d00;
+  /* #f4e19d; */
 	font-size: 14pt;
 	max-height: 17em;
 	min-height: 10em;
@@ -621,7 +625,8 @@ html .arrowDown {
 }
 .ugsChordChooser li:hover{
 	background-color: #99512c;
-	color: #f4e19d; /* #ffdb5b; */
+  color: #f4e19d;
+  /* #ffdb5b; */
 	text-shadow: 0px 2px 0px #551D00;
 }
 .ugsChordChooser .newChord{
@@ -629,7 +634,6 @@ html .arrowDown {
 	color: #551d00;
 	font-weight: bold;
 }
-/* delete button */
 .ugsChordChooser .deleteChord{
 	background: url("../img/editor/delete-btn.png") right center no-repeat;
 	display: block;
@@ -647,11 +651,11 @@ html .arrowDown {
 .ugsChordChooser li:hover .deleteChord{
 	opacity: 1;
 }
-/* mini-diagram */
 .ugsChordChooser canvas {
 	float: right;
 	margin-right: 10px;
-}/*
+}
+/*
  *	Document   : ugsEditorPlus.menuBar.css
  * Author     : Buz
  * Description: The top main application menu bar.
@@ -661,7 +665,8 @@ html .arrowDown {
  *  http://stackoverflow.com/questions/4531269/hide-vertical-scrollbar-in-select-element
  * @import url(http://fonts.googleapis.com/css?family=Peralta);
  *-------------- */
- html, body {
+html,
+body {
  	margin: 0;
  	padding: 0;
  }
@@ -807,7 +812,8 @@ html .arrowDown {
 .navOptions.active span,
 .navOptions a:hover span {
 	background-position: -200px -50px;
-}/*
+}
+/*
  *	Document   : ugsEditorPlus.overlays.css
  * Author     : Buz
  * Description: Generic and use-spedific Overlay/Dialog box elements.
@@ -819,7 +825,7 @@ html .arrowDown {
 	top:45px;
 	right:20px;
 	background-color: #2B1100;
-	background-color: rgba(30, 11, 0, 0.75); /* rgba(43, 17, 0, 0.80); */
+  background-color: rgba(30, 11, 0, 0.75);
 	-moz-box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
 	-webkit-box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
 	box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
@@ -836,13 +842,6 @@ html .arrowDown {
 	overflow: hidden;
 	padding: 10px;
 }
-/*
-.overlay div div{
-	background-image: none;
-	border-radius:0;
-	padding: 0;
-}
-*/
 /* MOVED FROM PAGE: SECTION 4
 ------------------------------ */
 .isHidden {
@@ -896,21 +895,17 @@ html .arrowDown {
 .overlay textarea:focus {
 	background-color:rgba(255, 255, 255, 0.9);
 	border-color: #6C280C;
-	-moz-box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
-	-webkit-box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
-	box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
+  -moz-box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3);
 }
 .overlay h3 {
-	/*
-	cursor: move;
-	*/
 	background: url("../img/editor/editorSprite.png") repeat-x 0 -100px #933f17;
 	border-bottom: 1px solid #240E01;
 	border-radius: 12px 12px 0 0;
 	border-top: 1px solid #84623C;
 	color: #F4E19F;
 	font-size: 22px;
-	/*font-weight: bold;*/
 	height: 37px;
 	line-height: 37px;
 	padding: 0 20px;
@@ -962,7 +957,6 @@ html .optionsDlg {
 	right: 210px;
 	top: 70px;
 	width: 490px;
-	/* backwards transition support */
 	-webkit-transition: width 0.6s ease;
 	-moz-transition: width 0.6s ease;
 	-ms-transition: width 0.6s ease;
@@ -1013,8 +1007,7 @@ html .chordBuilderNarrow{
 html .reformatDlg textarea{
 	height: 15em;
 }
-
-/*
+/* postitioning the drop-down menus & arrows
 -------------------------------------- */
 .layoutOptions{
 	left: 50px;
@@ -1038,11 +1031,29 @@ html .reformatDlg textarea{
 .helpOptions {
 	left: 320px;
 }
-
-
-
+.hasSongbookLink .layoutOptions:after,
+.hasSongbookLink .layoutOptions:before {
+  left: 72%;
+}
+.hasSongbookLink .tuningOptions {
+  left: 250px;
+}
+.hasSongbookLink .otherOptions {
+  left: 300px;
+}
+.hasSongbookLink .otherOptions:after,
+.hasSongbookLink .otherOptions:before {
+  left: 70%;
+}
+.hasSongbookLink .helpOptions {
+  left: 340px;
+}
+.hasSongbookLink .helpOptions:after,
+.hasSongbookLink .helpOptions:before {
+  left: 80%;
+}
 /*
-* Document   : ugsEditorPlus.themese.css
+ * Document   : ugsEditorPlus.themes.css
 * Author     : Buz
 * Description: Alternative color schemes.
 */
@@ -1052,12 +1063,21 @@ html .reformatDlg textarea{
 .theme-reversed {
 	background-color: #000;
 	color: #FFF;
+  /* unique to the reversed theme we need to harden editor's UI */
+}
+.theme-reversed pre {
+  color: #e9e9e9;
 }
 .theme-reversed .scalablePrintArea{
 	background-color: transparent;
 }
-.theme-reversed pre {
-	color: #e9e9e9;
+.theme-reversed .scalablePrintArea h5,
+.theme-reversed .scalablePrintArea h6 {
+  border-left-color: #444;
+  color: #69F;
+}
+.theme-reversed .ugsChorus {
+  border-left-color: #333;
 }
 .theme-reversed .ugsChords code {
 	color: #333;
@@ -1065,14 +1085,6 @@ html .reformatDlg textarea{
 .theme-reversed .ugsChords code em {
 	color: #F42;
 }
-.theme-reversed .ugsChorus {
-	border-left-color: #333;
-}
-.theme-reversed .scalablePrintArea h5, .theme-reversed .scalablePrintArea h6 {
-	border-left-color: #444;
-	color: #69F;
-}
-/* unique to the reversed theme we need to harden editor's UI */
 .theme-reversed .subNav a:hover {
 	background-color: #888;
 	color: #000;
@@ -1084,7 +1096,9 @@ html .reformatDlg textarea{
 }
 
 /* __________ Jelly Bean __________ */
-
+.theme-jellyBean pre {
+  color: inherit;
+}
 .theme-jellyBean .scalablePrintArea{
 	color: #56A0A5;
 	font-family: "Comic Sans MS", "Marker Felt", cursive, sans-serif;
@@ -1102,24 +1116,22 @@ html .reformatDlg textarea{
 .theme-jellyBean .scalablePrintArea h2 {
 	font-size: 1.1em;
 }
-.theme-jellyBean pre {
-	color: inherit;
+.theme-jellyBean .scalablePrintArea h5,
+.theme-jellyBean .scalablePrintArea h6 {
+  border-left-color: #F2E660;
+  color: #9C55ED;
+  font-family: inherit;
+  letter-spacing: 0.045em;
+}
+.theme-jellyBean .ugsChorus {
+  border-left-color: #F2E660;
+  border-radius: 5px 0 0 5px;
 }
 .theme-jellyBean .ugsChords code {
 	color: #333;
 }
 .theme-jellyBean .ugsChords code em {
 	color: #D20070;
-}
-.theme-jellyBean .ugsChorus {
-	border-left-color: #F2E660;
-	border-radius: 5px 0 0 5px;
-}
-.theme-jellyBean .scalablePrintArea h5, .theme-jellyBean .scalablePrintArea h6 {
-	border-left-color: #F2E660;
-	color: #9C55ED;
-	font-family: inherit;
-	letter-spacing: 0.045em;
 }
 
 /* __________ Western __________ */
@@ -1141,11 +1153,8 @@ html .reformatDlg textarea{
 .theme-western .scalablePrintArea h2{
 	font-size: 1.7em;
 }
-.theme-western .ugsChorus {
-	border-left-color: #BEC481;
-	border-radius: 5px 0 0 5px;
-}
-.theme-western .scalablePrintArea h5, .theme-western .scalablePrintArea h6 {
+.theme-western .scalablePrintArea h5,
+.theme-western .scalablePrintArea h6 {
 	border-left-color: #BED379;
 	color: #92A88C;
 	font-family: 'Smokum',Arial, sans-serif;
@@ -1153,6 +1162,10 @@ html .reformatDlg textarea{
 	font-style: normal;
 	padding: 0;
 	text-indent: 1em;
+}
+.theme-western .ugsChorus {
+  border-left-color: #BEC481;
+  border-radius: 5px 0 0 5px;
 }
 .theme-western .ugs-source-wrap pre {
 	color: inherit;
@@ -1163,9 +1176,6 @@ html .reformatDlg textarea{
 .theme-pumpkin .scalablePrintArea {
 	color: #68391D;
 }
-.theme-pumpkin .ugs-source-wrap pre {
-	color: inherit;
-}
 .theme-pumpkin .scalablePrintArea hgroup{
 	color: #B14623;
 	text-align: center;
@@ -1175,20 +1185,14 @@ html .reformatDlg textarea{
 	font-family: 'Ranchers',Arial,sans-serif;
 	font-size: 3.2em;
 	line-height: 1.1;
-	text-shadow: 0.064em 0.044em 0 #EDF8CE, -0.037em 0.044em 0 #EDF8CE, -0.074em .094em 0 #BED379, 0.074em .094em 0 #BED379;
+  text-shadow: 0.064em 0.044em 0 #edf8ce, -0.037em 0.044em 0 #edf8ce, -0.074em 0.094em 0 #bed379, 0.074em 0.094em 0 #bed379;
 }
 .theme-pumpkin .scalablePrintArea h2{
 	font-family: 'Cherry Cream Soda',cursive, sans-serif;
 	font-size: 1.1em;
 }
-.theme-pumpkin .ugsChorus {
-	border-left-color: #A0B74E;
-	border-radius: 5px 0 0 5px;
-}
-.theme-pumpkin .ugsChords code em {
-	color: #FE9600;
-}
-.theme-pumpkin .scalablePrintArea h5, .theme-pumpkin .scalablePrintArea h6 {
+.theme-pumpkin .scalablePrintArea h5,
+.theme-pumpkin .scalablePrintArea h6 {
 	border-left-color: #BED379;
 	color: #FFC501;
 	font-family: 'Cherry Cream Soda',cursive, sans-serif;
@@ -1197,14 +1201,20 @@ html .reformatDlg textarea{
 	padding: 0;
 	text-indent: 1em;
 }
-
+.theme-pumpkin .ugs-source-wrap pre {
+  color: inherit;
+}
+.theme-pumpkin .ugsChorus {
+  border-left-color: #A0B74E;
+  border-radius: 5px 0 0 5px;
+}
+.theme-pumpkin .ugsChords code em {
+  color: #FE9600;
+}
 /* __________ Zombie (Halloween II) __________ */
 
 .theme-zombie .scalablePrintArea {
 	color: #798666;
-}
-.theme-zombie .ugs-source-wrap pre {
-	color: inherit;
 }
 .theme-zombie .scalablePrintArea hgroup{
 	color: #902374;
@@ -1215,21 +1225,15 @@ html .reformatDlg textarea{
 	font-family: 'Creepster',cursive, sans-serif;
 	font-size: 3.2em;
 	line-height: 1.1;
-	text-shadow: 0.002em 0.002em 0em #364000, 0.044em 0.044em 0 #9EB036, -0.042em -0.014em 0 #8F2472, 0.087em 0.074em 0 #8F2472, -0.074em 0.094em 0 #CA4F04, 0.074em 0.174em 0 #CA4F04;
+  text-shadow: 0.002em 0.002em 0em #364000, 0.044em 0.044em 0 #9eb036, -0.042em -0.014em 0 #8f2472, 0.087em 0.074em 0 #8f2472, -0.074em 0.094em 0 #ca4f04, 0.074em 0.174em 0 #ca4f04;
 }
 .theme-zombie .scalablePrintArea h2 {
 	font-family: 'Cherry Cream Soda',cursive, sans-serif;
 	font-size: 1.1em;
 	text-shadow: 0.12em 0.13em 0 #DBDAE8;
 }
-.theme-zombie .ugsChorus {
-	border-left-color: #CDC693;
-	border-radius: 6px 0 0 6px;
-}
-.theme-zombie .ugsChords code em {
-	color: #DD1A52;
-}
-.theme-zombie .scalablePrintArea h5, .theme-zombie .scalablePrintArea h6 {
+.theme-zombie .scalablePrintArea h5,
+.theme-zombie .scalablePrintArea h6 {
 	border-left-color: #E4DCA4;
 	color: #798666;
 	font-family: 'Peralta',cursive, sans-serif;
@@ -1239,14 +1243,20 @@ html .reformatDlg textarea{
 	text-indent: 1em;
 	text-shadow: 0.03em 0.07em 0 #BED63A;
 }
-
+.theme-zombie .ugs-source-wrap pre {
+  color: inherit;
+}
+.theme-zombie .ugsChorus {
+  border-left-color: #CDC693;
+  border-radius: 6px 0 0 6px;
+}
+.theme-zombie .ugsChords code em {
+  color: #DD1A52;
+}
 /* __________ Frosty __________ */
 
 .theme-frosty .scalablePrintArea {
 	color: #154286;
-}
-.theme-frosty .ugs-source-wrap pre {
-	color: inherit;
 }
 .theme-frosty .scalablePrintArea hgroup{
 	color: #6A97DB;
@@ -1258,20 +1268,14 @@ html .reformatDlg textarea{
 	font-size: 2.18em;
 	letter-spacing: 0.05em;
 	line-height: 1.1;
-	text-shadow: -0.064em -0.034em 0 #FFFFFF, 0.008em 0.008em 0 #A3E3D7, 0.009em -0.009em 0 #A3E3D7, 0.098em 0.115em 0 #154286, 0.064em 0.064em 0 #00183D, -0.114em -0.064em 0 #154286, -0.114em 0 0 #154286, 0 -0.064em 0 #154286, -0.084em 0.064em 0 #154286, 0.064em -0.034em 0 #154286;
+  text-shadow: -0.064em -0.034em 0 #ffffff, 0.008em 0.008em 0 #a3e3d7, 0.009em -0.009em 0 #a3e3d7, 0.098em 0.115em 0 #154286, 0.064em 0.064em 0 #00183d, -0.114em -0.064em 0 #154286, -0.114em 0 0 #154286, 0 -0.064em 0 #154286, -0.084em 0.064em 0 #154286, 0.064em -0.034em 0 #154286;
 }
 .theme-frosty .scalablePrintArea h2 {
 	font-family: 'Ranchers',Arial,sans-serif;
 	font-size: 1.2em;
 }
-.theme-frosty .ugsChorus {
-	border-left-color: #0896FE;
-	border-radius: 6px 0 0 6px;
-}
-.theme-frosty .ugsChords code em {
-	color: #0896FE;
-}
-.theme-frosty .scalablePrintArea h5, .theme-frosty .scalablePrintArea h6 {
+.theme-frosty .scalablePrintArea h5,
+.theme-frosty .scalablePrintArea h6 {
 	border-left-color: #E3F7F3;
 	color: #80B7B1;
 	font-family: 'Cherry Cream Soda',cursive, sans-serif;
@@ -1280,7 +1284,16 @@ html .reformatDlg textarea{
 	padding: 0;
 	text-indent: 0.6em;
 }
-
+.theme-frosty .ugs-source-wrap pre {
+  color: inherit;
+}
+.theme-frosty .ugsChorus {
+  border-left-color: #0896FE;
+  border-radius: 6px 0 0 6px;
+}
+.theme-frosty .ugsChords code em {
+  color: #0896FE;
+}
 /* __________ Gruss vom Krampus __________ */
 
 /*
@@ -1289,9 +1302,6 @@ http://www.colourlovers.com/palette/510474/vintage_Christmas
 */
 .theme-krampus .scalablePrintArea {
 	color: #929867;
-}
-.theme-krampus .ugs-source-wrap pre {
-	color: inherit;
 }
 .theme-krampus .scalablePrintArea hgroup{
 	color: #929867;
@@ -1309,14 +1319,8 @@ http://www.colourlovers.com/palette/510474/vintage_Christmas
 	font-size: 1.2em;
 	text-shadow: 0.03em 0.03em 0 #FFFFFF, 0.08em 0.1em 0 #EBD592;
 }
-.theme-krampus .ugsChorus {
-	border-left-color: #B9C97E;
-	border-radius: 6px 0 0 6px;
-}
-.theme-krampus .ugsChords code em {
-	color: #384030;
-}
-.theme-krampus .scalablePrintArea h5, .theme-krampus .scalablePrintArea h6 {
+.theme-krampus .scalablePrintArea h5,
+.theme-krampus .scalablePrintArea h6 {
 	border-left-color: #7B8055;
 	color: #A32C28;
 	font-family: 'Peralta',cursive, sans-serif;
@@ -1325,15 +1329,27 @@ http://www.colourlovers.com/palette/510474/vintage_Christmas
 	padding: 0;
 	text-indent: 0.6em;
 }
-
+.theme-krampus .ugs-source-wrap pre {
+  color: inherit;
+}
+.theme-krampus .ugsChorus {
+  border-left-color: #B9C97E;
+  border-radius: 6px 0 0 6px;
+}
+.theme-krampus .ugsChords code em {
+  color: #384030;
+}
 /* __________ Notebook __________ */
-
+.theme-notebook {
+  /*
+	.ugsChords code em {
+		color: #384030;
+	}
+	*/
+}
 .theme-notebook .scalablePrintArea {
 	color: #443377;
 	font-family: 'Architects Daughter',Arial,sans-serif;
-}
-.theme-notebook .ugs-source-wrap pre {
-	color: inherit;
 }
 .theme-notebook .scalablePrintArea hgroup{
 	color: #2E2ECC;
@@ -1353,19 +1369,8 @@ http://www.colourlovers.com/palette/510474/vintage_Christmas
 	border-bottom: 1px solid #E4E4FF;
 	font-size: 1.1em;
 }
-.theme-notebook .ugsChorus {
-	border-left-color: #a4a0b2;
-	border-radius: 6px 0 0 6px;
-}
-.theme-notebook .ugsChords code {
-	font-family: inherit;
-}
-/*
-.theme-notebook .ugsChords code em {
-	color: #384030;
-}
-*/
-.theme-notebook .scalablePrintArea h5, .theme-notebook .scalablePrintArea h6 {
+.theme-notebook .scalablePrintArea h5,
+.theme-notebook .scalablePrintArea h6 {
 	border-left-color: #626283;
 	color: #2E2ECC;
 	font-family: 'Permanent Marker',Arial,sans-serif;
@@ -1373,19 +1378,29 @@ http://www.colourlovers.com/palette/510474/vintage_Christmas
 	padding: 0;
 	text-indent: 0.7em;
 }
-
+.theme-notebook .ugs-source-wrap pre {
+  color: inherit;
+}
+.theme-notebook .ugsChorus {
+  border-left-color: #a4a0b2;
+  border-radius: 6px 0 0 6px;
+}
+.theme-notebook .ugsChords code {
+  font-family: inherit;
+}
 /* __________ Just BLack __________ */
 
 .theme-justBlack .ugs-source-wrap h5,
-.theme-justBlack .ugs-source-wrap h6,
-.theme-justBlack .ugsChords code em {
+.theme-justBlack .ugs-source-wrap h6 {
     color: #000;
+  /* first choice: museo slab 500 */
+  font-family: 'Bree Serif', Arial, sans-serif;
+  font-style: normal;
 }
 .theme-justBlack .ugsChords code em{
+  color: #000;
 	font-weight: bold;
 }
-.theme-justBlack .ugs-source-wrap h5,
-.theme-justBlack .ugs-source-wrap h6,
 .theme-justBlack .scalablePrintArea hgroup,
 .theme-justBlack .scalablePrintArea hgroup *{
 	/* first choice: museo slab 500 */
@@ -1441,7 +1456,8 @@ html .diagramsOnTop .ugs-source-wrap {
 .diagramsOnSide .ugs-source-wrap {
 	margin-left:250px;
 }
-.liBtn, .liBtn * {
+.liBtn,
+.liBtn * {
 	cursor: pointer;
 }
 /* page widths
@@ -1462,9 +1478,20 @@ html .diagramsOnTop .ugs-source-wrap {
 /* redundant rule to allow JS hook
 -------------------------------- */
 /* NOTE: this should be last set of rules in this file! */
-.scalablePrintArea .ugs-diagrams-wrap canvas{}
-.scalablePrintArea .ugs-diagrams-wrap{}
-.scalablePrintArea .ugs-source-wrap{}
+.scalablePrintArea .ugs-diagrams-wrap canvas {
+  zoom: 1;
+}
+.scalablePrintArea .ugs-diagrams-wrap {
+  zoom: 1;
+}
+.scalablePrintArea .ugs-source-wrap {
+  zoom: 1;
+}
+/*
+ *	Document   : ugsEditorPlus.aceEditor.css
+ * Author     : Buz
+ * Description: Ace WYSIWYG Editor
+ */
 .aceEditorActive,
 .aceEditorActive body {
 	overflow: hidden;
@@ -1499,7 +1526,8 @@ html .diagramsOnTop .ugs-source-wrap {
 	text-decoration: none;
 }
 #aceHeader a:hover{
-	color: #CC7833;/*F92672;*/
+  color: #CC7833;
+  /*F92672;*/
 	text-decoration: none;
 }
 #aceEditor {
@@ -1519,7 +1547,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	cursor: pointer;
 	float: left;
 	margin: 7px 0.8em 0 0;
-	transition: background-color .3s ease;
+  transition: background-color 0.3s ease;
 }
 .aceSideBtn span {
 	box-sizing: border-box;
@@ -1531,7 +1559,7 @@ html .diagramsOnTop .ugs-source-wrap {
 	height: 2px;
 	margin: 4px 2px;
 	width: 16px;
-	transition: background-color .3s ease;
+  transition: background-color 0.3s ease;
 }
 .aceSideBtn:hover{
 	background-color: #333;
@@ -1562,7 +1590,8 @@ html .diagramsOnTop .ugs-source-wrap {
 	border-top: 2px solid #333;
 	padding: 1em .6em;
 }
-.aceHelp h1, .aceHelp h3 {
+.aceHelp h1,
+.aceHelp h3 {
 	color: #222222;
 	font-size: 2.5em;
 	font-weight: 500;
@@ -1582,7 +1611,8 @@ html .diagramsOnTop .ugs-source-wrap {
 .aceHelp strong {
 	font-weight: bold;
 }
-.aceHelp td, .aceHelp th {
+.aceHelp td,
+.aceHelp th {
 	color: #787878;
 	padding: 0 .8em .8em 0;
 	vertical-align: baseline;
