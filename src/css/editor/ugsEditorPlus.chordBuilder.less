@@ -5,23 +5,25 @@
  */
 /* Chord Builder's elements
 ------------------------------ */
-.chordBuilderDlg input[type=text] {
-	border: 1px solid #D7D7D7;
-	border-radius: 5px 5px 5px 5px;
-	display: block;
-	font-size: 30pt;
-	padding: 0;
-	text-align: center;
-	max-width: 100%;
-	width: 100%;
-}
-.chordBuilderDlg pre {
-	font-size: 12pt;
-	white-space: pre-wrap;
-	white-space: -moz-pre-wrap;
-	white-space: -pre-wrap;
-	white-space: -o-pre-wrap;
-	word-wrap: break-word;
+.chordBuilderDlg {
+	input[type=text] {
+		border: 1px solid #D7D7D7;
+		border-radius: 5px 5px 5px 5px;
+		display: block;
+		font-size: 30pt;
+		padding: 0;
+		text-align: center;
+		max-width: 100%;
+		width: 100%;
+	}
+	pre {
+		font-size: 12pt;
+		white-space: pre-wrap;
+		white-space: -moz-pre-wrap;
+		white-space: -pre-wrap;
+		white-space: -o-pre-wrap;
+		word-wrap: break-word;
+	}
 }
 /* ** canvas & editor stack */
 html body .editorSurface {
@@ -266,7 +268,7 @@ html .arrowDown {
 	font-weight:bold;
 }
 /* ________ Chord Chooser (List) ________ */
-.ugsChordChooser{
+.ugsChordChooser {
 	background-color: #eed18e;
 	border-radius: 10px;
 	color: #551d00;/* #f4e19d; */
@@ -275,50 +277,51 @@ html .arrowDown {
 	min-height: 10em;
 	overflow-y: auto;
 	padding: .1em 0;
-}
-.ugsChordChooser li{
-	background-color: #bc9350;
-	border-radius: 6px;
-	cursor: pointer;
-	margin: 0.5em;
-	padding: 0.5em;
-	/* backwards transition support */
-	-webkit-transition: background-color 0.4s ease;
-	-moz-transition: background-color 0.4s ease;
-	-ms-transition: background-color 0.4s ease;
-	-o-transition: background-color 0.4s ease;
-	transition: background-color 0.4s ease;
-}
-.ugsChordChooser li:hover{
-	background-color: #99512c;
-	color: #f4e19d; /* #ffdb5b; */
-	text-shadow: 0px 2px 0px #551D00;
-}
-.ugsChordChooser .newChord{
-	background-color: #b2612d;
-	color: #551d00;
-	font-weight: bold;
-}
-/* delete button */
-.ugsChordChooser .deleteChord{
-	background: url("../img/editor/delete-btn.png") right center no-repeat;
-	display: block;
-	float: right;
-	height: 30px;
-	opacity: 0;
-	width: 36px;
-	/* backwards transition support */
-	-webkit-transition: opacity 0.4s ease;
-	-moz-transition: opacity 0.4s ease;
-	-ms-transition: opacity 0.4s ease;
-	-o-transition: opacity 0.4s ease;
-	transition: opacity 0.4s ease;
-}
-.ugsChordChooser li:hover .deleteChord{
-	opacity: 1;
-}
-/* mini-diagram */
-.ugsChordChooser canvas {
-	float: right;
-	margin-right: 10px;
+
+	li {
+		background-color: #bc9350;
+		border-radius: 6px;
+		cursor: pointer;
+		margin: 0.5em;
+		padding: 0.5em;
+		/* backwards transition support */
+		-webkit-transition: background-color 0.4s ease;
+		-moz-transition: background-color 0.4s ease;
+		-ms-transition: background-color 0.4s ease;
+		-o-transition: background-color 0.4s ease;
+		transition: background-color 0.4s ease;
+	}
+	li:hover {
+		background-color: #99512c;
+		color: #f4e19d; /* #ffdb5b; */
+		text-shadow: 0px 2px 0px #551D00;
+	}
+	.newChord {
+		background-color: #b2612d;
+		color: #551d00;
+		font-weight: bold;
+	}
+	// delete button
+	.deleteChord {
+		background: url("../img/editor/delete-btn.png") right center no-repeat;
+		display: block;
+		float: right;
+		height: 30px;
+		opacity: 0;
+		width: 36px;
+		/* backwards transition support */
+		-webkit-transition: opacity 0.4s ease;
+		-moz-transition: opacity 0.4s ease;
+		-ms-transition: opacity 0.4s ease;
+		-o-transition: opacity 0.4s ease;
+		transition: opacity 0.4s ease;
+	}
+	li:hover .deleteChord {
+		opacity: 1;
+	}
+	// mini-diagram
+	canvas {
+		float: right;
+		margin-right: 10px;
+	}
 }
