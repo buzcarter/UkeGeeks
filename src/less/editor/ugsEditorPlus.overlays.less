@@ -11,9 +11,7 @@
 	right:20px;
 	background-color: #2B1100;
 	background-color: rgba(30, 11, 0, 0.75); // rgba(43, 17, 0, 0.80);
-	-moz-box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
-	-webkit-box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
-	box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.85);
+	.box-shadow(1px 10px 20px rgba(0, 0, 0, 0.85));
 	-moz-border-radius: 22px;
 	-webkit-border-radius: 22px;
 	border-radius: 22px;
@@ -73,11 +71,7 @@
 		border: solid 1px #E1B166;
 		max-width: 100%;
 		max-height: 100%;
-		-webkit-transition: background-color 500ms linear;
-		-moz-transition: background-color 500ms linear;
-		-o-transition: background-color 500ms linear;
-		-ms-transition: background-color 500ms linear;
-		transition: background-color 500ms linear;
+		.transition(background-color 500ms linear);
 
 		&:hover {
 			background-color:rgba(255, 255, 200, 0.7);
@@ -86,9 +80,7 @@
 		&:focus {
 			background-color:rgba(255, 255, 255, 0.9);
 			border-color: #6C280C;
-			-moz-box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
-			-webkit-box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
-			box-shadow: inset 3px 3px 5px rgba(0,0,0,.3);
+			.box-shadow(inset 3px 3px 5px rgba(0,0,0,.3));
 		}
 	}
 
@@ -153,12 +145,7 @@ html .optionsDlg {
 	right: 210px;
 	top: 70px;
 	width: 490px;
-	// backwards transition support
-	-webkit-transition: width 0.6s ease;
-	-moz-transition: width 0.6s ease;
-	-ms-transition: width 0.6s ease;
-	-o-transition: width 0.6s ease;
-	transition: width 0.6s ease;
+	.transition(width 0.6s ease);
 }
 html .chordBuilderNarrow{
 	width: 345px;

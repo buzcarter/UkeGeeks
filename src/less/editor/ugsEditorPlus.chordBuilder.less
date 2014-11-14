@@ -36,9 +36,7 @@ html body .editorSurface {
 	padding: 0;
 	position: relative;
 	width: 462px;
-	-moz-box-shadow:1px 2px 8px rgba(0, 0, 0, 0.5) inset;
-	-webkit-box-shadow:1px 2px 8px rgba(0, 0, 0, 0.5) inset;
-	box-shadow:1px 2px 8px rgba(0, 0, 0, 0.5) inset;
+	.box-shadow(1px 2px 8px rgba(0, 0, 0, 0.5) inset);
 }
 /* ** stacking order ** */
 .editorSurface canvas {
@@ -54,9 +52,6 @@ html body .editorSurface {
 #cdBldCursorCanvas {
 	z-index: 2;
 }
-.chordToolbox {
-	z-index: 3;
-}
 .toolboxEdgeShadow {
 	z-index: 4;
 }
@@ -64,41 +59,38 @@ html body .editorSurface {
 .chordToolbox{
 	border: 0 solid #ccc;
 	background-color: #F0EEF0;/*464646;*/
-	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+	.box-shadow(1px 1px 3px rgba(0, 0, 0, 0.1));
 	height: 250px;
 	position: absolute;
 	top: 25px;
 	width: 135px;
-	/* backwards transition support */
-	-webkit-transition: background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out;
-	-moz-transition: background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out;
-	-ms-transition: background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out;
-	-o-transition: background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out;
-	transition: background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out;
-}
-.chordToolbox.open,
-.chordToolbox:hover {
-	background-color: #fafafa;
-	border-color:#8C8C8C;
-	box-shadow: 4px 6px 9px rgba(0, 0, 0, 0.3);
-}
-.chordToolbox.leftEdge {
-	border-radius: 0 7px 7px 0;
-	border-width: 2px 2px 2px 0;
-	left: -110px;
-}
-.chordToolbox.leftEdge.open,
-.chordToolbox.leftEdge:hover {
-	left: 0;
-}
-.chordToolbox.rightEdge {
-	border-radius: 7px 0 0 7px;
-	border-width: 2px 0 2px 2px;
-	right: -110px;
-}
-.chordToolbox.rightEdge.open,
-.chordToolbox.rightEdge:hover {
-	right: 0;
+	.transition( background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out);
+	z-index: 3;
+
+	&.open,
+	&:hover {
+		background-color: #fafafa;
+		border-color:#8C8C8C;
+		.box-shadow(4px 6px 9px rgba(0, 0, 0, 0.3));
+	}
+	&.leftEdge {
+		border-radius: 0 7px 7px 0;
+		border-width: 2px 2px 2px 0;
+		left: -110px;
+		&.open,
+		&:hover {
+			left: 0;
+		}
+	}
+	&.rightEdge {
+		border-radius: 7px 0 0 7px;
+		border-width: 2px 0 2px 2px;
+		right: -110px;
+		&.open,
+		&:hover {
+			right: 0;
+		}
+	}
 }
 .chordToolboxInner{
 	margin: 10px auto;
@@ -111,16 +103,17 @@ html body .editorSurface {
 	position: absolute;
 	top: 26px;
 	width: 10px;
+
+	&.leftEdge{
+		.box-shadow(4px 0 6px rgba(0, 0, 0, 0.3));
+		left: -10px;
+	}
+	&.rightEdge{
+		.box-shadow(-4px 0 6px rgba(0, 0, 0, 0.3));
+		right: -10px;
+	}
 }
 
-.toolboxEdgeShadow.leftEdge{
-	box-shadow: 4px 0 6px rgba(0, 0, 0, 0.3);
-	left: -10px;
-}
-.toolboxEdgeShadow.rightEdge{
-	box-shadow: -4px 0 6px rgba(0, 0, 0, 0.3);
-	right: -10px;
-}
 /* --- */
 .toolChip {
 	background-color: #fafafa;
@@ -135,21 +128,27 @@ html body .editorSurface {
 	text-align: center;
 	text-decoration: none;
 	width: 100%;
-	/* backwards transition support */
-	-webkit-transition: background-color 0.4s ease, border-color 0.4s ease;
-	-moz-transition: background-color 0.4s ease, border-color 0.4s ease;
-	-ms-transition: background-color 0.4s ease, border-color 0.4s ease;
-	-o-transition: background-color 0.4s ease, border-color 0.4s ease;
-	transition: background-color 0.4s ease, border-color 0.4s ease;
-}
-.toolChip:hover {
-	background-color: #FEFEFE;
-	border: 1px solid #EDEDED;
+	.transition( background-color 0.4s ease, border-color 0.4s ease);
+
+	&:hover {
+		background-color: #FEFEFE;
+		border: 1px solid #EDEDED;
+	}
+
+	img,
+	.bigDot {
+		opacity: .75;
+	}
+
+	&:hover img,
+	&:hover .bigDot {
+		opacity: 1;
+	}
 }
 html .selected,
 html .selected:hover {
 	border-color: #AAA73F;
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	.box-shadow(0 0 5px rgba(0, 0, 0, 0.2));
 }
 #cdBldBtnFingerName {
 	color: #806753;
@@ -165,15 +164,10 @@ html .selected:hover {
 	margin: 5px auto;
 	width: 23px;
 }
+
 /* some "active" button (hover) efx */
-.toolChip img,
-.toolChip .bigDot {
-	opacity: .75;
-}
 .selected img,
-.selected .bigDot,
-.toolChip:hover img,
-.toolChip:hover .bigDot {
+.selected .bigDot {
 	opacity: 1;
 }
 /* hand */
@@ -233,11 +227,7 @@ html .arrowDown {
 .outputBox{
 	max-height: 30em;
 	overflow: hidden;
-	-webkit-transition: max-height 0.8s ease;
-	-moz-transition: max-height 0.8s ease;
-	-o-transition: max-height 0.8s ease;
-	-ms-transition: max-height 0.8s ease;
-	transition: max-height 0.8s ease;
+	.transition( max-height 0.8s ease);
 }
 .outputBox.collapseOutput{
 	max-height: 0;
@@ -284,12 +274,7 @@ html .arrowDown {
 		cursor: pointer;
 		margin: 0.5em;
 		padding: 0.5em;
-		/* backwards transition support */
-		-webkit-transition: background-color 0.4s ease;
-		-moz-transition: background-color 0.4s ease;
-		-ms-transition: background-color 0.4s ease;
-		-o-transition: background-color 0.4s ease;
-		transition: background-color 0.4s ease;
+		.transition(background-color 0.4s ease);
 	}
 	li:hover {
 		background-color: #99512c;
@@ -309,12 +294,7 @@ html .arrowDown {
 		height: 30px;
 		opacity: 0;
 		width: 36px;
-		/* backwards transition support */
-		-webkit-transition: opacity 0.4s ease;
-		-moz-transition: opacity 0.4s ease;
-		-ms-transition: opacity 0.4s ease;
-		-o-transition: opacity 0.4s ease;
-		transition: opacity 0.4s ease;
+		.transition(opacity 0.4s ease);
 	}
 	li:hover .deleteChord {
 		opacity: 1;
@@ -325,3 +305,5 @@ html .arrowDown {
 		margin-right: 10px;
 	}
 }
+
+/* / */
