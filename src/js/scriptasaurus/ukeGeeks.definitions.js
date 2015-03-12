@@ -36,7 +36,6 @@ ukeGeeks.definitions = (function() {
 	_public.instrument = {
 		sopranoUke: 0, // GCEA -- standard tuning G4 (or G3)-C4-E4-A4
 		baritoneUke: 5 // DGBE -- 5 steps lower than standard Soprano tuning: D3-G3-B3-E4
-		alternateUke: 2 // ADF#B -- 2 steps higher than standard tuning A4 (or A3)-D4-F#4-B4
 	};
 	
 	/* PUBLIC METHODS
