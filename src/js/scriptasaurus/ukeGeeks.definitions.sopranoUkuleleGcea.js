@@ -7,7 +7,7 @@
 ukeGeeks.definitions.sopranoUkuleleGcea = [
 	// Required: Instruement Name and Tuning (string names)
 	// -------------------------------------------------------
-	'{instrument: Soprano Ukulele}',
+	'{instrument: Standard Ukulele}',
 	'{tuning: G C E A}',
 	//  Ab returns G#
 	//  A
