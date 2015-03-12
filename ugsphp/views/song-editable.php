@@ -164,6 +164,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 				<ul class="pseudoSelect">
 					<li class="checked"><a href="#soprano">Standard</a></li>
 					<li><a href="#baritone">Baritone</a></li>
+					<li><a href="#alternate">Alternate</a></li>
 				</ul>
 			</dd>
 		</dl>
