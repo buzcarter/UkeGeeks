@@ -4,49 +4,60 @@
  * Description: Classes affecting song layout and style; Critical to Scriptasaurus presentation.
  * Important! This should be the last file in the CSS bundle.
  */
- .scalablePrintArea {
- 	-moz-transform-origin: 0 0;
- 	-webkit-transform-origin: 0 0;
- 	background-color: #fff;
- 	border-right:solid 1px #888;
- 	font-size: inherit;
- 	box-shadow: 3px 0 9px rgba(0, 0, 0, 0.4);
- }
- .scalablePrintArea hgroup{
- 	padding-bottom: .15in;
- }
+.scalablePrintArea {
+	-moz-transform-origin: 0 0;
+	-webkit-transform-origin: 0 0;
+	background-color: #fff;
+	border-right:solid 1px #888;
+	font-size: inherit;
+	.box-shadow(3px 0 9px rgba(0, 0, 0, 0.4));
+
+	hgroup {
+		padding-bottom: .15in;
+	}
+}
+
 /* Alternate Layouts: Hide Diagrams
 -------------------------------- */
-html .ugsHideDiagrams .ugs-diagrams-wrap {
-	display:none;
+html .ugsHideDiagrams {
+	.ugs-diagrams-wrap {
+		display: none;
+	}
+	.ugs-source-wrap {
+		margin-left: 0;
+	}
 }
-html .ugsHideDiagrams .ugs-source-wrap {
-	margin-left: 0;
-}
+
 /* Alternate Layouts: Chord Diagrams On Top:
 -------------------------------- */
-html .diagramsOnTop .ugs-diagrams-wrap {
-	float: none;
-	width: auto;
-}
-html .diagramsOnTop .ugs-source-wrap {
-	margin-left: 0;
+html .diagramsOnTop {
+	.ugs-diagrams-wrap {
+		float: none;
+		width: auto;
+	}
+	.ugs-source-wrap {
+		margin-left: 0;
+	}
 }
 .ugsNoChords .ugs-source-wrap{
 	margin-left: 0;
 }
+
 /* Alternate Layouts: standard Two Column
 ------------------------------ */
-.diagramsOnSide .ugs-diagrams-wrap {
-	float:left;
-	width:225px;
-}
-.diagramsOnSide .ugs-source-wrap {
-	margin-left:250px;
+.diagramsOnSide {
+	.ugs-diagrams-wrap {
+		float: left;
+		width: 225px;
+	}
+	.ugs-source-wrap {
+		margin-left: 250px;
+	}
 }
 .liBtn, .liBtn * {
 	cursor: pointer;
 }
+
 /* page widths
 -------------------------------- */
 .pageWidth_letter .scalablePrintArea {
@@ -62,9 +73,11 @@ html .diagramsOnTop .ugs-source-wrap {
 .pageWidth_screen .scalablePrintArea {
 	padding:20px;
 }
+
 /* redundant rule to allow JS hook
 -------------------------------- */
 /* NOTE: this should be last set of rules in this file! */
-.scalablePrintArea .ugs-diagrams-wrap canvas{}
-.scalablePrintArea .ugs-diagrams-wrap{}
-.scalablePrintArea .ugs-source-wrap{}
+// To prevent LESS compiler from removing them we need at least one rule, so using "zoom"
+.scalablePrintArea .ugs-diagrams-wrap canvas{ zoom: 1;}
+.scalablePrintArea .ugs-diagrams-wrap{ zoom: 1;}
+.scalablePrintArea .ugs-source-wrap{ zoom: 1;}

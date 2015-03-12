@@ -1,0 +1,222 @@
+/*
+ *	Document   : ugsEditorPlus.arrowBox.css
+ * Author     : Buz
+ * Description: The menu boxes and their contents.
+ */
+/* Thanks to: cssarrowplease.com
+ -------------------------------- */
+.arrowBox {
+	background-color: rgba(0, 0, 0, 0.81);
+	border: 2px solid #fff;
+	border-radius: 10px;
+	color:#b3b3b3;
+	display: none;
+	position: fixed;
+	top: 60px;
+	width: 310px;
+	.box-shadow(3px 13px 9px rgba(0, 0, 0, 0.5));
+	z-index: 5;
+
+	&:after,
+	&:before {
+		bottom: 100%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+
+	&:after {
+		border-color: rgba(0, 0, 0, 0);
+		border-bottom-color: #000;
+		border-width: 20px;
+		left: 50%;
+		margin-left: -20px;
+	}
+
+	&:before {
+		border-color: rgba(255, 255, 255, 0);
+		border-bottom-color: #ffffff;
+		border-width: 23px;
+		left: 50%;
+		margin-left: -23px;
+	}
+}
+ .arrowBoxContent{
+	padding: 1em .6em .4em;
+ }
+ .arrowBoxContent + .arrowBoxContent{
+	padding-top:0;
+ }
+
+/*
+-------------------------------------- */
+.enablePseudoSelects {
+	dt,
+	dd {
+		height: 3em;
+		line-height: 1;
+		margin: 0;
+		padding: 0;
+	}
+	dd {
+		display:none;
+		left: 16.1em;
+		position: relative;
+		top: -3.1em;
+		height: 0px;
+	}
+	label {
+		color: #E4E4E4;
+		display: block;
+		cursor: pointer;
+		border: solid 1px transparent;
+		border-radius: 7px;
+		padding: 0.5em;
+
+		&:hover {
+			color:#fff;
+			background-color: #2A2A2A;
+			border-color: #555;
+			.box-shadow(2px 2px 2px #000);
+
+			em {
+				color:#E4E4E4;
+			}
+		}
+	}
+
+	label em{
+		color: #898989;
+		float: right;
+		font-family: Arial;
+	}
+}
+.event-userSelecting label {
+	color:#B9B9B9;
+	em {
+		color:#3a3a3a;
+	}
+}
+html .active label {
+	background-color: #000;
+	color: #fff;
+}
+/*
+-------------------------------------- */
+.pseudoSelect {
+	position: absolute;
+	background-color: #3C3C3C;
+	border: solid 1px #555;
+	border-radius: 7px;
+	.box-shadow(2px 6px 6px rgba(0, 0, 0, 0.53));
+	color: #EFEFEF;
+	cursor: pointer;
+	width: 17em;
+
+	a {
+		border: 2px solid transparent;
+		border-radius: 10px;
+		color: inherit;
+		display: block;
+		padding: 0.5em 0.5em 0.5em 30px;
+		text-decoration: none;
+	}
+
+	li {
+		display: block;
+		float: none;
+		margin: 0;
+		padding: 0.1em;
+		text-align: inherit;
+
+		&:hover {
+			color: #fff;
+
+			a {
+				background-color: #000;
+				border-color: #676767;
+			}
+		}
+	}
+
+	.checked a {
+		background: url("../img/editor/checked.png") no-repeat scroll 10px center #2A2A2A;
+		border-color: #C5C5C5;
+		color: #FFFFFF;
+		text-shadow:1px 2px 1px #000;
+	}
+}
+/* our Checkboxes are a problem...
+-------------------------------- */
+.checkboxBlock {
+	border-top: 1px solid #575757;
+	.box-shadow(0 -1px 0 #000);
+	font-size: 0.81em;
+	padding: 0.75em 0;
+
+	label {
+		padding-left: 0.5em;
+	}
+}
+.checkBoxFinePrint{
+	display: block;
+	font-size:.85em;
+	padding: 0.3em 0 0.5em 3.1em;
+}
+#commonChordList {
+	display: block;
+	font-size: 1.2em;
+	margin-left: 1.5em;
+	width: 15em;
+}
+
+/* list of links (duh)
+ * ...undoing some spill-over styles, when will I learn
+ -------------------------------- */
+ .linksList {
+	font-size: .85em;
+	li {
+		margin: 0;
+		padding: 0.1em;
+		text-align: left;
+		float: none;
+	}
+	a {
+		border-radius: 8px;
+		color: #B9B9B9;
+		display: block;
+		padding: 0.6em;
+		text-decoration: none;
+
+		&:hover {
+			background-color: #000;
+			color:#fff;
+		}
+	}
+}
+/* Feedback message -- on UPDATE
+-------------------------------- */
+.updateMessage {
+	background-color: #BAE5A7;
+	border: 1px solid #44A819;
+	border-radius: 4px 4px 4px 4px;
+	.box-shadow(0 0 4px rgba(255, 190, 40, 0.8));
+	color: #43772D;
+	display: none;
+	position: absolute;
+	text-align: center;
+	text-shadow: 0 -1px rgba(255, 190, 40, 0.3);
+	width: 10em;
+
+	em {
+		border: 1px solid #66D836;
+		border-radius: 3px 3px 3px 3px;
+		.box-shadow(0 0 3px #559277 inset);
+		display: block;
+		height: 100%;
+		padding: 0.2em;
+	}
+}

@@ -1,0 +1,76 @@
+// Vendor Prefixes
+//
+// All vendor mixins are deprecated as of v3.2.0 due to the introduction of
+// Autoprefixer in our Gruntfile. They will be removed in v4.
+
+// Drop shadows
+//
+// Note: Deprecated `.box-shadow()` as of v3.1.0 since all of Bootstrap's
+// supported browsers that have box shadow capabilities now support it.
+
+.box-shadow(@shadow) {
+     -moz-box-shadow: @shadow;
+  -webkit-box-shadow: @shadow; // iOS <4.3 & Android <4.1
+          box-shadow: @shadow;
+}
+
+// Box sizing
+.box-sizing(@boxmodel) {
+  -webkit-box-sizing: @boxmodel;
+     -moz-box-sizing: @boxmodel;
+          box-sizing: @boxmodel;
+}
+
+// Transitions
+// slightly modifed to include -moz and -ms vendor extensions
+.transition(@transition) {
+  -webkit-transition: @transition;
+     -moz-transition: @transition;
+      -ms-transition: @transition;
+       -o-transition: @transition;
+          transition: @transition;
+}
+.transition(@transition1, @transition2) {
+  -webkit-transition: @transition1, @transition2;
+     -moz-transition: @transition1, @transition2;
+      -ms-transition: @transition1, @transition2;
+       -o-transition: @transition1, @transition2;
+          transition: @transition1, @transition2;
+}
+.transition(@transition1, @transition2, @transition3) {
+  -webkit-transition: @transition1, @transition2, @transition3;
+     -moz-transition: @transition1, @transition2, @transition3;
+      -ms-transition: @transition1, @transition2, @transition3;
+       -o-transition: @transition1, @transition2, @transition3;
+          transition: @transition1, @transition2, @transition3;
+}
+.transition(@transition1, @transition2, @transition3, @transition4) {
+  -webkit-transition: @transition1, @transition2, @transition3, @transition4;
+     -moz-transition: @transition1, @transition2, @transition3, @transition4;
+      -ms-transition: @transition1, @transition2, @transition3, @transition4;
+       -o-transition: @transition1, @transition2, @transition3, @transition4;
+          transition: @transition1, @transition2, @transition3, @transition4;
+}
+.transition-property(@transition-property) {
+  -webkit-transition-property: @transition-property;
+          transition-property: @transition-property;
+}
+.transition-delay(@transition-delay) {
+  -webkit-transition-delay: @transition-delay;
+          transition-delay: @transition-delay;
+}
+.transition-duration(@transition-duration) {
+  -webkit-transition-duration: @transition-duration;
+          transition-duration: @transition-duration;
+}
+.transition-timing-function(@timing-function) {
+  -webkit-transition-timing-function: @timing-function;
+          transition-timing-function: @timing-function;
+}
+.transition-transform(@transition) {
+  -webkit-transition: -webkit-transform @transition;
+     -moz-transition: -moz-transform @transition;
+       -o-transition: -o-transform @transition;
+          transition: transform @transition;
+}
+

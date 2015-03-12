@@ -1,0 +1,176 @@
+/*
+ *	Document   : ugsEditorPlus.menuBar.css
+ * Author     : Buz
+ * Description: The top main application menu bar.
+ */
+/**
+ * Help on hiding the select scroll bars:
+ *  http://stackoverflow.com/questions/4531269/hide-vertical-scrollbar-in-select-element
+ * @import url(http://fonts.googleapis.com/css?family=Peralta);
+ *-------------- */
+ html, body {
+ 	margin: 0;
+ 	padding: 0;
+ }
+ body {
+ 	position:relative;
+ 	padding-top: 40px;
+ }
+ .editableSongPage{
+ 	background-color:#EDECEA;
+ }
+/* LOGO
+-------------------------------- */
+.ugsLogo {
+	color: #F2A848;
+	font-family: 'Peralta', cursive;
+	font-size: 16px;
+	font-weight: normal;
+	position: absolute;
+	right: 1em;
+	text-shadow: 1px 1px #332222;
+}
+
+/* App
+-------------------------------- */
+.ugsAppMenuBar {
+	background: #933f17 url("../img/editor/editorSprite.png") 0 -100px repeat-x;
+	.box-shadow(0 5px 8px rgba(0, 0, 0, 0.65));
+	border-top: 1px solid #84623c;
+	border-bottom: 1px solid #240e01;
+	font: 17px/38px Helvetica, Arial;
+	height: 40px;
+	min-width: 910px;
+	padding-left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 2;
+
+	& > ul {
+		margin-left: 10px;
+	}
+	& > ul > li {
+		float: left;
+		position: relative;
+	}
+	& > ul > li > a {
+		border: solid 1px transparent;
+		color: #f4e19f;
+		cursor: pointer;
+		display: block;
+		float: left;
+		height: 38px;
+		line-height: 38px;
+		outline: 0 none;
+		padding: 0 15px 0 5px;
+		text-decoration: none;
+		text-shadow: 1px 2px 0 rgba(86, 3, 5, 0.95);
+	}
+	& > ul > li > a:hover {
+		border-color: #600000;
+		background-color: #451212;
+		background: url("../img/editor/editorSprite.png") 0 -145px repeat-x;
+		color: #fdda61;
+		text-shadow: none;
+	}
+	& > ul > .active > a {
+		background-color: #451212;
+		background: url("../img/editor/editorSprite.png") 0 -145px repeat-x;
+		color: #fef5e3;
+		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+	}
+}
+/* Icons/Sprits
+-------------------------------- */
+.ugsAppMenuBar > ul > li > a span {
+	background-image: url("../img/editor/editorSprite.png");
+	background-repeat: no-repeat;
+	float: left;
+	height: 25px;
+	margin-top: 7px;
+	width: 25px;
+}
+.navSong {
+	span {
+		background-position: -75px 0px;
+	}
+	&.active span,
+	& a:hover span {
+		background-position: -75px -50px;
+	}
+}
+.navInstruments {
+	span {
+		background-position: -50px 0px;
+	}
+	&.active span,
+	& a:hover span {
+		background-position: -50px -50px;
+	}
+}
+.navTranspose {
+	span {
+		background-position: -25px 0px;
+	}
+	&.active span,
+	& a:hover span {
+		background-position: -25px -50px;
+	}
+}
+.navDiagrams {
+	span {
+		background-position: 0px 0px;
+	}
+	&.active span,
+	& a:hover span {
+		background-position: 0px -50px;
+	}
+}
+.navLayout {
+	span {
+		background-position: -100px 0px;
+	}
+	&.active span,
+	& a:hover span {
+		background-position: -100px -50px;
+	}
+}
+.navColors {
+	span {
+		background-position: -125px 0px;
+	}
+	&.active span,
+	& a:hover span {
+		background-position: -125px -50px;
+	}
+}
+.navZoom {
+	span {
+		background-position: -150px 0px;
+	}
+	&.active span,
+	& a:hover span {
+		background-position: -150px -50px;
+	}
+}
+.navEdit {
+	span {
+		background-position: -175px 0px;
+	}
+	&.active span,
+	& a:hover span {
+		background-position: -175px -50px;
+	}
+}
+.navOptions {
+	span {
+		background-position: -200px 0px;
+	}
+	&.active span,
+	& a:hover span {
+		background-position: -200px -50px;
+	}
+}
+
+/* / */

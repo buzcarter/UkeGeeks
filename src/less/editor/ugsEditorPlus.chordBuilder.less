@@ -1,0 +1,309 @@
+/*
+ *	Document   : ugsEditorPlus.chordBuilder.css
+ * Author     : Buz
+ * Description: delicate positioning of chord builder's canvas and toolbox controls.
+ */
+/* Chord Builder's elements
+------------------------------ */
+.chordBuilderDlg {
+	input[type=text] {
+		border: 1px solid #D7D7D7;
+		border-radius: 5px 5px 5px 5px;
+		display: block;
+		font-size: 30pt;
+		padding: 0;
+		text-align: center;
+		max-width: 100%;
+		width: 100%;
+	}
+	pre {
+		font-size: 12pt;
+		white-space: pre-wrap;
+		white-space: -moz-pre-wrap;
+		white-space: -pre-wrap;
+		white-space: -o-pre-wrap;
+		word-wrap: break-word;
+	}
+}
+/* ** canvas & editor stack */
+html body .editorSurface {
+	background-color: #fff;
+	border-radius: 5px ;
+	font-size: 0.9em;
+	height: 300px;
+	margin: 5px auto;
+	overflow: hidden;
+	padding: 0;
+	position: relative;
+	width: 462px;
+	.box-shadow(1px 2px 8px rgba(0, 0, 0, 0.5) inset);
+}
+/* ** stacking order ** */
+.editorSurface canvas {
+	border:none;
+	cursor:none;
+	left: 0;
+	position: absolute;
+	top: 0;
+}
+#cdBldDiagramCanvas {
+	z-index: 1;
+}
+#cdBldCursorCanvas {
+	z-index: 2;
+}
+.toolboxEdgeShadow {
+	z-index: 4;
+}
+/* -- toolbox and its contents -- */
+.chordToolbox{
+	border: 0 solid #ccc;
+	background-color: #F0EEF0;/*464646;*/
+	.box-shadow(1px 1px 3px rgba(0, 0, 0, 0.1));
+	height: 250px;
+	position: absolute;
+	top: 25px;
+	width: 135px;
+	.transition( background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out);
+	z-index: 3;
+
+	&.open,
+	&:hover {
+		background-color: #fafafa;
+		border-color:#8C8C8C;
+		.box-shadow(4px 6px 9px rgba(0, 0, 0, 0.3));
+	}
+	&.leftEdge {
+		border-radius: 0 7px 7px 0;
+		border-width: 2px 2px 2px 0;
+		left: -110px;
+		&.open,
+		&:hover {
+			left: 0;
+		}
+	}
+	&.rightEdge {
+		border-radius: 7px 0 0 7px;
+		border-width: 2px 0 2px 2px;
+		right: -110px;
+		&.open,
+		&:hover {
+			right: 0;
+		}
+	}
+}
+.chordToolboxInner{
+	margin: 10px auto;
+	width: 100px;
+}
+/* forceed shadow over toolbox(es) */
+.toolboxEdgeShadow {
+	background-color: transparent;
+	height: 255px;
+	position: absolute;
+	top: 26px;
+	width: 10px;
+
+	&.leftEdge{
+		.box-shadow(4px 0 6px rgba(0, 0, 0, 0.3));
+		left: -10px;
+	}
+	&.rightEdge{
+		.box-shadow(-4px 0 6px rgba(0, 0, 0, 0.3));
+		right: -10px;
+	}
+}
+
+/* --- */
+.toolChip {
+	background-color: #fafafa;
+	border: 1px solid #fafafa;
+	border-radius: 5px;
+	color: #C7681B;
+	cursor: pointer;
+	display: block;
+	margin-bottom:8px;
+	min-height: 70px;
+	padding: 5px 0;
+	text-align: center;
+	text-decoration: none;
+	width: 100%;
+	.transition( background-color 0.4s ease, border-color 0.4s ease);
+
+	&:hover {
+		background-color: #FEFEFE;
+		border: 1px solid #EDEDED;
+	}
+
+	img,
+	.bigDot {
+		opacity: .75;
+	}
+
+	&:hover img,
+	&:hover .bigDot {
+		opacity: 1;
+	}
+}
+html .selected,
+html .selected:hover {
+	border-color: #AAA73F;
+	.box-shadow(0 0 5px rgba(0, 0, 0, 0.2));
+}
+#cdBldBtnFingerName {
+	color: #806753;
+	display: block;
+	font-size: .67em;
+}
+.bigDot {
+	background-color: #E78333;
+	border: 3px solid #973100;
+	border-radius: 23px 23px 23px 23px;
+	display: block;
+	height: 23px;
+	margin: 5px auto;
+	width: 23px;
+}
+
+/* some "active" button (hover) efx */
+.selected img,
+.selected .bigDot {
+	opacity: 1;
+}
+/* hand */
+.fingerToolImage {
+	background: url("../img/editor/hand.png") top center no-repeat;
+	display:block;
+	height: 83px;
+	margin: 0 auto;
+	position: relative;
+	width: 88px;
+}
+.fingerDot {
+	background-color: #F9F340;
+	border:solid 2px #AF9607;
+	border-radius: 8px;
+	display: block;
+	height: 8px;
+	position: absolute;
+	width: 8px;
+}
+.finger0 .fingerDot {
+	display:none;
+}
+.finger1 .fingerDot {
+	right: 22px;
+	top: 3px;
+}
+.finger2 .fingerDot {
+	right: 1px;
+	top: 11px;
+}
+.finger3 .fingerDot {
+	right: 1px;
+	top: 28px;
+}
+.finger4 .fingerDot {
+	right: 1px;
+	top: 44px;
+}
+/* sliders (up/down arrows) */
+label[for=cdBldStartingFret],
+html .arrowUp,
+html .arrowDown{
+	min-height: 52px;
+}
+html .arrowUp, html .arrowDown {
+	background-repeat: no-repeat;
+	background-position: center 29px;
+}
+html .arrowUp {
+	background-image: url("../img/editor/basic-up-arrow.png");
+}
+html .arrowDown {
+	background-image: url("../img/editor/basic-down-arrow.png");
+}
+/* output area */
+.outputBox{
+	max-height: 30em;
+	overflow: hidden;
+	.transition( max-height 0.8s ease);
+}
+.outputBox.collapseOutput{
+	max-height: 0;
+}
+
+/* ________ colorized chordPro defintion ________ */
+.chordPro-statement {
+	background-color:#f9f9f9;
+	border:solid 1px #bbb;
+	color: #999;
+	font-family: Consolas, 'courier new', monospace;
+	/* font-size: 14px; */
+	padding:1em;
+}
+.chordPro-keyword {
+	color: #8e7cc3;
+}
+.chordPro-attribute {
+	color: #741b47;
+}
+.chordPro-number {
+	color: #e69138;
+	font-weight:bold;
+}
+.chordPro-string {
+	background-color: #EDF7E6;
+	color: #38761d;
+	font-weight:bold;
+}
+/* ________ Chord Chooser (List) ________ */
+.ugsChordChooser {
+	background-color: #eed18e;
+	border-radius: 10px;
+	color: #551d00;/* #f4e19d; */
+	font-size: 14pt;
+	max-height: 17em;
+	min-height: 10em;
+	overflow-y: auto;
+	padding: .1em 0;
+
+	li {
+		background-color: #bc9350;
+		border-radius: 6px;
+		cursor: pointer;
+		margin: 0.5em;
+		padding: 0.5em;
+		.transition(background-color 0.4s ease);
+	}
+	li:hover {
+		background-color: #99512c;
+		color: #f4e19d; /* #ffdb5b; */
+		text-shadow: 0px 2px 0px #551D00;
+	}
+	.newChord {
+		background-color: #b2612d;
+		color: #551d00;
+		font-weight: bold;
+	}
+	// delete button
+	.deleteChord {
+		background: url("../img/editor/delete-btn.png") right center no-repeat;
+		display: block;
+		float: right;
+		height: 30px;
+		opacity: 0;
+		width: 36px;
+		.transition(opacity 0.4s ease);
+	}
+	li:hover .deleteChord {
+		opacity: 1;
+	}
+	// mini-diagram
+	canvas {
+		float: right;
+		margin-right: 10px;
+	}
+}
+
+/* / */

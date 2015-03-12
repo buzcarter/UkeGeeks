@@ -1,0 +1,254 @@
+/*
+ *	Document   : ugsEditorPlus.overlays.css
+ * Author     : Buz
+ * Description: Generic and use-spedific Overlay/Dialog box elements.
+ */
+/* FLOATIN EDITOR
+-------------------------------- */
+.overlay {
+	position:fixed;
+	top:45px;
+	right:20px;
+	background-color: #2B1100;
+	background-color: rgba(30, 11, 0, 0.75); // rgba(43, 17, 0, 0.80);
+	.box-shadow(1px 10px 20px rgba(0, 0, 0, 0.85));
+	-moz-border-radius: 22px;
+	-webkit-border-radius: 22px;
+	border-radius: 22px;
+	padding: 10px;
+	width: 490px;
+	z-index:0;
+}
+.overlay > div {
+	background: url("../img/editor/woodChip.png") repeat scroll 0 0 transparent;
+	border-radius: 0 0 13px 13px;
+	overflow: hidden;
+	padding: 10px;
+}
+
+// .overlay div div{
+// 	background-image: none;
+// 	border-radius:0;
+// 	padding: 0;
+// }
+
+/* MOVED FROM PAGE: SECTION 4
+------------------------------ */
+.isHidden {
+	display:none;
+}
+
+/* Form inputs,
+----------------------------------- */
+.overlay {
+	select{
+		font-size: 1.1em;
+	}
+	input[type=text],
+	input[type=password] {
+		display: block;
+		font-size: 1.2em;
+		margin-bottom: .4em;
+		padding: 0.1em;
+		width: 98%;
+	}
+	textarea {
+		font-family: Monaco, "Consolas", "Lucida Console", "Courier New", courier, monospace;
+		font-size: 10pt;
+		line-height: 1.25;
+		padding-left: .3em;
+		white-space: nowrap;
+		white-space:pre;
+		overflow:scroll;
+		height:525px;
+		width: 98%;
+	}
+
+	input[type=text],
+	input[type=password],
+	textarea {
+		background-color: rgba(255, 255, 255, 0.7);
+		border: solid 1px #E1B166;
+		max-width: 100%;
+		max-height: 100%;
+		.transition(background-color 500ms linear);
+
+		&:hover {
+			background-color:rgba(255, 255, 200, 0.7);
+			border-color:#444;
+		}
+		&:focus {
+			background-color:rgba(255, 255, 255, 0.9);
+			border-color: #6C280C;
+			.box-shadow(inset 3px 3px 5px rgba(0,0,0,.3));
+		}
+	}
+
+	h3 {
+		// cursor: move;
+		background: url("../img/editor/editorSprite.png") repeat-x 0 -100px #933f17;
+		border-bottom: 1px solid #240E01;
+		border-radius: 12px 12px 0 0;
+		border-top: 1px solid #84623C;
+		color: #F4E19F;
+		font-size: 22px;
+		// font-weight: bold;
+		height: 37px;
+		line-height: 37px;
+		padding: 0 20px;
+		text-shadow: 1px 2px 0 #592108;
+	}
+	.closeBtn {
+		background: url("../img/editor/closeBtn.png") no-repeat 0 0 transparent;
+		display: block;
+		height: 30px;
+		outline: none;
+		position: absolute;
+		right: 10px;
+		text-indent: -5000em;
+		top: 14px;
+		width: 30px;
+	}
+	.resizeBtn {
+		background: url("../img/editor/resizeBtn.png") no-repeat 0 0 transparent;
+		display: block;
+		height: 20px;
+		outline: none;
+		position: absolute;
+		right: 55px;
+		text-indent: -5000em;
+		top: 18px;
+		width: 20px;
+	}
+}
+/* _________ Specific Overlays _________ */
+html .helpDlg {
+	top:75px;
+	right:70px;
+	width: 300px;
+	z-index:1;
+}
+html .optionsDlg {
+	top:100px;
+	right:210px;
+	width: 380px;
+	z-index:2;
+}
+.optionsDlg div {
+	font-size:.91em;
+}
+.optionsDlg div li {
+	padding-bottom:.82em;
+}
+/* _________ Chord Builder Dialog _________ */
+.chordBuilderDlg {
+	right: 210px;
+	top: 70px;
+	width: 490px;
+	.transition(width 0.6s ease);
+}
+html .chordBuilderNarrow{
+	width: 345px;
+}
+/* STANDARD appearance HTML for Help Section
+-------------------------------- */
+.helpDlg {
+	font-size:.9em;
+}
+.normalHtml {
+	p,
+	ul,
+	ol {
+		margin-bottom:1em;
+	}
+	li {
+		list-style: disc outside none;
+		margin-left: 1em;
+		padding-bottom:.4em;
+	}
+	h3 {
+		font-size:1.2em;
+		font-weight:bold;
+	}
+}
+/* Reformat Dialog
+------------------------------ */
+.reformatDlg {
+	right: 25%;
+	top: 100px;
+	width: 480px;
+	z-index: 3;
+}
+.instructions {
+	width: 28em;
+	padding:0 0 .7em;
+	color:#563324;
+}
+.instructions.small {
+	clear:both;
+	font-size:.8em;
+	display:block;
+	width: 35em;
+}
+html .reformatDlg textarea{
+	height: 15em;
+}
+
+/* postitioning the drop-down menus & arrows
+-------------------------------------- */
+.layoutOptions {
+	left: 50px;
+	&:after,
+	&:before {
+		left:22%;
+	}
+}
+
+.tuningOptions {
+	left:150px;
+}
+
+#transposeOptions em {
+	color: #CCCCCC;
+	float: right;
+	font-size: 0.86em;
+}
+
+.otherOptions {
+	left: 250px;
+}
+.helpOptions {
+	left: 320px;
+}
+
+.hasSongbookLink {
+	.layoutOptions:after,
+	.layoutOptions:before {
+		left: 72%;
+	}
+
+	.tuningOptions {
+		left: 250px;
+	}
+
+	// OTHER
+	.otherOptions {
+		left: 300px;
+		&:after,
+		&:before {
+			left: 70%;
+		}
+	}
+
+	// HELP
+	.helpOptions {
+		left: 340px;
+		&:after,
+		&:before {
+			left: 80%;
+		}
+	}
+
+}
+
+

@@ -1,0 +1,99 @@
+/*
+ *	Document   : ugsEditorPlus.buttons.css
+ * Author     : Buz
+ * Description: All editor's buttons and button-like links.
+ */
+
+/* "base button" is rounded & gray with white text */
+.baseBtn {
+	background-color: #999;
+	border: 1px solid #333;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	color: #FFF;
+	cursor: pointer;
+	font-size: inherit;
+	font-weight: bold;
+	padding: 0.2em 1em;
+	text-align: center;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	/* Remove underline in case this is applied to a link */
+
+	text-decoration: none;
+	&:hover {
+		background-color: #888;
+		/* Force colorin case this is applied to a link */
+
+		color: #fff;
+	}
+}
+
+.blueBtn {
+	background-color: #89b9e3;
+	#gradient > .vertical(#89b9e3, #3d6bbb);
+	border-color: #3765B7;
+	text-shadow: #89b9e3 0px 1px 0, #3765b7 0 -1px 0;
+	&:hover {
+		background-color: #4c85e8;
+		#gradient > .vertical(#4c85e8, #2f5493);
+		text-shadow: black 0px 1px 0, #3765b7 0 -1px 0;
+	}
+}
+
+/* orange */
+.orange {
+	color: #fef4e9;
+	border: solid 1px #da7c0c;
+	background: #f78d1d;
+	#gradient > .vertical(#faa51a,  #f47a20);
+	text-shadow: #da7c0c 0px 1px 0, #faa51a 0 -1px 0;
+	&:hover {
+		background: #f47c20;
+		#gradient > .vertical(#f88e11,  #f06015);
+		text-shadow: #f47c20 0px 1px 0, #f88e11 0 -1px 0;
+	}
+	&:active {
+		color: #fcd3a5;
+		#gradient > .vertical(#f47a20,  #faa51a);
+	}
+}
+
+.btnBar {
+	height: 30px;
+
+	.baseBtn {
+		float: right;
+		font-size: 110%;
+		margin-bottom: 5px;
+	}
+}
+/* "Cancel"/"No Thanks" (subtle, alternate) buttons
+------------------------------ */
+.alternateBtn,
+.noThanks {
+	color: #3965B0;
+	float: right;
+	line-height: 33px;
+	margin-right: 1.5em;
+	text-decoration: none;
+
+	&:hover {
+		color:#0646AD;
+	}
+}
+
+.noThanks {
+	background-color: #EFD292;
+	border-radius: 6px;
+	padding: 0 0.4em;
+	.transition(background-color 0.4s ease);
+
+	&:hover {
+		background-color: #F2E2C1;
+	}
+}
+
+.alternateBtn {
+
+}

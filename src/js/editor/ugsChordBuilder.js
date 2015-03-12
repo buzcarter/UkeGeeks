@@ -5,6 +5,7 @@
  * @main  ugsChordBuilder
  */
 var ugsChordBuilder = window.ugsChordBuilder || {};
+ugsChordBuilder.version = '1.0.6';
 
 /**
  * Entities (data containers) shared between the class libraries. Private

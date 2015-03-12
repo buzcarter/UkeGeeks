@@ -1,0 +1,375 @@
+/*
+ * Document   : ugsEditorPlus.themes.css
+ * Author     : Buz
+ * Description: Alternative color schemes.
+ */
+
+/* __________ Reverse __________ */
+.theme-reversed {
+	background-color: #000;
+	color: #FFF;
+
+	pre {
+		color: #e9e9e9;
+	}
+	.scalablePrintArea{
+		background-color: transparent;
+		h5,
+		h6 {
+			border-left-color: #444;
+			color: #69F;
+		}
+	}
+	.ugsChorus {
+		border-left-color: #333;
+	}
+	.ugsChords {
+		code {
+			color: #333;
+			em {
+				color: #F42;
+			}
+		}
+
+	}
+	/* unique to the reversed theme we need to harden editor's UI */
+	.subNav a:hover {
+		background-color: #888;
+		color: #000;
+	}
+	.overlay {
+		background-color: #4E1C07;
+		.box-shadow( none);
+		color: #000;
+	}
+}
+
+/* __________ Jelly Bean __________ */
+.theme-jellyBean {
+	pre {
+		color: inherit;
+	}
+	.scalablePrintArea {
+		color: #56A0A5;
+		font-family: "Comic Sans MS", "Marker Felt", cursive, sans-serif;
+		hgroup {
+			color: #FF9417;
+			text-align: center;
+		}
+		h1 {
+			color: #D20770;
+			font-family: 'Peralta',cursive, sans-serif;
+			font-size: 2em;
+			text-shadow: 0.03125em 0.0625em 0 #FFFFFF, 0.09375em 0.125em 0 #F2E660;
+		}
+		h2 {
+			font-size: 1.1em;
+		}
+		h5,
+		h6 {
+			border-left-color: #F2E660;
+			color: #9C55ED;
+			font-family: inherit;
+			letter-spacing: 0.045em;
+		}
+	}
+	.ugsChorus {
+		border-left-color: #F2E660;
+		border-radius: 5px 0 0 5px;
+	}
+	.ugsChords {
+		code {
+			color: #333;
+			em {
+				color: #D20070;
+			}
+		}
+	}
+}
+
+/* __________ Western __________ */
+.theme-western {
+	.scalablePrintArea{
+		color: #88410A;
+		hgroup{
+			color: #88410A;
+			font-family: 'Smokum',Arial, sans-serif;
+			text-align: center;
+		}
+		h1 {
+			color: #472B07;
+			font-family: inherit;
+			font-size: 3.3em;
+			text-shadow: 0.011em 0.037em 0 #FFFFFF, 0.055em 0.07em 0 #E5DCC0;
+		}
+		h2{
+			font-size: 1.7em;
+		}
+		h5, h6 {
+			border-left-color: #BED379;
+			color: #92A88C;
+			font-family: 'Smokum',Arial, sans-serif;
+			font-size: 1.4em;
+			font-style: normal;
+			padding: 0;
+			text-indent: 1em;
+		}
+	}
+	.ugsChorus {
+		border-left-color: #BEC481;
+		border-radius: 5px 0 0 5px;
+	}
+	.ugs-source-wrap pre {
+		color: inherit;
+	}
+}
+
+/* __________ Pumpkin (Halloween 1) __________ */
+.theme-pumpkin {
+	.scalablePrintArea {
+		color: #68391D;
+		hgroup{
+			color: #B14623;
+			text-align: center;
+		}
+		h1 {
+			color: #D3770E;
+			font-family: 'Ranchers',Arial,sans-serif;
+			font-size: 3.2em;
+			line-height: 1.1;
+			text-shadow: 0.064em 0.044em 0 #EDF8CE, -0.037em 0.044em 0 #EDF8CE, -0.074em .094em 0 #BED379, 0.074em .094em 0 #BED379;
+		}
+		h2{
+			font-family: 'Cherry Cream Soda',cursive, sans-serif;
+			font-size: 1.1em;
+		}
+		h5, h6 {
+			border-left-color: #BED379;
+			color: #FFC501;
+			font-family: 'Cherry Cream Soda',cursive, sans-serif;
+			font-size: 1.4em;
+			font-style: normal;
+			padding: 0;
+			text-indent: 1em;
+		}
+	}
+	.ugs-source-wrap pre {
+		color: inherit;
+	}
+	.ugsChorus {
+		border-left-color: #A0B74E;
+		border-radius: 5px 0 0 5px;
+	}
+	.ugsChords {
+		code em {
+			color: #FE9600;
+		}
+	}
+}
+
+/* __________ Zombie (Halloween II) __________ */
+.theme-zombie {
+	.scalablePrintArea {
+		color: #798666;
+		hgroup{
+			color: #902374;
+			text-align: center;
+		}
+		h1 {
+			color: #BED63A;
+			font-family: 'Creepster',cursive, sans-serif;
+			font-size: 3.2em;
+			line-height: 1.1;
+			text-shadow: 0.002em 0.002em 0em #364000, 0.044em 0.044em 0 #9EB036, -0.042em -0.014em 0 #8F2472, 0.087em 0.074em 0 #8F2472, -0.074em 0.094em 0 #CA4F04, 0.074em 0.174em 0 #CA4F04;
+		}
+		h2 {
+			font-family: 'Cherry Cream Soda',cursive, sans-serif;
+			font-size: 1.1em;
+			text-shadow: 0.12em 0.13em 0 #DBDAE8;
+		}
+		h5, h6 {
+			border-left-color: #E4DCA4;
+			color: #798666;
+			font-family: 'Peralta',cursive, sans-serif;
+			font-size: 1.4em;
+			font-style: normal;
+			padding: 0;
+			text-indent: 1em;
+			text-shadow: 0.03em 0.07em 0 #BED63A;
+		}
+	}
+	.ugs-source-wrap pre {
+		color: inherit;
+	}
+	.ugsChorus {
+		border-left-color: #CDC693;
+		border-radius: 6px 0 0 6px;
+	}
+	.ugsChords code em {
+		color: #DD1A52;
+	}
+}
+
+/* __________ Frosty __________ */
+.theme-frosty {
+	.scalablePrintArea {
+		color: #154286;
+		hgroup{
+			color: #6A97DB;
+			text-align: center;
+		}
+		h1 {
+			 color: #D5E2F5;
+			font-family: 'Cherry Cream Soda',cursive, sans-serif;
+			 font-size: 2.18em;
+			 letter-spacing: 0.05em;
+			 line-height: 1.1;
+			 text-shadow: -0.064em -0.034em 0 #FFFFFF, 0.008em 0.008em 0 #A3E3D7, 0.009em -0.009em 0 #A3E3D7, 0.098em 0.115em 0 #154286, 0.064em 0.064em 0 #00183D, -0.114em -0.064em 0 #154286, -0.114em 0 0 #154286, 0 -0.064em 0 #154286, -0.084em 0.064em 0 #154286, 0.064em -0.034em 0 #154286;
+		}
+		h2 {
+			 font-family: 'Ranchers',Arial,sans-serif;
+			 font-size: 1.2em;
+		}
+		h5, h6 {
+			 border-left-color: #E3F7F3;
+			 color: #80B7B1;
+			font-family: 'Cherry Cream Soda',cursive, sans-serif;
+			 font-size: 1.4em;
+			 font-style: normal;
+			 padding: 0;
+			 text-indent: 0.6em;
+		}
+	}
+	.ugs-source-wrap pre {
+		color: inherit;
+	}
+	.ugsChorus {
+		border-left-color: #0896FE;
+		border-radius: 6px 0 0 6px;
+	}
+	.ugsChords code em {
+		color: #0896FE;
+	}
+}
+
+/* __________ Gruss vom Krampus __________ */
+/*
+http://www.colourlovers.com/palette/1374491/Merry_Christmas%E2%98%83
+http://www.colourlovers.com/palette/510474/vintage_Christmas
+*/
+.theme-krampus {
+	.scalablePrintArea {
+		color: #929867;
+		hgroup{
+			color: #929867;
+			text-align: center;
+		}
+		h1 {
+			color: #A22C27;
+			font-family: 'Lobster',cursive, sans-serif;
+			font-size: 2.78em;
+			line-height: 1.1;
+			text-shadow: 0.036em 0.04em 0 #FCECE8, 0.05em 0.08em 0 #4F2621, 0.02em 0.08em 0 #4F2621;
+		}
+		h2 {
+			font-family: 'Peralta',cursive, sans-serif;
+			font-size: 1.2em;
+			text-shadow: 0.03em 0.03em 0 #FFFFFF, 0.08em 0.1em 0 #EBD592;
+		}
+		h5, h6 {
+			border-left-color: #7B8055;
+			color: #A32C28;
+			font-family: 'Peralta',cursive, sans-serif;
+			font-size: 1.2em;
+			font-style: normal;
+			padding: 0;
+			text-indent: 0.6em;
+		}
+	}
+	.ugs-source-wrap pre {
+		color: inherit;
+	}
+	.ugsChorus {
+		border-left-color: #B9C97E;
+		border-radius: 6px 0 0 6px;
+	}
+	.ugsChords code em {
+		color: #384030;
+	}
+}
+
+/* __________ Notebook __________ */
+.theme-notebook {
+	.scalablePrintArea {
+		color: #443377;
+		font-family: 'Architects Daughter',Arial,sans-serif;
+		hgroup{
+			color: #2E2ECC;
+			font-family: inherit;
+			text-align: center;
+		}
+		h1 {
+			border-color: #E4E4FF;
+			border-style: solid;
+			border-width: 1px 0;
+			color: #252537;
+			font-family: 'Permanent Marker',Arial,sans-serif;
+			font-size: 2em;
+			margin-bottom: 0.2em;
+		}
+		h2 {
+			border-bottom: 1px solid #E4E4FF;
+			font-size: 1.1em;
+		}
+		h5, h6 {
+			border-left-color: #626283;
+			color: #2E2ECC;
+			font-family: 'Permanent Marker',Arial,sans-serif;
+			font-size: 1.3em;
+			padding: 0;
+			text-indent: 0.7em;
+		}
+	}
+	.ugs-source-wrap pre {
+		color: inherit;
+	}
+	.ugsChorus {
+		border-left-color: #a4a0b2;
+		border-radius: 6px 0 0 6px;
+	}
+	.ugsChords code {
+		font-family: inherit;
+	}
+	/*
+	.ugsChords code em {
+		color: #384030;
+	}
+	*/
+}
+
+/* __________ Just BLack __________ */
+.theme-justBlack {
+	.ugs-source-wrap {
+		h5,
+		h6 {
+			color: #000;
+			/* first choice: museo slab 500 */
+			font-family: 'Bree Serif', Arial, sans-serif;
+			font-style: normal;
+		}
+	}
+	.ugsChords code em {
+		color: #000;
+		font-weight: bold;
+	}
+	.scalablePrintArea hgroup,
+	.scalablePrintArea hgroup * {
+		/* first choice: museo slab 500 */
+		font-family: 'Bree Serif', Arial, sans-serif;
+		font-style: normal;
+	}
+	.scalablePrintArea hgroup{
+		text-align: center;
+	}
+}
+
