@@ -204,7 +204,7 @@ ugsEditorPlus.submenuUi = (function(){
 		'zoomDiagrams' : ['Tiny', 'Small', 'Medium', 'Large', 'Stupid Large'],
 		'layout' : ['Reference diagrams on left', 'Reference diagrams at top', 'No reference diagrams'],
 		'placement' : ['Chord names inline with lyrics', 'Chord names above lyrics', 'Names & diagrams above lyrics'],
-		'tuning' : ['Standard (GCEA) tuning', 'Baritone (DGBE) tuning', 'Alternate (ADF#B) tuning']
+		'tuning' : ['Standard (GCEA) tuning', 'Baritone (DGBE) tuning']
 	};
 
 	/**
