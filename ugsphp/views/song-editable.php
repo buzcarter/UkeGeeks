@@ -162,9 +162,9 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			<dt><label for="tuningPicker"><span>Standard ukulele tuning</span> <em>&#9658;</em></label></dt>
 			<dd id="tuningPicker" data-action="tuning">
 				<ul class="pseudoSelect">
-					<li class="checked"><a href="#soprano">Standard</a></li>
-					<li><a href="#baritone">Baritone</a></li>
-					<li><a href="#alternate">Alternate</a></li>
+					<li class="checked"><a href="#soprano">GCEA Standard</a></li>
+					<li><a href="#baritone">DGBE Baritone</a></li>
+					<li><a href="#alternate">ADF#B Alternate</a></li>
 				</ul>
 			</dd>
 		</dl>
