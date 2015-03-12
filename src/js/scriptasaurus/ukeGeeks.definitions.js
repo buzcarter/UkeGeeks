@@ -35,8 +35,8 @@ ukeGeeks.definitions = (function() {
 	 */
 	_public.instrument = {
 		sopranoUke: 0, // GCEA -- standard tuning G4 (or G3)-C4-E4-A4
-		baritoneUke: 5 // DGBE -- 5 steps lower than standard Soprano tuning: D3-G3-B3-E4
-		alternateUke: 2 // ADF#B -- 2 steps higher than standard tuning A4 (or A3)-D4-F#4-B4
+		baritoneUke: 5, // DGBE -- 5 steps lower than standard Soprano tuning: D3-G3-B3-E4
+		alternateUke: -2 // ADF#B -- 2 steps higher than standard tuning A4 (or A3)-D4-F#4-B4
 	};
 	
 	/* PUBLIC METHODS
@@ -65,7 +65,7 @@ ukeGeeks.definitions = (function() {
 	_public.useInstrument = function(offset) {
 		offset = (arguments.length > 0) ? offset : _public.instrument.sopranoUke;
 		_offset = parseInt(offset, 10);
-		if (_offset > 0){
+		if (_offset != 0){
 			_map = ukeGeeks.transpose.retune(_offset);
 		}
 		_public.setChords(ukeGeeks.chordImport.runBlock(_instruments[0]).chords);
@@ -87,7 +87,7 @@ ukeGeeks.definitions = (function() {
 			}
 		}
 		// next: built-in chords:
-		if (_offset < 1){
+		if (_offset == 0){
 			return _get(chordName);
 		}
 
