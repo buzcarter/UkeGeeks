@@ -333,7 +333,7 @@ ugsEditorPlus.actions = (function() {
 
 		if (value == 'alternate') {
 			tuning = ukeGeeks.definitions.instrument.alternateUke;
-			msg = '<strong>ADF#B</strong> alternate tuning';
+			msg = '<strong>ADF#B</strong> alternate';
 		}
 
 		$('#footTuningInfo').html(msg);
