@@ -331,6 +331,11 @@ ugsEditorPlus.actions = (function() {
 			msg = '<strong>DGBE</strong> Baritone Ukulele';
 		}
 
+		if (value == 'alternate') {
+			tuning = ukeGeeks.definitions.instrument.alternateUke;
+			msg = '<strong>ADF#B</strong> alternate';
+		}
+
 		$('#footTuningInfo').html(msg);
 		ukeGeeks.scriptasaurus.setTuningOffset(tuning);
 	};

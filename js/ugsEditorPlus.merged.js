@@ -15,8 +15,7 @@
  * @module ugsEditorPlus
  * @main ugsEditorPlus
  **/
-var ugsEditorPlus = window.ugsEditorPlus || {};
-;/**
+var ugsEditorPlus = window.ugsEditorPlus || {};/**
  * Options (Features) you can turn on or off. Where available defaults to values defined in UkeGeeks.settings
  *
  * @class options
@@ -155,8 +154,7 @@ ugsEditorPlus.options = {
 	 * @default see UkeGeeks.settings
 	 */
 	commonChords: []
-};
-;/**
+};/**
  * Does the work by providing "doAction" method to respond to events (does not
  * attach event handlers); Modifes some page elements -- adjust CSS classes on page,
  * runs Scriptasaurus, etc.
@@ -198,8 +196,8 @@ ugsEditorPlus.actions = (function() {
 	 * @type {JSON}
 	 */
 	var _prevValues = {
-		'placement': 'above',
-		'transpose': 'up_0'
+		'placement' : 'above',
+		'transpose' : 'up_0'
 	};
 
 	/**
@@ -209,10 +207,10 @@ ugsEditorPlus.actions = (function() {
 	 */
 	_public.init = function() {
 		_ele = {
-			songText: document.getElementById('ukeSongText'),
-			songContainer: document.getElementById('ukeSongContainer'),
-			cpmSource: document.getElementById('chordProSource'),
-			scalableArea: document.getElementById('scalablePrintArea')
+			songText : document.getElementById('ukeSongText'),
+			songContainer : document.getElementById('ukeSongContainer'),
+			cpmSource : document.getElementById('chordProSource'),
+			scalableArea : document.getElementById('scalablePrintArea')
 		};
 
 		$(document).on('option:click', function(e, data) {
@@ -237,7 +235,7 @@ ugsEditorPlus.actions = (function() {
 		// actions that modify song's HTML or reference diagrams require rerunning Scriptasaurus
 		var runRequired = false;
 
-		switch (action) {
+		switch (action){
 			case 'zoomFonts':
 				doSetFontSize(value);
 				break;
@@ -314,7 +312,7 @@ ugsEditorPlus.actions = (function() {
 	 * @method doUpdate
 	 * @private
 	 */
-	var doUpdate = function() {
+	var doUpdate = function(){
 		_public.run(true);
 	};
 
@@ -323,16 +321,16 @@ ugsEditorPlus.actions = (function() {
 	 * @method run
 	 * @param isDoBackup {bool} true forces backup; optional, default false.
 	 */
-	_public.run = function(isDoBackup) {
+	_public.run = function(isDoBackup){
 		isDoBackup = (arguments.length > 0) && isDoBackup;
 		_ele.songText.innerHTML = '<pre>' + _ele.cpmSource.value + '</pre>';
 		_song = ukeGeeks.scriptasaurus.run();
 
-		if (_song.chords.length < 1) {
+		if (_song.chords.length < 1){
 			ugsEditorPlus.autoReformat.run(_ele);
 		}
 
-		if (_song) {
+		if (_song){
 			ugsEditorPlus.songUi.update(_song);
 
 			// maintains last copy of USER edited song -- used for transpose etc
@@ -373,14 +371,14 @@ ugsEditorPlus.actions = (function() {
 
 		var s = ugsEditorPlus.styles.getSheet('ugsEditorCss');
 		var m = s.find('.scalablePrintArea .ugs-diagrams-wrap canvas');
-		m.style.width = Math.round(prct * ukeGeeks.settings.fretBox.width) + 'px';
-		m.style.height = Math.round(prct * ukeGeeks.settings.fretBox.height) + 'px';
+		m.style.width = Math.round(prct * ukeGeeks.settings.fretBox.width) +'px';
+		m.style.height = Math.round(prct * ukeGeeks.settings.fretBox.height) +'px';
 
 		m = s.find('.scalablePrintArea .ugs-diagrams-wrap');
-		m.style.width = columnWidth + 'px';
+		m.style.width = columnWidth +'px';
 
 		m = s.find('.scalablePrintArea .ugs-source-wrap');
-		m.style.marginLeft = (25 + columnWidth) + 'px';
+		m.style.marginLeft = (25 + columnWidth) +'px';
 	};
 
 	/* ----------------------------------------------------------------------------------- *|
@@ -393,7 +391,7 @@ ugsEditorPlus.actions = (function() {
 	 * @private
 	 * @param value {string} value of the clicked value item
 	 */
-	var doLayout = function(value) {
+	var doLayout = function(value){
 		$('body')
 			.toggleClass('diagramsOnTop', value == 'top')
 			.toggleClass('diagramsOnSide', value == 'left')
@@ -411,18 +409,18 @@ ugsEditorPlus.actions = (function() {
 	 * @param value {string} value of the clicked value item
 	 * @return {Boolean}
 	 */
-	var doPlacement = function(value) {
+	var doPlacement = function(value){
 		var isRunRequired = false;
 		ukeGeeks.toolsLite.setClass(_ele.songContainer, 'ugsInline', (value == 'inline'));
 
 		// NOTE: ugs already adds the "chord diagrams above" class based on setting,
 		// BUT does NOT remove it!!!!
 		var isMiniDiagrams = (value == 'miniDiagrams');
-		if (!isMiniDiagrams) {
+		if (!isMiniDiagrams){
 			ukeGeeks.toolsLite.removeClass(_ele.songContainer, 'ugsInlineDiagrams');
 		}
 
-		if (isMiniDiagrams || (_prevValues.placement == 'miniDiagrams')) {
+		if (isMiniDiagrams || (_prevValues.placement == 'miniDiagrams')){
 			ukeGeeks.settings.inlineDiagrams = isMiniDiagrams;
 			isRunRequired = true;
 		}
@@ -448,7 +446,7 @@ ugsEditorPlus.actions = (function() {
 	 * @param value {string} value of the clicked value item
 	 */
 	var doSetTheme = function(value) {
-		ugsEditorPlus.themes.set(value);
+		 ugsEditorPlus.themes.set(value);
 	};
 
 	/* ----------------------------------------------------------------------------------- *|
@@ -461,10 +459,10 @@ ugsEditorPlus.actions = (function() {
 	 * @private
 	 * @param value {string} currently selected option value
 	 */
-	var doSetPageWidth = function(value) {
+	var doSetPageWidth = function(value){
 		var opts = ['letter', 'a4', 'screen'];
 		var $body = $('body');
-		for (var i = 0; i < opts.length; i++) {
+		for(var i = 0; i < opts.length; i++){
 			$body.removeClass('pageWidth_' + opts[i]);
 		}
 		$body.addClass('pageWidth_' + value);
@@ -480,13 +478,18 @@ ugsEditorPlus.actions = (function() {
 	 * @private
 	 * @param value {string} value of the clicked value item
 	 */
-	var doTuning = function(value) {
+	var doTuning = function(value){
 		var tuning = ukeGeeks.definitions.instrument.sopranoUke,
-			msg = 'Standard <strong>GCEA</strong> Soprano Ukulele';
+			msg = '<strong>GCEA</strong> Standard Ukulele';
 
 		if (value == 'baritone') {
 			tuning = ukeGeeks.definitions.instrument.baritoneUke;
-			msg = 'Standard <strong>DGBE</strong> Baritone Ukulele';
+			msg = '<strong>DGBE</strong> Baritone Ukulele';
+		}
+
+		if (value == 'alternate') {
+			tuning = ukeGeeks.definitions.instrument.alternateUke;
+			msg = '<strong>ADF#B</strong> alternate tuning';
 		}
 
 		$('#footTuningInfo').html(msg);
@@ -499,7 +502,7 @@ ugsEditorPlus.actions = (function() {
 	 * @private
 	 * @param value {string} value of the clicked value item
 	 */
-	var doTranspose = function(value) {
+	var doTranspose = function(value){
 		var sign = value[0] == 'u' ? 1 : -1;
 		var steps = parseInt(value[value.length - 1], 10);
 		transpose(sign * steps);
@@ -510,7 +513,7 @@ ugsEditorPlus.actions = (function() {
 	 * @method transpose
 	 * @param steps {int} number of semitones, +/-6
 	 */
-	var transpose = function(steps) {
+	var transpose = function(steps){
 		var safeChords = [],
 			bad = '',
 			i;
@@ -525,8 +528,8 @@ ugsEditorPlus.actions = (function() {
 			}
 		}
 
-		if (bad.length > 0) {
-			if (!confirm('Sorry, but some of your chords can\'t be transposed:\n' + bad + '\n\nDo you want to continue anyway?')) {
+		if (bad.length > 0){
+			if (!confirm('Sorry, but some of your chords can\'t be transposed:\n' + bad + '\n\nDo you want to continue anyway?')){
 				return;
 			}
 		}
@@ -563,7 +566,7 @@ ugsEditorPlus.actions = (function() {
 
 	};
 
-	/**
+ /**
 	 * Sets Transpose menu's selected value to "Original"; adds example chord names
 	 * @method resetTranspose
 	 * @private
@@ -601,7 +604,7 @@ ugsEditorPlus.actions = (function() {
 	 * @private
 	 * @param isVisible {bool}
 	 */
-	var setEnclosureVisible = function(isVisible) {
+	var setEnclosureVisible = function(isVisible){
 		ukeGeeks.settings.opts.retainBrackets = isVisible;
 	};
 
@@ -621,7 +624,7 @@ ugsEditorPlus.actions = (function() {
 	 * @private
 	 * @param isIgnore {bool}
 	 */
-	var setIgnoreCommon = function(isIgnore) {
+	var setIgnoreCommon = function(isIgnore){
 		ukeGeeks.settings.opts.ignoreCommonChords = isIgnore;
 	};
 
@@ -635,14 +638,14 @@ ugsEditorPlus.actions = (function() {
 	var setCommonChordsList = function(chordList) {
 		if (typeof chordList == 'string') {
 			var inputList = chordList.split(/[ ,]+/);
-			var cleanList = [];
+		var cleanList = [];
 
-			for (var i = 0; i < inputList.length; i++) {
-				var c = ukeGeeks.toolsLite.trim(inputList[i]);
-				if (c.length > 0) {
-					cleanList.push(c);
-				}
+		for (var i = 0; i < inputList.length; i++) {
+			var c = ukeGeeks.toolsLite.trim(inputList[i]);
+			if (c.length > 0){
+				cleanList.push(c);
 			}
+		}
 
 			chordList = cleanList;
 		}
@@ -656,7 +659,7 @@ ugsEditorPlus.actions = (function() {
 	return _public;
 
 }());
-;/**
+/**
  * Handles transfering the easy text bits of a Song -- title, artist, etc -- to the page.
  * @class songUi
  * @namespace ugsEditorPlus
@@ -721,8 +724,7 @@ ugsEditorPlus.songUi = (function() {
 
 }()
 );
-
-;/**
+/**
  * from: http://www.javascriptkit.com/dhtmltutors/externalcss.shtml
  * @class styles
  * @namespace ugsEditorPlus
@@ -739,29 +741,29 @@ ugsEditorPlus.styles = (function() {
 	};
 
 	var _sheet = null;
-
+	
 	_public.getSheet = function(title) {
 		_sheet = _getSheet(title);
 		_public.Rules = _getRules();
 		return this;
 	};
-
-	var _getSheet = function(title) {
-		for (var i = 0; i < document.styleSheets.length; i++) {
-			if (document.styleSheets[i].title == title) {
+	
+	var _getSheet = function(title){
+		for (var i = 0; i < document.styleSheets.length; i++){
+			if (document.styleSheets[i].title == title){
 				return document.styleSheets[i];
 			}
 		}
 		return null;
 	};
-
+	
 	var _getRules = function() {
-		if (_sheet == null) {
+		if (_sheet == null){
 			return [];
 		}
 		return _sheet.cssRules ? _sheet.cssRules : _sheet.rules;
 	};
-
+	
 	_public.find = function(selector) {
 		selector = selector.toLowerCase();
 		for (var i = 0; i < _public.Rules.length; i++) {
@@ -780,8 +782,7 @@ ugsEditorPlus.styles = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());
-;/**
+}());/**
  * Changes the song's color scheme ("theme") by changing both the applied body class
  * and the UkeGeek settings used to draw the diagrams.
  * @class themes
@@ -964,6 +965,7 @@ ugsEditorPlus.themes = (function() {
 			}
 		},
 
+
 		'zombie': {
 			name: 'Zombies!!!',
 			selectText: 'Zombies!!!',
@@ -1005,10 +1007,11 @@ ugsEditorPlus.themes = (function() {
 		return _colorSchemes[themeName].selectText;
 	};
 
+
 	/**
 	 * Populates the UL (identified via CSS/jQuery selector) with the color scheme List Items (LIs)
 	 * @method loadList
-	 * @param {string} selector
+	 * @param  {string} selector
 	 * @param {string} selectedValue value that should be "checked"
 	 */
 	_public.loadList = function(selector, selectedValue) {
@@ -1042,8 +1045,7 @@ ugsEditorPlus.themes = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());
-;/**
+}());/**
  * UI mechanics of the Other Options "dialog"'s checkboxes and input
  * fields (does NOT manage "pageWidth" since its standard submenu behavior
  * is already handled in that class)
@@ -1113,7 +1115,7 @@ ugsEditorPlus.optionsDlg = (function() {
 		$('.overlay').draggable({
 			handle: 'hgroup'
 			//containParent: true
-		});
+    });
 	};
 
 	var triggerNotify = function(action, value) {
@@ -1128,8 +1130,7 @@ ugsEditorPlus.optionsDlg = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());
-;var ugsEditorPlus = window.ugsEditorPlus || {};
+}());var ugsEditorPlus = window.ugsEditorPlus || {};
 
 /**
  * TK
@@ -1153,11 +1154,11 @@ ugsEditorPlus.reformat = (function() {
 	 * @private
 	 */
 	var _enums = {
-		lineTypes: {
-			blank: 0,
-			chords: 1,
-			lyrics: 2,
-			tabs: 3
+		lineTypes : {
+			blank : 0,
+			chords : 1,
+			lyrics : 2,
+			tabs : 3
 		}
 	};
 
@@ -1178,25 +1179,25 @@ ugsEditorPlus.reformat = (function() {
 	};
 
 	var _re = {
-		words: /\b(\S+)\b/gi,
-		spaces: /(\s+)/g,
-		leadingSpace: /(^\s+)/,
-		chordNames: /\b[A-G][#b]?(m|m6|m7|m9|dim|dim7|maj7|sus2|sus4|aug|6|7|9|add9|7sus4)?\b/,
-		chrdBlock: /\b(\S+\s*)/g,
-		tabs: /^\s*(\|{0,2}[A-Gb]?\|{0,2}[-x0-9|:]{4,})/
+		words : /\b(\S+)\b/gi,
+		spaces : /(\s+)/g,
+		leadingSpace : /(^\s+)/,
+		chordNames : /\b[A-G][#b]?(m|m6|m7|m9|dim|dim7|maj7|sus2|sus4|aug|6|7|9|add9|7sus4)?\b/,
+		chrdBlock : /\b(\S+\s*)/g,
+		tabs : /^\s*(\|{0,2}[A-Gb]?\|{0,2}[-x0-9|:]{4,})/
 	};
 
-	// Hal Leonard Uke Chord Finder:
-	// + aug
-	// o dim
-	// -----------------
-	// F Fm F+ Fdim
-	// F5 Fadd9 Fm(add9) Fsus4
-	// Fsus2 F6 Fm6 Fmaj7
-	// Fmaj9 Fm7 Fm(maj7) Fm7b5
-	// Fm9 Fm11 F7 Fsus4
-	// F+7 F7b5 F9 F7#9
-	// F7b9 F11 F13 Fdim7
+// Hal Leonard Uke Chord Finder:
+// + aug
+// o dim
+// -----------------
+// F Fm F+ Fdim
+// F5 Fadd9 Fm(add9) Fsus4
+// Fsus2 F6 Fm6 Fmaj7
+// Fmaj9 Fm7 Fm(maj7) Fm7b5
+// Fm9 Fm11 F7 Fsus4
+// F+7 F7b5 F9 F7#9
+// F7b9 F11 F13 Fdim7
 
 	/**
 	 * Accepts a text block, returns "ChordPro" text block with chord lines merged into lyric lines with chords enclosed in square-brackets (i.e. [Cdim])
@@ -1227,7 +1228,7 @@ ugsEditorPlus.reformat = (function() {
 	 * @param text {string} string RAW song
 	 * @return {array of Lines}
 	 */
-	var read = function(text) {
+	var read = function(text){
 		var lineAry = [];
 		text = text.replace('	', '    ');
 		var lines = text.split('\n');
@@ -1235,13 +1236,13 @@ ugsEditorPlus.reformat = (function() {
 			var words = lines[i].match(_re.words);
 			var l = new LineObj();
 			l.source = lines[i];
-			if ((words != null) && (words.length > 0)) {
+			if ((words != null) && (words.length > 0)){
 				l.wordCount = words.length;
 				l.words = words;
 				l.chordCount = countChords(words);
 			}
 			var spaces = lines[i].match(_re.spaces);
-			if ((spaces != null) && (spaces.length > 0)) {
+			if ((spaces != null) && (spaces.length > 0)){
 				l.spaceCount = spaces.length;
 			}
 			l.lineType = toLineType(l);
@@ -1256,18 +1257,18 @@ ugsEditorPlus.reformat = (function() {
 	 * @param line {line}
 	 * @return {_enums.lineTypes}
 	 */
-	var toLineType = function(line) {
-		if ((line.spaceCount + line.wordCount) < 1) {
+	var toLineType = function(line){
+		if ((line.spaceCount + line.wordCount) < 1){
 			return _enums.lineTypes.blank;
 		}
 
 		var tabs = line.source.match(_re.tabs);
-		if (tabs != null) {
+		if (tabs != null){
 			return _enums.lineTypes.tabs;
 		}
 
 		var t = _enums.lineTypes.lyrics;
-		if ((line.chordCount > 0) && (line.wordCount == line.chordCount)) {
+		if ((line.chordCount > 0) && (line.wordCount == line.chordCount)){
 			t = _enums.lineTypes.chords;
 			_hasChords = true;
 		}
@@ -1281,7 +1282,7 @@ ugsEditorPlus.reformat = (function() {
 	 * @param words {array of words}
 	 * @return [int] number found
 	 */
-	var countChords = function(words) {
+	var countChords = function(words){
 		var count = 0;
 		for (var i = 0; i < words.length; i++) {
 			if (words[i].match(_re.chordNames)) {
@@ -1297,28 +1298,28 @@ ugsEditorPlus.reformat = (function() {
 	 * @param lines {array of Lines}
 	 * @return [string]
 	 */
-	var merge = function(lines) {
+	var merge = function(lines){
 		var s = '';
 		var thisLine, nextLine;
-		for (var i = 0; i < lines.length;) {
+		for (var i = 0; i < lines.length; ) {
 			thisLine = lines[i];
-			nextLine = lines[i + 1];
+			nextLine = lines[i+1];
 			i++;
 			// If this line's blank or its the last line...
-			if (!nextLine || (thisLine.lineType == _enums.lineTypes.blank)) {
+			if (!nextLine || (thisLine.lineType == _enums.lineTypes.blank)){
 				s += thisLine.source + '\n';
 				continue;
 			}
 
 			// OK, we've complicated things a bit by adding tabs, so we'll handle this in a helper...
-			if ((thisLine.lineType == _enums.lineTypes.tabs) && isTabBlock(lines, i)) {
+			if ((thisLine.lineType == _enums.lineTypes.tabs) && isTabBlock(lines, i)){
 				s += '{start_of_tab}\n' + thisLine.source.replace(_re.leadingSpace, '') + '\n' + nextLine.source.replace(_re.leadingSpace, '') + '\n' + lines[i + 1].source.replace(_re.leadingSpace, '') + '\n' + lines[i + 2].source.replace(_re.leadingSpace, '') + '\n' + '{end_of_tab}\n';
-				i += 3;
+				i+= 3;
 				continue;
 			}
 
 			// finally, look for a "mergable" pair: this line is chords and the next is lyrics -- if not this we'll just output the current line
-			if ((thisLine.lineType != _enums.lineTypes.chords) || (nextLine.lineType != _enums.lineTypes.lyrics)) {
+			if ((thisLine.lineType != _enums.lineTypes.chords) || (nextLine.lineType != _enums.lineTypes.lyrics)){
 				s += (thisLine.lineType == _enums.lineTypes.chords) ? wrapChords(thisLine.source) + '\n' : thisLine.source + '\n';
 				continue;
 			}
@@ -1337,12 +1338,12 @@ ugsEditorPlus.reformat = (function() {
 	 * @param index {int} current line's index within line array
 	 * @return [bool]
 	 */
-	var isTabBlock = function(lines, index) {
-		if (index + 3 >= lines.length) {
+	var isTabBlock = function(lines, index){
+		if (index + 3 >= lines.length){
 			return false;
 		}
-		for (var i = index; i < index + 3; i++) {
-			if (lines[i].lineType != _enums.lineTypes.tabs) {
+		for (var i = index; i < index + 3; i++){
+			if (lines[i].lineType != _enums.lineTypes.tabs){
 				return false;
 			}
 		}
@@ -1356,15 +1357,15 @@ ugsEditorPlus.reformat = (function() {
 	 * @param lyricsLine {string} the line of lyrics
 	 * @return [string] merged lines
 	 */
-	var mergeLines = function(chordLine, lyricsLine) {
-		while (lyricsLine.length < chordLine.length) {
+	var mergeLines = function(chordLine, lyricsLine){
+		while (lyricsLine.length < chordLine.length){
 			lyricsLine += ' ';
 		}
 		var s = '';
 		var blocks = chordLine.match(_re.chrdBlock);
 		var lead = chordLine.match(_re.leadingSpace);
 		var offset = 0;
-		if (lead) {
+		if (lead){
 			s += lyricsLine.substr(offset, lead[0].length);
 			offset = lead[0].length;
 		}
@@ -1372,7 +1373,7 @@ ugsEditorPlus.reformat = (function() {
 			s += '[' + blocks[j].replace(_re.spaces, '') + ']' + lyricsLine.substr(offset, blocks[j].length);
 			offset += blocks[j].length;
 		}
-		if (offset < lyricsLine.length) {
+		if (offset < lyricsLine.length){
 			s += lyricsLine.substr(offset, lyricsLine.length);
 		}
 		return s;
@@ -1384,11 +1385,11 @@ ugsEditorPlus.reformat = (function() {
 	 * @param chordLine {string} the line containing the chord names
 	 * @return [string] each word of input line gets bracketed
 	 */
-	var wrapChords = function(chordLine) {
+	var wrapChords = function(chordLine){
 		var chords = chordLine.replace(_re.spaces, ' ').split(' ');
 		var s = '';
 		for (var i = 0; i < chords.length; i++) {
-			if (chords[i].length > 0) {
+			if (chords[i].length > 0){
 				s += '[' + chords[i] + '] ';
 			}
 		}
@@ -1400,8 +1401,7 @@ ugsEditorPlus.reformat = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());
-;/**
+}());/**
  *
  * @class autoReformat
  * @namespace ugsEditorPlus
@@ -1424,8 +1424,8 @@ ugsEditorPlus.autoReformat = (function() {
 	var _formatted;
 	var _isDisabled = false;
 
-	_public.run = function(elements) {
-		if (_isDisabled) {
+	_public.run = function(elements){
+		if (_isDisabled){
 			return;
 		}
 		_ele = elements;
@@ -1451,25 +1451,25 @@ ugsEditorPlus.autoReformat = (function() {
 		runNow();
 	};
 
-	var doOk = function() {
+	var doOk = function(){
 		_ele.cpmSource.value = _formatted;
 		doClose();
 		ugsEditorPlus.actions.run(true);
 	};
 
-	var doClose = function() {
+	var doClose = function(){
 		ukeGeeks.toolsLite.addClass(_ele.reformatDlg, 'isHidden');
 	};
 
-	var doDisable = function(isDisabled) {
+	var doDisable = function(isDisabled){
 		_isDisabled = isDisabled;
 	};
 
-	var runNow = function() {
+	var runNow = function(){
 		_formatted = ugsEditorPlus.reformat.run(_ele.cpmSource.value);
 		_ele.reformatTextBox.innerHTML = _formatted;
 
-		if (!ugsEditorPlus.reformat.hasChords()) {
+		if (!ugsEditorPlus.reformat.hasChords()){
 			return;
 		}
 
@@ -1481,8 +1481,7 @@ ugsEditorPlus.autoReformat = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());
-;/**
+}());/**
  * Handles Top Menu UI -- includes the show/hide dialogs (why? cuz they're attached to top menu buttons)
  * Shows (a) dialongs (such as Edit) and (b) those tool-tippy options thingies.
  * @class topMenus
@@ -1617,14 +1616,14 @@ ugsEditorPlus.topMenus = (function() {
 	};
 
 }());
-;/**
+/**
  * Wires up all the "pseudo-selects" (aka "dropdownlists") on a Tooltip-Dialog boxes on
  * the page; assumes consistent HTML (hello, jQuery)
  * TODO: Refactor -- quite brittle!
  * @class submenuUi
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.submenuUi = (function() {
+ugsEditorPlus.submenuUi = (function(){
 	/**
 	 * attach public members to this object
 	 * @property _public
@@ -1656,7 +1655,7 @@ ugsEditorPlus.submenuUi = (function() {
 	 * @param  {event} e
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onOptionClick = function(e) {
+	var onOptionClick = function(e){
 		var $optionItem = $(this);
 		var value = stripHash($optionItem.children().attr('href'));
 
@@ -1736,11 +1735,11 @@ ugsEditorPlus.submenuUi = (function() {
 	 * @param  {event} e
 	 * @return {bool} false to kill event bubbling
 	 */
-	var onLabelClick = function(e) {
+	var onLabelClick = function(e){
 		var $thisLabel = $(this);
 		var id = $thisLabel.attr('for');
 		setActiveLabel($thisLabel);
-		$('#' + id).show();
+		$('#'+id).show();
 		onListActive(this, true);
 		if (_open !== null) {
 			$('#' + _open.id).hide();
@@ -1758,12 +1757,12 @@ ugsEditorPlus.submenuUi = (function() {
 		return false;
 	};
 
-	_public.reset = function($dlg) {
+	_public.reset = function($dlg){
 		$dlg.find('dt').removeClass('active');
 		$dlg.find('.event-userSelecting').removeClass('event-userSelecting');
 	};
 
-	var setActiveLabel = function($label) {
+	var setActiveLabel = function($label){
 		$label.closest('dl').children('dt').removeClass('active');
 		$label.closest('dt').addClass('active');
 	};
@@ -1776,7 +1775,7 @@ ugsEditorPlus.submenuUi = (function() {
 	 * @param  {Boolean} isInUse [description]
 	 * @return void
 	 */
-	var onListActive = function(ele, isInUse) {
+	var onListActive = function(ele, isInUse){
 		$(ele).parents('.enablePseudoSelects').toggleClass('event-userSelecting', isInUse);
 	};
 
@@ -1785,8 +1784,8 @@ ugsEditorPlus.submenuUi = (function() {
 	 * @param  {event} e
 	 * @return bool
 	 */
-	var doCollapseAllLists = function(e) {
-		if ($(e.target).is('a')) {
+	var doCollapseAllLists = function(e){
+		if ($(e.target).is('a')){
 			return;
 		}
 		$(this).find('dd').hide();
@@ -1799,12 +1798,12 @@ ugsEditorPlus.submenuUi = (function() {
 	 * @method closeAll
 	 * @param  {event} e
 	 */
-	var closeAll = function(e) {
+	var closeAll = function(e){
 		$('.arrowBox').fadeOut(270);
 		ugsEditorPlus.topMenus.makeAllInactive();
 	};
 
-	var stripHash = function(value) {
+	var stripHash = function(value){
 		return (value[0] == '#') ? value.substr(1) : value;
 	};
 
@@ -1819,10 +1818,10 @@ ugsEditorPlus.submenuUi = (function() {
 	 * @type {JSON}
 	 */
 	var _desriptions = {
-		'zoomDiagrams': ['Tiny', 'Small', 'Medium', 'Large', 'Stupid Large'],
-		'layout': ['Reference diagrams on left', 'Reference diagrams at top', 'No reference diagrams'],
-		'placement': ['Chord names inline with lyrics', 'Chord names above lyrics', 'Names & diagrams above lyrics'],
-		'tuning': ['Soprano (GCEA) tuning', 'Baritone (DBEA) tuning']
+		'zoomDiagrams' : ['Tiny', 'Small', 'Medium', 'Large', 'Stupid Large'],
+		'layout' : ['Reference diagrams on left', 'Reference diagrams at top', 'No reference diagrams'],
+		'placement' : ['Chord names inline with lyrics', 'Chord names above lyrics', 'Names & diagrams above lyrics'],
+		'tuning' : ['(GCEA) Standard tuning', '(DGBE) Baritone tuning', '(ADF#B) alternate tuning']
 	};
 
 	/**
@@ -1833,10 +1832,10 @@ ugsEditorPlus.submenuUi = (function() {
 	 * @param  {jQueryElement} $ele jQuery element that ...
 	 * @return {string}
 	 */
-	var getLabelText = function(action, value, $ele) {
+	var getLabelText = function(action, value, $ele){
 		var index = $ele.index();
 
-		switch (action) {
+		switch (action){
 			case 'paper':
 				return 'Width ' + $ele.text();
 			case 'zoomFonts':
@@ -1846,17 +1845,17 @@ ugsEditorPlus.submenuUi = (function() {
 			case 'colors':
 				return ugsEditorPlus.themes.getDescription(value);
 			case 'transpose':
-				if (value == 'up_0') {
+				if (value == 'up_0'){
 					return 'Original key';
 				}
 				var txt = $ele.text();
 				return txt.replace(' ', ' steps - "') + '"';
 			default:
-				return _desriptions[action][index];
+			 return _desriptions[action][index];
 		}
 	};
 
-	_public.resetTransposeLabel = function() {
+	_public.resetTransposeLabel = function(){
 		$('label[for=transposePicker] span').text('Original key');
 	};
 
@@ -1866,7 +1865,7 @@ ugsEditorPlus.submenuUi = (function() {
 	return _public;
 
 }());
-;/**
+/**
  * Creates a new song via AJAX.
  * Dependencies: jQuery
  * @class newSong
@@ -1882,7 +1881,7 @@ ugsEditorPlus.newSong = (function() {
 
 	/**
 	 * lock-down the Submit (Update) button to avoid double posts;
-	 * @attribute _isUpdating
+	 *  @attribute _isUpdating
 	 * @type {Boolean}
 	 */
 	var _isUpdating = false;
@@ -1893,7 +1892,7 @@ ugsEditorPlus.newSong = (function() {
 		_ajaxUri = ajaxUri;
 
 		$('#newSongBtn').click(function(e) {
-			if (doValidate(this)) {
+			if(doValidate(this)) {
 				doPost();
 			}
 		});
@@ -1923,37 +1922,37 @@ ugsEditorPlus.newSong = (function() {
 	};
 
 	var doAjaxOk = function(data) {
-		showErrors(data.HasErrors, data.Message);
-		if (data.HasErrors) {
-			return;
-		}
-		document.location.href = data.ContinueUri;
-	};
-
-	var doPost = function() {
-		if (_isUpdating) {
-			return;
-		}
-
-		var data = {
-			'handler': 'ugs_new',
-			'songTitle': $('#songTitle').val(),
-			'songArtist': $('#songArtist').val()
+			showErrors(data.HasErrors, data.Message);
+			if(data.HasErrors) {
+				return;
+			}
+			document.location.href = data.ContinueUri;
 		};
 
-		$.ajax({
-			url: _ajaxUri,
-			type: "POST",
-			dataType: 'json',
-			data: JSON.stringify(data),
-			success: function(data) {
-				doAjaxOk(data);
+	var doPost = function() {
+			if (_isUpdating){
+				return;
+			}
+
+			var data = {
+				'handler': 'ugs_new',
+				'songTitle': $('#songTitle').val(),
+				'songArtist': $('#songArtist').val()
+			};
+
+			$.ajax({
+				url: _ajaxUri,
+				type: "POST",
+				dataType: 'json',
+				data: JSON.stringify(data),
+				success: function(data) {
+					doAjaxOk(data);
 			},
 			error: function(data) {
 				showErrors(true, 'Failed to create the song file.<br/>Please have your admin check the CPM directory permissions.');
-			}
-		});
-	};
+				}
+			});
+		};
 
 	var doValidate = function() {
 		var $title = $('#songTitle');
@@ -1965,25 +1964,25 @@ ugsEditorPlus.newSong = (function() {
 	};
 
 	var showErrors = function(hasErrors, message) {
-		var $err = $('#newSongForm .errorMessage');
-		if (hasErrors) {
-			$err.show().html(message);
-			$('#songTitle').focus();
+			var $err = $('#newSongForm .errorMessage');
+			if(hasErrors) {
+				$err.show().html(message);
+				$('#songTitle').focus();
 		}
 		else {
-			$err.hide();
-		}
-	};
+				$err.hide();
+			}
+		};
 
 	var closeDlg = function(e) {
 		$('#newSongForm').fadeOut();
 	};
 
-	var resetFields = function() {
+	var resetFields = function(){
 		$('#songTitle, #songArtist').val('');
 	};
 
-	var onEscape = function(e) {
+	var onEscape = function(e){
 		if (e.which == 27) {
 			closeDlg();
 		}
@@ -1993,8 +1992,7 @@ ugsEditorPlus.newSong = (function() {
 	// return public interface "JSON handle"
 	// ---------------------------------------
 	return _public;
-})();
-;/**
+})();/**
  * Updates an exising song via AJAX.
  * Dependencies: jQuery
  * @class updateSong
@@ -2017,11 +2015,11 @@ ugsEditorPlus.updateSong = (function() {
 	 * @type {JSON}
 	 */
 	var _selectors = {
-		messageBox: '#messageBox',
-		message: '#sourceFeedback',
-		button: '#saveBtn',
-		spinner: '#loadingSpinner',
-		song: '#chordProSource'
+		messageBox : '#messageBox',
+		message : '#sourceFeedback',
+		button : '#saveBtn',
+		spinner : '#loadingSpinner',
+		song : '#chordProSource'
 	};
 
 	/**
@@ -2052,23 +2050,23 @@ ugsEditorPlus.updateSong = (function() {
 			});
 	};
 
-	var showBusy = function() {
+	var showBusy = function(){
 		$(_selectors.message).hide().html();
 		$(_selectors.messageBox).slideDown('fast');
 		$(_selectors.spinner).show();
 	};
 
-	var showMessage = function(message) {
+	var showMessage = function(message){
 		$(_selectors.spinner).hide();
 		$(_selectors.message).show().html(message);
 	};
 
-	var hideMessage = function() {
+	var hideMessage = function(){
 		$(_selectors.messageBox).delay(3000).fadeOut('slow');
 	};
 
 	var doUpdate = function() {
-		if (_isUpdating) {
+		if (_isUpdating){
 			return;
 		}
 
@@ -2084,7 +2082,7 @@ ugsEditorPlus.updateSong = (function() {
 			url: _ajaxUri,
 			type: 'POST',
 			dataType: 'json',
-			contentType: "application/json; charset=utf-8",
+			contentType:"application/json; charset=utf-8",
 			data: JSON.stringify(data),
 			success: function(data) {
 				doAjaxOk(data);
@@ -2104,8 +2102,7 @@ ugsEditorPlus.updateSong = (function() {
 	// return public interface "JSON handle"
 	// ---------------------------------------
 	return _public;
-})();
-;/**
+})();/**
  * Search on the song list page for songs.
  * Dependencies: jQuery and Twitter Bootstrap's typeahead plugin
  * Based on tutorial:
@@ -2114,7 +2111,7 @@ ugsEditorPlus.updateSong = (function() {
  * @constructor
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.typeahead = function() {
+ugsEditorPlus.typeahead = function(){
 	/**
 	 * attach public members to this object
 	 * @property _public
@@ -2144,9 +2141,9 @@ ugsEditorPlus.typeahead = function() {
 	 * keys, searchable text, and display text
 	 * @method listFromHtml
 	 */
-	var listFromHtml = function() {
+	var listFromHtml = function(){
 
-		$('li').each(function(index) {
+		$( 'li' ).each(function( index ) {
 			var $this = $(this);
 			var plainText = crushText($this.text());
 			var href = $this.children('a').attr('href');
@@ -2157,48 +2154,48 @@ ugsEditorPlus.typeahead = function() {
 
 			_keysToDetailsDict[key] = {
 				// content displayed in drop down list
-				html: html,
+				html : html,
 				// what we'll match against
-				searchText: plainText,
+				searchText : plainText,
 				// unique key/id
-				code: key,
+				code : key,
 				// when a selection is made this is the location we'll launch
-				href: href
+				href : href
 			};
 			_keysList.push(key);
 		});
 
 	};
 
-	var crushText = function(value) {
+	var crushText = function(value){
 		return value
 			.toLowerCase()
-			.replace(_re.noise, '')
-			.replace(_re.common, ' ')
-			.replace(_re.space, ' ')
-			.trim();
+    	.replace(_re.noise, '')
+    	.replace(_re.common, ' ')
+    	.replace(_re.space, ' ')
+    	.trim();
 	};
 
-	var _ta_source = function(query, process) {
+	var _ta_source = function (query, process) {
 		_scrubbedQuery = crushText(query);
 		_words = _scrubbedQuery.split(' ');
 		var regGroup = '';
 		for (var i = 0; i < _words.length; i++) {
 			_words[i] = _words[i].trim();
-			if (_words[i].length > 0) {
+			if (_words[i].length > 0){
 				regGroup += (regGroup.length > 0 ? '|' : '') + _words[i];
 			}
 		}
-		_regex = new RegExp('(' + regGroup + ')', 'gi');
+		_regex = new RegExp( '(' + regGroup + ')', 'gi');
 		process(_keysList);
 	};
 
-	var _ta_updater = function(item) {
+	var _ta_updater = function (item) {
 		window.location = _keysToDetailsDict[item].href;
 		return _keysToDetailsDict[item].searchText;
 	};
 
-	var _ta_matcher = function(item) {
+	var _ta_matcher = function (item) {
 		var detailed = _keysToDetailsDict[item];
 		for (var i = 0; i < _words.length; i++) {
 			if (detailed.searchText.indexOf(_words[i]) == -1) {
@@ -2208,16 +2205,16 @@ ugsEditorPlus.typeahead = function() {
 		return true;
 	};
 
-	var _ta_sorter = function(items) {
+	var _ta_sorter = function (items) {
 		return items.sort(function(a, b) {
 			return (_keysToDetailsDict[a].searchText > _keysToDetailsDict[b].searchText);
 		});
 	};
 
-	var _ta_highligher = function(item) {
+	var _ta_highligher = function (item) {
 		var $temp = $('<div/>').html(_keysToDetailsDict[item].html);
 
-		$('em, .bigger', $temp).each(function(index) {
+		$('em, .bigger', $temp).each(function( index ){
 			var $ele = $(this);
 			var text = $ele.html();
 			$ele.html(text.replace(_regex, "<strong>$1</strong>"));
@@ -2225,7 +2222,7 @@ ugsEditorPlus.typeahead = function() {
 		return $temp.html();
 	};
 
-	_public.initialize = function() {
+	_public.initialize = function(){
 		listFromHtml();
 
 		$('#quickSearch')
@@ -2246,13 +2243,12 @@ ugsEditorPlus.typeahead = function() {
 	// return public interface "JSON handle"
 	// ---------------------------------------
 	return _public;
-};
-;/**
+};/**
  * Resizes an overlay to fill the window (this is a 1.0, so "fill" is relative -- it gets much bigger)
  * @class resize
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.resize = (function() {
+ugsEditorPlus.resize = (function(){
 	/**
 	 * attach public members to this object
 	 * @property _public
@@ -2295,7 +2291,7 @@ ugsEditorPlus.resize = (function() {
 	 * @private
 	 * @return {void}
 	 */
-	var setup = function(dlgElement) {
+	var setup = function(dlgElement){
 		$dlg = $(dlgElement);
 		$("body").append('<div id="aceHeader"><button class="aceSideBtn" title="Show options &amp; help"><span></span><span></span><span></span></button><strong>Edit Song</strong><a href="#exit-fullscreen">Exit fullscreen</a></div><div id="aceEditor"></div><div id="aceHelp"></div>');
 
@@ -2375,19 +2371,19 @@ ugsEditorPlus.resize = (function() {
 		var path = getPath('ugsEditorPlus');
 
 		LazyLoad.js(path + '/ace/ace.js', function() {
-			editor = ace.edit("aceEditor");
-			editor.setTheme("ace/theme/idle_fingers");
-			editor.getSession().setMode("ace/mode/chordpro");
-			editor.setOptions({
-				enableBasicAutocompletion: true,
-				enableSnippets: true
+				editor = ace.edit("aceEditor");
+				editor.setTheme("ace/theme/idle_fingers");
+				editor.getSession().setMode("ace/mode/chordpro");
+				editor.setOptions({
+					enableBasicAutocompletion: true,
+					enableSnippets: true
+				});
+				editor.completers = [ugsAce.chordCompleter];
+				copySongToAce();
+
+				$help.html(ugsAce.helpHtml);
+
 			});
-			editor.completers = [ugsAce.chordCompleter];
-			copySongToAce();
-
-			$help.html(ugsAce.helpHtml);
-
-		});
 	};
 
 	var copySongToAce = function() {
@@ -2423,15 +2419,15 @@ ugsEditorPlus.resize = (function() {
 	 * @param  {DOM-element} dlgElement handle to Overlay/dialog being resized
 	 * @return {void}
 	 */
-	_public.toggle = function(dlgElement) {
+	_public.toggle = function(dlgElement){
 		if ($dlg === null) {
-			setup(dlgElement);
+		setup(dlgElement);
 		}
 
-		if (isBig) {
+		if (isBig){
 			hideAce();
 		}
-		else {
+		else{
 			showAce();
 		}
 		return false;
@@ -2443,8 +2439,7 @@ ugsEditorPlus.resize = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());
-;/**
+}());/**
  *
  * Dependencies: jQuery & ugsChordBuilder classes
  * @class chordBuilder
@@ -2479,7 +2474,7 @@ ugsEditorPlus.chordBuilder = (function() {
 	 * @method onShowDlgBtnClick
 	 * @param  {event} evt
 	 */
-	var onShowDlgBtnClick = function(evt) {
+	var onShowDlgBtnClick = function(evt){
 		evt.preventDefault();
 		_builder.reload();
 		var id = $(this).data('dialog');
@@ -2491,8 +2486,7 @@ ugsEditorPlus.chordBuilder = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());
-;/**
+}());/**
  * Exposes the only method required to attach UkeGeeks Scriptasaurus Song-a-matic editor functionality.
  *
  * @class songAmatic
@@ -2546,14 +2540,14 @@ ugsEditorPlus.songAmatic = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());
-;/**
+}());/**
  * Library for an HTML5 WYSIWYG editor to build ChordPro chord define tags.
  * @module  ugsChordBuilder
  * @namespace ugsChordBuilder
  * @main  ugsChordBuilder
  */
 var ugsChordBuilder = window.ugsChordBuilder || {};
+ugsChordBuilder.version = '1.0.6';
 
 /**
  * Entities (data containers) shared between the class libraries. Private
@@ -2638,7 +2632,7 @@ ugsChordBuilder.entities = {
 		 */
 		this.y = y ? y : 0;
 	}
-};
+	};
 
 /**
  * "Properties, Options, Preferences" such as fretboard size and colors; dot attributes, the cursors, fonts etc.
@@ -2990,8 +2984,8 @@ ugsChordBuilder.fretDots = (function() {
 			if (_dots[i].finger > 0) {
 				addLabel(context, pos, _dots[i].finger);
 			}
-		}
-	};
+	}
+};
 
 	// ---------------------------------------
 	// return public interface
@@ -3423,8 +3417,7 @@ ugsChordBuilder.export = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());
-;/**
+}());/**
  *
  * @class chooserList
  * @namespace ugsChordBuilder
@@ -3902,7 +3895,7 @@ ugsChordBuilder.chooserList = (function() {
 	return _public;
 
 }());
-;/**
+/**
  * Doing
  * @class editorUi
  * @constructor
@@ -3936,7 +3929,7 @@ ugsChordBuilder.editorUi = function() {
 		outputBox: 'cdBldOutputBox',
 		cancelBtn: 'cdBldCancelBtn',
 		saveBtn: 'cdBldSaveBtn'
-		// openBtn: 'cdBldOpenBtn'
+		// 		openBtn: 'cdBldOpenBtn'
 	};
 
 	var _cursorCanvas = null,
@@ -4059,7 +4052,7 @@ ugsChordBuilder.editorUi = function() {
 			dots: ugsChordBuilder.fretDots.getDots(),
 			definition: ugsChordBuilder.export.getDefinition(_currentName, _startingFret)
 		};
-		if (!ugsChordBuilder.chooserList.save(d)) {
+		if (!ugsChordBuilder.chooserList.save(d)){
 			var e = document.getElementById(_ids.chordName);
 			e.focus();
 			e.select();
@@ -4356,400 +4349,10 @@ ugsChordBuilder.editorUi = function() {
 		document.getElementById(_ids.output).innerHTML = ugsChordBuilder.export.getDefinitionHtml(_currentName, _startingFret);
 	};
 
-	this.reload = function() {
+	this.reload = function(){
 		reset();
 		ugsChordBuilder.chooserList.reset();
 		ugsChordBuilder.chooserList.show(true);
 	};
 
-};
-;/*jslint browser: true, eqeqeq: true, bitwise: true, newcap: true, immed: true, regexp: false */
-
-/**
-LazyLoad makes it easy and painless to lazily load one or more external
-JavaScript or CSS files on demand either during or after the rendering of a web
-page.
-
-Supported browsers include Firefox 2+, IE6+, Safari 3+ (including Mobile
-Safari), Google Chrome, and Opera 9+. Other browsers may or may not work and
-are not officially supported.
-
-Visit https://github.com/rgrove/lazyload/ for more info.
-
-Copyright (c) 2011 Ryan Grove <ryan@wonko.com>
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the 'Software'), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-@module lazyload
-@class LazyLoad
-@static
-*/
-
-LazyLoad = (function (doc) {
-  // -- Private Variables ------------------------------------------------------
-
-  // User agent and feature test information.
-  var env,
-
-  // Reference to the <head> element (populated lazily).
-  head,
-
-  // Requests currently in progress, if any.
-  pending = {},
-
-  // Number of times we've polled to check whether a pending stylesheet has
-  // finished loading. If this gets too high, we're probably stalled.
-  pollCount = 0,
-
-  // Queued requests.
-  queue = {css: [], js: []},
-
-  // Reference to the browser's list of stylesheets.
-  styleSheets = doc.styleSheets;
-
-  // -- Private Methods --------------------------------------------------------
-
-  /**
-  Creates and returns an HTML element with the specified name and attributes.
-
-  @method createNode
-  @param {String} name element name
-  @param {Object} attrs name/value mapping of element attributes
-  @return {HTMLElement}
-  @private
-  */
-  function createNode(name, attrs) {
-    var node = doc.createElement(name), attr;
-
-    for (attr in attrs) {
-      if (attrs.hasOwnProperty(attr)) {
-        node.setAttribute(attr, attrs[attr]);
-      }
-    }
-
-    return node;
-  }
-
-  /**
-  Called when the current pending resource of the specified type has finished
-  loading. Executes the associated callback (if any) and loads the next
-  resource in the queue.
-
-  @method finish
-  @param {String} type resource type ('css' or 'js')
-  @private
-  */
-  function finish(type) {
-    var p = pending[type],
-        callback,
-        urls;
-
-    if (p) {
-      callback = p.callback;
-      urls     = p.urls;
-
-      urls.shift();
-      pollCount = 0;
-
-      // If this is the last of the pending URLs, execute the callback and
-      // start the next request in the queue (if any).
-      if (!urls.length) {
-        callback && callback.call(p.context, p.obj);
-        pending[type] = null;
-        queue[type].length && load(type);
-      }
-    }
-  }
-
-  /**
-  Populates the <code>env</code> variable with user agent and feature test
-  information.
-
-  @method getEnv
-  @private
-  */
-  function getEnv() {
-    var ua = navigator.userAgent;
-
-    env = {
-      // True if this browser supports disabling async mode on dynamically
-      // created script nodes. See
-      // http://wiki.whatwg.org/wiki/Dynamic_Script_Execution_Order
-      async: doc.createElement('script').async === true
-    };
-
-    (env.webkit = /AppleWebKit\//.test(ua))
-      || (env.ie = /MSIE|Trident/.test(ua))
-      || (env.opera = /Opera/.test(ua))
-      || (env.gecko = /Gecko\//.test(ua))
-      || (env.unknown = true);
-  }
-
-  /**
-  Loads the specified resources, or the next resource of the specified type
-  in the queue if no resources are specified. If a resource of the specified
-  type is already being loaded, the new request will be queued until the
-  first request has been finished.
-
-  When an array of resource URLs is specified, those URLs will be loaded in
-  parallel if it is possible to do so while preserving execution order. All
-  browsers support parallel loading of CSS, but only Firefox and Opera
-  support parallel loading of scripts. In other browsers, scripts will be
-  queued and loaded one at a time to ensure correct execution order.
-
-  @method load
-  @param {String} type resource type ('css' or 'js')
-  @param {String|Array} urls (optional) URL or array of URLs to load
-  @param {Function} callback (optional) callback function to execute when the
-    resource is loaded
-  @param {Object} obj (optional) object to pass to the callback function
-  @param {Object} context (optional) if provided, the callback function will
-    be executed in this object's context
-  @private
-  */
-  function load(type, urls, callback, obj, context) {
-    var _finish = function () { finish(type); },
-        isCSS   = type === 'css',
-        nodes   = [],
-        i, len, node, p, pendingUrls, url;
-
-    env || getEnv();
-
-    if (urls) {
-      // If urls is a string, wrap it in an array. Otherwise assume it's an
-      // array and create a copy of it so modifications won't be made to the
-      // original.
-      urls = typeof urls === 'string' ? [urls] : urls.concat();
-
-      // Create a request object for each URL. If multiple URLs are specified,
-      // the callback will only be executed after all URLs have been loaded.
-      //
-      // Sadly, Firefox and Opera are the only browsers capable of loading
-      // scripts in parallel while preserving execution order. In all other
-      // browsers, scripts must be loaded sequentially.
-      //
-      // All browsers respect CSS specificity based on the order of the link
-      // elements in the DOM, regardless of the order in which the stylesheets
-      // are actually downloaded.
-      if (isCSS || env.async || env.gecko || env.opera) {
-        // Load in parallel.
-        queue[type].push({
-          urls    : urls,
-          callback: callback,
-          obj     : obj,
-          context : context
-        });
-      } else {
-        // Load sequentially.
-        for (i = 0, len = urls.length; i < len; ++i) {
-          queue[type].push({
-            urls    : [urls[i]],
-            callback: i === len - 1 ? callback : null, // callback is only added to the last URL
-            obj     : obj,
-            context : context
-          });
-        }
-      }
-    }
-
-    // If a previous load request of this type is currently in progress, we'll
-    // wait our turn. Otherwise, grab the next item in the queue.
-    if (pending[type] || !(p = pending[type] = queue[type].shift())) {
-      return;
-    }
-
-    head || (head = doc.head || doc.getElementsByTagName('head')[0]);
-    pendingUrls = p.urls.concat();
-
-    for (i = 0, len = pendingUrls.length; i < len; ++i) {
-      url = pendingUrls[i];
-
-      if (isCSS) {
-          node = env.gecko ? createNode('style') : createNode('link', {
-            href: url,
-            rel : 'stylesheet'
-          });
-      } else {
-        node = createNode('script', {src: url});
-        node.async = false;
-      }
-
-      node.className = 'lazyload';
-      node.setAttribute('charset', 'utf-8');
-
-      if (env.ie && !isCSS && 'onreadystatechange' in node && !('draggable' in node)) {
-        node.onreadystatechange = function () {
-          if (/loaded|complete/.test(node.readyState)) {
-            node.onreadystatechange = null;
-            _finish();
-          }
-        };
-      } else if (isCSS && (env.gecko || env.webkit)) {
-        // Gecko and WebKit don't support the onload event on link nodes.
-        if (env.webkit) {
-          // In WebKit, we can poll for changes to document.styleSheets to
-          // figure out when stylesheets have loaded.
-          p.urls[i] = node.href; // resolve relative URLs (or polling won't work)
-          pollWebKit();
-        } else {
-          // In Gecko, we can import the requested URL into a <style> node and
-          // poll for the existence of node.sheet.cssRules. Props to Zach
-          // Leatherman for calling my attention to this technique.
-          node.innerHTML = '@import "' + url + '";';
-          pollGecko(node);
-        }
-      } else {
-        node.onload = node.onerror = _finish;
-      }
-
-      nodes.push(node);
-    }
-
-    for (i = 0, len = nodes.length; i < len; ++i) {
-      head.appendChild(nodes[i]);
-    }
-  }
-
-  /**
-  Begins polling to determine when the specified stylesheet has finished loading
-  in Gecko. Polling stops when all pending stylesheets have loaded or after 10
-  seconds (to prevent stalls).
-
-  Thanks to Zach Leatherman for calling my attention to the @import-based
-  cross-domain technique used here, and to Oleg Slobodskoi for an earlier
-  same-domain implementation. See Zach's blog for more details:
-  http://www.zachleat.com/web/2010/07/29/load-css-dynamically/
-
-  @method pollGecko
-  @param {HTMLElement} node Style node to poll.
-  @private
-  */
-  function pollGecko(node) {
-    var hasRules;
-
-    try {
-      // We don't really need to store this value or ever refer to it again, but
-      // if we don't store it, Closure Compiler assumes the code is useless and
-      // removes it.
-      hasRules = !!node.sheet.cssRules;
-    } catch (ex) {
-      // An exception means the stylesheet is still loading.
-      pollCount += 1;
-
-      if (pollCount < 200) {
-        setTimeout(function () { pollGecko(node); }, 50);
-      } else {
-        // We've been polling for 10 seconds and nothing's happened. Stop
-        // polling and finish the pending requests to avoid blocking further
-        // requests.
-        hasRules && finish('css');
-      }
-
-      return;
-    }
-
-    // If we get here, the stylesheet has loaded.
-    finish('css');
-  }
-
-  /**
-  Begins polling to determine when pending stylesheets have finished loading
-  in WebKit. Polling stops when all pending stylesheets have loaded or after 10
-  seconds (to prevent stalls).
-
-  @method pollWebKit
-  @private
-  */
-  function pollWebKit() {
-    var css = pending.css, i;
-
-    if (css) {
-      i = styleSheets.length;
-
-      // Look for a stylesheet matching the pending URL.
-      while (--i >= 0) {
-        if (styleSheets[i].href === css.urls[0]) {
-          finish('css');
-          break;
-        }
-      }
-
-      pollCount += 1;
-
-      if (css) {
-        if (pollCount < 200) {
-          setTimeout(pollWebKit, 50);
-        } else {
-          // We've been polling for 10 seconds and nothing's happened, which may
-          // indicate that the stylesheet has been removed from the document
-          // before it had a chance to load. Stop polling and finish the pending
-          // request to prevent blocking further requests.
-          finish('css');
-        }
-      }
-    }
-  }
-
-  return {
-
-    /**
-    Requests the specified CSS URL or URLs and executes the specified
-    callback (if any) when they have finished loading. If an array of URLs is
-    specified, the stylesheets will be loaded in parallel and the callback
-    will be executed after all stylesheets have finished loading.
-
-    @method css
-    @param {String|Array} urls CSS URL or array of CSS URLs to load
-    @param {Function} callback (optional) callback function to execute when
-      the specified stylesheets are loaded
-    @param {Object} obj (optional) object to pass to the callback function
-    @param {Object} context (optional) if provided, the callback function
-      will be executed in this object's context
-    @static
-    */
-    css: function (urls, callback, obj, context) {
-      load('css', urls, callback, obj, context);
-    },
-
-    /**
-    Requests the specified JavaScript URL or URLs and executes the specified
-    callback (if any) when they have finished loading. If an array of URLs is
-    specified and the browser supports it, the scripts will be loaded in
-    parallel and the callback will be executed after all scripts have
-    finished loading.
-
-    Currently, only Firefox and Opera support parallel loading of scripts while
-    preserving execution order. In other browsers, scripts will be
-    queued and loaded one at a time to ensure correct execution order.
-
-    @method js
-    @param {String|Array} urls JS URL or array of JS URLs to load
-    @param {Function} callback (optional) callback function to execute when
-      the specified scripts are loaded
-    @param {Object} obj (optional) object to pass to the callback function
-    @param {Object} context (optional) if provided, the callback function
-      will be executed in this object's context
-    @static
-    */
-    js: function (urls, callback, obj, context) {
-      load('js', urls, callback, obj, context);
-    }
-
-  };
-})(this.document);
+};

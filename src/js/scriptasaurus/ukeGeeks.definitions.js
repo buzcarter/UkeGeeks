@@ -34,6 +34,7 @@ ukeGeeks.definitions = (function() {
 	 * @type JSON
 	 */
 	_public.instrument = {
+		alternateUke: -2, // ADF#B -- 2 steps higher than standard tuning: A4 (or A3)-D4-F#4-B4
 		sopranoUke: 0, // GCEA -- standard tuning G4 (or G3)-C4-E4-A4
 		baritoneUke: 5 // DGBE -- 5 steps lower than standard Soprano tuning: D3-G3-B3-E4
 	};
@@ -41,7 +42,7 @@ ukeGeeks.definitions = (function() {
 	/* PUBLIC METHODS
 	------------------------------------ */
 	/**
-	 * Define an instrument's chord dictionary, this makes this instrument avaiable for showing its chord diagrams.
+	 * Define an instrument's chord dictionary, this makes this instrument available for showing its chord diagrams.
 	 * @method addInstrument
 	 * @param definitions {mixed} (Either string or array of strings) Block of CPM text -- specifically looks for instrurment, tuning, and define statements.
 	 * @return {void}
@@ -58,13 +59,13 @@ ukeGeeks.definitions = (function() {
 	 * Choose which instrument's chord dictionary you want used for the chord 
 	 * diagrams. NOTE: .
 	 * @method useInstrument
-	 * @param offset {int} (optional) default 0. Number of semitones to shif the tuning.
+	 * @param offset {int} (optional) default 0. Number of semitones to shift the tuning down (positive offset = lower tuning, negative offset = higher tuning).
 	 * @return {void}
 	 */
 	_public.useInstrument = function(offset) {
 		offset = (arguments.length > 0) ? offset : _public.instrument.sopranoUke;
 		_offset = parseInt(offset, 10);
-		if (_offset > 0){
+		if (_offset != 0){
 			_map = ukeGeeks.transpose.retune(_offset);
 		}
 		_public.setChords(ukeGeeks.chordImport.runBlock(_instruments[0]).chords);
@@ -86,7 +87,7 @@ ukeGeeks.definitions = (function() {
 			}
 		}
 		// next: built-in chords:
-		if (_offset < 1){
+		if (_offset == 0){
 			return _get(chordName);
 		}
 
