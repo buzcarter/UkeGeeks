@@ -44,7 +44,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		</article>
 	</article>
 	<footer>
-		<p>Note: <span id="footTuningInfo">Standard <strong>GCEA</strong> Soprano Ukulele</span> Tuning. <small>Powered by <a href="http://ukegeeks.com/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.com</small></p>
+		<p>Note: <span id="footTuningInfo"><strong>GCEA</strong> Standard Ukulele</span> Tuning. <small>Powered by <a href="http://ukegeeks.com/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.com</small></p>
 	</footer>
 </section>
 <!-- EDIT SONG (DIALOG) -->
@@ -159,11 +159,12 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 					<li><a href="#up_6">+6 <em>F#</em></a></li>
 				</ul>
 			</dd>
-			<dt><label for="tuningPicker"><span>Soprano ukulele tuning</span> <em>&#9658;</em></label></dt>
+			<dt><label for="tuningPicker"><span>Standard ukulele tuning</span> <em>&#9658;</em></label></dt>
 			<dd id="tuningPicker" data-action="tuning">
 				<ul class="pseudoSelect">
-					<li class="checked"><a href="#soprano">Soprano</a></li>
-					<li><a href="#baritone">Baritone</a></li>
+					<li class="checked"><a href="#soprano">GCEA Standard</a></li>
+					<li><a href="#baritone">DGBE Baritone</a></li>
+					<li><a href="#alternate">ADF#B Alternate</a></li>
 				</ul>
 			</dd>
 		</dl>

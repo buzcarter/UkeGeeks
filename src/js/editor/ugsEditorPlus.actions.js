@@ -324,11 +324,16 @@ ugsEditorPlus.actions = (function() {
 	 */
 	var doTuning = function(value){
 		var tuning = ukeGeeks.definitions.instrument.sopranoUke,
-			msg = 'Standard <strong>GCEA</strong> Soprano Ukulele';
+			msg = '<strong>GCEA</strong> Standard Ukulele';
 
 		if (value == 'baritone') {
 			tuning = ukeGeeks.definitions.instrument.baritoneUke;
-			msg = 'Standard <strong>DGBE</strong> Baritone Ukulele';
+			msg = '<strong>DGBE</strong> Baritone Ukulele';
+		}
+
+		if (value == 'alternate') {
+			tuning = ukeGeeks.definitions.instrument.alternateUke;
+			msg = '<strong>ADF#B</strong> alternate';
 		}
 
 		$('#footTuningInfo').html(msg);
