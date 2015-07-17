@@ -215,10 +215,10 @@ ugsEditorPlus.actions = (function() {
 
 		var s = ugsEditorPlus.styles.getSheet('ugsEditorCss');
 		var m = s.find('.scalablePrintArea .ugs-diagrams-wrap canvas');
-		var svg = s.find('.scalablePrintArea .ugs-diagrams-wrap .ugs-diagrams--chord-img svg');
-		m.style.width = Math.round(prct * ukeGeeks.settings.fretBox.width) +'px';
-		svg.style.width = m.style.width;
-		m.style.height = Math.round(prct * ukeGeeks.settings.fretBox.height) +'px';
+		m.style.width = Math.round(prct * ukeGeeks.settings.fretBox.width) + 'px';
+			m.style.height = Math.round(prct * ukeGeeks.settings.fretBox.height) +'px';
+
+		s.find('.scalablePrintArea .ugs-diagrams-wrap .ugs-diagrams--chord-img svg').style.width = m.style.width;
 
 		m = s.find('.scalablePrintArea .ugs-diagrams-wrap');
 		m.style.width = columnWidth +'px';

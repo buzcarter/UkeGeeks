@@ -373,11 +373,10 @@ ugsEditorPlus.actions = (function() {
 
 		var s = ugsEditorPlus.styles.getSheet('ugsEditorCss');
 		var m = s.find('.scalablePrintArea .ugs-diagrams-wrap canvas');
-		var svg = s.find('.scalablePrintArea .ugs-diagrams-wrap .ugs-diagrams--chord-img svg');
 		m.style.width = Math.round(prct * ukeGeeks.settings.fretBox.width) + 'px';
-		svg.style.width = m.style.width;
 		m.style.height = Math.round(prct * ukeGeeks.settings.fretBox.height) + 'px';
-		// svg.style.height = m.style.height;
+
+		s.find('.scalablePrintArea .ugs-diagrams-wrap .ugs-diagrams--chord-img svg').style.width = m.style.width;
 
 		m = s.find('.scalablePrintArea .ugs-diagrams-wrap');
 		m.style.width = columnWidth + 'px';
@@ -2557,6 +2556,7 @@ ugsEditorPlus.songAmatic = (function() {
  * @main  ugsChordBuilder
  */
 var ugsChordBuilder = window.ugsChordBuilder || {};
+ugsChordBuilder.version = '1.0.6';
 
 /**
  * Entities (data containers) shared between the class libraries. Private

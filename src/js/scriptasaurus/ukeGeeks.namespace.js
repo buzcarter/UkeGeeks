@@ -1,7 +1,7 @@
 /**
   * <ul>
   * <li>Project: UkeGeeks' Scriptasaurus</li>
- * <li>Version: 1.4.3</li>
+ * <li>Version: 1.5.1</li>
   * <li>Homepage: http://ukegeeks.com</li>
   * <li>Project Repository: https://github.com/buzcarter/UkeGeeks</li>
   * <li>Author: Buz Carter</li>

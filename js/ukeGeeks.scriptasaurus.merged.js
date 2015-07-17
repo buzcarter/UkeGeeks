@@ -1,7 +1,7 @@
 /**
  * <ul>
  * <li>Project: UkeGeeks' Scriptasaurus</li>
- * <li>Version: 1.4.3</li>
+ * <li>Version: 1.5.1</li>
  * <li>Homepage: http://ukegeeks.com</li>
  * <li>Project Repository: https://github.com/buzcarter/UkeGeeks</li>
  * <li>Author: Buz Carter</li>
@@ -18,10 +18,8 @@
  * @module ukeGeeks
  * @main ukeGeeks
  */
-var ukeGeeks = window.ukeGeeks || {};;
-
-
-/**
+var ukeGeeks = window.ukeGeeks || {};
+;/**
  * Defines chords and provides simple lookup (find) tools.
  * @class definitions
  * @namespace ukeGeeks
@@ -1997,8 +1995,8 @@ ukeGeeks.chordBrush = function() {
 	 * @return {void}
 	 */
 	_public.plot = function(chordBox, chord, fretBox, fontSettings, colorSettings) {
-		var ctx = new ukeGeeks.image().newImage(fretBox.width, fretBox.height);
-		if (!ctx) {
+		var ugsImg = new ukeGeeks.image().newImage(fretBox.width, fretBox.height);
+		if (!ugsImg) {
 			return;
 		}
 
@@ -2014,7 +2012,7 @@ ukeGeeks.chordBrush = function() {
 			x: fretBox.topLeftPos.x,
 			y: fretBox.topLeftPos.y
 		};
-		_drawFretboard(ctx, pos, fretBox, colorSettings.fretLines);
+		_drawFretboard(ugsImg, pos, fretBox, colorSettings.fretLines);
 		// find where the circle centers should be:
 		var centers = {
 			x: pos.x,
@@ -2033,20 +2031,15 @@ ukeGeeks.chordBrush = function() {
 				x: (centers.x + s * fretBox.stringSpace),
 				y: (fudgeY + centers.y + (chord.dots[i].fret - firstFret) * fretBox.fretSpace)
 			};
-			ctx.circle(p.x, p.y, fretBox.dotRadius).style({
+			ugsImg.circle(p.x, p.y, fretBox.dotRadius).style({
 				fillColor: colorSettings.dots
 			});
-			// ukeGeeks.canvasTools.drawDot(ctx, p, fretBox.dotRadius, colorSettings.dots);
 			// check that the dot's radius isn't stupidly small
 			if (chord.dots[i].finger > 0 && fretBox.showText && fretBox.dotRadius > 4) {
-				ctx.text(p.x, p.y + 5, chord.dots[i].finger).style({
+				ugsImg.text(p.x, p.y + 5, chord.dots[i].finger).style({
 					fillColor: colorSettings.dotText,
 					fontFamily: fontSettings.dot
 				});
-				// ukeGeeks.canvasTools.drawText(ctx, {
-				// 	x: p.x,
-				// 	y: (p.y + 5)
-				// }, chord.dots[i].finger, fontSettings.dot, colorSettings.dotText);
 			}
 		}
 
@@ -2060,42 +2053,36 @@ ukeGeeks.chordBrush = function() {
 				y: pos.y + fretBox.fretSpace * (0.96 * (5.0 - (fretRange.last - fretRange.first)))
 				// Old Y caculcation: pos.y + (0.8 * fretBox.fretSpace)
 			};
-			ctx.text(txtPos.x, txtPos.y, fretRange.first).style({
+			ugsImg.text(txtPos.x, txtPos.y, fretRange.first).style({
 				fontFamily: fontSettings.fret,
 				fillColor: colorSettings.fretText,
 				textAlign: 'left'
 			});
-			// ukeGeeks.canvasTools.drawText(ctx, txtPos, fretRange.first, fontSettings.fret, colorSettings.fretText, 'left');
 
 			// no point in double plotting a fret (i.e. barred 8th fret) so only add second label if
 			// first and last frets are different. Also, it's odd to see both 8 & 9, so only show if there's
 			// at least one fret between first and last (i.e. 8 & 10)
 			if ((fretRange.last - fretRange.first) > 1) {
 				txtPos.y = pos.y + (4.8 * fretBox.fretSpace);
-				ctx.text(txtPos.x, txtPos.y, fretRange.last).style({
+				ugsImg.text(txtPos.x, txtPos.y, fretRange.last).style({
 					fontFamily: fontSettings.fret,
 					fillColor: colorSettings.fretText,
 					textAlign: 'left'
 				});
-				// ukeGeeks.canvasTools.drawText(ctx, txtPos, fretRange.last, fontSettings.fret, colorSettings.fretText, 'left');
 			}
 		}
 
 		// TODO: top offset
 		if (fretBox.showText) {
-			ctx.text((pos.x + 1.5 * fretBox.stringSpace), (pos.y - 5), chord.name).style({
+			ugsImg.text((pos.x + 1.5 * fretBox.stringSpace), (pos.y - 5), chord.name).style({
 				fontFamily: fontSettings.text,
 				fillColor: colorSettings.text
 			});
-			// ukeGeeks.canvasTools.drawText(ctx, {
-			// 	x: (pos.x + 1.5 * fretBox.stringSpace),
-			// 	y: (pos.y - 5)
-			// }, chord.name, fontSettings.text, colorSettings.text);
 		}
 
-		_mutedStrings(ctx, fretBox, chord.muted, colorSettings.xStroke);
-		// ukeGeeks.canvas.appendChild(chordBox, ctx);
-		ukeGeeks.svg.appendChild(chordBox, ctx, 'ugs-diagrams--chord-img');
+		_mutedStrings(ugsImg, fretBox, chord.muted, colorSettings.xStroke);
+		// ukeGeeks.canvas.appendChild(chordBox, ugsImg);
+		ukeGeeks.svg.appendChild(chordBox, ugsImg, 'ugs-diagrams--chord-img');
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -2107,18 +2094,18 @@ ukeGeeks.chordBrush = function() {
 	/**
 	 * @method _drawFretboard
 	 * @private
-	 * @param ctx {CanvasContext} Valid Canvas Context Handle
+	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {XYPosObject} Object with two properties: x & y ints, position in pixels
 	 * @param fretBox {settings}
 	 * @return {void}
 	 */
-	var _drawFretboard = function(ctx, pos, fretBox, fretColor) {
+	var _drawFretboard = function(ugsImg, pos, fretBox, fretColor) {
 		// width offset, a "subpixel" adjustment
 		var i, offset = fretBox.lineWidth / 2;
 		var stringHeight = ukeGeeks.settings.numFrets * fretBox.fretSpace;
 		var fretWidth = 3 * fretBox.stringSpace;
 
-		var fretboard = ctx.newGroup('fretboard').style({
+		var fretboard = ugsImg.newGroup('fretboard').style({
 			fillColor: 'none',
 			strokeColor: fretColor,
 			strokeWidth: fretBox.lineWidth
@@ -2143,18 +2130,18 @@ ukeGeeks.chordBrush = function() {
 	 * TODO: Loop over the muted array, dropping X's whenever a string position is TRUE
 	 * @method _mutedStrings
 	 * @private
-	 * @param  {CanvasContext} ctx  Valid Canvas Context handle
+	 * @param  ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param  {JSON} fretBox  See Settings.fretBox
 	 * @param  {bool} muted    Is this string "muted"?
 	 * @param  {string} strokeColor Valid CSS hex color (shorthand not recommended)
 	 * @return {void}
 	 */
-	var _mutedStrings = function(ctx, fretBox, muted, strokeColor) {
+	var _mutedStrings = function(ugsImg, fretBox, muted, strokeColor) {
 		var x = fretBox.topLeftPos.x + fretBox.lineWidth / 2;
 		var y = fretBox.topLeftPos.y + fretBox.lineWidth / 4;
 		for (var i = 0; i < muted.length; i++) {
 			if (muted[i]) {
-				_drawX(ctx, {
+				_drawX(ugsImg, {
 					x: x + i * fretBox.stringSpace,
 					y: y
 				}, fretBox, strokeColor);
@@ -2166,34 +2153,22 @@ ukeGeeks.chordBrush = function() {
 	 * Plots an "X" centered at POSITION
 	 * @method _drawX
 	 * @private
-	 * @param {CanvasContext} ctx Valid Canvas Context handle
+	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param centerPos {XyPositionJson} JSON with two properties: x & y ints, position in pixels, format {x: <int>, y: <int>}
 	 * @param  {JSON} fretBox  See Settings.fretBox
 	 * @param  {string} strokeColor Valid CSS hex color (shorthand not recommended)
 	 * @return {void}
 	 */
-	var _drawX = function(ctx, pos, fretBox, strokeColor) {
+	var _drawX = function(ugsImg, pos, fretBox, strokeColor) {
 		pos.x -= fretBox.xWidth / 2;
 		pos.y -= fretBox.xWidth / 2;
 
-		var x = ctx.newGroup('X').style({
+		var x = ugsImg.newGroup('X').style({
 			strokeColor: strokeColor || 'black',
 			strokeWidth: fretBox.xStroke
 		});
 		x.line(pos.x, pos.y, pos.x + fretBox.xWidth, pos.y + fretBox.xWidth);
 		x.line(pos.x, pos.y + fretBox.xWidth, pos.x + fretBox.xWidth, pos.y);
-
-		// ctx.beginPath();
-
-		// ctx.moveTo(pos.x, pos.y);
-		// ctx.lineTo(pos.x + fretBox.xWidth, pos.y + fretBox.xWidth);
-		// ctx.moveTo(pos.x, pos.y + fretBox.xWidth);
-		// ctx.lineTo(pos.x + fretBox.xWidth, pos.y);
-
-		// ctx.strokeStyle = strokeColor;
-		// ctx.lineWidth = fretBox.xStroke;
-		// ctx.stroke();
-		// ctx.closePath();
 	};
 
 	/**
@@ -3181,21 +3156,19 @@ ukeGeeks.tabs = function() {
 		// prep canvas
 		outElement = (typeof(outElement) == 'string') ? document.getElementById(outElement) : outElement;
 
-		var ctx = new ukeGeeks.image().newImage(getWidth(tabs, labelOffset, false), height);
-		// var ctx = ukeGeeks.canvasTools.addCanvas(outElement, getWidth(tabs, labelOffset, false), height);
+		var ugsImg = new ukeGeeks.image().newImage(getWidth(tabs, labelOffset, false), height);
 		var pos = {
 			x: tab_settings.dotRadius + labelOffset,
 			y: 1 + tab_settings.dotRadius
 		};
 		var lineWidth = getWidth(tabs, labelOffset, true);
-		drawStaff(ctx, pos, lineWidth, tab_settings);
-		drawNotes(ctx, pos, tabs, tab_settings, lineWidth);
+		drawStaff(ugsImg, pos, lineWidth, tab_settings);
+		drawNotes(ugsImg, pos, tabs, tab_settings, lineWidth);
 		if (tabInfo.hasLabels) {
-			drawLabels(ctx, pos, tab_settings);
+			drawLabels(ugsImg, pos, tab_settings);
 		}
 
-		// console.log('ukeGeeks.tabs', 'redraw', ukeGeeks.svg.toString(ctx));
-		outElement.innerHTML = ukeGeeks.svg.toString(ctx);
+		outElement.innerHTML = ukeGeeks.svg.toString(ugsImg);
 	};
 
 	/**
@@ -3410,31 +3383,24 @@ ukeGeeks.tabs = function() {
 	 * Create the staff -- really the four tablature strings
 	 * @method drawStaff
 	 * @private
-	 * @param ctx {canvasContext} Handle to active canvas context
+	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param length {int} Length in pixels
 	 * @param settings {settingsObj}
 	 * @return {voie}
 	 */
-	var drawStaff= function(ctx, pos, length, settings) {
+	var drawStaff= function(ugsImg, pos, length, settings) {
 		var offset = settings.lineWidth / 2;
 		var x = pos.x + offset;
 		var y = pos.y + offset;
-		var staff = ctx.newGroup('staff').style({
+		var staff = ugsImg.newGroup('staff').style({
 			strokeColor: settings.lineColor,
 			strokeWidth: settings.lineWidth
 		});
-		// ctx.beginPath();
 		for (var i = 0; i < NUM_STRINGS; i++) {
 			staff.hLine(x, y, length);
-			// ctx.moveTo(x, y);
-			// ctx.lineTo(x + length, y);
 			y += settings.lineSpacing;
 		}
-		// ctx.strokeStyle = settings.lineColor;
-		// ctx.lineWidth = settings.lineWidth;
-		// ctx.stroke();
-		// ctx.closePath();
 		staff.endGroup();
 	};
 
@@ -3442,14 +3408,14 @@ ukeGeeks.tabs = function() {
 	 * Loop over the normalized tabs emitting the dots/fingers on the passed in canvase
 	 * @method drawNotes
 	 * @private
-	 * @param ctx {canvasContext} Handle to active canvas context
+	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param tabs {array} Array of normalized string data -- space (character) or int (fret number)
 	 * @param settings {settingsObj}
 	 * @param lineWidth {int} Length in pixels (used only when line ends with a measure mark)
 	 * @return {void}
 	 */
-	var drawNotes= function(ctx, pos, tabs, settings, lineWidth) {
+	var drawNotes= function(ugsImg, pos, tabs, settings, lineWidth) {
 		var c;
 		var center = {
 			x: 0,
@@ -3467,24 +3433,19 @@ ukeGeeks.tabs = function() {
 				if (c == '|') {
 					var jnum = parseInt(chrIdx, 10);
 					var heavy = (((jnum + 1) < (tabs[strIdx].length - 1)) && (tabs[strIdx][jnum + 1] == '|')) || ((jnum == (tabs[strIdx].length - 1)) && (tabs[strIdx][jnum - 1] == '|'));
-					drawMeasure(ctx, {
+					drawMeasure(ugsImg, {
 						x: (chrIdx == tabs[strIdx].length - 1) ? pos.x + lineWidth : center.x,
 						y: pos.y
 					}, settings, heavy);
 				}
 				else if (!isNaN(c)) {
-					ctx.circle(center.x, center.y, settings.dotRadius).style({
+					ugsImg.circle(center.x, center.y, settings.dotRadius).style({
 						fillColor: settings.dotColor
 					});
-					// ukeGeeks.canvasTools.drawDot(ctx, center, settings.dotRadius, settings.dotColor);
-					ctx.text(center.x, center.y + 0.5 * settings.dotRadius, c).style({
+					ugsImg.text(center.x, center.y + 0.5 * settings.dotRadius, c).style({
 						fontFamily: settings.textFont,
 						fillColor: settings.textColor
 					});
-					// ukeGeeks.canvasTools.drawText(ctx, {
-					// 	x: center.x,
-					// 	y: (center.y + 0.5 * settings.dotRadius)
-					// }, c, settings.textFont, settings.textColor);
 				}
 				center.x += settings.noteSpacing;
 			}
@@ -3496,49 +3457,38 @@ ukeGeeks.tabs = function() {
 	 * Draws a vertical "measure" demarcation line
 	 * @method drawMeasure
 	 * @private
-	 * @param ctx {canvasContext} Handle to active canvas context
+	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param settings {settingsObj}
 	 * @param heavy {bool} if TRUE hevy line
 	 * @return {void}
 	 */
-	var drawMeasure= function(ctx, pos, settings, heavy) {
+	var drawMeasure= function(ugsImg, pos, settings, heavy) {
 		var offset = settings.lineWidth / 2;
-		ctx.vLine(pos.x + offset, pos.y, (NUM_STRINGS - 1) * settings.lineSpacing).style({
+		ugsImg.vLine(pos.x + offset, pos.y, (NUM_STRINGS - 1) * settings.lineSpacing).style({
 			strokeColor: settings.lineColor,
 			strokeWidth: (heavy ? 4.5 : 1) * settings.lineWidth
 		});
-		// ctx.beginPath();
-		// ctx.moveTo(pos.x + offset, pos.y);
-		// ctx.lineTo(pos.x + offset, pos.y + (NUM_STRINGS - 1) * settings.lineSpacing);
-		// ctx.strokeStyle = settings.lineColor;
-		// ctx.lineWidth = (heavy ? 4.5 : 1) * settings.lineWidth;
-		// ctx.stroke();
-		// ctx.closePath();
 	};
 
 	/**
 	 * Adds the string letters on the left-side of the canvas, before the tablature string lines
 	 * @method drawLabels
 	 * @private
-	 * @param ctx {canvasContext} Handle to active canvas context
+	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param settings {settingsObj}
 	 * @return {void}
 	 */
-	var drawLabels= function(ctx, pos, settings) {
+	var drawLabels= function(ugsImg, pos, settings) {
 		// ['A','E','C','G'];
 		var labels = ukeGeeks.settings.tuning.slice(0).reverse();
 		for (var i = 0; i < NUM_STRINGS; i++) {
-			ctx.text(1, (pos.y + (i + 0.3) * settings.lineSpacing), labels[i]).style({
+			ugsImg.text(1, (pos.y + (i + 0.3) * settings.lineSpacing), labels[i]).style({
 				fontFamily: settings.labelFont,
 				fillColor: settings.lineColor,
 				textAlign: 'left'
 			});
-			// ukeGeeks.canvasTools.drawText(ctx, {
-			// 	x: 1,
-			// 	y: (pos.y + (i + 0.3) * settings.lineSpacing)
-			// }, labels[i], settings.labelFont, settings.lineColor, 'left');
 		}
 	};
 
