@@ -68,11 +68,16 @@
 .ugsLayoutTwoColumn .ugs-source-wrap {
 	margin-left:250px;
 }
-/* CHORD CANVAS (BLOCKS)
-  ------------------------------ */
-.ugs-diagrams-wrap canvas {
+.ugs-diagrams-wrap .ugs-diagrams--chord-img,
+.ugs-diagrams-wrap .ugs-diagrams-wrap canvas {
 	float:left;
 	margin-right:5px;
+}
+/* CHORD CANVAS (BLOCKS)
+  ------------------------------ */
+.ugs-diagrams--chord-img svg {
+	max-width: 100%;
+	height: auto;
 }
 .ugsIgnoredChords {
 	clear: left;
@@ -254,6 +259,10 @@
 	top:-72px;
 	width: 40px;
 }
+.ugsInlineDiagrams .ugs-diagrams--chord-img svg {
+	max-width: 60px; /* actually, not sure what setting this fixes/triggers, 'cetp it works */'
+}
+.ugsChords code svg,
 .ugsChords code canvas {
 	left:0;
 	position:absolute;

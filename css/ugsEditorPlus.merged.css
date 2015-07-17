@@ -1296,6 +1296,9 @@ html .diagramsOnTop .ugs-source-wrap {
 .pageWidth_screen .scalablePrintArea {
 	padding: 20px;
 }
+.scalablePrintArea .ugs-diagrams-wrap .ugs-diagrams--chord-img svg {
+	zoom: 1;
+}
 .scalablePrintArea .ugs-diagrams-wrap canvas {
 	zoom: 1;
 }
