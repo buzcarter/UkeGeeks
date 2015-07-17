@@ -12,7 +12,7 @@ ukeGeeks.definitions.sopranoUkuleleGcea = [
 	//  Ab returns G#
 	//  A
 	// -------------------------------------------------------
-	'{define: A frets 2 1 0 0 fingers 1 2 0 0}',
+	'{define: A frets 2 1 0 0 fingers 2 1 0 0}',
 	'{define: Am frets 2 0 0 0 fingers 1 0 0 0}',
 	'{define: A7 frets 0 1 0 0 fingers 0 1 0 0}',
 	'{define: A7sus4 frets 0 2 0 0 fingers 0 2 0 0}',
