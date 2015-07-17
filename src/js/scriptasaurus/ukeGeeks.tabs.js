@@ -109,17 +109,19 @@ ukeGeeks.tabs = function() {
 		// prep canvas
 		outElement = (typeof(outElement) == 'string') ? document.getElementById(outElement) : outElement;
 
-		var ctx = ukeGeeks.canvasTools.addCanvas(outElement, getWidth(tabs, labelOffset, false), height);
+		var ugsImg = new ukeGeeks.image().newImage(getWidth(tabs, labelOffset, false), height);
 		var pos = {
 			x: tab_settings.dotRadius + labelOffset,
 			y: 1 + tab_settings.dotRadius
 		};
 		var lineWidth = getWidth(tabs, labelOffset, true);
-		drawStaff(ctx, pos, lineWidth, tab_settings);
-		drawNotes(ctx, pos, tabs, tab_settings, lineWidth);
+		drawStaff(ugsImg, pos, lineWidth, tab_settings);
+		drawNotes(ugsImg, pos, tabs, tab_settings, lineWidth);
 		if (tabInfo.hasLabels){
-			drawLabels(ctx, pos, tab_settings);
+			drawLabels(ugsImg, pos, tab_settings);
 		}
+
+		outElement.innerHTML = ukeGeeks.svg.toString(ugsImg);
 	};
 	
 	/**
@@ -334,40 +336,39 @@ ukeGeeks.tabs = function() {
 	 * Create the staff -- really the four tablature strings
 	 * @method drawStaff
 	 * @private 
-	 * @param ctx {canvasContext} Handle to active canvas context
+	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param length {int} Length in pixels
 	 * @param settings {settingsObj}
 	 * @return {voie}
 	 */
-	var drawStaff= function(ctx, pos, length, settings) {
+	var drawStaff= function(ugsImg, pos, length, settings) {
 		var offset = settings.lineWidth / 2;
 		var x = pos.x + offset;
 		var y = pos.y + offset;
-		ctx.beginPath();
+		var staff = ugsImg.newGroup('staff').style({
+			strokeColor: settings.lineColor,
+			strokeWidth: settings.lineWidth
+		});
 		for (var i = 0; i < NUM_STRINGS; i++) {
-			ctx.moveTo(x, y);  
-			ctx.lineTo(x + length, y);
+			staff.hLine(x, y, length);
 			y += settings.lineSpacing;
 		}
-		ctx.strokeStyle = settings.lineColor;
-		ctx.lineWidth = settings.lineWidth;
-		ctx.stroke();
-		ctx.closePath();
+		staff.endGroup();
 	};
 	
 	/**
 	 * Loop over the normalized tabs emitting the dots/fingers on the passed in canvase
 	 * @method drawNotes
 	 * @private 
-	 * @param ctx {canvasContext} Handle to active canvas context
+	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param tabs {array} Array of normalized string data -- space (character) or int (fret number)
 	 * @param settings {settingsObj}
 	 * @param lineWidth {int} Length in pixels (used only when line ends with a measure mark)
 	 * @return {void}
 	 */
-	var drawNotes= function(ctx, pos, tabs, settings, lineWidth) {
+	var drawNotes= function(ugsImg, pos, tabs, settings, lineWidth) {
 		var c;
 		var center = {
 			x: 0,
@@ -385,17 +386,19 @@ ukeGeeks.tabs = function() {
 				if (c == '|'){
 					var jnum = parseInt(chrIdx, 10);
 					var heavy = (((jnum + 1) < (tabs[strIdx].length - 1)) && (tabs[strIdx][jnum + 1] == '|')) || ((jnum == (tabs[strIdx].length - 1)) && (tabs[strIdx][jnum - 1] == '|'));
-					drawMeasure(ctx, {
+					drawMeasure(ugsImg, {
 						x: (chrIdx == tabs[strIdx].length - 1) ? pos.x + lineWidth : center.x,
 						y: pos.y
 					}, settings, heavy);
 				}
 				else if (!isNaN(c)){
-					ukeGeeks.canvasTools.drawDot(ctx, center, settings.dotRadius, settings.dotColor);
-					ukeGeeks.canvasTools.drawText(ctx, {
-						x: center.x,
-						y: (center.y + 0.5 * settings.dotRadius)
-					}, c, settings.textFont, settings.textColor);
+					ugsImg.circle(center.x, center.y, settings.dotRadius).style({
+						fillColor: settings.dotColor
+					});
+					ugsImg.text(center.x, center.y + 0.5 * settings.dotRadius, c).style({
+						fontFamily: settings.textFont,
+						fillColor: settings.textColor
+					});
 				}
 				center.x += settings.noteSpacing;
 			}
@@ -407,40 +410,38 @@ ukeGeeks.tabs = function() {
 	 * Draws a vertical "measure" demarcation line
 	 * @method drawMeasure
 	 * @private 
-	 * @param ctx {canvasContext} Handle to active canvas context
+	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param settings {settingsObj}
 	 * @param heavy {bool} if TRUE hevy line
 	 * @return {void}
 	 */
-	var drawMeasure= function(ctx, pos, settings, heavy) {
+	var drawMeasure= function(ugsImg, pos, settings, heavy) {
 		var offset = settings.lineWidth / 2;
-		ctx.beginPath();
-		ctx.moveTo(pos.x + offset, pos.y);  
-		ctx.lineTo(pos.x + offset, pos.y + (NUM_STRINGS - 1) * settings.lineSpacing);
-		ctx.strokeStyle = settings.lineColor;
-		ctx.lineWidth = (heavy ? 4.5 : 1) * settings.lineWidth;
-		ctx.stroke();
-		ctx.closePath();
+		ugsImg.vLine(pos.x + offset, pos.y, (NUM_STRINGS - 1) * settings.lineSpacing).style({
+			strokeColor: settings.lineColor,
+			strokeWidth: (heavy ? 4.5 : 1) * settings.lineWidth
+		});
 	};
 	
 	/**
 	 * Adds the string letters on the left-side of the canvas, before the tablature string lines
 	 * @method drawLabels
 	 * @private 
-	 * @param ctx {canvasContext} Handle to active canvas context
+	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param settings {settingsObj}
 	 * @return {void}
 	 */
-	var drawLabels= function(ctx, pos, settings) {
+	var drawLabels= function(ugsImg, pos, settings) {
 		// ['A','E','C','G'];
 		var labels = ukeGeeks.settings.tuning.slice(0).reverse();
 		for (var i = 0; i < NUM_STRINGS; i++) {
-			ukeGeeks.canvasTools.drawText(ctx, {
-				x: 1,
-				y: (pos.y + (i + 0.3) * settings.lineSpacing)
-			}, labels[i], settings.labelFont, settings.lineColor, 'left');
+			ugsImg.text(1, (pos.y + (i + 0.3) * settings.lineSpacing), labels[i]).style({
+				fontFamily: settings.labelFont,
+				fillColor: settings.lineColor,
+				textAlign: 'left'
+			});
 		}
 	};
 
