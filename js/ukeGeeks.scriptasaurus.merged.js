@@ -1695,7 +1695,7 @@ ukeGeeks.image.prototype = {
  * @class  svg
  * @namespace ukeGeeks
  */
-ukeGeeks.svg = (function() {
+ukeGeeks.imageSvg = (function() {
 	function getStyle(type, style) {
 		if (!style) {
 			return null;
@@ -1831,7 +1831,7 @@ ukeGeeks.svg = (function() {
  * @class  canvas
  * @namespace ukeGeeks
  */
-ukeGeeks.canvas = (function() {
+ukeGeeks.imageCanvas = (function() {
 	function addCanvas(element, width, height) {
 		var canvas = document.createElement('canvas');
 		if (!canvas) {
@@ -2081,8 +2081,8 @@ ukeGeeks.chordBrush = function() {
 		}
 
 		_mutedStrings(ugsImg, fretBox, chord.muted, colorSettings.xStroke);
-		// ukeGeeks.canvas.appendChild(chordBox, ugsImg);
-		ukeGeeks.svg.appendChild(chordBox, ugsImg, 'ugs-diagrams--chord-img');
+		// ukeGeeks.imageCanvas.appendChild(chordBox, ugsImg);
+		ukeGeeks.imageSvg.appendChild(chordBox, ugsImg, 'ugs-diagrams--chord-img');
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -2894,7 +2894,7 @@ ukeGeeks.chordPainter = function() {
 	var _public = {};
 
 	/**
-	 * ukeGeeks.canvas object handle
+	 * ukeGeeks.chordBrush object handle
 	 * @property _brush
 	 * @type ukeGeeks.chordBrush instance handle
 	 * @private
@@ -3168,7 +3168,7 @@ ukeGeeks.tabs = function() {
 			drawLabels(ugsImg, pos, tab_settings);
 		}
 
-		outElement.innerHTML = ukeGeeks.svg.toString(ugsImg);
+		outElement.innerHTML = ukeGeeks.imageSvg.toString(ugsImg);
 	};
 
 	/**

@@ -17,7 +17,7 @@ ukeGeeks.tabs = function() {
 	var tab_settings = ukeGeeks.settings.tabs;
 
 	// TODO: use ukeGeeks.settings.tuning for NUM_STRINGS and LAST_STRING_NAME??
-	
+
 	/**
 	 * (Constant) Number of Strings (dashed lines of tablature notation) expected. (For now
 	 * a constant -- ukueleles "always" have four). Making a variable to help support port
@@ -45,13 +45,13 @@ ukeGeeks.tabs = function() {
 	 * @return {void}
 	 */
 	var init= function() {};
-	
+
 	/**
 	 * Races through all &lt;pre&gt; tags within h, any with the CSS class of "ugsTabs" will be replaced with the canvas element.
 	 * @method replace
 	 * @public
-	 * @param h {DOM-element} 
-	 * @return {void} 
+	 * @param h {DOM-element}
+	 * @return {void}
 	 */
 	var replace= function(h) {
 		var tabBlocks = h.getElementsByTagName('pre');
@@ -63,9 +63,9 @@ ukeGeeks.tabs = function() {
 			}
 		}
 	};
-	
+
 	/**
-	 * 
+	 *
 	 * @method loadBlocks
 	 * @param text {string} Block of text that contains one or more tablature blocks
 	 * @param outElement {string or DOM} Either: (string) the Id to a DOM element, or DOM element handle where the canvas/converted text will be placed.
@@ -85,9 +85,9 @@ ukeGeeks.tabs = function() {
 			}
 		}
 	};
-	
+
 	/**
-	 * 
+	 *
 	 * @method redraw
 	 * @param inTabs {string or array} Block of text or four element array containing tablbature to be parsed
 	 * @param outElement {string or DOM} Either: (string) the Id to a DOM element, or DOM element handle where the canvas/converted text will be placed.
@@ -121,15 +121,15 @@ ukeGeeks.tabs = function() {
 			drawLabels(ugsImg, pos, tab_settings);
 		}
 
-		outElement.innerHTML = ukeGeeks.svg.toString(ugsImg);
+		outElement.innerHTML = ukeGeeks.imageSvg.toString(ugsImg);
 	};
-	
+
 	/**
 	 * This is insanely long, insanely kludgy, but, insanely, it works. This will read break a block of text into
 	 * four lines (the ukulele strings), then find which frets are used by each. Then, the hard part, pack un-needed
 	 * dashes. Once it's done that a 2-dimentional array (strings X frets) is created and returned.
 	 * @method readTabs
-	 * @private 
+	 * @private
 	 * @param ukeStrings {array<string>} Block of tablbabure to be parsed
 	 * @return {2-dimentional array}
 	 */
@@ -148,7 +148,7 @@ ukeGeeks.tabs = function() {
 			hasLabels: hasLabels
 		};
 	};
-	
+
 	/**
 	 * @method getWidth
 	 * @private
@@ -161,7 +161,7 @@ ukeGeeks.tabs = function() {
 		if (!isTruncate){
 			return (tab_settings.noteSpacing * tabs[0].length) + labelOffset + tab_settings.dotRadius;
 		}
-		
+
 		var len = tabs[0].length;
 		var plusDot = tab_settings.dotRadius;
 		if (tabs[0][len - 1] == '|'){
@@ -169,31 +169,31 @@ ukeGeeks.tabs = function() {
 			len -= 1;
 			plusDot = 0;
 		}
-		
+
 		return tab_settings.noteSpacing * len + labelOffset + plusDot;
 	};
-	
+
 	/**
 	 * Processes ukeStrings stripping the first character from each line
 	 * @method stripStringLabels
 	 * @private
-	 * @param ukeStrings {array<string>} 
-	 * @return {void} 
+	 * @param ukeStrings {array<string>}
+	 * @return {void}
 	 */
 	var stripStringLabels= function(ukeStrings) {
 		for (var i = 0; i < NUM_STRINGS; i++) {
 			ukeStrings[i] = ukeStrings[i].substr(1);
 		}
 	};
-	
+
 	/**
-	 * Finds the frets in used for each line. In other words, ignoring 
+	 * Finds the frets in used for each line. In other words, ignoring
 	 * spacers ("-" or "|") this returns arrays of numbers, the frets
 	 * in use, for each line.
 	 * @method getFretNumbers
 	 * @private
-	 * @param ukeStrings {array<string>} 
-	 * @return {void} 
+	 * @param ukeStrings {array<string>}
+	 * @return {void}
 	 */
 	var getFretNumbers= function(ukeStrings) {
 		// first, get the frets
@@ -210,8 +210,8 @@ ukeGeeks.tabs = function() {
 	 * This helps us pack because "12" and "7" now occupy the same space horizontally.
 	 * @method getSymbols
 	 * @private
-	 * @param ukeStrings {array<string>} 
-	 * @return {void} 
+	 * @param ukeStrings {array<string>}
+	 * @return {void}
 	 */
 	var getSymbols= function(ukeStrings) {
 		// convert to symbols
@@ -232,8 +232,8 @@ ukeGeeks.tabs = function() {
 	 * this gets a TODO: get max!
 	 * @method getMinLineLength
 	 * @private
-	 * @param ukeStrings {array<string>} 
-	 * @return {void} 
+	 * @param ukeStrings {array<string>}
+	 * @return {void}
 	 */
 	var getMinLineLength = function(ukeStrings){
 		var minLength = 0;
@@ -252,13 +252,13 @@ ukeGeeks.tabs = function() {
 	/**
 	 * OK, having created symbolic representations for the lines in earlier steps
 	 * here we go through and "merge" them into a single, master "guide" -- saying
-	 * "somewhere on this beat you'll pluck (or not) one note". This normalized 
+	 * "somewhere on this beat you'll pluck (or not) one note". This normalized
 	 * guide will be the master for the next step.
 	 * @method getGuideLine
 	 * @private
 	 * @param symbols {undefined}
 	 * @param minLength {int}
-	 * @return {void} 
+	 * @return {void}
 	 */
 	var getGuideLine= function(symbols, minLength) {
 		// Build a master pattern "guide" and eliminate double dashes
@@ -285,11 +285,11 @@ ukeGeeks.tabs = function() {
 		}
 		return guide;
 	};
-	
+
 	/**
 	 * Using the packed "guide" line we loop over the strings, rebuilding each string
 	 * with either a space, measure marker, or the note -- as an integer! Now the frets
-	 * are the same regardless of whether they are single or double digit numbers: 
+	 * are the same regardless of whether they are single or double digit numbers:
 	 * a "12" occupies no more horizontal space than a "5".
 	 * @method getPackedLines
 	 * @private
@@ -297,7 +297,7 @@ ukeGeeks.tabs = function() {
 	 * @param symbols {undefined}
 	 * @param guide {undefined}
 	 * @param minLength {int}
-	 * @return {void} 
+	 * @return {void}
 	 */
 	var getPackedLines= function(frets, symbols, guide, minLength) {
 		// pack it!
@@ -335,7 +335,7 @@ ukeGeeks.tabs = function() {
 	/**
 	 * Create the staff -- really the four tablature strings
 	 * @method drawStaff
-	 * @private 
+	 * @private
 	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param length {int} Length in pixels
@@ -356,11 +356,11 @@ ukeGeeks.tabs = function() {
 		}
 		staff.endGroup();
 	};
-	
+
 	/**
 	 * Loop over the normalized tabs emitting the dots/fingers on the passed in canvase
 	 * @method drawNotes
-	 * @private 
+	 * @private
 	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param tabs {array} Array of normalized string data -- space (character) or int (fret number)
@@ -405,11 +405,11 @@ ukeGeeks.tabs = function() {
 			center.y += settings.lineSpacing;
 		}
 	};
-	
+
 	/**
 	 * Draws a vertical "measure" demarcation line
 	 * @method drawMeasure
-	 * @private 
+	 * @private
 	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param settings {settingsObj}
@@ -423,11 +423,11 @@ ukeGeeks.tabs = function() {
 			strokeWidth: (heavy ? 4.5 : 1) * settings.lineWidth
 		});
 	};
-	
+
 	/**
 	 * Adds the string letters on the left-side of the canvas, before the tablature string lines
 	 * @method drawLabels
-	 * @private 
+	 * @private
 	 * @param ugsImg {ukeGeeksImage} image builder tool instance
 	 * @param pos {xyPos} JSON (x,y) position
 	 * @param settings {settingsObj}

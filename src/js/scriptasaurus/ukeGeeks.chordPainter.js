@@ -13,7 +13,7 @@ ukeGeeks.chordPainter = function(){
 	var _public = {};
 
 	/**
-	 * ukeGeeks.canvas object handle
+	 * ukeGeeks.chordBrush object handle
 	 * @property _brush
 	 * @type ukeGeeks.chordBrush instance handle
 	 * @private

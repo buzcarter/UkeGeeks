@@ -1,5 +1,5 @@
 /**
- * First places a Canvas element within a DOM element, then draws a chord diagram on it.
+ * Adds a chord diagram to the DOM
  * @class chordBrush
  * @namespace ukeGeeks
  */
@@ -122,8 +122,8 @@ ukeGeeks.chordBrush = function() {
 		}
 
 		_mutedStrings(ugsImg, fretBox, chord.muted, colorSettings.xStroke);
-		// ukeGeeks.canvas.appendChild(chordBox, ugsImg);
-		ukeGeeks.svg.appendChild(chordBox, ugsImg, 'ugs-diagrams--chord-img');
+		// ukeGeeks.imageCanvas.appendChild(chordBox, ugsImg);
+		ukeGeeks.imageSvg.appendChild(chordBox, ugsImg, 'ugs-diagrams--chord-img');
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
