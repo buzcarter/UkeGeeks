@@ -1,0 +1,14 @@
+# **/*.gitignore
+
+# Our Gulp Build Files
+node_modules/
+
+# Files from difference tools
+**/*.bak
+**/*.less.bak
+**/*.js.bak
+**/*.css.bak
+**/*.php.bak
+**/*.cpm.txt.bak
+
+# Operating system files

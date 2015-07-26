@@ -278,6 +278,11 @@ Whether running mod_rewrite or using query params ("mysite.com/songbook" versus 
 * **Server error: _"File Not Found: 404"_** : Check file locations.
 * **PHP error: _"Warning: include_once(ugsphp/Ugs.php) [function.include-once]: failed to open stream_** : Check where you've installed the MVC files used by the views. You may move them, but be sure that the config and the Views are able to locate the required files.
 
+## Gulp Build Configuration
+
+```
+> node "node_modules\gulp\bin\gulp.js" hello
+```
 
 ## License
 
