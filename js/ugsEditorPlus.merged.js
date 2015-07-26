@@ -376,7 +376,9 @@ ugsEditorPlus.actions = (function() {
 		m.style.width = Math.round(prct * ukeGeeks.settings.fretBox.width) + 'px';
 		m.style.height = Math.round(prct * ukeGeeks.settings.fretBox.height) + 'px';
 
-		s.find('.scalablePrintArea .ugs-diagrams-wrap .ugs-diagrams--chord-img svg').style.width = m.style.width;
+		var svg = s.find('.scalablePrintArea .ugs-diagrams-wrap .ugs-diagrams--chord-img svg');
+		svg.style.width = m.style.width;
+		svg.style.height = m.style.height;
 
 		m = s.find('.scalablePrintArea .ugs-diagrams-wrap');
 		m.style.width = columnWidth + 'px';
