@@ -44,8 +44,25 @@ var task_build_styles = function() {
 		.pipe(gulp.dest(config.styles.outputDir));
 };
 
+var task_watch = function() {
+	console.log('Watching files');
+
+	if (config.styles) {
+		gulp.watch(config.styles.watch, ['build-styles']);
+	}
+
+	/*	if (config.scripts) {
+		config.scripts.forEach(function(script_task, index, ary) {
+			gulp.watch(script_task.files, {
+				cwd: config.root
+			}, ['build-scripts']);
+		});
+	}*/
+};
+
 // expose tasks
 gulp
 	.task('hello', task_hello)
 	.task('build-styles', task_build_styles)
-	.task('default', ['hello', 'build-styles']);
+	.task('watch', task_watch)
+	.task('default', ['hello', 'build-styles', 'watch']);
