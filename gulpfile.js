@@ -95,11 +95,7 @@ var config = {
 	}]
 };
 
-var helloTask = function() {
-	console.log('Hello, Geeky Ukester!');
-};
-
-var buildStylesTask = function() {
+var stylesTask = function() {
 	console.log('Building LESS Styles');
 
 	if (!config.styles) {
@@ -121,7 +117,7 @@ var buildStylesTask = function() {
 		.pipe(gulp.dest(config.styles.outputDir));
 };
 
-var buildScriptsTask = function() {
+var jsTask = function() {
 	var merged;
 	console.log('Merging & minifying JavaScript files');
 
@@ -159,10 +155,8 @@ var watchTask = function() {
 	}
 };
 
-// expose tasks
 gulp
-	.task('hello', helloTask)
-	.task('build-styles', buildStylesTask)
-	.task('build-scripts', buildScriptsTask)
+	.task('build-styles', stylesTask)
+	.task('build-scripts', jsTask)
 	.task('watch', watchTask)
 	.task('default', ['build-styles', 'build-scripts', 'watch']);
