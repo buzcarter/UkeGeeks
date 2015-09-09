@@ -1,0 +1,24 @@
+{title: 每個人都會}
+{artist: 方大同}
+{meta: 原調: 1=C}
+{meta: 選調: 1=C}
+{meta: Capo=2}
+
+
+{comment: 主歌 A}
+愛是兩[Am]人一張棉被也[Em]是一人一瓶清水[F]
+都說對[C]
+
+愛是送[Am]一百支玫瑰也[Em]是讓赤地開花蕊[F]
+就OK[G]
+
+{comment: 主歌 B}
+人間的[F]青草地 需要澆水[G]
+內心的花園 就[Em]不會枯萎[Am]
+把最甜最好[F]的滋味
+散播[G]到東南西北[C]
+
+什麼比[F] love love [G]love love [Em]love 更美[Am]
+[F]愛讓人安[G]心在夢[C]中 熟睡[C]
+啊[F] love love[G] love love[Em] love 最美[Am]
+[F]美在每一[G]個人都[C]會

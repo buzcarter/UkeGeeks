@@ -1,0 +1,33 @@
+{title: I Love You （簡單版）}
+{artist: 王若琳}
+{meta: 原調: 1=C#}
+{meta: 選調: 1=C}
+{meta: Capo=1}
+
+{comment: 前奏} 
+{start_of_tab}
+|---------11--------|---------11-----------|---------11----|---11----9--8---|
+|---9---9----9------|---8---8----8-----9-8-|---6---6----6--|--9---9-------9-|
+|-----8-------------|-----8-------------8--|-----6---------|----------------|
+|-------------------|----------------------|---------------|----------------|
+{end_of_tab}
+
+{comment: 節奏型} 
+{rhythm: (14 3) (12 3) (14 3) (12 3) }
+
+{comment: 主歌}
+[C]I [G]love y[Am]ou
+[C]say we're [F]together baby
+[G]you and [C]me
+[C]I can only give my [Em7]life
+And show you all I [Am]am
+[C]In the breath I [F]breathe
+[C]I will promise you my [Em7]heart
+And give you all you [Am]need
+[C]If it takes some [F]time
+[Dm]If you tell me you don't [Am]need me anymore
+[Em]That our love won't last for[B7]ever
+[Dm]I will ask you for a [Am]chance to try again
+[Em]To make our love a little [F]better [G]OOH ……
+[C]I [G]love y[Am]ou
+[C]Say we're [F]together

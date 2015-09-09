@@ -1,0 +1,29 @@
+{title: 喜劇之王 C}
+{artist: 李榮浩}
+{meta: 選調: 1=C}
+{comment: 前奏/間奏}
+Am Em|Am Em|F G|Am Am
+{comment: 主歌 A}
+[Am]我看著[Em]顆獼猴桃[Am] [Em] [Fmaj7]眼淚突[G]然被引爆[Am] [Am]
+
+我[Dm]]可不是 可不是 [G]特別愛閙 [Em]這叫做 這叫做 [Am]心靈感召
+[Dm]不信你[E]問李清照[Am] [Am]
+
+[Am]我天生[Em]不愛炫耀[Am] [Em] [Fmaj7]卻太多[G]藝術細胞[Am] [Am]
+
+[Dm]我談的情 拍的拖 [G]也許很少 [Em]中的槍 捱的刀 [Am]受的煎熬
+[Dm]華麗得[E]無法低調[Am] [Am]
+{comment: B}
+
+為什麼 [Fmaj7]全世界的戀 [G]我都失一遍 [Em]為所有的悲劇 當[Am]特約演員
+我[Dm]傷得斷腸 我[Am]哭得誇張 像[Dm]一套港產[E]片
+為何 [Fmaj7]普天下的淚 我[G]先流一遍 市[Em]面上的紙巾 都[Am]由我代言
+站[Dm]在我旁邊 你[Am]不算可憐 這[Dm]也是[E]種貢[Am]獻
+{comment: A2}
+
+[Am]被分手[Em]的那一秒[Am] [Em] [Fmaj7]我瘋狂[G]往海邊跑[Am] [Am]
+
+你[Dm]有什麼資格說 [G]我很無聊 [Em]你那次淋着雨 [Am]失控咆哮
+[Dm]廉價小[E]說那一套[Am] [Am]
+
+{comment: 回B段}

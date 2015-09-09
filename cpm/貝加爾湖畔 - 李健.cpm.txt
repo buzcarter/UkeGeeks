@@ -1,0 +1,39 @@
+{title: 貝加爾湖畔}
+{artist: 李健}
+{rhythm: (4 3) (2 3) (1 3) (2 3)}
+{comment: 前奏}
+[Gm] [C] [Fmaj7] [D] [Gm] [A7] [Dm]
+ 
+{comment: 主歌}
+在我的懷[Gm]裡 　 [C] 在你的眼[Fmaj7]裡　 
+[D]那裡春風沉[Gm] 醉 那裡[C] 綠草如茵[Fmaj7] 
+[Dm] 月光把愛戀[Gm] 　[C] 灑滿了湖面[Fmaj7] 　
+[D] 兩個人的篝[Gm] 火 照亮[A7] 整個夜晚
+ 
+{comment: 副歌}
+{start_of_chorus}
+[Dm] 多少年以後 [Bb] 如雲般遊走[Fmaj7] 
+那變換的腳[Gm]步 讓我[C]們難牽手[Fmaj7]
+
+這一生一世[Bb] 有多少你我[Fmaj7] 
+被吞沒在月[Gm] 光如[C] 水的夜裡[Fmaj7] 　　[A]
+{end_of_chorus}
+
+{comment: 橋段}
+[Dm] 多想某一天[Gm] [C] 往日又重現[Fmaj7] 
+[D]我們流連忘[Gm]返 在貝[A7] 加爾湖畔[Dm]
+
+{comment: 副歌}
+{start_of_chorus}
+多少年以後[Bb] 往事隨雲走[Fmaj7] 
+那紛飛的冰[Gm] 雪 容不[C] 下那溫柔[Fmaj7]
+
+這一生一世[Bb] 這時間太少[Fmaj7] 
+不夠證明融[Gm] 化 冰[C] 雪的深情[Fmaj7]　　 [A]
+{end_of_chorus}
+
+{comment: 結尾}
+[Dm] 就在某一天[Gm] [C] 你忽然出現[Fmaj7] 
+[D] 你清澈又神[Gm]秘 在貝[A7] 加爾湖畔[Dm]
+
+你清[Dm]澈又神[Em]秘 像貝[Am]加爾湖畔[Am]

@@ -1,0 +1,20 @@
+{title: 再見}
+{artist: 張震岳}
+{comment: 節奏} 
+{rhythm: (d(o u)) ((~ u o u))(d(o u)) ((~ u o u)) }
+
+{comment: 前奏} 
+[G] [G]
+{rhythm: (d(o u))(d(o u)) (d(o u)) ((d u d u))| (d(o u))(d(o u)) ((d)) d.| }
+{comment: 主歌 A}
+我怕[G]我沒有機會 跟你[C]說一聲再[G]見 
+因為[Em]也許 就[Am]再也見不到[D]你
+明天[G]我要離開 熟悉的[C]地方和[G]你
+要分[Em]離　 我[C]眼淚就[D]掉下[G]去
+{comment: 副歌}
+{start_of_chorus}
+我會[Em]牢牢記住你的[Bm]臉 我會[C]珍惜你給的思[G]念
+這些[Em]日子在我心中 [Am]永遠都不會抹[D]去
+我不[G]能答應你 我是[C]否會再回[G]來
+不回[Em]頭　 不[C]回頭的[D]走下[G]去
+{end_of_chorus}

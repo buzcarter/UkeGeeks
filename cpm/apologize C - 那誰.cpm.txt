@@ -1,0 +1,10 @@
+{title: apologize C}
+{artist: 那誰}
+{meta: 選調: 1=C}
+{comment: 主歌 A}
+[Am] [F] [C] [G]
+{comment:前奏：6415 6415 }
+
+Apologize 
+
+I'm holding on your rope

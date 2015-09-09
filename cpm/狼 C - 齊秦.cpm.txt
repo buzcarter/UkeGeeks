@@ -1,0 +1,18 @@
+{title: 狼 C}
+{artist: 齊秦}
+{meta: 選調: 1=C}
+{comment: 主歌 A}
+{comment: 前奏6m-6m-6m-6m}
+
+我是[Am]一匹來自[Em]北方的狼[Am] [Am]
+走[Am]在無[Em]垠的曠野[Am]中 [Am]
+淒[Fmaj7]厲的 [G]北風吹[Am]過
+[Dm]漫漫的[E]黃沙掠[Am]過 [Am]
+{comment: 重複A段}
+
+{start_of_chorus}
+我[Fmaj7]只有咬着[G]冷冷的[Am]牙 [Am]
+[Dm]報以兩聲長[E]嘯
+不為[Am]別的 [Fmaj7] [G] [Am]
+只為那[Dm]傳說中[E]美麗的草[Am]原
+{end_of_chorus}

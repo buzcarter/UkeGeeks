@@ -1,0 +1,21 @@
+{title: 夏天的風}
+{artist: }
+{meta: 原調: 1=D}
+
+{comment: 節奏型} 
+{rhythm: d (d(d u))d (d(d u)) }
+
+{comment: 主歌 A}
+七月的風[G]懶懶的
+[A] 連雲都變[Bm7]熱熱的
+[#Fm] 不久後天[G]悶悶的
+一陣[A]雲後雨[Bm7]下過 woo…yeah…
+
+[G]氣溫 [A] 爬升到
+無法[Bm7]再忍受
+[#Fm] 索性閉上了[G]雙眼
+讓想[A]象任意改[Bm7]變
+
+{comment: 主歌 B}
+
+場景兩個人

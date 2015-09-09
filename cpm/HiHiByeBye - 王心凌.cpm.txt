@@ -1,0 +1,22 @@
+{title: HiHiByeBye}
+{artist: 王心凌}
+{rhythm:(d u) (o u) (d u) (o u) }
+
+{comment: 主歌A}
+你生[Am]氣來像火災 我哭起[F]來就像水災
+我們[G]兩個人加起來剛好[C]就變成無害
+你喜[F]歡喝冰牛[G]奶 我喜[Em]歡喝熱牛[Am]奶
+你的[E]冰塊加到我的牛奶[Em]就溫暖起來
+{comment: 主歌B}
+你喜[Am]歡走左邊 因為你說[F]會有安全感
+我喜[G]歡走右邊 因為我覺得[C]比較浪漫
+你睡[F]起來是早[G]上 我睡[Em]起來是夜[Am]晚
+我們[E]一起翻臉一加一等[Am]於是零鴨蛋
+{comment: 副歌C}
+我跟[Am]你說hihi 你跟我[F]說byebye
+我們[E]看似奇怪其實默契[Am]一直在
+我跟[Am]你說byebye 你[F]跟我說hihi
+你說[E]奇不奇怪我們見怪[Am]要更怪
+{comment: 副歌D}
+三輪[Dm]車跑得[F]快上面[E]坐著老太[Am]太
+老太[Dm]太去BYE[F]BYE小猴[E]子們又好[Am]hi

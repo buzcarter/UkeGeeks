@@ -1,0 +1,62 @@
+{title: 夏天結束以前}
+{artist: 滅火器}
+{meta: 原調: 1=D}
+{meta: 選調: 1=C}
+{meta: Capo=2}
+
+{comment: Pre Intro}
+[G] [A]
+
+[D]我緊握著[A/#C]手 冷汗直[Bm]流
+這是[G]最後一[A]球
+
+
+{comment: 副歌}
+{start_of_chorus}
+[D]飛出去的時[A/#C]候 不要回[Bm]頭
+帶著[G]我們的[A]夢一起[D]走
+我什麼都沒[A/#C]有
+這是最後的請[Bm]求 夏天[G]不要[A]走
+{end_of_chorus}
+{comment: Intro}
+[D] [A/#C] [Bm] [G] [A]
+
+{comment: 主歌 A}
+[Bm]九局下 緊[#Fm]要關頭
+命運[G]落在我手[D]中
+一[Em]起努力了[Em/#D]這麼久
+我知[Em/D]道 不該退[A/#C]縮
+[Bm]氣氛凝結了時空
+[#Fm]壘上的你們看著我
+[G]像要說些什[D]麼
+一起[Em]許下了承諾 一路[Em/#D]奮戰到最後
+那些[Em/D]畫面從眼前閃[A]過
+{comment: 副歌}
+{start_of_chorus}
+[D]飛出去的時[A/#C]候 不要回[Bm]頭
+帶著[G]我們的[A]夢一起[D]走
+我什麼都沒[A/#C]有
+這是最後的請[Bm]求 夏天[G]不要[A]走
+{end_of_chorus}
+{comment: Interlude}
+[#Fm] [G] [A] [D] [x8]
+[Bm] [#Fm] [G] [D] [x2]
+{comment: Bridge}
+[Bm]球劃過午後[#Fm]的天空 眼[G]淚不停的[D]流
+很[Em]驕傲我們[Em/#D]曾活過 [Em/D]沒有保[A/#C]留
+不[Bm]留遺憾的[#Fm]往前走 無[G]論勝利與[D]否
+一起[Em]許下了承諾 一路[Em/#D]奮戰到最後
+那些[Em/D]畫面從眼前閃[A]過
+
+{comment: 副歌}
+{start_of_chorus}
+[D]飛出去的時[A/#C]候 不要回[Bm]頭
+帶著[G]我們的[A]夢一起[D]走
+我什麼都沒[A/#C]有
+這是最後的請[Bm]求 夏天[G]不要[A]走
+{end_of_chorus}
+
+{comment: Outro}
+[D] [A/#C] [Bm] [G] [A] [x2]
+[Bm] [Bm/#A] [A] [A/#G] [x2] 
+[G]

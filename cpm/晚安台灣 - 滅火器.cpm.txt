@@ -1,0 +1,44 @@
+{title: 晚安台灣}
+{artist: 滅火器}
+{meta: 原調: bG}
+{meta: 選調: G}
+{meta: 吉他降半弦}
+
+{comment: Pre Intro}
+[G] [Gsus4] [x2]
+
+{comment: 主歌 A}
+在[G]這個安靜的暗暝
+我知道[Em7]你有心事睏袂去
+想到[C]你的過去 [Gsus4/B]受盡凌遲
+[Am]甘苦很多[D]年 [Dsus4] [D]
+{comment: Intro}
+[G] [Em7] [C] [D] [x2]
+
+{comment: 主歌 B}
+在[G]這個安靜的暗暝
+我知道[Em7]你有心事睏袂去
+想到[C]你的過去 [Gsus4/B]受盡凌遲
+[Am]甘苦很多[D]年
+
+在[G]這個安靜的暗暝
+我知道[Em7]你有心事睏袂去
+煩惱[C]你的未來[Gsus4/B]要對叼去
+[Am]幸福在哪裡[Dsus4] [D]
+
+{comment: 副歌}
+{start_of_chorus}
+[Cadd9]啊～啊
+黑暗他[D]總會過去
+日[G]頭一出來猶原[Em7]擱是好天氣
+[C]你有一個[D]美麗的名[G]字 [Gsus4]
+[Cadd9]啊～啊
+天公伯[D]總會保庇
+[G]日頭一出來[D/#F]猶原[Em7]擱是好天氣
+[C]願你順[D]遂 台灣
+
+[Em] [D]
+[C]願你順[D]遂 台灣
+{end_of_chorus}
+{comment: Interlude/Outro}
+[G] [Em7] [C] [D] [x2]

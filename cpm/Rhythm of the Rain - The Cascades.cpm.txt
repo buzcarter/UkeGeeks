@@ -1,0 +1,26 @@
+{title: Rhythm of the Rain}
+{artist: The Cascades}
+{meta: 原調: 1=F}
+{meta: 選調: 1=C}
+{meta: Capo=5}
+
+
+
+{comment: 節奏型：鄉村節奏} 
+{rhythm: ( (d u) (o u) (d u) (o u)}
+
+{comment: 主歌 A}
+[C]Listen to the rhythm of the [F]falling rain 
+[C]Telling me just what a fool I’ve [G7]been
+I [C]wish that it would go and let me [F]cry in vain
+And [C]let me be [G7]alone ag[C]ain
+
+{comment: 主歌 B}
+The [C]only girl I care about has [F]gone away 
+Looking [C]for a brand new [G7]start
+But [C]little does she know that when she [F]left that day
+Along [C]with her she [G7]took my [C]heart [C7]
+
+{comment: 副歌 1}
+
+[F]Rain

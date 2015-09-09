@@ -1,0 +1,22 @@
+{title: 500 Miles(醉鄉民謡版)}
+{artist: Justin Timberlake}
+{meta: 原調: 1=A}
+{meta: 選調: 1=G}
+{meta: Capo=2}
+
+{comment: 前奏 / 間奏} 
+{start_of_tab}
+|-------- ---2-2-0--|--2-2-0----0-2-0 | 0-2-0 | |
+|---3---5----3----3-|- 3--- 3---0----3-0 |-0-0-3 3 0 | 0 0 3 3 |
+|-------- ---2------|--4--------0- | | |
+|-------- ---0------|--0--------2- | | |
+{end_of_tab}
+
+{comment: 節奏型 ：鄉村節奏（下面湊活吧）} 
+{rhythm: (d u) (o u) (d u) (o u)}
+
+{comment: A 段}
+If you [G]miss the train I'm [Em]on
+You will [Am]know that I am [C]gone
+You can [Am]hear the whistle [D]blow a hundred [G]miles
+A hundred [G]miles

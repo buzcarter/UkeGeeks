@@ -1,0 +1,40 @@
+{title: 海上的人}
+{artist: 滅火器}
+{meta: 原調: bA}
+{meta: 選調: A}
+{meta: 吉他降半弦}
+
+{comment: 前奏}
+[A] [Bm] [Dsus2] [A] [E/#G] [#Fm] [#Cm] [Dsus2] [Esus2]
+
+{comment: 主歌 A}
+回頭看那段[A]青春的[Esus2]路程 你[#Fm]想起離開的[#Cm]時候
+[Dsus2]傻傻坐上[A]那班夜車 開始[Bm]奔走的人[E]生
+[A]渾沌的[Esus2]青春 還[#Fm]有你軟弱的[#Cm]個性
+[Dsus2]點起手上[A]又一支菸 [Dsus2]眼淚 [Esus2]流不 [A]停
+
+{comment: Interlude}
+[A] [Esus2] [#Fm] [#Cm] [Dsus2] [Esus2] [x2]
+
+{comment: 主歌 B}
+你說[A]人生呀[Esus2]人生 像[#Fm]飄浪海上[#Cm]的船
+[Dsus2]有時風吹起[A]陣陣風湧 運命[Bm]總是捉摸不[#Csus2]定
+
+{comment: Bridge}
+[#Fm]抬頭看[E]遙遠天上 笑[Dsus2]看這浮沉風[A]景 [#Cm]
+[#Fm]就算要[E]等待一生 也要[Dsus2]活得沒有怨[Esus2]恨
+
+{comment: 副歌}
+{start_of_chorus}
+[A]海風吹著[Bm]你的歌聲 [Dsus2]吹著你的頭[A]髮 [E/#G]
+就算[#Fm]眼前路要面對[#Cm]長長孤單 [Dsus2]心有一點點[Esus2]累
+[A]海風吹著[Bm]你的背影 [Dsus2]吹著你的願[A]望 [E/#G]
+你說[#Fm]你相信總會有[#Cm]那一天 會[Dsus2]實現 當初的[Esus2]誓言
+不用怕 我們慢慢的走
+{end_of_chorus}
+
+{comment: SOLO}
+[A] [Bm] [Dsus2] [A] [E/#G] [#Fm] [#Cm] [Dsus2] [Esus2] [x2]
+
+{comment: Outro}
+[A] [Esus2] [#Fm] [#Cm] [Dsus2] [Esus2] [x2]

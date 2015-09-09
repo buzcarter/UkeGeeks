@@ -1,0 +1,32 @@
+{title: Take Me Home Country Road}
+{artist: John Denver}
+{meta: 原調: 1=A}
+{meta: 選調: 1=G}
+{meta: Capo=2}
+
+
+
+{comment: 節奏型:鄉村節奏} 
+{rhythm: (d u) (o u) (d u) (o u)}
+
+{comment: 主歌 A}
+[G] Almost heaven [Em]West Virginia
+[D]Blue Ridge Mountain [C]Shenandoah [G]River
+[G]Life is old there
+[Em]Older than the trees
+[D]Younger than the mountains
+[C]Growing like a [G]breeze
+
+
+{comment: 主歌 B}
+[G] All my memories [Em]Gather round her
+[D] Miner's Lady [C]Stranger to blue [G]water
+[G]Dark and dusty [Em]Painted on the sky
+[D]Misty taste of moonshine [C]Tear drops in my [G]eyes
+
+{comment: 主歌C}
+[Em]I hear her [D]voice in the [G]morning hours She calls me
+The [C]radio [G]reminds me of my [D]home far away
+And [Em]driving down the [F]road
+I'll get a [C]feeling That I [G]should have been home
+[D]Yesterday

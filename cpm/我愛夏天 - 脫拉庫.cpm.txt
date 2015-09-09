@@ -1,0 +1,22 @@
+{title: 我愛夏天}
+{artist: 脫拉庫}
+{meta: 原調: 1=A}
+{meta: 選調: 1=G}
+{meta: Capo=2}
+
+
+
+{comment: 主歌 A}
+[G]我 ~ 我愛[Em]夏天
+[C]有 ~ 漂亮美[D]眉
+[G]我 ~ 我愛[Em]夏天
+[C]因為 ~[D] 他們穿的養[G]眼
+
+
+{comment: 副歌}
+{start_of_chorus}
+[G]每到夏天我要去海[C]邊 
+[D]海邊有個漂亮高雄[G]妹
+[G]只打電話不常見面 [C]我好想念
+[D]不知她會在哪個海[G]邊
+{end_of_chorus}

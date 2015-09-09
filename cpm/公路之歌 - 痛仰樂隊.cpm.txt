@@ -1,0 +1,36 @@
+{title: 公路之歌}
+{artist: 痛仰樂隊}
+{comment: 建議節奏}
+{rhythm: d d o (u d) }
+
+{comment: 主歌 A}
+[F]夢想 [G]在什麼[Am]地方
+總是[F]那麼[G]令人向[Am]往
+我[F]不顧一[G]切 [Am]走在路上
+就是[F]為了來[G]到你的身[Am]旁
+[F]夢想 [G]在不在[Am]前方
+今夜[F]的星光[G]分外明[Am]亮
+[F]想著遠[G]方 [Am]想著心上的姑娘
+回[F]頭路已是[G]那麼漫[Am]長
+
+{comment: 主歌 B}
+[F]夢想 [G]在什麼地[Am]方
+滾動[F]的車輪[G]滾動着年[Am]華
+我[F]再也不願[G]沉醉 [Am]不能入睡
+要[F]繼續還是[G]要去面[Am]對
+[F]夢想 [G]在不在前[Am]方
+黎明[F]的曙光已[G]微微照[Am]亮
+我[F]似曾聞[G]見鮮[Am]花在盛放
+那是[F]燎原[G]星星的光[Am]亮
+
+
+{comment: 副歌 }
+{start_of_chorus}
+{comment: (F G Am) x 4 }
+[F]一直往南方[G]開
+一直往[Am]南方開
+{comment: 結尾 }
+[F]噢~[G]噢~[Am]噢噢~
+
+[F]噢~[G]噢~ ~一直往[Am]南方開
+{end_of_chorus}

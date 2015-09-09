@@ -1,0 +1,19 @@
+{title: 小城故事 (C調)}
+{artist: 鄧麗君}
+{meta: 原調：C}
+{meta: 首音：E}
+
+{comment: 節奏型} 
+{rhythm: (4 3) (2 3) (1 3) (2 3) | (4 3) (2 1) (4 3) (2 1)}
+
+{comment: A 主歌}
+[C]小城故事[C]多，[Am]充滿喜和[Dm]樂，
+[G]若是[C]你到[Am]小城來，[G]收穫特別[C]多。
+[C]看似一幅[C]畫，[Am]聽像一首[Dm]歌，
+[G]人生[C]境界[Am]真善美，[G]這裡已包[C]括。
+
+{comment: B 副歌}
+{start_of_chorus}
+[Am]談的談，[Dm]說的[G]說，[Am]小城故事真不[G]錯，
+[Am]請你的朋友[Em7]一起[Dm]來，[G]小城來做[C]客。
+{end_of_chorus}

@@ -1,0 +1,31 @@
+{title: 去大理 G}
+{artist: 郝雲}
+{comment: 前奏Gadd9|Cmaj7|Gadd9|Cmaj7}
+{comment: A段}
+
+[G]是不是對生活不太滿[Cmaj7]意
+
+[G]很久沒有笑過又不知為[D]何
+
+[G]既然不快樂又不喜歡[Am]這裡
+
+[D]不如一路向西 去大[G]理
+
+[G]路程有點波折空氣有點[Cmaj7]稀薄
+
+[G]景色越遼闊 心裡越寂[D]寞
+
+[G]不知道誰在 何處等[Am]待
+
+[D]不知道後來的後[G]來
+{comment: B段}
+
+{start_of_chorus}
+[Cmaj7]誰的頭頂上沒有灰[Em]塵
+
+[Cmaj7]誰的肩上沒有過齒[G]痕
+
+[Cmaj7]也許愛情就在洱海邊[Am]等着
+
+[D]也許故事正在發生[G]着
+{end_of_chorus}

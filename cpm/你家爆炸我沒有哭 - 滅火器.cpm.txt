@@ -1,0 +1,52 @@
+{title: 你家爆炸我沒有哭}
+{artist: 滅火器}
+{meta: 原調: B}
+{meta: 選調: C}
+{meta: 吉他全部降半弦}
+
+{comment: 前奏/間奏}
+[C] [Bm] [Em] [D]
+[C] [D] [Bm] [Em] [C] [Bm] [Em] [D] [C] [D] [G] 
+
+{comment: 主歌 A}
+[C]憂頭結面 [Bm]印堂發黑 [Am7]為何這麼失[G]志
+[C]若是遇到[G/B]什麼困難[C]我們會陪[D]你
+[C]生活之中[Bm]難免會有[Am7]一些不如[G]意
+雖[C]然度爛 [Bm]總有一天 [C]都[D]會過[G]去
+
+[Em]把握眼前[Bm]的青春 [C]不要空枉[G]費
+[Em]朋友兄弟[Bm]一條心 [C]共渡歹時[D]機
+
+{comment: 主歌 B}
+[C] 我有[Em7]好多譜子[F]
+[C] 個個[Em7]都來之不易
+
+[C]磨起[Em7]多少個[F]耳繭
+[C]聽膩[Em7]多少首[C]經典
+
+{comment: 副歌}
+{start_of_chorus}
+[C]沒人知影[D]一生之中[G]青春有多[Em]少
+怎能[C]眼睜睜的[D]看他隨風[G]過 
+別在[C]龜龜毛毛
+[D]盡說一些[Bm]沒路用的[Em]廢話
+這些[C]話[D]你要放在心[G]底
+{end_of_chorus}
+
+{comment: SOLO}
+[C] [D] [Bm] [Em] [x3]
+[C] [Bm] [C] [D]
+
+{comment: 副歌}
+{start_of_chorus}
+[C]沒人知影[D]一生之中[Bm]青春有多[Em]少
+怎能[C]眼睜睜的[D]看他隨風[G]過 
+別在[C]龜龜毛毛
+[D]盡說一些[Bm]沒路用的[Em]廢話
+這些[C]話[D]你要放在心[G]底 [Em]
+這些[C]話[D]你要放在心[G]底 
+{end_of_chorus}
+
+{comment: Outro}
+[C] [Bm] [Em] [D]
+[C] [D] [Bm] [Em] [C] [Bm] [Em] [D] [C] [D] [G]

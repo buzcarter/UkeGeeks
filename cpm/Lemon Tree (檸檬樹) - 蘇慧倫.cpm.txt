@@ -1,0 +1,48 @@
+{title: Lemon Tree (檸檬樹)}
+{artist: 蘇慧倫}
+{comment: 主歌節奏型}
+{rhythm: 3 12 3 12}
+{comment: 副歌節奏型}
+{rhythm: d (d u) (~ u) (d u)}
+
+{comment: 前奏}
+[Am] [Em] [Am] [Em] 
+[Dm] [Em] [Am] [Am]
+{comment: 主歌 1}
+一個[Am] 人孤單單的[Em]下午
+當[Am]風吹得每棵樹都想[Em] 跳舞
+記[Am] 得昨天你穿藍[Em] 色衣服
+你[Am] 說對愛太專注容易[Em] 孤獨
+這句[Dm] 話什麼意思[Em] 我不清楚[Am]
+
+{comment: 主歌 2}
+[Am] 我愛[Am]上了雲愛[Em]上你
+多[Am] 麼希望像你自由[Em] 來去
+原[Am] 來星期天容易[Em] 思念
+反[Am] 覆看部電影一遍[Em]一遍
+孤獨[Dm]的流著眼淚[Em]回憶太美[Am]
+
+{comment: 副歌}
+{start_of_chorus}
+[Am] 愛多[C] 美麗充滿[G] 香氣
+只[Am] 是在心裡它總是酸[Em] 溜溜地
+我不[F] 懂我自己[G] 越來越像 lemo[C]n tree
+[G] 我[C]一天一天更[G]愛你
+我不[Am] 管不管不管愛會苦[Em]苦地
+海藍[F] 藍的天氣[Dm] 我的愛是 lemo[G]n tree[G]
+{end_of_chorus}
+噠[Am]..　[Em]噠..　[Am]..　[Em]噠.. 
+　[Dm]噠..　[Em]噠..　[Am]
+ 
+{comment: 主歌 2 X1}
+[E]i so la[E] tion 想住[Am] 進你心裡[Am]
+[G]i so la[G] tion 期[C] 待下雨[E] 的一棵 lemon tree
+{comment: 副歌 X1}
+
+你[Am] 總是望著藍[Em] 藍海面
+說[Am] 著流浪過的夢容易[Em] 實現
+這句[Dm] 話什麼意思 [Em] 我不清[Am]楚
+{comment: 副歌 X1}
+我不[Am] 管不管 我一天[C] 一天更愛[G] 你 
+我不[Am] 管不管不管愛會[Em]苦苦地 
+海藍[F] 藍的天氣[G]..我的愛是 lemo[C]n tree

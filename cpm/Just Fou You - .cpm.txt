@@ -1,0 +1,41 @@
+{title: Just Fou You}
+{artist: }
+{meta: 原調: 1=D}
+{meta: 選調: 1=C}
+{meta: Capo=2}
+
+
+
+
+{comment: 節奏型} 
+{rhythm: d (d(d u))d (d(d u)}
+
+{comment:}
+I [C]picked the reddest [Am]apple from the [Dm]tree [G]
+It [C]was the finest [Am]one that I could [Dm]see [G] 
+I [Am]saved it all [Em]except a bite or [F]two [C]
+Just for [Dm]you [C] [F] [G] 
+
+{comment: }
+
+I [C]carried home the [Am]groceries from the [Dm]store [G]
+I [C]wanted to be [Am]helpful with a [Dm]chore [G]
+I [Am]put them all away [Em]except a [F]few [C]
+ just for [Dm]you [C] [F] [G] 
+
+{comment: }
+{start_of_chorus}
+[F]Someday I’[Em]ll be [Dm]grown up [C]too
+And [F]if I [Em]can I’ll [Dm]grow up just like [G]you
+I [C]ate up all my [Am]lunch just like you [Dm]said [G]
+But [C]I think there was [Am]a little too much [Dm]bread [G]
+And [Am]so I left the [Em]crust when I was [F]through [C] 
+just for [Dm]you [C] [F] [G] 
+{comment: }
+
+[F]Someday I’[Em]ll be [Dm]grown up [C]too
+And [F]if I [Em]can I’ll [Dm]grow up just like [G]you
+Just [C]one more thing be[Am]fore I go to [Dm]bed [G]
+And [C]everything I [Am]have to say is [Dm]said [G]
+There’s [Am]something special [Em]that I want to [F]do [C]
+Here’s a [Dm]kiss
