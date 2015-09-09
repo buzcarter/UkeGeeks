@@ -91,9 +91,12 @@ ugsEditorPlus.newSong = (function() {
 		var $title = $('#songTitle');
 		var title = $title.val().trim();
 		$title.val(title);
+		/*
 		var ok = title.length > 2;
 		showErrors(!ok, 'Song\'s title is required<br/><em>(you may change it later, must be at least 2 characters)</em>');
 		return ok;
+		*/
+		return true;
 	};
 
 	var showErrors = function(hasErrors, message) {
