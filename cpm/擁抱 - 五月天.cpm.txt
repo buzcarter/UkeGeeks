@@ -1,0 +1,61 @@
+{title: 擁抱}
+{artist: 五月天}
+{meta: 1=B}
+{meta: 變調夾夾4品，G調指法}
+{comment: 前奏,旋律引用《loving you》}
+[Cmaj7]啦～～ [Bm7]啦～～[Am7]啦～～[Gmaj7]啦～～ 
+[Cmaj7]嗚～～[Bm7] [Am7]啊～～[Gmaj7]～
+{comment: A1}
+
+[Cmaj7]脫下長日[Bm7]的假面　
+[Am7]奔向夢幻的疆[Gmaj7]界
+[Cmaj7]南瓜馬車[Bm7]的午夜　
+[Am7]換上童話的玻璃[Gmaj7]鞋
+[Cmaj7]讓我享受[Bm7]這感覺　
+[Am7]我是孤傲的薔[Gmaj7]薇
+[Cmaj7]讓我品嚐[Bm7]這滋味　
+[Am7]紛亂世界的不了[Gmaj7]解
+{comment: B1}
+
+[Cmaj7]昨天太近　[Bm7]明天太遠　
+[Am7]默默聆聽那黑[Gmaj7]夜
+[Cmaj7]晚風吻盡　[Bm7]荷花葉　
+[Am7]任我醉倒在池[Gmaj7]邊
+[Cmaj7]等你清楚看見[Bm7]我的美　
+[Am7]月光曬乾眼[Gmaj7]淚
+{comment: 副歌}
+{start_of_chorus}
+[Cmaj7]那一個[Bm7]人～～[Am7]　[Gmaj7]愛我
+[Cmaj7]將我的[Bm7]手～～[Am7]　緊[Gmaj7]握
+[Cmaj7]抱緊我　吻[Bm7]我　喔[Am7]愛~~~　別[Gmaj7]走
+{end_of_chorus}
+{comment: A2}
+
+[Cmaj7]隱藏自己[Bm7]的疲倦　
+[Am7]表達自己的狼[Gmaj7]狽
+[Cmaj7]放縱自己[Bm7]的狂野　
+[Am7]找尋自己的明[Gmaj7]天
+[Cmaj7]向你要求[Bm7]的誓言　
+[Am7]就算是你的謊[Gmaj7]言
+[Cmaj7]我需要愛[Bm7]的慰藉　
+[Am7]就算那愛已如潮[Gmaj7]水
+{comment: B2}
+
+[Cmaj7]昨天太近　[Bm7]明天太遠　
+[Am7]默默聆聽那黑[Gmaj7]夜
+[Cmaj7]晚風吻盡　[Bm7]荷花葉　
+[Am7]任我醉倒在池[Gmaj7]邊
+[Cmaj7]等你清楚看見[Bm7]我的美　
+[Am7]月光曬乾眼[Gmaj7]淚
+{comment: 副歌}
+{start_of_chorus}
+[Cmaj7]那一個[Bm7]人～～[Am7]　愛[Gmaj7]我
+[Cmaj7]將我的[Bm7]手～～[Am7]　緊[Gmaj7]握
+[Cmaj7]抱緊我　吻[Bm7]我　喔[Am7]愛~~~　別[Gmaj7]走
+[Cmaj7]那一個[Bm7]人～～[Am7]　愛[Gmaj7]我
+[Cmaj7]將我的[Bm7]手～～[Am7]　緊[Gmaj7]握
+[Cmaj7]抱緊我　吻[Bm7]我　喔[Am7]愛~~~　別[Gmaj7]走
+[Cmaj7]抱緊我　吻[Bm7]我　喔[Am7]愛~~~　別[Gmaj7]走
+[Cmaj7]抱緊我　吻[Bm7]我　喔[Am7]愛~~~[Gmaj7]
+{end_of_chorus}
+{comment: 結束}

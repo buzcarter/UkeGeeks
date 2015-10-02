@@ -1,0 +1,48 @@
+{title: 喜歡你}
+{artist: Beyond}
+{meta: 1=C}
+{meta: 選1=B,變調夾夾4品}
+{meta: G調指法}
+{comment: 主歌A1}
+
+[Gadd9]細雨帶風濕透黃昏的街[Em]道
+[Gadd9]抹去雨水雙眼無故地仰[Em]望
+望向[C]孤單的晚燈
+是那傷感的記[D]憶
+[Gadd9]再次泛起心裡無數的思[Em]念
+[Gadd9]以往片刻歡笑仍掛在臉[Em]上
+願你[C]此刻可會知
+是我[D]衷心的說聲～[D7]
+{comment: 副歌}
+{start_of_chorus}
+喜歡[G]你 那雙眼動[Em]人 笑聲更迷[C]人
+願再[D]可 輕撫[G]你 那可愛面[Em]容
+輓手說夢[C]話 像昨[D]天 你共[G]我
+{end_of_chorus}
+
+{comment: 主歌A2}
+
+[Gadd9]滿帶理想的我曾經多衝[Em]動
+[Gadd9]抱怨與她相愛難有自[Em]由
+願你[C]此刻可會知
+是我[D]衷心的說聲～[D7]
+{comment: 副歌}
+{start_of_chorus}
+喜歡[G]你 那雙眼動[Em]人 笑聲更迷[C]人
+願再[D]可 輕撫[G]你 那可愛面[Em]容
+輓手說夢[C]話 像昨[D]天 你共[G]我
+{end_of_chorus}
+
+{comment: 橋段}
+
+[C]每晚夜裡自我[D]獨行
+隨處[Em]蕩 多冰[C]冷
+[C]以往為了自我掙[D]扎
+從不[Em]知 她的[C]痛[D]苦
+{comment: 副歌}
+{start_of_chorus}
+喜歡[G]你 那雙眼動[Em]人 笑聲更迷[C]人
+願再[D]可 輕撫[G]你 那可愛面[Em]容
+輓手說夢[C]話 像昨[D]天 你共[G]我
+{end_of_chorus}
+{comment: 結束}

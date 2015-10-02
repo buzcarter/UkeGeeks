@@ -1,0 +1,61 @@
+{title: 傻子}
+{artist: 林宥嘉}
+{meta: 1=B}
+{meta: 變調夾夾4品 G調指法}
+{comment: 前奏}
+[Cmaj7] [G] [Cmaj7] [G]
+{comment: 主歌A1}
+
+[Cmaj7] 等愛的人[G]很多
+不預設[Cmaj7]你會在乎[G]我
+[Cmaj7] 難道一生的時[G]間
+都用[Cmaj7]來換
+和你[D]一個誤會
+[Cmaj7] 誰能真的[G]讓誰
+幸福到[Cmaj7]故事的結[G]尾
+[Cmaj7] 何必那麼的慌[G]張
+有時[Cmaj7]清醒
+才是[D]錯誤的開[G]始
+{comment: 副歌}
+
+{start_of_chorus}
+我不需[Bm7]要
+也不重[Cmaj7]要
+做一個[D6add11]傻子 [D6]多麼[G]好
+我不明[Bm7]白
+也不需要明[Cmaj7]白
+[Cm]就讓我這樣到老 (就很好)
+{end_of_chorus}
+{comment: 主歌A2}
+
+[Cmaj7] 誰能真的[G]讓誰
+幸福到[Cmaj7]故事的結[G]尾
+[Cmaj7] 何必那麼的慌[G]張
+有時[Cmaj7]清醒
+才是[D]錯誤的開[G]始
+{comment: 副歌}
+
+{start_of_chorus}
+我不需[Bm7]要
+也不重[Cmaj7]要
+做一個[D6add11]傻子 [D6]多麼[G]好
+我不明[Bm7]白
+也不需要明[Cmaj7]白
+就讓我[Cm]這樣到老 (就很好)
+{end_of_chorus}
+{comment: 橋段}
+
+[E5]沒什麼 [D#5]緊要
+只需要[D5]你輕輕一個擁[C#5]抱
+就算不留[C]下什麼也無所[D]謂就算
+留[Am7]下了什麼也都[Cm]珍貴
+[G]珍貴 [Bm7]珍貴 [Cmaj7]
+做[D6add11]傻子 [D6]多麼 [G]好
+{comment: 副歌}
+{start_of_chorus}
+我不明[Bm7]白
+也不需要明[Cmaj7]白
+[Cm]就讓我這樣到[G]老 
+這樣到[Cmaj7]老 (就很好)[Gadd9]
+{end_of_chorus}
+{comment: 結束}

@@ -1,0 +1,69 @@
+{title: what can i do}
+{artist: 南拳媽媽}
+{meta: 原調: 1=#F}
+{meta: 選調: 1=F}
+
+{comment: 前奏 / 間奏} 
+F D F D
+
+{comment: 節奏型} 
+{rhythm: (d) (d u) (~ u )(d u)|(d) (d u) (~ u )(d u)}
+
+{comment: 主歌}
+[F] 沒魚[D]的海[F] 會很[D]空白
+[F] 沒冰[D]紅茶[F] 夏天[D]不要來
+[Gm] 我的世界[C]因為有了[F]你
+沒有[A]風也搖[Dm]擺想要[Gm7]飛快[C]跟我[F]來
+{comment: 副歌A}
+{comment: 節奏型 下 切上·上 切上} 
+What Can I [A7]Do我的[Dm]愛
+碰到[bB]你壞[C]不起[F]來
+What Can I [A7]Do你的[Dm]人
+像泡[bB]面無[C]所不[F]在
+What Can I [A7]Do裝可[Dm]愛
+還是[bB]要說[C]個明[Dm]白
+What Can I [A7]Do我愛[Dm]你
+可不可以[bB]你也很[C]巧地愛上[F]我
+ 
+{comment: 接前奏 F D F D}
+
+[F] 沒車[D]的路[F] 會很[D]奇怪
+[F] 沒人[D]比賽[F] 操場[D]say bye bye
+[Gm] 我的世界[C]因為有了[F]你
+沒有[A]風也搖[Dm]擺想要[Gm7]飛快[C]跟我[F]來
+
+{comment: 節奏型 下 切上·上 切上} 
+What Can I [A7]Do我的[Dm]愛
+碰到[bB]你壞[C]不起[F]來
+What Can I [A7]Do你的[Dm]人
+像泡[bB]面無[C]所不[F]在
+What Can I [A7]Do裝可[Dm]愛
+還是[bB]要說[C]個明[Dm]白
+What Can I [A7]Do我愛[Dm]你
+可不可以[bB]你也很[C]巧地愛上[F]我
+
+{comment: 副歌B}
+{comment: 節奏型 琶音} 
+[Gm] 我的世界[C]因為有了[F]你
+沒有[A]風也搖[Dm]擺想要[Gm7]飛快[C]跟我[F]來
+
+{comment: 節奏型 下 切上·上 切上} 
+What Can I [A7]Do我的[Dm]愛
+碰到[bB]你壞[C]不起[F]來
+What Can I [A7]Do你的[Dm]人
+像泡[bB]面無[C]所不[F]在
+What Can I [A7]Do裝可[Dm]愛
+還是[bB]要說[C]個明[Dm]白
+What Can I [A7]Do我愛[Dm]你
+可不可以[bB]你也很[C]巧地愛上[F]我
+
+{comment: 節奏型 下 切上·上 切上} 
+{comment: 最後一段唱升了半音，可用食指大橫按在第一品，使琴整體音色升半音，然後其餘手指還照和弦按，其中bB和弦變成B。}
+What Can I [A7]Do我的[Dm]愛
+碰到[bB]你壞[C]不起[F]來
+What Can I [A7]Do你的[Dm]人
+像泡[bB]面無[C]所不[F]在
+What Can I [A7]Do裝可[Dm]愛
+還是[bB]要說[C]個明[Dm]白
+What Can I [A7]Do我愛[Dm]你
+可不可以[bB]你也很[C]巧地愛上[F]我

@@ -1,0 +1,61 @@
+{title: What's up}
+{artist: a.m.p}
+{meta: 選調: 1=C}
+
+
+整首歌的和弦都是這四個：[C] [Dm] [F] [C] 
+{comment: 主歌} 
+Twenty-five years and my life is still
+Trying to get up that great big hill of hope
+For a destination
+And I realized quickly when I knew I should
+That the world was made up of this brotherhood of man
+For whatever that means
+
+{comment: Bridge} 
+And so I cry sometimes
+When I m lying in bed
+Just to get it all out
+What s in my head
+And I am feeling a little peculiar
+And so I wake in the morning
+And I step outside
+And I take a deep breath and I get real high
+And I scream at the top of my lungs
+What s going on?
+
+{comment: 副歌} 
+And I say, hey hey hey hey
+I said hey, what s going on?
+And I say, hey hey hey hey
+I said hey, what s going on?
+Ooh, ooh ooh
+{comment:主歌 } 
+and I try, oh my god do I try
+I try all the time, in this institution
+And I pray, oh my god do I pray
+I pray every single day
+For a revolution
+{comment:Bridge } 
+And so I cry sometimes
+When I m lying in bed
+Just to get it all out
+What s in my head
+And I am feeling a little peculiar
+And so I wake in the morning
+And I step outside
+And I take a deep breath and I get real high
+And I scream at the top of my lungs
+What s going on?
+{comment: 副歌} 
+And I say, hey hey hey hey
+I said hey, what s going on?
+And I say, hey hey hey hey
+I said hey, what s going on? *N次
+
+{comment: 主歌} 
+Twenty-five years and my life is still
+Trying to get up that great big hill of hope
+For a destination
+
+~更多譜子，請關注微信公眾號：ken_music

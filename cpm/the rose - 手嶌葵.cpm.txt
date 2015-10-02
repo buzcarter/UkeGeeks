@@ -1,0 +1,45 @@
+{title: the rose}
+{artist: 手嶌葵}
+{comment: 前奏 / 間奏} 
+{start_of_tab}
+|-----------------|-----------------|
+|-----------------|-----------------|
+|-0---0---0---0---|-0---0---0---0---|
+|-----------------|-----------------|
+{end_of_tab}
+
+{comment: 節奏型} 
+{rhythm: (124 3) (2 3) |(1 3) (2 3) }
+或者
+{rhythm: (124 3) (2 3) |(2 3) (2 3) }
+
+{comment: 主歌1}
+Some say [C]love it is a [G]river
+That [F]drowns the tender [C]reed
+Some say [C]love it is a [G]razor
+That [F]leaves your soul to [C]bleed
+{comment: 主歌2}
+Some say [Em]love it is a [Am]hunger
+An [F]endless aching [G]need
+I say [C]love it is a [G]flower
+And [F]you , its only [C]seed
+{comment: 主歌1}
+It's the [C]heart afraid of [G]breaking
+That [F]never learns to [C]dance
+It's the [C]dream afraid of [G]waking
+That [F]never takes the [C]chance
+{comment: 主歌2}
+It's the [Em]one who won't be [Am]taken
+Who can[F]not seem to [G]give
+And the [C]soul afraid of [G]dying
+That [F]never learns to [C]live
+{comment: 主歌1}
+When the [C]night has been too [G]lonely
+And the [F]road has been too [C]long
+And you [C]think that love is [G]only
+For the [F]lucky and the [C]strong
+{comment: 主歌2}
+Just re[Em]member in the [Am]winter
+Far [F]beneath the bitter [G]snows
+Lies the [C]seed that with the sun's [G]love
+In the [F]spring becomes the [C]rose

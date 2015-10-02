@@ -1,11 +1,7 @@
-{title: Just Fou You}
-{artist: }
+{title: Just For You}
 {meta: 原調: 1=D}
 {meta: 選調: 1=C}
 {meta: Capo=2}
-
-
-
 
 {comment: 節奏型} 
 {rhythm: d (d(d u))d (d(d u)}

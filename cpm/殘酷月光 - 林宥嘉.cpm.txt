@@ -1,0 +1,44 @@
+{title: 殘酷月光}
+{artist: 林宥嘉}
+{meta: 1=A}
+{meta: 變調夾夾2品，play：G key}
+{comment: 主歌A1}
+
+讓[Gadd9]我愛你 然後[C]把我拋棄
+我[D]只要出發 不要目[G]的
+我會[Am]一直想[D]你 [Bm]忘記了呼[Em]吸
+[C]孤獨到[Cm]底讓我昏[D]迷
+{comment: A2}
+
+如[Gadd9]果恨你 就能[C]不忘記你
+所[D]有的面目 我都不抗[G]拒
+如果[Am]不夠悲[D]傷 [Bm]就無法飛[Em]翔
+可[C]沒有夢[Cm]想 何必遠[D]方
+{comment: 副歌}
+{start_of_chorus}
+我[G]一直都在流浪
+可我 [Bm]不曾見過海洋
+我以為的遺[C]忘
+原來[Cm]躺在你手[D]上
+我[G]努力微笑堅強
+寂寞[Bm]築成一道圍牆
+也敵不過夜[C]裡 最[D]溫柔的月[G]光
+{end_of_chorus}
+
+{comment: A3}
+
+如[Gadd9]果恨你 就能[C]不忘記你
+所[D]有的面目 我都不抗[G]拒
+如果[Am]不夠悲[D]傷 [Bm]就無法飛[Em]翔
+可[C]沒有夢[Cm]想 何必遠[D]方
+{comment: 副歌}
+{start_of_chorus}
+我[G]一直都在流浪
+可我 [Bm]不曾見過海洋
+我以為的遺[C]忘
+原來[Cm]躺在你手[D]上
+我[G]努力微笑堅強
+寂寞[Bm]築成一道圍牆
+也敵不過夜[C]裡 最[D]溫柔的月[G]光
+{end_of_chorus}
+{comment: 副歌 重複升半key}

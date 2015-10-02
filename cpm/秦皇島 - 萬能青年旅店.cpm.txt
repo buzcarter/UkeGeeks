@@ -1,0 +1,30 @@
+{title: 秦皇島}
+{artist: 萬能青年旅店}
+{meta: 1=A}
+{meta: 變調夾夾2品，play：G key}
+{comment: 前奏}
+[Gadd9] [Gmaj7] [Em] [C]
+{comment: A1}
+
+[Gadd9]站在能分割世界的[Gmaj7]橋
+還是看不[Em]清 在那些時[C]刻
+遮蔽我[Gadd9]們 黑暗的[Gmaj7]心 
+究竟是什[Em]麼嗯～[C]
+{comment: A2}
+
+[Gadd9]住在我心裡孤獨[Gmaj7]的
+孤獨的海[Em]怪 痛苦之[C]王
+開始厭[Gadd9]倦 深海的[Gmaj7]光 
+停滯的海[Em]浪 嗯～[C]
+{comment: A3}
+
+[Gadd9]站在能看到燈火的[Gmaj7]橋
+還是看不[Em]清 在那些夜[C]晚
+照亮我[Gadd9]們 黑暗的[Gmaj7]心 
+究竟是什[Em]麼 嗯～[C]
+{comment: A4}
+
+[Gadd9]於是他默默追逐[Gmaj7]着
+橫渡海[Em]峽 年輕的[C]人
+看著他[Gadd9]們 為了彼[Gmaj7]岸
+驕傲[Em]地 驕傲的 滅 [C]亡

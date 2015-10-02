@@ -1,0 +1,46 @@
+{title: 寫一首歌}
+{artist: 順子}
+{meta: 原調: 1=Eb}
+{meta: 選調: 1=C}
+{meta: 男調：G}
+{meta: 女調：C or D}
+
+{comment: 主歌 A} 
+
+[C]月亮在你的眼睛　[Am]太陽在我心
+[Dm]現在我唱這首歌　[G]OHH　只為你
+想把[C]所有煩惱都忘掉　[Am]做不做的到
+你[Dm]明白我心在燃燒　[G]因為你　因為你
+[C]OH　[Am] 為[Dm]你 [G]
+{comment: 主歌 B} 
+你[C]心中的話　我全都想聽　[Am]能不能相信
+[Dm]所有的夢裡全都是你　[G]會不會停息
+[C]和你一起　是否　不會再放棄 [Am]你的心裡有沒有秘密
+[Dm]我分不清　不要在意　[G]只想為想為你 寫一首[C]歌
+寫[Am]一首歌　都[Dm]是你　OOH[G]
+
++主歌 A
+
+{comment: Bridge （和弦跟前面的一樣）} 
+OH, [Bb]LOVE'S IN THE AIR　IT'S [A]EVERYWHERE
+[Am]EVERYONE CAN SEE　[G]EVERYONE CAN FEEL
+THAT [Bb]LOVE'S IN THE AIR IT [A]DOESN'T MATTER WHERE
+[Dm]EVERYONE AGREES　[G]LOVE IS ALL WE NEED
+
+{comment: 主歌 C} 
+WHEN THE MOON FALLS IN YOUR EYES
+I KNOW THE SUN HAS SET
+THE FIRE STILL BURNS WITHIN ME
+SINCE THE DAY WE MET
+I KNOW MY HEAVEN WOULD BE SO COMPLETE
+YOU COULD MAKE IT REAL
+I WON'T LET THIS CHANGE GO BY　I CAN SEE
+I CAN FEEL YOU
+WHEN THE MOON FALLS IN YOUR EYES
+I KNOW THE SUN HAS SET
+THE FIRE STILL BURNS WITHIN ME, WITHIN ME
+
+月亮在你的眼睛　太陽在我的心
+現在我唱這首歌　只為你
+
+~更多譜子和好聽音樂，請關注微信公眾號：ken_music

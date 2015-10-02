@@ -1,0 +1,27 @@
+{title: Close to you}
+{artist: Carpenters}
+{meta: 選調: 1=C}
+{meta: 男調: 1=E}
+{meta: 女調: 1=G}
+{comment: A 段} 
+Why do [F]birds suddenly [E]appear
+Every[Em]time you are [Am]near?
+[F]Just like me, they long to be
+[C]Close to you
+Why [F]stars fall down from the [E]sky
+Every[Em]time you walk [Am]by?
+[F]Just like me, they long to be
+[C]Close to you 
+{comment: B 段} 
+[F]On the day that you were born
+The angels got together
+They [Em]decided to create a dream come [A]true
+So they [F]sprinkled moon dust in your hair
+And put a starlight in your eyes so [G]blue
+{comment: C 段} 
+That is [F]why all the girls in [E]town
+Follow [Em]you, all [Am]around
+[F]Just like me, they long to be
+[C]Close to you
+
+~更多譜子，請關注微信公眾號：ken_music

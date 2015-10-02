@@ -1,4 +1,4 @@
-{title: 跟往事乾杯}
+{title: 跟往是乾杯}
 {artist: 姜育恆}
 {meta: 原調: 1=D}
 

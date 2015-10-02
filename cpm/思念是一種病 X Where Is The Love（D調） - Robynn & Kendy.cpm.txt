@@ -1,0 +1,59 @@
+{title: 思念是一種病 X Where Is The Love（D調）}
+{artist: Robynn & Kendy}
+{meta: 原調：Eb}
+{meta: 選調：D}
+{meta: 首音：F#}
+
+{comment: A 副歌 1}
+{start_of_chorus}
+[D]當你在穿山[A]越嶺的另一邊，我在[Bm]孤獨的路上沒有[G]盡頭。
+{end_of_chorus}
+
+{comment: B 主歌 1}
+[D] 一輩子有多少的來不及，發現[A] 已經失去最重要的東西，
+[Bm] 恍然大悟，早已遠去[G]，為何總是在犯錯之後才肯[D]相信，
+錯的是自己，他們說[A]這就是人生，試着體會，
+[Bm]試着忍住眼淚，還是[G]躲不開應該有的情緒。
+[D] 我不會奢求世界[A]停止轉動，[Bm] 我知道逃避一點[G]都沒有用，
+只是這段[D]時間裡，尤其在夜裡，還是[A]會想起難忘的事情，
+[Bm] 我想我的思念是一[G]種病，久久不能痊癒。
+
+{comment: C 副歌 2}
+{start_of_chorus}
+[D] People hatin', people fi[A]ghtin', children hurt and you hear them cry[Bm]~in',
+Can you practice what you pre[G]ach? Or would you turn the other che[D]ek?
+Father, Father, Father hel[A]~p us, send some guidance from abo[Bm]~ve,
+'Cause people got me, got me que[G]~stionin', where is the lo[D]~ve?
+The [A]love, the [Bm]love, where is the lo[G]~ve, the love, the lo[D]~ve?
+（口風琴） [A] [Bm] [G]
+{end_of_chorus}
+
+{comment: D 主歌 2}
+[D]汲汲營營，忘記身邊[A]的人需要愛和關心[Bm]，藉口總是拉遠了距離[G]，不知不覺，無聲無息，
+[D] 我們總是在抱怨事與願違[A]，卻不願意回頭看看自[Bm]~己，想想自己，到底[G]做了什麼蠢事情。
+[D] 也許是上帝給我[A]一個試煉[Bm]，只是這傷口需要[G]花點時間，
+只是會想[D]唸過去的一切，那些人事[A]物會離我遠去[Bm]，而我們終究也會[G]遠離，變成回憶。
+
+{comment: E 副歌 3}
+{start_of_chorus}
+[D] People hatin', people fi[A]ghtin', children hurt and you hear them cry[Bm]~in',
+Can you practice what you pre[G]ach? Or would you turn the other che[D]ek?
+Father, Father, Father hel[A]~p us, send some guidance from abo[Bm]~ve,
+'Cause people got me, got me que[G]~stionin', where is the lo[D]~ve?
+The [A]love, the [Bm]love, where is the lo[G]~ve, the love, the lo[D]~ve?
+{end_of_chorus}
+
+{comment: F 說唱 }
+多久沒有說我愛你，多久[A]沒有擁抱你所愛的人，
+當這個[Bm]世界不再那麼美好，只有愛[G] 可以讓他更好。
+我相信一切[D]都來得及，別管那些紛紛擾擾，[A]別讓不開心的事停下了腳步，
+就怕[Bm]你不說，就怕你不做，別讓[G]遺憾繼續，一切都來得及。
+
+{comment: G 副歌 4}
+{start_of_chorus}
+[D]當你在穿山[A]越嶺的另一邊，我在[Bm]孤獨的路上沒有[G]盡頭，
+時常感覺[D]你在耳後的呼吸[A]~，卻未曾[Bm]感覺你在心口的鼻[G]~息，
+（Where is the love?）哦~，[D]思念是一種病[A]~，（The love,）
+哦~~，（the love,）[Bm]思念是一種病[G]~，（where is the love, the love,）一種[D]病，
+（the love?）[A] Yeah~~[Bm]~~~，oo[G]o~~~。 
+{end_of_chorus}

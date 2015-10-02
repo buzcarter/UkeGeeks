@@ -1,0 +1,31 @@
+{title: 普通朋友}
+{artist: 陶喆}
+{meta: 原調: 1=F}
+{meta: 選調: 1=C}
+{meta: Capo=5}
+
+
+{comment: 主歌}
+等[C]待 我[Fm]隨時隨地在等[C]待 做[Fm]你感情上的依[C]賴 
+我[Fm]沒有任何的疑[Dm]問 這是[G7]愛
+
+我[C]猜 你[Fm]早就想要說明[C]白 我[Fm]覺得自己好失[C]敗
+從[Fm]天堂掉落到深[Dm]淵 多無[G7]奈
+
+{comment: Bridge}
+我[Fm]願意改[C]變 (what can I do?)
+重[Fm]新再來一[C]遍(just give me change)
+我[Fm]無法只是[Em7]普通朋[Am]友
+感[Dm]情已那麼深 叫我[G7]怎麼能放手
+
+{comment: 副歌}
+但你說 [C]愛 I [Em7]only want to be your [Dm]friend
+做個[G7]朋友
+我[C]在 你[Em7]心中只是 just a [Dm]friend 不是[G7]情人
+我[F]感激你對我這[E7]樣的坦白
+但[Am]我給你的愛暫[D]時收不回來
+So [Dm]I 我[G7]不能只是be your [C]friend
+
+~更多譜子和好聽音樂，請關注微信公眾號：ken_music
+
+{end_of_chorus}

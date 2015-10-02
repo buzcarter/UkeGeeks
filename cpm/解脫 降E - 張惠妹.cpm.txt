@@ -1,0 +1,28 @@
+{title: 解脫 降E}
+{artist: 張惠妹}
+{meta: 1=C}
+{comment: 唱降E調}
+{comment: 前奏}
+[Cadd9] [G/B] [Am7] [Am7/G] [Fmaj7] [C/E] [Dm7] 
+[Dm7/G]
+{comment: A1}
+
+[Cadd9]愛是不夜城 [G/B]回憶像星辰[Am7] [Am7/G]
+[Fmaj7]熱淚越沸騰 [Am7]我越感覺[Dm7]有點冷 [Dm7/G]
+{comment: A2}
+
+[Cadd9]變了心的人 [G/B]越想越傷人[Am7] [Am7/G]
+[Fmaj7]枯坐到清晨 [Am7]陽光替房[Dm7]間開了燈 [Dm7/G] 
+{comment: B段}
+
+[Fmaj7]想 [C/E]若結局一樣 [Dm7]又何苦再想
+[Fmaj7]傷 [C/E]若讓人成長 [Dm7]我為什麼怕分手的[Dm7/G]傷
+{comment: C段}
+
+解[Cadd9]脫是肯承認[G/B]這是個錯
+[Am7]我不應該[Am7/G]還不放手
+[Fmaj7]你有自由[C/E]走我有自由好[Dm7]好過 [Dm7/G]
+解[Cadd9]脫是懂擦乾[G/B]淚看以後
+[Am7]找個新方[Am7/G]嚮往前走
+[Fmaj7]這世界遼[C/E]闊我總會實[Dm7]現一個夢[Dm7/G]
+{comment: 間奏返回A2}

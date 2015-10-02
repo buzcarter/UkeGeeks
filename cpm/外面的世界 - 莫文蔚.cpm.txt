@@ -1,0 +1,30 @@
+{title: 外面的世界}
+{artist: 莫文蔚}
+{meta: 原調: 1=C}
+{meta: 選調: 1=C}
+{meta: Capo=0}
+
+
+
+{comment: 節奏型} 
+{rhythm: (124 3 12 3 ) }
+
+{rhythm:(d)(d)(d)(d u) }
+
+{comment: 主歌 A}
+[C] 在很久[G]很久以[Am] 前
+[Em] 你擁有[F]我　[G] 我擁有[C]你 [F] [G]
+[C] 在很久[G]很久以[Am] 前
+[Em] 你離開[F]我去[G]遠空翱[C] 翔 [C]
+{comment: 主歌 B}
+[C] 每當夕陽[G]西沉的時[Am]候
+[Em] 我總是[F]在這裡盼望你[G] [F] [C]
+[C] 天空中[G]雖然飄著[Am]雨
+[Em] 我依然[F]等待[G]你的歸[C]期 [C]
+{comment: 副歌}
+{start_of_chorus}
+[F] 外面的[G]世界很精[C]彩 [C]
+[F] 外面的[G]世界很無[C]奈 [C]
+[F] 當你覺得[G]外面的世界[C]很[G]精[Am]彩
+[Am]我會在[Dm]這裡衷心[Dm]的祝福你[G]
+{end_of_chorus}

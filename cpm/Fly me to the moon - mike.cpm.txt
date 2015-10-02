@@ -1,16 +1,17 @@
 {title: Fly me to the moon}
 {artist: mike}
-{comment: 節奏型}
+{comment: 节奏型}
 {rhythm: d (o)u (u o u) }
-
-
-
-
-
-
 
 [Am]Fly me to the [Dm]moon
 And let me [G7]sing among the [Cmaj7]stars[C7]
 [F]Let me see what [Dm]Spring is like
 On [E7]Jupiter and [Am]Mars[A7]
-In [Dm]other words
+In [Dm]other words,[G7] hold my [Em]hand![A7]
+In [Dm]other words,[G7] darling, [Bm]kiss me![E7]
+[Am]Fill my heart with [Dm]song
+And let me [G7]sing forever[Cmaj7]more[C7]
+[F]You are all I [Dm]long for
+All I [E7]worship and [Am]adore[A7]
+In [Dm]other words,[G7] please be [Em]true![A7]
+In [Dm]other words,[G7] I love [C]you![Fm]  [C]
