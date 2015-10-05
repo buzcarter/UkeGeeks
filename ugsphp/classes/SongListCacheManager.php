@@ -58,6 +58,7 @@ class SongListCacheManager {
 
 		foreach ($files as $fname) {
 			$s = preg_replace(Config::FileNamePattern, '$1', $fname);
+			$s = urlencode($s);
 
 			$content = FileHelper::getFile(Config::$SongDirectory . $fname);
 			$parsed = SongHelper::parseSong($content);
