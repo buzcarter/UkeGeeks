@@ -10,7 +10,7 @@
 isLegacyIe = true;
 document.getElementsByTagName('html')[0].className = 'ie';
 </script>
-<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>/js/excanvas.js"></script>
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="<?php echo($model->StaticsPrefix); ?>/css/yuiReset.css" />
