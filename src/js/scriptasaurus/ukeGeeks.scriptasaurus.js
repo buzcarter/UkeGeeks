@@ -39,14 +39,14 @@ ukeGeeks.scriptasaurus = (function() {
 	 * @method run
 	 * @return {songObject}
 	 */
-	_public.run = function() {
+	_public.run = function(markup) {
 		//console.log('run (Classic Mode)');
 		var handles = _getHandlesFromId();
 		if (!handles || !handles.diagrams || !handles.text || !handles.wrap) {
 			return null;
 		}
 		_errList = [];
-		var song = _runSong(handles);
+		var song = _runSong(handles, markup);
 		showErrors(_errList[0]);
 		return song;
 	};
@@ -64,7 +64,7 @@ ukeGeeks.scriptasaurus = (function() {
 			if (handles === null) {
 				continue;
 			}
-			songs.push(_runSong(handles));
+			songs.push(_runSong(handles, markup));
 		}
 		return songs;
 	};
@@ -88,13 +88,13 @@ ukeGeeks.scriptasaurus = (function() {
 	 * @param handles {ukeGeeks.data.htmlHandles}
 	 * @return {songObj}
 	 */
-	var _runSong = function(handles){
+	var _runSong = function(handles, markup){
 		// console.log('run Song');
 
 		// read Music, find chords, generate HTML version of song:
 		var cpm = new ukeGeeks.cpmParser();
 		cpm.init();
-		var song = cpm.parse(handles.text.innerHTML);
+		var song = cpm.parse(markup || handles.text.innerHTML);
 		ukeGeeks.definitions.replace(song.defs);
 
 		var chrdPrsr = new ukeGeeks.chordParser();
