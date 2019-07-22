@@ -1,4 +1,10 @@
-# UkeGeeks Scriptasaurus
+# UkeGeeks-ng
+
+An attempt at an *enhanced/updated/modified/edited_to_fits_my_needs* version of UkeGeeks (since the original doesn't seems to accept pull request since early 2015).
+_______________________________________
+_______________________________________
+
+## UkeGeeks Scriptasaurus
 
 When added to your webpage this JavaScript library creates ukulele chord fingering diagrams and nicely formated songsheets by reading songs from directly within HTML &lt;pre&gt; tags.
 
