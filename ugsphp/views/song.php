@@ -56,7 +56,7 @@ header aside a{
 	</div>
 </section>
 <footer>
-	<p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by UkeGeeks' Scriptasaurus &bull; ukegeeks.com</small></p>
+  <?php echo ($model->PoweredBy!=''?"Powered by ".$model->PoweredBy:''); ?>
 </footer>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>/js/ukeGeeks.scriptasaurus.min.js"></script>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>/js/startup.js"></script>
