@@ -19,7 +19,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <script type="text/javascript" src="//explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.legacyIe.css" />
 <![endif]-->
-<link href='http://fonts.googleapis.com/css?family=Peralta|Smokum|Cherry+Cream+Soda|Ranchers|Creepster|Lobster|Permanent+Marker|Architects+Daughter|Bree+Serif' rel='stylesheet' type='text/css' />
+<link href='https://fonts.googleapis.com/css?family=Peralta|Smokum|Cherry+Cream+Soda|Ranchers|Creepster|Lobster|Permanent+Marker|Architects+Daughter|Bree+Serif' rel='stylesheet' type='text/css' />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/yuiReset.css" />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/basic-page-layout.css" />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ukeGeeks.music.css" />
@@ -44,7 +44,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		</article>
 	</article>
 	<footer>
-		<p>Note: <span id="footTuningInfo">Standard <strong>GCEA</strong> Soprano Ukulele</span> Tuning. <small>Powered by <a href="http://ukegeeks.com/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.com</small></p>
+    <?php echo ($model->PoweredBy!=''?"Powered by ".$model->PoweredBy:''); ?>
 	</footer>
 </section>
 <!-- EDIT SONG (DIALOG) -->
@@ -74,6 +74,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <!-- APP TOOLBAR -->
 <section id="ugsAppToolbar" class="ugsAppMenuBar">
 	<ul>
+		<li class="navHome"> <a href="/" title="Go back to the songbook"><span></span>Songbook</a> </li>
 		<li class="navEdit" data-dialog="songSourceDlg"> <a href="#songSourceDlg" title="View &amp; edit the song source"><span></span>Edit</a> </li>
 		<li class="navLayout showOptionsBox"> <a href="#layoutOptions" title="Resize fonts &amp; chord diagrams. Customize layout &amp; colors."><span></span>Appearance</a></li>
 		<li class="navInstruments showOptionsBox"> <a href="#tuningOptions" title="Transpose song's key &amp; choose your prefered ukulele tuning"><span></span>Transpose</a></li>
