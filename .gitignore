@@ -1,0 +1,7 @@
+ugsphp/settings.json
+ugsphp/Config.php
+ugsphp/cache/SongList.cache
+ugsphp/cache/SongList.info
+.htaccess
+cpm/
+songs/
