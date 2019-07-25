@@ -65,6 +65,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			<input type="button" id="updateBtn" class="baseBtn blueBtn" value="Update" title="Rebuild digarams and music" />
 			<?php if ($model->IsUpdateAllowed) { ?>
 				<input type="button" id="saveBtn" class="baseBtn orange" value="Save" title="Save" style="margin-right:1.6em;" />
+				<input type="button" id="deleteBtn" class="baseBtn red" value="Delete" title="Delete" style="margin-right:1.6em;" />
 			<?php } ?>
 			<a href="#chordBuilder" id="cdBldOpenBtn" data-dialog="cdBldDlg" class="alternateBtn" title="Add custom &amp; alternate chord diagrams">Chord Builder</a>
 		</p>
@@ -306,6 +307,7 @@ $(function() {
 <?php if ($model->IsUpdateAllowed) {
 	?>
 	ugsEditorPlus.updateSong.init("<?php echo($model->UpdateAjaxUri); ?>", "<?php echo($model->Id); ?>");
+	ugsEditorPlus.deleteSong.init("<?php echo($model->DeleteAjaxUri); ?>", "<?php echo($model->Id); ?>");
 	<?php
 	}
 ?>

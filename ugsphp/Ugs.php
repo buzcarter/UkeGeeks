@@ -122,31 +122,34 @@ class Ugs{
 		$builder = null;
 
 		switch($action){
-			case Actions::Edit:
-			case Actions::Song:
-				$builder = new Song_Vmb();
-				break;
-			case Actions::Source:
-				$builder = new Source_Vmb();
-				break;
-			case Actions::Reindex:
-				$builder = new RebuildSongCache_Vmb();
-				break;
-			case Actions::Logout:
-			case Actions::Login:
-				$builder = new Login_Vmb();
-				break;
-		case Actions::AjaxNewSong:
-			$builder = new Ajax_NewSong_Vmb();
-			break;
-		case Actions::AjaxUpdateSong:
-			$builder = new Ajax_UpdateSong_Vmb();
-			break;
-			default:
-				$builder = Config::UseDetailedLists
-					? new SongListDetailed_Vmb()
-					: new SongList_Vmb();
-				break;
+      case Actions::Edit:
+      case Actions::Song:
+        $builder = new Song_Vmb();
+        break;
+      case Actions::Source:
+        $builder = new Source_Vmb();
+        break;
+      case Actions::Reindex:
+        $builder = new RebuildSongCache_Vmb();
+        break;
+      case Actions::Logout:
+      case Actions::Login:
+        $builder = new Login_Vmb();
+        break;
+      case Actions::AjaxNewSong:
+        $builder = new Ajax_NewSong_Vmb();
+        break;
+      case Actions::AjaxUpdateSong:
+        $builder = new Ajax_UpdateSong_Vmb();
+        break;
+      case Actions::AjaxDeleteSong:
+        $builder = new Ajax_DeleteSong_Vmb();
+        break;
+      default:
+        $builder = Config::UseDetailedLists
+          ? new SongListDetailed_Vmb()
+          : new SongList_Vmb();
+        break;
 		}
 
 		$builder->SiteUser = $siteUser;

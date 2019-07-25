@@ -276,6 +276,7 @@ Whether running mod_rewrite or using query params ("mysite.com/songbook" versus 
 * **logout**: logs out the currently logged in user
 * **ajaxnewsong**: (JavaScript call) create a new song using minimal inputs (title and artist)
 * **ajaxupdatesong**: (JavaScript call) update existing song, key is file name
+* **ajaxdeletesong**: (JavaScript call) delete existing song, key is file name
 
 ## Trouble Shooting
 * **Nothing's happening on sample songs** : Make sure the page is finding the CSS and JavaScript files. You might need to&hellip;

@@ -21,6 +21,13 @@ class Song_Vm extends _base_Vm {
 	public $UpdateAjaxUri = '';
 
 	/**
+	 * URL where "Delete Song" AJAX is sent.
+	 * -- Only used if Editing is enabled and user has permission.
+	 * @var string
+	 */
+	public $DeleteAjaxUri = '';
+
+	/**
 	 * If TRUE View may show edit form
 	 * -- Only used if Editing is enabled and user has permission.
 	 * @var boolean
@@ -31,6 +38,7 @@ class Song_Vm extends _base_Vm {
 	{
 		parent::__construct();
 		$this->UpdateAjaxUri = Ugs::MakeUri( Actions::AjaxUpdateSong);
+		$this->DeleteAjaxUri = Ugs::MakeUri( Actions::AjaxDeleteSong);
 	}
 
 }
