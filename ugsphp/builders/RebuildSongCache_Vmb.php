@@ -10,6 +10,11 @@ class RebuildSongCache_Vmb extends _base_Vmb {
 	// PUBLIC METHODS
 	// -----------------------------------------
 	public function Build() {
+    if(!$this->SiteUser->IsAuthenticated || !$this->SiteUser->MayEdit)
+    {
+      die('Reindex Forbidden !');
+    }
+
 		$timestart = microtime(true);
 
 		$cache = new SongListCacheManager();
