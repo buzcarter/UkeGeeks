@@ -1,6 +1,20 @@
 # UkeGeeks-ng
 
 An attempt at an *enhanced/updated/modified/edited_to_fits_my_needs* version of UkeGeeks (since the original doesn't seems to accept pull request since early 2015).
+
+###What's changed so far :
+
+- Added a DELETE SONG button to the EDITOR
+- Added a SONGBOOK button when viewing a song (to go back)
+
+- Various pseudo-security fixes (.gitignore, separate config file with example, ...)
+- Switched some calls to HTTPS
+- Removed useless SOPRANO tuning references on each pages
+
+###What's planned ?
+
+A lot. Read the issue tracking on github with the label "enhancement".
+Some features will be hard to implement with the actual code imho, but I'll try anyway without starting from scratch.
 _______________________________________
 _______________________________________
 
