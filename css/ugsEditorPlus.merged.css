@@ -972,7 +972,7 @@ html .reformatDlg textarea {
 }
 .theme-jellyBean .scalablePrintArea {
 	color: #56a0a5;
-	font-family: "Comic Sans MS", "Marker Felt", cursive, sans-serif;
+	font-family: "Comic Sans MS", sans-serif;
 }
 .theme-jellyBean .scalablePrintArea hgroup {
 	color: #ff9417;
