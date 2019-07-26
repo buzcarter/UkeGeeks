@@ -132,6 +132,8 @@
 	-moz-transition: border linear 0.2s, box-shadow linear 0.2s;
 	-o-transition: border linear 0.2s, box-shadow linear 0.2s;
 	transition: border linear 0.2s, box-shadow linear 0.2s;
+  width:60%;
+  display: block;
 }
 .quickSearch:focus {
 	border-color: rgba(82, 168, 236, 0.8);

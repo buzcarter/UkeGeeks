@@ -2251,14 +2251,15 @@ ugsEditorPlus.typeahead = function(){
 	 */
 	var listFromHtml = function(){
 
-		$( 'li' ).each(function( index ) {
+		$( '.SongListSong' ).each(function( index ) {
 			var $this = $(this);
-			var plainText = crushText($this.text());
-			var href = $this.children('a').attr('href');
+			var plainText = crushText($this.data('searchable'));
+			var href = $this.parent('a').attr('href');
 			var key = href.toLowerCase();
 
-			var html = $this.children('a').html();
-			html = html.replace('<strong class="', '<span class="bigger ').replace('</strong>', '</span>');
+			//var html = $this.children('a').html();
+			//html = html.replace('<strong class="', '<span class="bigger ').replace('</strong>', '</span>');
+      var html = $this.data('searchable');
 
 			_keysToDetailsDict[key] = {
 				// content displayed in drop down list
@@ -2351,7 +2352,8 @@ ugsEditorPlus.typeahead = function(){
 	// return public interface "JSON handle"
 	// ---------------------------------------
 	return _public;
-};/**
+};
+/**
  * Resizes an overlay to fill the window (this is a 1.0, so "fill" is relative -- it gets much bigger)
  * @class resize
  * @namespace ugsEditorPlus

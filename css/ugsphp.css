@@ -17,7 +17,7 @@ body{
 h1 {
     color: #944615;
     font-family: 'MEgalopolisExtraRegular',Verdana,Geneva,sans-serif;
-    font-size: 36px;
+    font-size: 2.3em;
     margin-bottom: 0.6em;
 }
 h2 {
@@ -56,11 +56,8 @@ a {
 }
 .songList li {
 	color: #A8A8A8;
-	font-size: 10px;
-	list-style: decimal outside none;
-	margin-bottom: 0.35em;
-	margin-left: 20px;
-	padding: 0.35em 0;
+  margin-left: 20px;
+  padding: 0.35em 0;
 }
 .songList li:hover {
 	background-color: #FFECC7;
@@ -74,6 +71,36 @@ a {
 .songList li em {
 	color: #5D5639;
 	font-size: 1.1em;
+}
+
+.SongListAside {
+  text-align:right;
+  margin-bottom: 1em;
+}
+
+.SongListTitle {
+  text-align:left;
+}
+
+.SongListLetter {
+  font-weight: bold;
+  margin: 35px 0 10px 0;
+  font-size: 1.5em;
+  /* border-radius: 3px; */
+  border: gray 1px solid;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  /* display: inline-block; */
+  padding: 4px;
+  /* box-shadow: 1px 1px 10px rgba(0,0,0,0.2); */
+}
+.SongListArtist {
+  letter-spacing: 0.1em;
+  margin: 1em 0 0em 0;
+}
+.SongListSong {
+      letter-spacing: normal;
 }
 
 /* login page's form
@@ -114,3 +141,4 @@ a {
 .errorMessage em{
 	font-size:.8em;
 }
+

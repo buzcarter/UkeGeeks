@@ -5,30 +5,48 @@ function SayHello(){
 	return $greetings[rand(0, count($greetings) - 1)];
 }
 
-/**
- * Convert a Song object to custom HTML
- */
-function MakeRowHtml($song){
-	$html = '<strong class="songTitle">' . $song->Title . '</strong>';
 
-	if (strlen($song->Artist) > 0){
-		$html .= ' <em class="songArtist">' . $song->Artist . '</em>';
-	}
+// Sort by ARTIST and then by TITLE
+function strCompareArtist($obj1, $obj2)
+{ 
+    if(strtoupper($obj1->Artist) == strtoupper($obj2->Artist))
+      return strcasecmp($obj1->Title, $obj2->Title);
+    else
+      return strcasecmp($obj1->Artist, $obj2->Artist);
+} 
 
-	if (!$song->HasInfo){
-		$html .= ' <em class="songIncomplete">(incomplete)</em>';
-	}
+// Build a songlist, alphabetically ordered, by ARTIST
+function BuildSongList($SongList)
+{
+    usort($SongList, 'strCompareArtist');
 
-	if (strlen($song->Subtitle) > 0){
-		$html .= '<p><em class="songSubtitle">' . $song->Subtitle . '</em></p>';
-	}
+    $currentLetter = '';
+    $songLetter = '';
+    $currentArtist = '';
+    foreach($SongList as $song)
+    {
+      $songLetter = substr($song->Artist, 0, 1);
 
-	if (strlen($song->Album) > 0){
-		$html .= '<p><em class="songAlbum">' . $song->Album . '</em></p>';
-	}
+      if($currentLetter != $songLetter)
+      {
+        $currentLetter = $songLetter;
+        echo "<div class='SongListLetter'>".strtoupper($currentLetter)."</div>";
+      }
 
+      if(strtoupper($song->Artist) != strtoupper($currentArtist))
+      {
+        if($currentArtist != '')
+        {
+          echo '</ul></div>';
+        }
+        $currentArtist = $song->Artist;
+        echo '<div class="SongListArtist">'.$currentArtist.'<ul>';
+      }
 
-	return '<a href="' . $song->Uri . '">' . $html  . '</a>';
+      echo '<li>';
+      echo '  <a href="'.$song->Uri.'"><span class="SongListSong" data-searchable="'.$song->Artist.' - '.$song->Title.'">'.$song->Title.'</span></a>';
+      echo '</li>';
+    }
 }
 
 /* ------------------------------------------------
@@ -48,7 +66,7 @@ function MakeRowHtml($song){
 <body class="songListPage">
 	<section class="contentWrap">
 		<?php if ($model->SiteUser->IsAuthenticated) { ?>
-			<aside style="float:right;">
+			<aside class='SongListAside'>
 				<em style="font-size:.8em; padding-right:1.5em; color:#BCB59C;"><?php echo(SayHello() . ', '. $model->SiteUser->DisplayName); ?>!
 					(<a href="<?php echo($model->LogoutUri); ?>">Logout</a>)
 				</em>
@@ -60,17 +78,18 @@ function MakeRowHtml($song){
 				?>
 			</aside>
 		<?php } ?>
-	<h2><?php echo($model->SubHeadline); ?></h2>
-	<h1><?php echo($model->Headline); ?></h1>
-	<p><?php echo(count($model->SongList)); ?> Songs.
-		<label for="quickSearch">Quick search:</label> <input class="quickSearch" id="quickSearch" autocomplete="off" type="text" /></p>
-	<ol class="songList">
+  <div class='SongListTitle'>
+    <h2><?php echo($model->SubHeadline); ?></h2>
+    <h1><?php echo($model->Headline); ?></h1>
+  </div>
+	<div>
+		<input class="quickSearch" id="quickSearch" autocomplete="off" type="text" placeholder="Enter Artist or Song Title" />
+  </div>
+	<div class="songList">
 		<?php
-		foreach($model->SongList as $song){
-			echo('<li>' . MakeRowHtml($song) . '</li>');
-		}
+      BuildSongList($model->SongList);
 		?>
-	</ol>
+	</div>
 	</section>
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.merged.js"></script>
