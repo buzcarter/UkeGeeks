@@ -11,7 +11,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title><?php echo($model->PageTitle); ?></title>
+<title><?php echo($model->PageTitle); ?> | <?php echo Config::SongbookHeadline?></title>
 <script type="text/javascript">var isLegacyIe = false;</script>
 <!--[if lt IE 9]>
 <script type="text/javascript">isLegacyIe = true;document.getElementsByTagName('html')[0].className='legacyIe';</script>
