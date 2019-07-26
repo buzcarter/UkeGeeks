@@ -14,6 +14,7 @@ ukeGeeks.definitions.sopranoUkuleleGcea = [
 	// -------------------------------------------------------
 	'{define: A frets 2 1 0 0 fingers 2 1 0 0}',
 	'{define: Am frets 2 0 0 0 fingers 1 0 0 0}',
+	'{define: Ammaj7 frets 1 0 0 0 fingers 1 0 0 0}',
 	'{define: A7 frets 0 1 0 0 fingers 0 1 0 0}',
 	'{define: A7sus4 frets 0 2 0 0 fingers 0 2 0 0}',
 	'{define: Am7 frets 0 0 0 0}',
@@ -61,11 +62,13 @@ ukeGeeks.definitions.sopranoUkuleleGcea = [
 	//  C
 	// -------------------------------------------------------
 	'{define: C frets 0 0 0 3 fingers 0 0 0 3}',
+	'{define: Cadd9 frets 0 2 0 3 fingers 0 2 0 3}',
 	'{define: Cm frets 0 3 3 3 fingers 0 1 2 3}',
 	'{define: C7 frets 0 0 0 1 fingers 0 0 0 1}',
 	'{define: C7sus4 frets 0 0 1 1 fingers 0 0 1 1}',
 	'{define: Cm7 frets 3 3 3 3 fingers 1 1 1 1}',
 	'{define: Cdim frets 2 3 2 3 fingers 1 3 2 4}',
+	'{define: Cdim7 frets 2 3 2 3 fingers 1 3 2 4}',
 	'{define: Cmaj7 frets 0 0 0 2 fingers 0 0 0 1}',
 	'{define: C6 frets 0 0 0 0}',
 	'{define: Cm6 frets 0 3 5 5 fingers 0 1 3 1}',

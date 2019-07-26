@@ -6,8 +6,11 @@ An attempt at an *enhanced/updated/modified/edited_to_fits_my_needs* version of 
 
 - Added a **DELETE SONG** button to the EDITOR
 - Added a **SONGBOOK** button when viewing a song (to go back)
-- Sorted the song list by artist and song name + layout change for better search
+- **Sorted the song list** by artist and song name + layout change for better search
 
+- Added some missing chords
+
+- Non-intrusive popup on missing chords
 - Various pseudo-security fixes (.gitignore, separate config file, preventing some things to READ only users, ...)
 - Switched some calls to HTTPS
 - Removed useless SOPRANO tuning references on each pages
