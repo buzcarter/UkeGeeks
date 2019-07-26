@@ -103,6 +103,14 @@ a {
       letter-spacing: normal;
 }
 
+.SongListFooter {
+  margin: 3em auto 1em auto;
+  border-top: 1px gray dashed;
+  padding: 1em;
+  text-align: center;
+  font-size: 0.6em;
+}
+
 /* login page's form
  ------------------------------------------- */
 .loginPage .overlay{

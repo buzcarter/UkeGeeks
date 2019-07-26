@@ -44,7 +44,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		</article>
 	</article>
 	<footer>
-    <?php echo ($model->PoweredBy!=''?"Powered by ".$model->PoweredBy:''); ?>
+    <?php //echo ($model->PoweredBy!=''?"Powered by ".$model->PoweredBy:''); ?>
 	</footer>
 </section>
 <!-- EDIT SONG (DIALOG) -->
@@ -211,9 +211,12 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <aside class="arrowBox helpOptions" id="helpDlg">
 	<fieldset class="arrowBoxContent linksList">
 		<ul>
-			<li><a href="http://blog.ukegeeks.com/users-guide/" target="_blank" title="View the complete documentation including ChordPro tips">User Guide</a></li>
-			<li><a href="http://ukegeeks.com/tools/chord-finder.htm" target="_blank" title="Access the UkeGeeks library of common chords">Chord Finder</a></li>
-			<li><a href="http://ukegeeks.com/tools/reverse-chord-finder.htm" target="_blank" title="Find chord names by drawing the diagram">Reverse Chord Lookup</a></li>
+      <li><a href="https://github.com/bloodybowlers/UkeGeeks-ng" target="_blank">UkeGeeks-NG website</a></li>
+      <li><hr></li>
+      <li><a href="http://ukegeeks.com" target="_blank">Original UkeGeeks website</a></li>
+			<li><a href="http://blog.ukegeeks.com/users-guide/" target="_blank" title="View the complete documentation including ChordPro tips">Online Ukegeeks's User Guide</a></li>
+			<li><a href="http://ukegeeks.com/tools/chord-finder.htm" target="_blank" title="Access the UkeGeeks library of common chords">Online Ukegeeks's Chord Finder</a></li>
+			<li><a href="http://ukegeeks.com/tools/reverse-chord-finder.htm" target="_blank" title="Find chord names by drawing the diagram">Online Ukegeeks's Reverse Chord Lookup</a></li>
 		</ul>
 	</fieldset>
 </aside>

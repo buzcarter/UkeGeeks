@@ -90,6 +90,7 @@ function BuildSongList($SongList)
       BuildSongList($model->SongList);
 		?>
 	</div>
+  <footer class='SongListFooter'>Powered by <a href='https://github.com/bloodybowlers/UkeGeeks-ng' target=_blank><?php echo $model->PoweredBy?></a></footer>
 	</section>
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.merged.js"></script>
