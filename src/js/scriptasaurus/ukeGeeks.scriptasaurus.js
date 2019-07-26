@@ -149,7 +149,12 @@ ukeGeeks.scriptasaurus = (function() {
 			s += (s.length > 0) ? ', ' : '';
 			s += errs[i];
 		}
-		alert('Forgive me, but I don\'t know the following chords: ' + s);
+		$.notify('Forgive me, but I don\'t know the following chords: ' + s, {
+      clickToHide: true,
+      autoHide: false,
+      position: 'top left',
+      className: 'warn'
+      });
 	};
 
 	/**

@@ -58,7 +58,7 @@ header aside a{
 <footer>
   <?php echo ($model->PoweredBy!=''?"Powered by ".$model->PoweredBy:''); ?>
 </footer>
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>/js/ukeGeeks.scriptasaurus.min.js"></script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>/js/ukeGeeks.scriptasaurus.merged.js"></script>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>/js/startup.js"></script>
 </body>
 </html>
