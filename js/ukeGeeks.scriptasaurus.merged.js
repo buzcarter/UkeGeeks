@@ -1468,6 +1468,7 @@ ukeGeeks.definitions.sopranoUkuleleGcea = [
 	'{define: Ebsus4 frets 1 3 4 1 fingers 2 3 4 1}',
 	'{define: Ebaug frets 0 3 3 2 fingers 0 2 2 1}',
 	'{define: Eb9 frets 0 1 1 1}',
+	'{define: Ebadd9 frets 0 3 1 1 fingers 0 3 1 1}',
 	//  E
 	// -------------------------------------------------------
 	'{define: E frets 4 4 4 2 fingers 2 3 4 1}',
