@@ -65,7 +65,7 @@ class SongListCacheManager {
 			$song = new SongLinkPlus_Pvm();
 			$song->Uri = Ugs::MakeUri(Actions::Song, $s);
 			$song->HasInfo = (strlen($parsed->title) + strlen($parsed->artist)) > 0;
-			$song->Title = $this->fixLeadingArticle((strlen($parsed->title) > 0) ? $parsed->title : $this->filenameToTitle($s));
+			$song->Title = ((strlen($parsed->title) > 0) ? $parsed->title : $this->filenameToTitle($s));
 			$song->Subtitle = $parsed->subtitle;
 			$song->Album = $parsed->album;
 			$song->Artist = $parsed->artist;
@@ -83,19 +83,5 @@ class SongListCacheManager {
 	 */
 	private function filenameToTitle($filename) {
 		return trim(ucwords(str_replace('-', ' ', str_replace('_', ' ', $filename))));
-	}
-
-	/**
-	 * Handles titles beginning with "The", "A", "An"
-	 * @method fixLeadingArticle
-	 * @param string $title
-	 * @return string
-	 */
-	private function fixLeadingArticle($title) {
-		$r = '/^(the|a|an) (.*)$/i';
-		if (preg_match($r, $title)){
-			$title = preg_replace($r, '$2, $1', $title);
-		}
-		return $title;
 	}
 }
