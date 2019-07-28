@@ -66,7 +66,7 @@ ugsLogin = (function(){
 	};
 
 	var doSubmit = function(){
-		var ok = (document.getElementById('username').value.length > 3) && (document.getElementById('password').value.length > 3);
+		var ok = (document.getElementById('username').value.length >= 3) && (document.getElementById('password').value.length >= 3);
 		var err = document.getElementById('loginErrorMessage');
 		if (!ok){
 			err.innerHTML = 'Check your username & password';
