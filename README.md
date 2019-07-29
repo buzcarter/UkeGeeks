@@ -8,7 +8,12 @@ An attempt at an *enhanced/updated/modified/edited_to_fits_my_needs* version of 
 - Added a **SONGBOOK** button when viewing a song (to go back)
 - **Sorted the song list** by artist and song name + layout change for better search
 
+  
+
 - Added some missing chords
+- Removed legacy browser support
+
+  
 
 - Non-intrusive popup on missing chords
 - Various pseudo-security fixes (.gitignore, separate config file, preventing some things to READ only users, ...)
