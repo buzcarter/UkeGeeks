@@ -14,6 +14,7 @@ An attempt at an *enhanced/updated/modified/edited_to_fits_my_needs* version of 
 - Various pseudo-security fixes (.gitignore, separate config file, preventing some things to READ only users, ...)
 - Switched some calls to HTTPS
 - Removed useless SOPRANO tuning references on each pages
+- Login page cleanup + ability to hide email
 
 #### What's planned ?
 

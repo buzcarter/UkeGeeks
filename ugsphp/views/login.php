@@ -8,7 +8,7 @@ $errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title><?php echo($model->PageTitle); ?></title>
+  <title><?php echo($model->PageTitle); ?> | <?php echo Config::SongbookHeadline?></title>
 	<meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
 	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.min.css" title="ugsEditorCss" />
 	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsphp.css" />
@@ -25,13 +25,12 @@ $errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
 		<p class="errorMessage" id="loginErrorMessage" style="display: <?php echo($errCssstyle); ?>"><?php echo($model->ErrorMessage); ?></p>
 		<ul>
 			<li>
-				<label for="username">Username:</label>
+				<label for="username">Username</label>
 				<input type="text" name="username" id="username" size="20" value="<?php echo($model->Username); ?>" />
 			</li>
 			<li>
-				<label for="password">Password:</label>
+				<label for="password">Password</label>
 				<input type="password" name="password" id="password" size="20" />
-				<p class="hint">yo! this is cAsEsenSiTIvE.</p>
 			</li>
 			<li class="btnBar">
 				<input type="submit" value="Login" name="loginBtn" class="baseBtn blueBtn" />
