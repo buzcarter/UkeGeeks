@@ -37,7 +37,9 @@ $errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
 				<input type="submit" value="Login" name="loginBtn" class="baseBtn blueBtn" />
 			</li>
 		</ul>
+    <?php if(Config::ShowSupportEmail) {?>
 		<p class="help">Problems or you need access? <a href="mailto:<?php echo($model->SupportEmail); ?>?subject=I humbly beseech thee, songbook access, please...">Drop a line.</a></p>
+    <?}?>
 	</form>
 </div>
 </section>

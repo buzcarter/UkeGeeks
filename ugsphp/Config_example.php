@@ -90,6 +90,13 @@ class Config {
 	 */
 	const SongCacheKey_FileName = 'SongList';
 
+	/**
+	 * If true, show support email on the login page (to request access, ...)
+	 * @constant(ShowSupportEmail)
+	 * @var Boolean
+	 */
+	const ShowSupportEmail = false;
+
 	// --------------------------------------
 	// Logins (only if "IsLoginRequired" enabled)
 	// --------------------------------------
