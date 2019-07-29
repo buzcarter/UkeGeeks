@@ -17,13 +17,6 @@ ugsEditorPlus.resize = (function(){
 	var editor = null;
 
 	/**
-	 * miliseconds to fade in/out editor
-	 * @property FADE_SPEED
-	 * @final
-	 * @type {Number}
-	 */
-	var FADE_SPEED = 550;
-	/**
 	 * miliseconds to slide in/out sidebar (help) panel
 	 * @property SLIDE_SPEED
 	 * @final
@@ -116,9 +109,11 @@ ugsEditorPlus.resize = (function(){
 		$('html').addClass('aceEditorActive');
 		$('.overlay').fadeOut(300);
 
+
 		if (editor !== null) {
 			// editor has already been initialized, safe to continue
 			copySongToAce();
+      showHelp(true);
 			return;
 		}
 
@@ -138,11 +133,12 @@ ugsEditorPlus.resize = (function(){
 
 				$help.html(ugsAce.helpHtml);
 
+        showHelp(true);
 			});
 	};
 
 	var copySongToAce = function() {
-		$aceLayer.fadeIn(FADE_SPEED);
+		$aceLayer.show();
 		editor.setValue($('#chordProSource').val());
 		editor.gotoLine(1);
 		$help.fadeIn(1);
@@ -158,7 +154,7 @@ ugsEditorPlus.resize = (function(){
 		isBig = false;
 
 		$dlg.show();
-		$aceLayer.fadeOut(FADE_SPEED);
+		$aceLayer.hide();
 		$help.fadeOut(FADE_SPEED);
 		if (editor !== null) {
 			$('#chordProSource').val(editor.getValue());
