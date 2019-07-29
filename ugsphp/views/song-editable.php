@@ -47,7 +47,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 	</hgroup>
 	<div>
 		<a title="close this" href="#close" class="closeBtn">Close</a>
-		<a title="switch to fullscreen editor" href="#resize" class="resizeBtn">Fullscreen</a>
+		<a title="switch to advanced editor" href="#resize" class="resizeBtn">[Switch to advanced editor...]</a>
 		<p class="btnBar">
 			<span id="messageBox" class="updateMessage">
 				<em>
