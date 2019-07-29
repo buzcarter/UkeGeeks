@@ -80,19 +80,7 @@ if (!console){
 	console = {log: function(){}};
 }
 
-/**
- * +++
- */
-if (isLegacyIe){
-	window.attachEvent('onload',function(){
-		ukeGeeks.wordpress.init(true, 0.8);
-		ukeGeeks.wordpress.run();
-	});
-}
-else{
-	(function(){
-		ukeGeeks.wordpress.init(false, 0.8);
-		ukeGeeks.wordpress.run();
-	})();
-}
-
+function(){
+  ukeGeeks.wordpress.init(false, 0.8);
+  ukeGeeks.wordpress.run();
+}();

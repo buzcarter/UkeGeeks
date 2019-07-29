@@ -25,16 +25,6 @@ var ugsEditorPlus = window.ugsEditorPlus || {};/**
  */
 ugsEditorPlus.options = {
 	/**
-	 * If true attempts compatibility for versions of Microsoft Internet Explorer prior to IE9
-	 * @example
-	 *  Allowed values: true, false
-	 * @property useLegacyIe
-	 * @type Boolean
-	 * @default false
-	 */
-	useLegacyIe: false,
-
-	/**
 	 * If true the Edit Song box is shown when the page loads; false hides it.
 	 * @example
 	 *  Allowed values: true, false
@@ -154,7 +144,8 @@ ugsEditorPlus.options = {
 	 * @default see UkeGeeks.settings
 	 */
 	commonChords: []
-};/**
+};
+/**
  * Does the work by providing "doAction" method to respond to events (does not
  * attach event handlers); Modifes some page elements -- adjust CSS classes on page,
  * runs Scriptasaurus, etc.
@@ -2257,8 +2248,6 @@ ugsEditorPlus.typeahead = function(){
 			var href = $this.parent('a').attr('href');
 			var key = href.toLowerCase();
 
-			//var html = $this.children('a').html();
-			//html = html.replace('<strong class="', '<span class="bigger ').replace('</strong>', '</span>');
       var html = $this.data('searchable');
 
 			_keysToDetailsDict[key] = {
@@ -2624,7 +2613,7 @@ ugsEditorPlus.songAmatic = (function() {
 		ukeGeeks.settings.opts.retainBrackets = !opts.hideChordEnclosures;
 		$('#songSourceDlg').toggle(opts.showEditOnLoad);
 
-		ukeGeeks.scriptasaurus.init(opts.useLegacyIe);
+		ukeGeeks.scriptasaurus.init();
 
 		ugsEditorPlus.actions.init();
 		ugsEditorPlus.topMenus.init();
@@ -2650,7 +2639,8 @@ ugsEditorPlus.songAmatic = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+/**
  * Library for an HTML5 WYSIWYG editor to build ChordPro chord define tags.
  * @module  ugsChordBuilder
  * @namespace ugsChordBuilder

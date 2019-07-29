@@ -8,16 +8,6 @@
  */
 ugsEditorPlus.options = {
 	/**
-	 * If true attempts compatibility for versions of Microsoft Internet Explorer prior to IE9
-	 * @example
-	 *  Allowed values: true, false
-	 * @property useLegacyIe
-	 * @type Boolean
-	 * @default false
-	 */
-	useLegacyIe: false,
-
-	/**
 	 * If true the Edit Song box is shown when the page loads; false hides it.
 	 * @example
 	 *  Allowed values: true, false

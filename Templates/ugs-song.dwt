@@ -5,15 +5,6 @@
 <!-- TemplateBeginEditable name="doctitle" -->
 <title>UNTITLED - ARTIST</title>
 <!-- TemplateEndEditable -->
-<script type="text/javascript">var isLegacyIe = false;</script>
-<!--[if lt IE 9]>
-<script type="text/javascript">
-isLegacyIe = true;
-document.getElementsByTagName('html')[0].className = 'ie';
-</script>
-<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<script type="text/javascript" src="../js/excanvas.js"></script>
-<![endif]-->
 <link rel="stylesheet" type="text/css" href="../css/yuiReset.css" />
 <link rel="stylesheet" type="text/css" href="../css/basic-page-layout.css" media="all" />
 <link rel="stylesheet" type="text/css" href="../css/ukeGeeks.music.css" media="all" />

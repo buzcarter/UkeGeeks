@@ -26,7 +26,7 @@ ugsEditorPlus.songAmatic = (function() {
 		ukeGeeks.settings.opts.retainBrackets = !opts.hideChordEnclosures;
 		$('#songSourceDlg').toggle(opts.showEditOnLoad);
 
-		ukeGeeks.scriptasaurus.init(opts.useLegacyIe);
+		ukeGeeks.scriptasaurus.init();
 
 		ugsEditorPlus.actions.init();
 		ugsEditorPlus.topMenus.init();

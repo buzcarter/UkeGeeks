@@ -12,21 +12,8 @@ function checkUrlOpts(){
 	ukeGeeks.settings.inlineDiagrams = true;
 }
 
-/**
- * Here we've added a call to checkUrlOpts in what's otherwise a 
- * very "standard" way to run Scriptasaurus.
- */
-if (isLegacyIe){
-	window.attachEvent('onload',function(){
-		checkUrlOpts();
-		ukeGeeks.scriptasaurus.init(true);
-		ukeGeeks.scriptasaurus.run();
-	});
-}
-else{
-	(function(){
-		checkUrlOpts();
-		ukeGeeks.scriptasaurus.init(false);
-		ukeGeeks.scriptasaurus.run();
-	})();
-}
+function(){
+  checkUrlOpts();
+  ukeGeeks.scriptasaurus.init(false);
+  ukeGeeks.scriptasaurus.run();
+}();

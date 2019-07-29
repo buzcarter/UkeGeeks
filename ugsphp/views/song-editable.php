@@ -12,13 +12,6 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <head>
 <meta charset="utf-8" />
 <title><?php echo($model->PageTitle); ?> | <?php echo Config::SongbookHeadline?></title>
-<script type="text/javascript">var isLegacyIe = false;</script>
-<!--[if lt IE 9]>
-<script type="text/javascript">isLegacyIe = true;document.getElementsByTagName('html')[0].className='legacyIe';</script>
-<script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<script type="text/javascript" src="//explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>
-<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.legacyIe.css" />
-<![endif]-->
 <link href='https://fonts.googleapis.com/css?family=Peralta|Smokum|Cherry+Cream+Soda|Ranchers|Creepster|Lobster|Permanent+Marker|Architects+Daughter|Bree+Serif' rel='stylesheet' type='text/css' />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/yuiReset.css" />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/basic-page-layout.css" />
@@ -306,7 +299,6 @@ if (ugs_settings && ugs_settings.invalidJson){
 <script type="text/javascript">
 $(function() {
 	var ugs_settings = window.ugs_settings || {};
-	ugs_settings.useLegacyIe = isLegacyIe;
 	ugsEditorPlus.songAmatic.init(ugs_settings);
 
 <?php if ($model->IsUpdateAllowed) {

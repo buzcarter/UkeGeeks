@@ -4,15 +4,6 @@
 <meta charset="utf-8" />
 <title><?php echo($model->PageTitle); ?> </title>
 <meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
-<script type="text/javascript">var isLegacyIe = false;</script>
-<!--[if lt IE 9]>
-<script type="text/javascript">
-isLegacyIe = true;
-document.getElementsByTagName('html')[0].className = 'ie';
-</script>
-<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>/js/excanvas.js"></script>
-<![endif]-->
 <link rel="stylesheet" type="text/css" href="<?php echo($model->StaticsPrefix); ?>/css/yuiReset.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo($model->StaticsPrefix); ?>/css/basic-page-layout.css" media="all" />
 <link rel="stylesheet" type="text/css" href="<?php echo($model->StaticsPrefix); ?>/css/ukeGeeks.music.css" media="all" />
