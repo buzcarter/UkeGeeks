@@ -1002,6 +1002,43 @@ html .reformatDlg textarea {
 .theme-western .scalablePrintArea {
 	color: #88410a;
 }
+.theme-jellyMono pre {
+	color: inherit;
+}
+.theme-jellyMono .scalablePrintArea {
+	color: #56a0a5;
+	font-family: monospace, sans-serif;
+}
+.theme-jellyMono .scalablePrintArea hgroup {
+	color: #ff9417;
+	text-align: center;
+}
+.theme-jellyMono .scalablePrintArea h1 {
+	color: #d20770;
+	font-family: 'peralta', sans-serif;
+	font-size: 2em;
+	text-shadow: 0.03125em 0.0625em 0 #fff, 0.09375em 0.125em 0 #f2e660;
+}
+.theme-jellyMono .scalablePrintArea h2 {
+	font-size: 1.1em;
+}
+.theme-jellyMono .scalablePrintArea h5, .theme-jellyMono .scalablePrintArea h6 {
+	border-left-color: #f2e660;
+	color: #9c55ed;
+	font-family: inherit;
+	letter-spacing: 0.045em;
+}
+.theme-jellyMono .ugsChorus {
+	border-left-color: #f2e660;
+	border-radius: 5px 0 0 5px;
+}
+.theme-jellyMono .ugsChords code {
+	color: #333;
+}
+.theme-jellyMono .ugsChords code em {
+	color: #d20070;
+  font-family: monospace;
+}
 .theme-western .scalablePrintArea hgroup {
 	color: #88410a;
 	font-family: 'Smokum', Arial, sans-serif;

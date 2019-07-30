@@ -91,6 +91,24 @@ ugsEditorPlus.themes = (function() {
 			}
 		},
 
+		'jellyMono': {
+			name: 'Jelly Mono',
+			selectText: 'Jelly Mono (vibrant)',
+			description: 'Sugary, vibrant bowl of jelly beans (monospace font version)!',
+			song: {
+				fretLines: '#49BC45',
+				dots: '#FF9417',
+				dotText: '#FCF49F',
+				text: '#D20070',
+				fretText: '#4a4a4a'
+			},
+			tabs: {
+				lines: '#6699FF',
+				dots: '#FFF9BA',
+				text: '#75003E'
+			}
+		},
+
 		'justBlack': {
 			name: 'Just Black',
 			selectText: 'Black (for laser printers)',

@@ -860,6 +860,24 @@ ugsEditorPlus.themes = (function() {
 			}
 		},
 
+		'jellyMono': {
+			name: 'Jelly Mono',
+			selectText: 'Jelly Mono (vibrant)',
+			description: 'Sugary, vibrant bowl of jelly beans (monospace font version)!',
+			song: {
+				fretLines: '#49BC45',
+				dots: '#FF9417',
+				dotText: '#FCF49F',
+				text: '#D20070',
+				fretText: '#4a4a4a'
+			},
+			tabs: {
+				lines: '#6699FF',
+				dots: '#FFF9BA',
+				text: '#75003E'
+			}
+		},
+
 		'justBlack': {
 			name: 'Just Black',
 			selectText: 'Black (for laser printers)',
@@ -1030,7 +1048,8 @@ ugsEditorPlus.themes = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+/**
  * UI mechanics of the Other Options "dialog"'s checkboxes and input
  * fields (does NOT manage "pageWidth" since its standard submenu behavior
  * is already handled in that class)
@@ -2361,13 +2380,6 @@ ugsEditorPlus.resize = (function(){
 	var editor = null;
 
 	/**
-	 * miliseconds to fade in/out editor
-	 * @property FADE_SPEED
-	 * @final
-	 * @type {Number}
-	 */
-	var FADE_SPEED = 150;
-	/**
 	 * miliseconds to slide in/out sidebar (help) panel
 	 * @property SLIDE_SPEED
 	 * @final
@@ -2489,7 +2501,6 @@ ugsEditorPlus.resize = (function(){
 	};
 
 	var copySongToAce = function() {
-		//$aceLayer.fadeIn(FADE_SPEED);
 		$aceLayer.show();
 		editor.setValue($('#chordProSource').val());
 		editor.gotoLine(1);
@@ -2506,7 +2517,6 @@ ugsEditorPlus.resize = (function(){
 		isBig = false;
 
 		$dlg.show();
-		//$aceLayer.fadeOut(FADE_SPEED);
 		$aceLayer.hide();
 		$help.fadeOut(FADE_SPEED);
 		if (editor !== null) {
