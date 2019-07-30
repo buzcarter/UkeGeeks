@@ -299,17 +299,22 @@ if (ugs_settings && ugs_settings.invalidJson){
 }
 </script>
 <script type="text/javascript">
-$(function() {
+$(function()
+{
 	var ugs_settings = window.ugs_settings || {};
 	ugsEditorPlus.songAmatic.init(ugs_settings);
 
-<?php if ($model->IsUpdateAllowed) {
-	?>
-	ugsEditorPlus.updateSong.init("<?php echo($model->UpdateAjaxUri); ?>", "<?php echo($model->Id); ?>");
-	ugsEditorPlus.deleteSong.init("<?php echo($model->DeleteAjaxUri); ?>", "<?php echo($model->Id); ?>");
-	<?php
-	}
-?>
+  <?php if ($model->IsUpdateAllowed) {
+    ?>
+    ugsEditorPlus.updateSong.init("<?php echo($model->UpdateAjaxUri); ?>", "<?php echo($model->Id); ?>");
+    ugsEditorPlus.deleteSong.init("<?php echo($model->DeleteAjaxUri); ?>", "<?php echo($model->Id); ?>");
+    <?php
+    }
+  ?>
+
+// EXTREMELY IMPORTANT !
+// Init the chord container height for it to match the height of the chords canvas
+$('#ukeChordsCanvasWrapper').height($('#ukeChordsCanvas').height());
 
 // Sticky chords at the top
 $(window).scroll(function(e)
