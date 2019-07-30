@@ -31,7 +31,9 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 	</header>
 	<div class="metaInfo" id="songMeta"> </div>
 	<article id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
-		<aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped"></aside>
+    <div id="ukeChordsCanvasWrapper">
+      <aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped"></aside>
+    </div>
 		<article id="ukeSongText" class="ugs-source-wrap">
 			<pre><?php echo($model->Body); ?></pre>
 		</article>
@@ -308,6 +310,25 @@ $(function() {
 	<?php
 	}
 ?>
+
+// Sticky chords at the top
+$(window).scroll(function(e)
+{ 
+  var $chords = $('#ukeChordsCanvas'); 
+  var thresold = $chords.height() + 100;
+
+  if ($(this).scrollTop() > thresold && !$chords.hasClass('chordsAlwaysOnTop'))
+  { 
+    $chords.addClass('chordsAlwaysOnTop'); 
+  }
+
+  if ($(this).scrollTop() < thresold && $chords.hasClass('chordsAlwaysOnTop'))
+  {
+    $chords.removeClass('chordsAlwaysOnTop'); 
+  } 
+});
+
+
 });
 </script>
 </body>

@@ -12,14 +12,15 @@ UkeGeeks is a songbook editor for ukulele made by [Buz Carter](http://pizzabythe
 
 #### Major features/changes
 
+- Chords now **stay on top** when **scrolling** a song
 - Added a **DELETE SONG** button to the EDITOR
 - Added a **SONGBOOK** button when viewing a song (to go back)
 - **Sorted the song list** by artist and song name + layout change for better search
-- Removed legacy browser support
-- Added some missing chords
+- Removed **legacy browser** support
 
 #### Improvements, small fixes, QoL changes
 
+- Added some missing chords
 - Non-intrusive popup on missing chords
 - Various pseudo-security fixes (.gitignore, separate config file, preventing some things to READ only users, ...)
 - Switched some calls to HTTPS
