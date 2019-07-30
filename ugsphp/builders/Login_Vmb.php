@@ -12,7 +12,7 @@ class Login_Vmb extends _base_Vmb {
 	 */
 	public function Build($login = null) {
 		$viewModel = new Login_Vm();
-		$viewModel->PageTitle = 'Login Required';
+		$viewModel->PageTitle = Lang::Get('login_page_title');
 
 		if (isset($_REQUEST['username'])){
 			$login = $login == null ? new SimpleLogin : $login;

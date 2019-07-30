@@ -12,7 +12,7 @@ class RebuildSongCache_Vmb extends _base_Vmb {
 	public function Build() {
     if(!$this->SiteUser->IsAuthenticated || !$this->SiteUser->MayEdit)
     {
-      die('Reindex Forbidden !');
+      die(Lang::Get('reindex_forbid'));
     }
 
 		$timestart = microtime(true);

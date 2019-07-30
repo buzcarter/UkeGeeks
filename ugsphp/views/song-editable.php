@@ -45,11 +45,11 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <!-- EDIT SONG (DIALOG) -->
 <section id="songSourceDlg" class="overlay <?php echo($editDlgCssClassName); ?>">
 	<hgroup>
-		<h3>Edit Song</h3>
+		<h3><?php echo Lang::Get('edit_song'); ?></h3>
 	</hgroup>
 	<div>
-		<a title="close this" href="#close" class="closeBtn">Close</a>
-		<a title="switch to advanced editor" href="#resize" class="resizeBtn">[Switch to advanced editor...]</a>
+		<a title="<?php echo Lang::Get('close');?>" href="#close" class="closeBtn"><?php echo Lang::Get('close');?></a>
+		<a title="<?php echo Lang::Get('switch_adv_editor_desc')?>" href="#resize" class="resizeBtn">[<?php echo Lang::Get('switch_adv_editor'); ?>]</a>
 		<p class="btnBar">
 			<span id="messageBox" class="updateMessage">
 				<em>
@@ -57,12 +57,12 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 					<span id="sourceFeedback"></span>
 				</em>
 			</span>
-			<input type="button" id="updateBtn" class="baseBtn blueBtn" value="Update" title="Rebuild digarams and music" />
+			<input type="button" id="updateBtn" class="baseBtn blueBtn" value="<?php echo Lang::Get('update');?>" title="<?php echo Lang::Get('update_descr');?>" />
 			<?php if ($model->IsUpdateAllowed) { ?>
-				<input type="button" id="saveBtn" class="baseBtn orange" value="Save" title="Save" style="margin-right:1.6em;" />
-				<input type="button" id="deleteBtn" class="baseBtn red" value="Delete" title="Delete" style="margin-right:1.6em;" />
+				<input type="button" id="saveBtn" class="baseBtn orange" value="<?php echo Lang::Get('save');?>" title="<?php echo Lang::Get('save');?>" style="margin-right:1.6em;" />
+				<input type="button" id="deleteBtn" class="baseBtn red" value="<?php echo Lang::Get('delete');?>" title="<?php echo Lang::Get('delete');?>" style="margin-right:1.6em;" />
 			<?php } ?>
-			<a href="#chordBuilder" id="cdBldOpenBtn" data-dialog="cdBldDlg" class="alternateBtn" title="Add custom &amp; alternate chord diagrams">Chord Builder</a>
+			<a href="#chordBuilder" id="cdBldOpenBtn" data-dialog="cdBldDlg" class="alternateBtn" title="<?php echo Lang::Get('chord_builder_desc')?>"><?php echo Lang::Get('chord_builder')?></a>
 		</p>
 		<textarea id="chordProSource" wrap="off"><?php echo($model->Body); ?></textarea>
 	</div>
@@ -70,14 +70,13 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <!-- APP TOOLBAR -->
 <section id="ugsAppToolbar" class="ugsAppMenuBar">
 	<ul>
-		<li class="navHome"> <a href="/" title="Go back to the songbook"><span></span>Songbook</a> </li>
-		<li class="navEdit" data-dialog="songSourceDlg"> <a href="#songSourceDlg" title="View &amp; edit the song source"><span></span>Edit</a> </li>
-		<li class="navLayout showOptionsBox"> <a href="#layoutOptions" title="Resize fonts &amp; chord diagrams. Customize layout &amp; colors."><span></span>Appearance</a></li>
-		<li class="navInstruments showOptionsBox"> <a href="#tuningOptions" title="Transpose song's key &amp; choose your prefered ukulele tuning"><span></span>Transpose</a></li>
-		<li class="navOptions showOptionsBox"> <a href="#optionsDlg" title="Advanced options &amp; settings"><span></span>Options</a> </li>
-		<li class="showDlgBtn showOptionsBox"> <a href="#helpDlg" title="Help &amp; Quick tips on formatting your song">?</a> </li>
+		<li class="navHome"> <a href="/" title="<?php echo Lang::Get('tb_songbook_desc')?>"><span></span><?php echo Lang::Get('tb_songbook')?></a> </li>
+		<li class="navEdit" data-dialog="songSourceDlg"> <a href="#songSourceDlg" title="<?php echo Lang::Get('tb_edit_descr')?>"><span></span><?php echo Lang::Get('tb_edit')?></a> </li>
+		<li class="navLayout showOptionsBox"> <a href="#layoutOptions" title="<?php echo Lang::Get('tb_layout_descr')?>"><span></span><?php echo Lang::Get('tb_layout')?></a></li>
+		<li class="navInstruments showOptionsBox"> <a href="#tuningOptions" title="<?php echo Lang::Get('tb_tuning_descr')?>"><span></span><?php echo Lang::Get('tb_tuning')?></a></li>
+		<li class="navOptions showOptionsBox"> <a href="#optionsDlg" title="<?php echo Lang::Get('tb_options_descr')?>"><span></span><?php echo Lang::Get('tb_options')?></a> </li>
+		<li class="showDlgBtn showOptionsBox"> <a href="#helpDlg" title="<?php echo Lang::Get('tb_help_descr')?>">?</a> </li>
 	</ul>
-	<h2 class="ugsLogo">Uke Geeks Song-a-Matic</h2>
 </section>
 <!-- LAYOUT OPTIONS -->
 <aside class="arrowBox layoutOptions" id="layoutOptions">
@@ -183,20 +182,20 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 	<fieldset class="arrowBoxContent">
 		<p class="checkboxBlock">
 			<input type="checkbox" value="true" id="chkEnclosures" checked="checked" />
-			<label for="chkEnclosures">Hide chord enclosures
-				<span class="checkBoxFinePrint">don't put [brackets] around chord names</span>
+			<label for="chkEnclosures"><?php echo Lang::Get('hide_chord_enclosure')?>
+				<span class="checkBoxFinePrint"><?php echo Lang::Get('hide_chord_enclosure_desc')?></span>
 			</label>
 		</p>
 		<p class="checkboxBlock">
 			<input type="checkbox" value="true" id="chkSortAlpha" checked="checked" />
-			<label for="chkSortAlpha">Sort reference diagrams alphabetically
-				<span class="checkBoxFinePrint">otherwise &ldquo;song order&rdquo; is used</span>
+			<label for="chkSortAlpha"><?php echo Lang::Get('sort_ref_diagram_alpha')?>
+				<span class="checkBoxFinePrint"><?php echo Lang::Get('sort_ref_diagram_alpha_desc')?></span>
 			</label>
 		</p>
 		<p class="checkboxBlock">
 			<input type="checkbox" value="true" id="chkIgnoreCommon" checked="checked" />
-			<label for="chkIgnoreCommon">Ignore common chords
-				<span class="checkBoxFinePrint">don't create master chord diagrams for these chords:</span>
+			<label for="chkIgnoreCommon"><?php echo Lang::Get('ignore_common_chords')?>
+				<span class="checkBoxFinePrint"><?php echo Lang::Get('ignore_common_chords_desc')?></span>
 			</label>
 			<input type="text" id="commonChordList" value="" />
 		</p>
@@ -219,51 +218,49 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <!-- REFORMAT (DIALOG) -->
 <section id="reformatDlg" class="reformatDlg overlay isHidden">
 	<hgroup>
-		<h3>Use Auto-Formated Version?</h3>
+		<h3><?php echo Lang::Get('use_auto_format')?></h3>
 	</hgroup>
 	<div>
-		<!-- <a title="resize this" href="#resize" class="resizeBtn">Resize</a> -->
-		<p class="instructions">Whoa! I didn't find any chords in your song -- it's probably not in ChordPro format. Here's the converted version&hellip;</p>
+		<p class="instructions"><?php echo Lang::Get('chords_not_found')?></p>
 		<p class="btnBar">
-			<input type="button" id="reformatYesBtn" class="baseBtn blueBtn" value="OK, Use This!" />
-			<a id="reformatNoBtn" href="#noThanks" class="noThanks">No, Thanks!</a>
+			<input type="button" id="reformatYesBtn" class="baseBtn blueBtn" value="<?php echo Lang::Get('ok_use_this')?>" />
+			<a id="reformatNoBtn" href="#noThanks" class="noThanks"><?php echo Lang::Get('no_thanks')?></a>
 		</p>
 		<textarea id="reformatSource" wrap="off"></textarea>
-		<p class="instructions small">Want to make more adjustments? Click &ldquo;No Thanks&rdquo; and try the <a href="http://ukegeeks.com/tools" target="_blank" title="open the reformat tool in a new window">Reformater Tool</a> instead.</p>
-		<p class="instructions small"><input type="checkbox" value="true" id="reformatDisable" /> <label for="reformatDisable">Don't perform this check again.</label></p>
+		<p class="instructions small"><input type="checkbox" value="true" id="reformatDisable" /> <label for="reformatDisable"><?php echo Lang::Get('no_chord_check_again')?></label></p>
 	</div>
 </section>
 
 <!-- CHORD BUILDER (DIALOG) -->
 <section id="cdBldDlg" class="overlay chordBuilderDlg isHidden chordBuilderNarrow">
 	<hgroup>
-		<h3>Chord Builder</h3>
+		<h3><?php echo Lang::Get('chord_builder')?></h3>
 	</hgroup>
 	<div>
-		<a title="close this" href="#close" class="closeBtn">Close</a>
+		<a title="close this" href="#close" class="closeBtn"><?php echo Lang::Get('close')?></a>
 		<div id="cdBldChooserPanel">
 			<ul id="cdBldPick" class="ugsChordChooser"></ul>
 		</div>
 		<div id="cdBldBuilderPanel" style="display:none">
 			<p class="">
-				<label for="cdBldChordName">Chord Name: <input class="chordName" type="text" id="cdBldChordName" value="CHORDNAME" /></label>
+				<label for="cdBldChordName"><?php echo Lang::Get('chord_name')?> <input class="chordName" type="text" id="cdBldChordName" value="XXXXXXX" /></label>
 			</p>
 			<div class="editorSurface" id="cdBldEditorSurface">
 				<div class="toolboxEdgeShadow leftEdge"></div>
 				<div id="cdBldToolbox" class="chordToolbox leftEdge">
 					<div class="chordToolboxInner">
-						<a href="#dots" id="cdBldDotsBtn" class="toolChip selected">Add Dots <span class="bigDot"></span></a>
-						<a href="#fingers" id="cdBldFingersBtn" class="toolChip">Set Fingers <span id="cdBldBtnDiagram" class="fingerToolImage finger1"><span class="fingerDot"></span></span><span id="cdBldBtnFingerName"></span></a>
+						<a href="#dots" id="cdBldDotsBtn" class="toolChip selected"><?php echo Lang::Get('add_dot')?><span class="bigDot"></span></a>
+						<a href="#fingers" id="cdBldFingersBtn" class="toolChip"><?php echo Lang::Get('choose_finger')?> <span id="cdBldBtnDiagram" class="fingerToolImage finger1"><span class="fingerDot"></span></span><span id="cdBldBtnFingerName"></span></a>
 					</div>
 				</div>
 				<div class="toolboxEdgeShadow rightEdge"></div>
 				<div class="chordToolbox rightEdge">
 					<div class="chordToolboxInner">
-						<label for="cdBldStartingFret" class="toolChip">Starting Fret
+						<label for="cdBldStartingFret" class="toolChip"><?php echo Lang::Get('starting_fret')?>
 							<select id="cdBldStartingFret"></select>
 						</label>
-						<a href="#slide-up" id="toolboxSlideUpBtn" class="toolChip arrowUp" data-direction="up" title="move all dots -1 fret">Slide Up</a>
-						<a href="#slide-down" id="toolboxSlideDownBtn" class="toolChip arrowDown" data-direction="down" title="move all dots +1 fret">Slide Down</a>
+						<a href="#slide-up" id="toolboxSlideUpBtn" class="toolChip arrowUp" data-direction="up" title="move all dots -1 fret"><?php echo Lang::Get('slide_up')?></a>
+						<a href="#slide-down" id="toolboxSlideDownBtn" class="toolChip arrowDown" data-direction="down" title="move all dots +1 fret"><?php echo Lang::Get('slide_down')?></a>
 					</div>
 				</div>
 				<canvas id="cdBldCursorCanvas" width="462" height="300"></canvas>
@@ -271,11 +268,11 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			</div>
 
 			<p class="">
-				<label for="cdBldShowOutputBtn"><input id="cdBldShowOutputBtn" type="checkbox" value="0" /> Show ChordPro output</label>
+				<label for="cdBldShowOutputBtn"><input id="cdBldShowOutputBtn" type="checkbox" value="0" /><?php echo Lang::Get('show_chordpro_output')?></label>
 			</p>
 			<p class="btnBar">
-				<input type="button" value="Add" class="baseBtn blueBtn" id="cdBldSaveBtn">
-				<a href="#closeBuilder" id="cdBldCancelBtn" class="noThanks">Cancel</a>
+				<input type="button" value="<?php echo Lang::Get('add')?>" class="baseBtn blueBtn" id="cdBldSaveBtn">
+				<a href="#closeBuilder" id="cdBldCancelBtn" class="noThanks"><?php echo Lang::Get('cancel')?></a>
 			</p>
 			<div id="cdBldOutputBox" class="outputBox collapseOutput" style="clear:right;">
 				<pre id="cdBldOutput" class="chordPro-statement" title="Your ChordPro define tag"></pre>

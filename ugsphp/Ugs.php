@@ -189,6 +189,7 @@ class Ugs{
 			}
 		}
 
+    Lang::Init();
 	}
 
 	/**

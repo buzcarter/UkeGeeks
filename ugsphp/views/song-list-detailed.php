@@ -1,11 +1,5 @@
 <?php
 
-function SayHello(){
-	$greetings = array('Aloha', 'Bonjour', 'Ciao', 'Greetin\'s', 'Guten Tag', 'Hallo', '¡Hola', 'Howdy', 'Hej', 'Konnichiwa', 'Mabuhay', 'Nǐ hǎo', 'Whassup', 'Yo');
-	return $greetings[rand(0, count($greetings) - 1)];
-}
-
-
 // Sort by ARTIST and then by TITLE
 function strCompareArtist($obj1, $obj2)
 { 
@@ -67,12 +61,12 @@ function BuildSongList($SongList)
 	<section class="contentWrap">
 		<?php if ($model->SiteUser->IsAuthenticated) { ?>
 			<aside class='SongListAside'>
-				<em style="font-size:.8em; padding-right:1.5em; color:#BCB59C;"><?php echo(SayHello() . ', '. $model->SiteUser->DisplayName); ?>!
-					(<a href="<?php echo($model->LogoutUri); ?>">Logout</a>)
+				<em style="font-size:.8em; padding-right:1.5em; color:#BCB59C;"><?php echo Lang::Get('hello').', '. $model->SiteUser->DisplayName; ?> !
+					(<a href="<?php echo($model->LogoutUri); ?>"><?php echo Lang::Get('logout')?></a>)
 				</em>
 				<?php if ($model->IsNewAllowed) {
 					?>
-					<input type="button" id="openNewDlgBtn" class="baseBtn blueBtn" value="New Song" title="Start editing a new song" />
+					<input type="button" id="openNewDlgBtn" class="baseBtn blueBtn" value="<?php echo Lang::Get('new_song')?>" title="<?php echo Lang::Get('new_song_descr')?>" />
 					<?php
 				}
 				?>
@@ -83,14 +77,14 @@ function BuildSongList($SongList)
     <h1><?php echo($model->Headline); ?></h1>
   </div>
 	<div>
-		<input class="quickSearch" id="quickSearch" autocomplete="off" type="text" placeholder="Enter Artist or Song Title" />
+		<input class="quickSearch" id="quickSearch" autocomplete="off" type="text" placeholder="<?php echo Lang::Get('search_bar_placeholder')?>" />
   </div>
 	<div class="songList">
 		<?php
       BuildSongList($model->SongList);
 		?>
 	</div>
-  <footer class='SongListFooter'>Powered by <a href='https://github.com/bloodybowlers/UkeGeeks-ng' target=_blank><?php echo $model->PoweredBy?></a></footer>
+  <footer class='SongListFooter'><?php echo Lang::Get('poweredby')?> <a href='https://github.com/bloodybowlers/UkeGeeks-ng' target=_blank><?php echo $model->PoweredBy?></a></footer>
 	</section>
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.merged.js"></script>
@@ -98,16 +92,16 @@ function BuildSongList($SongList)
 		?>
 		<section class="overlay" style="top:100px; right:40%; display:none;" id="newSongForm">
 			<hgroup>
-				<h3>Add Song</h3>
+				<h3><?php echo Lang::Get('new_song')?></h3>
 			</hgroup>
-			<div><a title="close this" href="#close" id="hideNewSongBtn" class="closeBtn">Close</a>
-				<p id="loadingSpinner"><img src="<?php echo($model->StaticsPrefix); ?>img/editor/busy.gif" /> Saving&hellip;</p>
+			<div><a title="<?php echo Lang::Get('close');?>" href="#close" id="hideNewSongBtn" class="closeBtn"><?php echo Lang::Get('close');?></a>
+				<p id="loadingSpinner"><img src="<?php echo($model->StaticsPrefix); ?>img/editor/busy.gif" /> <?php echo Lang::Get('saving')?>&hellip;</p>
 				<p class="errorMessage" style="display:none;"></p>
-				<label for="songTitle">Title</label>
+				<label for="songTitle"><?php echo Lang::Get('title');?></label>
 				<input type="text" name="songTitle" id="songTitle" value="" />
-				<label for="songArtist">Artist</label>
+				<label for="songArtist"><?php echo Lang::Get('artist');?></label>
 				<input type="text" name="songArtist" id="songArtist" value="" />
-				<input type="button" id="newSongBtn" class="baseBtn blueBtn" value="Continue" title="Save &amp; continue editing" />
+				<input type="button" id="newSongBtn" class="baseBtn blueBtn" value="<?php echo Lang::Get('continue');?>" title="<?php echo Lang::Get('continue_new_song');?>" />
 			</div>
 		</section>
 		<script type="text/javascript">

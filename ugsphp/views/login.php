@@ -18,26 +18,26 @@ $errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
 </section>
 <section class="overlay">
 	<hgroup>
-		<h3>Login</h3>
+		<h3><?php echo Lang::Get('login');?></h3>
 	</hgroup>
 	<div>
 	<form method="post" action="<?php echo($model->FormPostUri); ?>" id="loginForm">
 		<p class="errorMessage" id="loginErrorMessage" style="display: <?php echo($errCssstyle); ?>"><?php echo($model->ErrorMessage); ?></p>
 		<ul>
 			<li>
-				<label for="username">Username</label>
+				<label for="username"><?php echo Lang::Get('username');?></label>
 				<input type="text" name="username" id="username" size="20" value="<?php echo($model->Username); ?>" />
 			</li>
 			<li>
-				<label for="password">Password</label>
+				<label for="password"><?php echo Lang::Get('password');?></label>
 				<input type="password" name="password" id="password" size="20" />
 			</li>
 			<li class="btnBar">
-				<input type="submit" value="Login" name="loginBtn" class="baseBtn blueBtn" />
+				<input type="submit" value="<?php echo Lang::Get('login');?>" name="loginBtn" class="baseBtn blueBtn" />
 			</li>
 		</ul>
     <?php if(Config::ShowSupportEmail) {?>
-		<p class="help">Problems or you need access? <a href="mailto:<?php echo($model->SupportEmail); ?>?subject=I humbly beseech thee, songbook access, please...">Drop a line.</a></p>
+		<p class="help"><?php echo Lang::Get('login_need_access');?> <a href="mailto:<?php echo($model->SupportEmail); ?>?subject=UkeGeeks"><?php echo Lang::Get('send_email_btn');?></a></p>
     <?}?>
 	</form>
 </div>
@@ -70,7 +70,7 @@ ugsLogin = (function(){
 		var ok = (document.getElementById('username').value.length >= 3) && (document.getElementById('password').value.length >= 3);
 		var err = document.getElementById('loginErrorMessage');
 		if (!ok){
-			err.innerHTML = 'Check your username & password';
+			err.innerHTML = '<?php echo Lang::Get('check_username_password');?>.';
 			readyForm();
 		}
 		err.style.display = ok ? 'none' : 'block';

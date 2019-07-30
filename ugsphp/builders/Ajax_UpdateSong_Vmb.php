@@ -32,7 +32,7 @@ class Ajax_UpdateSong_Vmb extends _base_Vmb {
 		file_put_contents($fullFilePath, $song);
 
 		$viewModel->HasErrors = false;
-		$viewModel->Message = 'Success!';
+		$viewModel->Message = Lang::Get('success');
 
 		return $viewModel;
 	}
