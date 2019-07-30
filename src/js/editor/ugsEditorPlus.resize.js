@@ -155,7 +155,7 @@ ugsEditorPlus.resize = (function(){
 
 		$dlg.show();
 		$aceLayer.hide();
-		$help.fadeOut(FADE_SPEED);
+		$help.hide();
 		if (editor !== null) {
 			$('#chordProSource').val(editor.getValue());
 		}
