@@ -303,3 +303,7 @@
   height: 120px;
 }
 
+#songSourceDlg {
+  z-index: 6;
+}
+
