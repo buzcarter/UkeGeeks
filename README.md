@@ -1,32 +1,46 @@
 # UkeGeeks-ng
 
-An attempt at an *enhanced/updated/modified/edited_to_fits_my_needs* version of UkeGeeks (since the original doesn't seems to accept pull request since early 2015).
+![Ukegeeks-ng](./img/screenshot.png)
 
-#### What's changed so far :
+This fork is an attempt at an *enhanced/updated/modified/edited_to_fits_my_needs* version of UkeGeeks (since the original doesn't seems to accept pull request since early 2015).
+
+### What's changed so far :
+
+#### Major features/changes
 
 - Added a **DELETE SONG** button to the EDITOR
 - Added a **SONGBOOK** button when viewing a song (to go back)
 - **Sorted the song list** by artist and song name + layout change for better search
-
-  
-
-- Added some missing chords
 - Removed legacy browser support
+- Added some missing chords
 
-  
+#### Improvements, small fixes, QoL changes
 
 - Non-intrusive popup on missing chords
 - Various pseudo-security fixes (.gitignore, separate config file, preventing some things to READ only users, ...)
 - Switched some calls to HTTPS
 - Removed useless SOPRANO tuning references on each pages
 - Login page cleanup + ability to hide email
+- Made the advanced editor link more obvious + help displayed on startup
 
-#### What's planned ?
+### What's planned ?
 
-A lot. Read the issue tracking on github with the label "enhancement".
-Some features will be hard to implement with the actual code imho, but I'll try anyway without starting from scratch.
+A lot. Read the issue tracking on github with the label "feature request".  
+Some features will be hard to implement with the actual code imho, but I'll try anyway without starting from scratch.  
+I have only a limited time to work on the project...
 _______________________________________
 _______________________________________
+_______________________________________
+_______________________________________
+_______________________________________
+_______________________________________
+_______________________________________
+_______________________________________
+_______________________________________
+
+## Below documentation is from the original repo
+
+**May not be up to date with the current fork...! **
 
 ## UkeGeeks Scriptasaurus
 
