@@ -18,13 +18,11 @@ ukeGeeks.scriptasaurus = (function() {
 	/**
 	 * Preps this class for running
 	 * @method init
-	 * @param isIeFamily {bool} TRUE if UserAgent (Browser to you and me) is Internet Explorer
 	 * @return {void}
 	 */
-	_public.init = function(isIeFamily) {
+	_public.init = function() {
 		var defs = ukeGeeks.definitions;
 
-		ukeGeeks.settings.environment.isIe = isIeFamily;
 		// TODO: known problem -- need to preload Sorprano chord libarary then we can retune if needed
 		defs.addInstrument(defs.sopranoUkuleleGcea);
 		defs.useInstrument(defs.instrument.sopranoUke);

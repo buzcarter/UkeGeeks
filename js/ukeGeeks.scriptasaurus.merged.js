@@ -462,16 +462,6 @@ ukeGeeks.settings = (function() {
 		bottomPadding: 10 // extra blank space added to bottom of diagram
 	};
 
-	// Info about runtime environment. Not really a setting.
-	_public.environment = {
-		/**
-		 * set in scriptasaurus. True if UserAgent is Internet Explorer
-		 * @property environment.isIe
-		 * @type bool
-		 */
-		isIe : false
-	};
-
 	/**
 	 * List of common chords to be "ignored" (won't show master chord diagrams)
 	 * @property commonChords
@@ -543,7 +533,8 @@ ukeGeeks.settings = (function() {
 	/* return our public interface
 	 */
 	return _public;
-}());/**
+}());
+/**
  * A container or Models library. ukegeeks.data is really a "Models" namespace. Please refactor.
  * @class data
  * @namespace ukeGeeks
@@ -1626,10 +1617,6 @@ ukeGeeks.canvasTools = (function() {
 		if (!c){
 			return null;
 		}
-		// because IE is an abomination... must init & place in DOM BEFORE doing anything else
-		if (ukeGeeks.settings.environment.isIe){
-			c = G_vmlCanvasManager.initElement(c);
-		}
 		element.appendChild(c);
 		c.width = width;
 		c.height = height;
@@ -1642,7 +1629,8 @@ ukeGeeks.canvasTools = (function() {
 	};
 
 	return _public;
-}());/**
+}());
+/**
  * First places a Canvas element within a DOM element, then draws a chord diagram on it.
  * @class chordBrush
  * @namespace ukeGeeks
@@ -3345,13 +3333,11 @@ ukeGeeks.scriptasaurus = (function() {
 	/**
 	 * Preps this class for running
 	 * @method init
-	 * @param isIeFamily {bool} TRUE if UserAgent (Browser to you and me) is Internet Explorer
 	 * @return {void}
 	 */
-	_public.init = function(isIeFamily) {
+	_public.init = function() {
 		var defs = ukeGeeks.definitions;
 
-		ukeGeeks.settings.environment.isIe = isIeFamily;
 		// TODO: known problem -- need to preload Sorprano chord libarary then we can retune if needed
 		defs.addInstrument(defs.sopranoUkuleleGcea);
 		defs.useInstrument(defs.instrument.sopranoUke);

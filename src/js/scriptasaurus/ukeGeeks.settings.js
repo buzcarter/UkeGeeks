@@ -248,16 +248,6 @@ ukeGeeks.settings = (function() {
 		bottomPadding: 10 // extra blank space added to bottom of diagram
 	};
 
-	// Info about runtime environment. Not really a setting.
-	_public.environment = {
-		/**
-		 * set in scriptasaurus. True if UserAgent is Internet Explorer
-		 * @property environment.isIe
-		 * @type bool
-		 */
-		isIe : false
-	};
-
 	/**
 	 * List of common chords to be "ignored" (won't show master chord diagrams)
 	 * @property commonChords

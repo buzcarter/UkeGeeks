@@ -64,10 +64,6 @@ ukeGeeks.canvasTools = (function() {
 		if (!c){
 			return null;
 		}
-		// because IE is an abomination... must init & place in DOM BEFORE doing anything else
-		if (ukeGeeks.settings.environment.isIe){
-			c = G_vmlCanvasManager.initElement(c);
-		}
 		element.appendChild(c);
 		c.width = width;
 		c.height = height;
