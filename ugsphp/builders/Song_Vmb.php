@@ -42,7 +42,7 @@ class Song_Vmb extends _base_Vmb {
 	 * @return string
 	 */
 	private function getSettings() {
-		$settings = FileHelper::getFile(Config::$AppDirectory . 'settings.json');
+		$settings = FileHelper::getFile(Config::$AppDirectory . 'settings.js');
 		if ($settings === null){
 			return '{}';
 		}

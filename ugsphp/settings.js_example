@@ -33,7 +33,7 @@
 	// "paper": "letter",
 
 	/* Theme shortname applied on page load.
-	 * Allowed values (text): frosty, jellyBean, justBlack, krampus, normal, notebook, pumpkin, reversed, western, zombie
+	 * Allowed values (text): frosty, jellyBean, jellyMono, justBlack, krampus, normal, notebook, pumpkin, reversed, western, zombie
 	 */
 	// "theme": "normal",
 
