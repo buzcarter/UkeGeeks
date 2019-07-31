@@ -119,5 +119,6 @@
   "baritone_tun" : "Baritone (DGBE)",
   "font_size" : "Font size",
   "steps" : "step(s)",
-  "original_transpose" : "original"
+  "original_transpose" : "original",
+  "type_your_song_here" : "TYPE_YOUR_SONG_HERE"
 }
