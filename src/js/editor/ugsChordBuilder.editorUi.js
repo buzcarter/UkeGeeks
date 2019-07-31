@@ -52,11 +52,11 @@ ugsChordBuilder.editorUi = function() {
 	 * @type {JSON}
 	 */
 	var _fingerNames = {
-		0: 'None',
-		1: 'Index finger',
-		2: 'Middle finger',
-		3: 'Ring finger',
-		4: 'Pinkie'
+		0: ugs_il8n.none,
+		1: ugs_il8n.index_finger,
+		2: ugs_il8n.middle_finger,
+		3: ugs_il8n.ring_finger,
+		4: ugs_il8n.pinkie_finger
 	};
 
 	/**
@@ -223,7 +223,7 @@ ugsChordBuilder.editorUi = function() {
 	 * @return {void}
 	 */
 	var resetInputs = function(name, startingFret, isNew) {
-		_currentName = (name && name.length > 0) ? name : 'CHORDNAME';
+		_currentName = (name && name.length > 0) ? name : ugs_il8n.chord_name;
 		document.getElementById(_ids.chordName).value = _currentName;
 
 		_startingFret = startingFret ? startingFret : 1;
@@ -232,7 +232,7 @@ ugsChordBuilder.editorUi = function() {
 		document.getElementById(_ids.showOutputBtn).checked = false;
 		setClass(document.getElementById(_ids.outputBox), 'collapseOutput', true);
 
-		document.getElementById(_ids.saveBtn).value = isNew ? 'Add' : 'Update';
+		document.getElementById(_ids.saveBtn).value = isNew ? ugs_il8n.add : ugs_il8n_update;
 	};
 
 	/**

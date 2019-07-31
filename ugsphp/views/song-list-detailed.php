@@ -86,6 +86,10 @@ function BuildSongList($SongList)
 	</div>
   <footer class='SongListFooter'><?php echo Lang::Get('poweredby')?> <a href='https://github.com/bloodybowlers/UkeGeeks-ng' target=_blank><?php echo $model->PoweredBy?></a></footer>
 	</section>
+  <script type="text/javascript">
+    // Uglyyyyyyyyyyyyyy
+    var ugs_il8n = <?php echo Lang::GetJsonData() ?>;
+  </script>
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.merged.js"></script>
 	<?php if ($model->IsNewAllowed) {

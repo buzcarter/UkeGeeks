@@ -41,7 +41,7 @@ ugsEditorPlus.resize = (function(){
 	 */
 	var setup = function(dlgElement){
 		$dlg = $(dlgElement);
-		$("body").append('<div id="aceHeader"><button class="aceSideBtn" title="Show options &amp; help"><span></span><span></span><span></span></button><strong>Edit Song</strong><a href="#exit-fullscreen">Exit fullscreen</a></div><div id="aceEditor"></div><div id="aceHelp"></div>');
+		$("body").append('<div id="aceHeader"><button class="aceSideBtn" title="' + ugs_il8n.show_option_help + '"><span></span><span></span><span></span></button><strong>' + ugs_il8n.edit_song + '</strong><a href="#exit-fullscreen">' + ugs_il8n.exit_goback + '</a></div><div id="aceEditor"></div><div id="aceHelp"></div>');
 
 		$aceLayer = $('#aceEditor');
 		$aceLayer.fadeOut(1);
@@ -130,6 +130,30 @@ ugsEditorPlus.resize = (function(){
 				});
 				editor.completers = [ugsAce.chordCompleter];
 				copySongToAce();
+
+        // Override the Ace editor help here (and translate !)
+        ugsAce.helpHtml = '<div class="aceHelp"><h3>' + ugs_il8n.keyboard_shortcuts + '</h3>'+
+          '<table><thead><tr><th>' + ugs_il8n.shortcut + '</th><th>' + ugs_il8n.action + '</th></tr></thead><tbody>'+
+          '<tr><td class="shortKeys"><code class="key">CTRL</code> + <code class="key">F</code></td><td>' + ugs_il8n.find + '</td></tr><tr>'+
+          '<td class="shortKeys"><code class="key">CTRL</code> + <code class="key">H</code></td><td>' + ugs_il8n.find_replace + '</td></tr>'+
+          '<tr><td class="shortKeys"><code class="key">' + ugs_il8n.escape + '</code></td><td>' + ugs_il8n.close_find_chord + '</td></tr>'+
+          '<tr><td class="shortKeys"><code class="key">CTRL</code> + <code class="key">' + ugs_il8n.spacebar + '</code></td>'+
+          '<td>' +ugs_il8n.list_song_chords_help + '</td></tr></tbody></table>'+
+          '<h3>Snippets</h3><p>' + ugs_il8n.snippets_help + '.</p><table><thead><tr><th>Snippet</th><th>' + ugs_il8n.chordpro_markup + '</th></tr></thead>'+
+          '<tbody><tr><td class="shortKeys"><strong>t</strong> ' + ugs_il8n.or + ' <strong>title</strong></td><td><code class="snip">{title: <em>' + ugs_il8n.title + '</em>}</code></td>'+
+          '</tr><tr><td class="shortKeys"><strong>st</strong> ' + ugs_il8n.or + ' <strong>subtitle</strong></td><td><code class="snip">{subtitle: <em>' + ugs_il8n.subtitle + '</em>}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>a</strong> ' + ugs_il8n.or +' <strong>artist</strong></td><td><code class="snip">{artist: <em>' + ugs_il8n.name + '</em>}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>al</strong> ' + ugs_il8n.or +' <strong>album</strong></td><td><code class="snip">{album: <em>' + ugs_il8n.title + '</em>}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>c</strong> ' + ugs_il8n.or +' <strong>comment</strong></td><td><code class="snip">{comment: <em>' + ugs_il8n.comment + '</em>}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>col</strong> ' + ugs_il8n.or +' <strong>column</strong></td><td><code class="snip">{column_break}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>chorus</strong></td><td>' + ugs_il8n.add_complete_chorus_block + ' <code class="snip">{start_of_chorus}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>tab</strong></td><td>' + ugs_il8n.add_complete_tab_block + ' <code class="snip">{start_of_tab}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>soc</strong></td><td><code class="snip">{start_of_chorus}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>eoc</strong></td><td><code class="snip">{end_of_chorus}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>sot</strong></td><td><code class="snip">{start_of_tab}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>eot</strong></td><td><code class="snip">{end_of_tab}</code></td></tr>'+
+          '</tbody></table>'+
+          '</p><p>'+ ugs_il8n.snip_tips + '.</p></div>';
 
 				$help.html(ugsAce.helpHtml);
 

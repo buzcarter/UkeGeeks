@@ -2404,7 +2404,7 @@ ugsEditorPlus.resize = (function(){
 	 */
 	var setup = function(dlgElement){
 		$dlg = $(dlgElement);
-		$("body").append('<div id="aceHeader"><button class="aceSideBtn" title="Show options &amp; help"><span></span><span></span><span></span></button><strong>Edit Song</strong><a href="#exit-fullscreen">Exit fullscreen</a></div><div id="aceEditor"></div><div id="aceHelp"></div>');
+		$("body").append('<div id="aceHeader"><button class="aceSideBtn" title="' + ugs_il8n.show_option_help + '"><span></span><span></span><span></span></button><strong>' + ugs_il8n.edit_song + '</strong><a href="#exit-fullscreen">' + ugs_il8n.exit_goback + '</a></div><div id="aceEditor"></div><div id="aceHelp"></div>');
 
 		$aceLayer = $('#aceEditor');
 		$aceLayer.fadeOut(1);
@@ -2493,6 +2493,30 @@ ugsEditorPlus.resize = (function(){
 				});
 				editor.completers = [ugsAce.chordCompleter];
 				copySongToAce();
+
+        // Override the Ace editor help here (and translate !)
+        ugsAce.helpHtml = '<div class="aceHelp"><h3>' + ugs_il8n.keyboard_shortcuts + '</h3>'+
+          '<table><thead><tr><th>' + ugs_il8n.shortcut + '</th><th>' + ugs_il8n.action + '</th></tr></thead><tbody>'+
+          '<tr><td class="shortKeys"><code class="key">CTRL</code> + <code class="key">F</code></td><td>' + ugs_il8n.find + '</td></tr><tr>'+
+          '<td class="shortKeys"><code class="key">CTRL</code> + <code class="key">H</code></td><td>' + ugs_il8n.find_replace + '</td></tr>'+
+          '<tr><td class="shortKeys"><code class="key">' + ugs_il8n.escape + '</code></td><td>' + ugs_il8n.close_find_chord + '</td></tr>'+
+          '<tr><td class="shortKeys"><code class="key">CTRL</code> + <code class="key">' + ugs_il8n.spacebar + '</code></td>'+
+          '<td>' +ugs_il8n.list_song_chords_help + '</td></tr></tbody></table>'+
+          '<h3>Snippets</h3><p>' + ugs_il8n.snippets_help + '.</p><table><thead><tr><th>Snippet</th><th>' + ugs_il8n.chordpro_markup + '</th></tr></thead>'+
+          '<tbody><tr><td class="shortKeys"><strong>t</strong> ' + ugs_il8n.or + ' <strong>title</strong></td><td><code class="snip">{title: <em>' + ugs_il8n.title + '</em>}</code></td>'+
+          '</tr><tr><td class="shortKeys"><strong>st</strong> ' + ugs_il8n.or + ' <strong>subtitle</strong></td><td><code class="snip">{subtitle: <em>' + ugs_il8n.subtitle + '</em>}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>a</strong> ' + ugs_il8n.or +' <strong>artist</strong></td><td><code class="snip">{artist: <em>' + ugs_il8n.name + '</em>}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>al</strong> ' + ugs_il8n.or +' <strong>album</strong></td><td><code class="snip">{album: <em>' + ugs_il8n.title + '</em>}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>c</strong> ' + ugs_il8n.or +' <strong>comment</strong></td><td><code class="snip">{comment: <em>' + ugs_il8n.comment + '</em>}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>col</strong> ' + ugs_il8n.or +' <strong>column</strong></td><td><code class="snip">{column_break}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>chorus</strong></td><td>' + ugs_il8n.add_complete_chorus_block + ' <code class="snip">{start_of_chorus}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>tab</strong></td><td>' + ugs_il8n.add_complete_tab_block + ' <code class="snip">{start_of_tab}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>soc</strong></td><td><code class="snip">{start_of_chorus}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>eoc</strong></td><td><code class="snip">{end_of_chorus}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>sot</strong></td><td><code class="snip">{start_of_tab}</code></td></tr>'+
+          '<tr><td class="shortKeys"><strong>eot</strong></td><td><code class="snip">{end_of_tab}</code></td></tr>'+
+          '</tbody></table>'+
+          '</p><p>'+ ugs_il8n.snip_tips + '.</p></div>';
 
 				$help.html(ugsAce.helpHtml);
 
@@ -3468,7 +3492,7 @@ ugsChordBuilder.export = (function() {
 	 */
 	_public.getDefinition = function(chordName, startingFret) {
 		chordName = scrub(chordName);
-		var name = (chordName && chordName.length > 0) ? chordName : 'CHORDNAME';
+		var name = (chordName && chordName.length > 0) ? chordName : ugs_il8n.chord_name;
 		var fretsStr = '';
 		var fingersString = '';
 		var addsString = '';
@@ -3533,7 +3557,8 @@ ugsChordBuilder.export = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+/**
  *
  * @class chooserList
  * @namespace ugsChordBuilder
@@ -3687,7 +3712,7 @@ ugsChordBuilder.chooserList = (function() {
 	 */
 	_public.save = function(data) {
 		if (dictionaryFindDupes(_currentChord == null ? -1 : _currentChord.id, data.name) >= 0) {
-			alert('Hey, this chord name is already being used.');
+			alert(ugs_il8n.chord_name_already_used);
 			return false;
 		}
 		var id = -1;
@@ -3720,7 +3745,7 @@ ugsChordBuilder.chooserList = (function() {
 	 * @return {void}
 	 */
 	var doDelete = function(chord) {
-		if (!confirm('Delete definition for "' + chord.name + '"?')) {
+		if (!confirm(ugs_il8n.delete_definition + ' "' + chord.name + '"?')) {
 			return;
 		}
 		var item = listGetItem(chord.id);
@@ -3749,7 +3774,7 @@ ugsChordBuilder.chooserList = (function() {
 		if (_currentChord != null) {
 			chord = ukeGeeks.chordImport.runLine(_currentChord.definition);
 			if (hasMutedStrings(chord)) {
-				alert('Uh-oh! This chord uses muted strings!\nCurrently the Chord Builder does not support muted strings -- \nsaving edits will result in mutes being lost.');
+				alert(ugs_il8n.muted_unsup_editor);
 			}
 		}
 		_setChordMethod(chord);
@@ -3834,7 +3859,7 @@ ugsChordBuilder.chooserList = (function() {
 		for (i = 0; i < chordDefs.length; i++) {
 			s += listHtmlString(chordDefs[i].id, chordDefs[i].name);
 		}
-		ul.innerHTML = '<li data-id="' + C_NEW_CHORD + '" class="newChord">+ Add New Chord</li>' + s;
+		ul.innerHTML = '<li data-id="' + C_NEW_CHORD + '" class="newChord">+ ' + ugs_il8n.add_new_chord + '</li>' + s;
 
 		var items = ul.getElementsByTagName('li');
 		for (i = items.length - 1; i >= 0; i--) {
@@ -4011,6 +4036,7 @@ ugsChordBuilder.chooserList = (function() {
 	return _public;
 
 }());
+
 /**
  * Doing
  * @class editorUi
@@ -4064,11 +4090,11 @@ ugsChordBuilder.editorUi = function() {
 	 * @type {JSON}
 	 */
 	var _fingerNames = {
-		0: 'None',
-		1: 'Index finger',
-		2: 'Middle finger',
-		3: 'Ring finger',
-		4: 'Pinkie'
+		0: ugs_il8n.none,
+		1: ugs_il8n.index_finger,
+		2: ugs_il8n.middle_finger,
+		3: ugs_il8n.ring_finger,
+		4: ugs_il8n.pinkie_finger
 	};
 
 	/**
@@ -4235,7 +4261,7 @@ ugsChordBuilder.editorUi = function() {
 	 * @return {void}
 	 */
 	var resetInputs = function(name, startingFret, isNew) {
-		_currentName = (name && name.length > 0) ? name : 'CHORDNAME';
+		_currentName = (name && name.length > 0) ? name : ugs_il8n.chord_name;
 		document.getElementById(_ids.chordName).value = _currentName;
 
 		_startingFret = startingFret ? startingFret : 1;
@@ -4244,7 +4270,7 @@ ugsChordBuilder.editorUi = function() {
 		document.getElementById(_ids.showOutputBtn).checked = false;
 		setClass(document.getElementById(_ids.outputBox), 'collapseOutput', true);
 
-		document.getElementById(_ids.saveBtn).value = isNew ? 'Add' : 'Update';
+		document.getElementById(_ids.saveBtn).value = isNew ? ugs_il8n.add : ugs_il8n_update;
 	};
 
 	/**

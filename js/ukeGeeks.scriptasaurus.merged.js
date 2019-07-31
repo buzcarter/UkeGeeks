@@ -3462,7 +3462,7 @@ ukeGeeks.scriptasaurus = (function() {
 			s += (s.length > 0) ? ', ' : '';
 			s += errs[i];
 		}
-		$.notify('Forgive me, but I don\'t know the following chords: ' + s, {
+		$.notify(ugs_il8n.forgive_chord_unknown + ' : ' + s, {
       clickToHide: true,
       autoHide: false,
       position: 'top left',

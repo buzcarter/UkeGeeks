@@ -296,6 +296,10 @@ if (ugs_settings && ugs_settings.invalidJson){
 }
 </script>
 <script type="text/javascript">
+
+// Ugggglyyyyyyyyyyy
+var ugs_il8n = <?php echo Lang::GetJsonData() ?>;
+
 $(function()
 {
 	var ugs_settings = window.ugs_settings || {};
@@ -309,27 +313,26 @@ $(function()
     }
   ?>
 
-// EXTREMELY IMPORTANT !
-// Init the chord container height for it to match the height of the chords canvas
-$('#ukeChordsCanvasWrapper').height($('#ukeChordsCanvas').height());
+  // EXTREMELY IMPORTANT !
+  // Init the chord container height for it to match the height of the chords canvas
+  $('#ukeChordsCanvasWrapper').height($('#ukeChordsCanvas').height());
 
-// Sticky chords at the top
-$(window).scroll(function(e)
-{ 
-  var $chords = $('#ukeChordsCanvas'); 
-  var thresold = $chords.height() + 100;
-
-  if ($(this).scrollTop() > thresold && !$chords.hasClass('chordsAlwaysOnTop'))
+  // Sticky chords at the top
+  $(window).scroll(function(e)
   { 
-    $chords.addClass('chordsAlwaysOnTop'); 
-  }
+    var $chords = $('#ukeChordsCanvas'); 
+    var thresold = $chords.height() + 100;
 
-  if ($(this).scrollTop() < thresold && $chords.hasClass('chordsAlwaysOnTop'))
-  {
-    $chords.removeClass('chordsAlwaysOnTop'); 
-  } 
-});
+    if ($(this).scrollTop() > thresold && !$chords.hasClass('chordsAlwaysOnTop'))
+    { 
+      $chords.addClass('chordsAlwaysOnTop'); 
+    }
 
+    if ($(this).scrollTop() < thresold && $chords.hasClass('chordsAlwaysOnTop'))
+    {
+      $chords.removeClass('chordsAlwaysOnTop'); 
+    } 
+  });
 
 });
 </script>

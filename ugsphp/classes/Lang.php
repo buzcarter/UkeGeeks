@@ -34,6 +34,11 @@ class Lang
     header('Content-Type: application/json');
     echo json_encode(self::$_langData, JSON_PRETTY_PRINT);
   }
+
+  public static function GetJsonData()
+  {
+    echo json_encode(self::$_langData);
+  }
 }
 
 ?>

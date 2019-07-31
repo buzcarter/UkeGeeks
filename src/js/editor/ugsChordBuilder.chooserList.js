@@ -152,7 +152,7 @@ ugsChordBuilder.chooserList = (function() {
 	 */
 	_public.save = function(data) {
 		if (dictionaryFindDupes(_currentChord == null ? -1 : _currentChord.id, data.name) >= 0) {
-			alert('Hey, this chord name is already being used.');
+			alert(ugs_il8n.chord_name_already_used);
 			return false;
 		}
 		var id = -1;
@@ -185,7 +185,7 @@ ugsChordBuilder.chooserList = (function() {
 	 * @return {void}
 	 */
 	var doDelete = function(chord) {
-		if (!confirm('Delete definition for "' + chord.name + '"?')) {
+		if (!confirm(ugs_il8n.delete_definition + ' "' + chord.name + '"?')) {
 			return;
 		}
 		var item = listGetItem(chord.id);
@@ -214,7 +214,7 @@ ugsChordBuilder.chooserList = (function() {
 		if (_currentChord != null) {
 			chord = ukeGeeks.chordImport.runLine(_currentChord.definition);
 			if (hasMutedStrings(chord)) {
-				alert('Uh-oh! This chord uses muted strings!\nCurrently the Chord Builder does not support muted strings -- \nsaving edits will result in mutes being lost.');
+				alert(ugs_il8n.muted_unsup_editor);
 			}
 		}
 		_setChordMethod(chord);
@@ -299,7 +299,7 @@ ugsChordBuilder.chooserList = (function() {
 		for (i = 0; i < chordDefs.length; i++) {
 			s += listHtmlString(chordDefs[i].id, chordDefs[i].name);
 		}
-		ul.innerHTML = '<li data-id="' + C_NEW_CHORD + '" class="newChord">+ Add New Chord</li>' + s;
+		ul.innerHTML = '<li data-id="' + C_NEW_CHORD + '" class="newChord">+ ' + ugs_il8n.add_new_chord + '</li>' + s;
 
 		var items = ul.getElementsByTagName('li');
 		for (i = items.length - 1; i >= 0; i--) {

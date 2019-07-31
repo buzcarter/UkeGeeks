@@ -810,7 +810,7 @@ ugsChordBuilder.export = (function() {
 	 */
 	_public.getDefinition = function(chordName, startingFret) {
 		chordName = scrub(chordName);
-		var name = (chordName && chordName.length > 0) ? chordName : 'CHORDNAME';
+		var name = (chordName && chordName.length > 0) ? chordName : ugs_il8n.chord_name;
 		var fretsStr = '';
 		var fingersString = '';
 		var addsString = '';
