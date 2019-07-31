@@ -12,10 +12,10 @@ final class Actions {
 	const Login = 4;
 	const Logout = 5;
 	const Edit = 6;
-	// AJAX Actions
 	const AjaxNewSong = 7;
 	const AjaxUpdateSong = 8;
 	const AjaxDeleteSong = 9;
+  const GetLangData = 10;
 
 	/**
 	 * convert passed in string value to corresponding Actions enum
@@ -33,6 +33,7 @@ final class Actions {
 		 	case 'ajaxnewsong': return self::AjaxNewSong;
 		 	case 'ajaxupdatesong': return self::AjaxUpdateSong;
 		 	case 'ajaxdeletesong': return self::AjaxDeleteSong;
+		 	case 'getlangdata': return self::GetLangData;
 		 }
 		 return self::Songbook;
 	}
@@ -53,6 +54,7 @@ final class Actions {
 			case self::AjaxNewSong: return 'AjaxNewSong';
 			case self::AjaxUpdateSong: return 'AjaxUpdateSong';
 			case self::AjaxDeleteSong: return 'AjaxDeleteSong';
+			case self::GetLangData: return 'GetLangData';
 		}
 		return 'Songbook';
 	}

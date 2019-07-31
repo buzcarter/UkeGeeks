@@ -28,6 +28,12 @@ class Lang
     else
       return '??translation_missing??';
   }
+
+  public static function SendJsonData()
+  {
+    header('Content-Type: application/json');
+    echo json_encode(self::$_langData, JSON_PRETTY_PRINT);
+  }
 }
 
 ?>
