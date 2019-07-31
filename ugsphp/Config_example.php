@@ -97,6 +97,13 @@ class Config {
 	 */
 	const ShowSupportEmail = false;
 
+	/**
+	 * Language to use
+	 * @constant(Lang)
+	 * @var string
+	 */
+	const Lang = 'EN';
+
 	// --------------------------------------
 	// Logins (only if "IsLoginRequired" enabled)
 	// --------------------------------------

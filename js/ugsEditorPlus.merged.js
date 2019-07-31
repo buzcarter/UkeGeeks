@@ -1822,10 +1822,10 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @type {JSON}
 	 */
 	var _desriptions = {
-		'zoomDiagrams' : ['Tiny', 'Small', 'Medium', 'Large', 'Stupid Large'],
-		'layout' : ['Reference diagrams on left', 'Reference diagrams at top', 'No reference diagrams'],
-		'placement' : ['Chord names inline with lyrics', 'Chord names above lyrics', 'Names & diagrams above lyrics'],
-		'tuning' : ['Soprano (GCEA) tuning', 'Baritone (DGBE) tuning']
+		'zoomDiagrams' : [ugs_il8n.tiny, ugs_il8n.small, ugs_il8n.medium, ugs_il8n.large, ugs_il8n.stupid_large],
+		'layout' : [ugs_il8n.refdiag_left, ugs_il8n.refdiag_top, ugs_il8n.no_refdiag],
+		'placement' : [ugs_il8n.chord_name_inline, ugs_il8n.chord_name_above, ugs_il8n.chord_and_name_above],
+		'tuning' : [ugs_il8n.standard_tuning, ugs_il8n.baritone_tuning]
 	};
 
 	/**
@@ -1841,26 +1841,26 @@ ugsEditorPlus.submenuUi = (function(){
 
 		switch (action){
 			case 'paper':
-				return 'Width ' + $ele.text();
+				return ugs_il8n.width + ' ' + $ele.text();
 			case 'zoomFonts':
-				return 'Font size ' + value + 'pt';
+				return ugs_il8n.font_size + ' ' + value + 'pt';
 			case 'zoomDiagrams':
-				return _desriptions.zoomDiagrams[index] + ' diagrams';
+				return ugs_il8n.diagram + ' ' + _desriptions.zoomDiagrams[index];
 			case 'colors':
 				return ugsEditorPlus.themes.getDescription(value);
 			case 'transpose':
 				if (value == 'up_0'){
-					return 'Original key';
+					return ugs_il8n.original_key;
 				}
 				var txt = $ele.text();
-				return txt.replace(' ', ' steps - "') + '"';
+				return txt.replace(' ', ' ' + ugs_il8n.steps + ' - "') + '"';
 			default:
 			 return _desriptions[action][index];
 		}
 	};
 
 	_public.resetTransposeLabel = function(){
-		$('label[for=transposePicker] span').text('Original key');
+		$('label[for=transposePicker] span').text(ugs_il8n.original_key);
 	};
 
 	// ---------------------------------------

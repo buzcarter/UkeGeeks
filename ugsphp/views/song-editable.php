@@ -103,27 +103,27 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			<dt><label for="diagramSizePicker"><span>Stupid Large diagrams</span> <em>&#9658;</em></label></dt>
 			<dd id="diagramSizePicker" data-action="zoomDiagrams">
 				<ul class="pseudoSelect">
-					<li><a href="#40">Tiny </a></li>
-					<li><a href="#65">Small </a></li>
-					<li><a href="#80">Medium </a></li>
-					<li><a href="#90">Large </a></li>
-					<li class="checked"><a href="#100">Stupid Large </a></li>
+					<li><a href="#40"><?php echo Lang::Get('tiny')?></a></li>
+					<li><a href="#65"><?php echo Lang::Get('small')?></a></li>
+					<li><a href="#80"><?php echo Lang::Get('medium')?></a></li>
+					<li><a href="#90"><?php echo Lang::Get('large')?></a></li>
+					<li class="checked"><a href="#100"><?php echo Lang::Get('stupid_large')?></a></li>
 				</ul>
 			</dd>
 			<dt><label for="diagramPositionPicker"><span>Reference diagrams on left</span> <em>&#9658;</em></label></dt>
 			<dd id="diagramPositionPicker" data-action="layout">
 				<ul class="pseudoSelect">
-					<li class="checked"><a href="#left">On left side</a></li>
-					<li><a href="#top">At the top</a></li>
-					<li><a href="#none">Don't show</a></li>
+					<li class="checked"><a href="#left"><?php echo Lang::Get('left_side')?></a></li>
+					<li><a href="#top"><?php echo Lang::Get('top')?></a></li>
+					<li><a href="#none"><?php echo Lang::Get('do_not_show')?></a></li>
 				</ul>
 			</dd>
 			<dt><label for="lyricChordsPicker"><span>Chord names above lyrics</span> <em>&#9658;</em></label></dt>
 			<dd id="lyricChordsPicker" data-action="placement">
 				<ul class="pseudoSelect">
-					<li><a href="#inline">Chord names inline </a></li>
-					<li class="checked"><a href="#above">Chord names above </a></li>
-					<li><a href="#miniDiagrams">Names &amp; diagrams above </a></li>
+					<li><a href="#inline"><?php echo Lang::Get('chord_name_inline')?></a></li>
+					<li class="checked"><a href="#above"><?php echo Lang::Get('chord_name_above')?></a></li>
+					<li><a href="#miniDiagrams"><?php echo Lang::Get('chord_and_name_above')?></a></li>
 				</ul>
 			</dd>
 			<dt><label for="colorPicker"><span>Normal colors (white paper) </span><em>&#9658;</em></label></dt>
@@ -146,7 +146,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 					<li><a href="#down_3">-3 <em>A</em></a></li>
 					<li><a href="#down_2">-2 <em>A#</em></a></li>
 					<li><a href="#down_1">-1 <em>B</em></a></li>
-					<li class="checked"><a href="#up_0">Original <em>C</em></a></li>
+					<li class="checked"><a href="#up_0"><?php echo Lang::Get('original_transpose')?><em>C</em></a></li>
 					<li><a href="#up_1">+1 <em>C#</em></a></li>
 					<li><a href="#up_2">+2 <em>D</em></a></li>
 					<li><a href="#up_3">+3 <em>D#</em></a></li>
@@ -158,8 +158,8 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			<dt><label for="tuningPicker"><span>Soprano ukulele tuning</span> <em>&#9658;</em></label></dt>
 			<dd id="tuningPicker" data-action="tuning">
 				<ul class="pseudoSelect">
-					<li class="checked"><a href="#soprano">Soprano</a></li>
-					<li><a href="#baritone">Baritone</a></li>
+					<li class="checked"><a href="#soprano"><?php echo Lang::Get('standard_tun')?></a></li>
+					<li><a href="#baritone"><?php echo Lang::Get('baritone_tun')?></a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -174,7 +174,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 				<ul class="pseudoSelect" id="pageWidth">
 					<li class="checked"><a href="#letter">US Letter (8.5 x 11 in)</a></li>
 					<li><a href="#a4">A4 (21 x 29.7 cm)</a></li>
-					<li><a href="#screen">full screen</a></li>
+					<li><a href="#screen"><?php echo Lang::Get('fullscreen')?></a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -286,8 +286,6 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/lazyload.min.js"></script>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/notify.min.js"></script>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery.draggable.js"></script>
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ukeGeeks.scriptasaurus.merged.js"></script>
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.merged.js"></script>
 <script type="text/javascript">
 var ugs_settings = <?php echo($model->EditorSettingsJson); ?>;
 if (ugs_settings && ugs_settings.invalidJson){
@@ -336,5 +334,7 @@ $(function()
 
 });
 </script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ukeGeeks.scriptasaurus.merged.js"></script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.merged.js"></script>
 </body>
 </html>
