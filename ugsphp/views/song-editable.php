@@ -71,11 +71,13 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <section id="ugsAppToolbar" class="ugsAppMenuBar">
 	<ul>
 		<li class="navHome"> <a href="/" title="<?php echo Lang::Get('tb_songbook_desc')?>"><span></span><?php echo Lang::Get('tb_songbook')?></a> </li>
-		<li class="navEdit" data-dialog="songSourceDlg"> <a href="#songSourceDlg" title="<?php echo Lang::Get('tb_edit_descr')?>"><span></span><?php echo Lang::Get('tb_edit')?></a> </li>
 		<li class="navLayout showOptionsBox"> <a href="#layoutOptions" title="<?php echo Lang::Get('tb_layout_descr')?>"><span></span><?php echo Lang::Get('tb_layout')?></a></li>
 		<li class="navInstruments showOptionsBox"> <a href="#tuningOptions" title="<?php echo Lang::Get('tb_tuning_descr')?>"><span></span><?php echo Lang::Get('tb_tuning')?></a></li>
 		<li class="navOptions showOptionsBox"> <a href="#optionsDlg" title="<?php echo Lang::Get('tb_options_descr')?>"><span></span><?php echo Lang::Get('tb_options')?></a> </li>
 		<li class="showDlgBtn showOptionsBox"> <a href="#helpDlg" title="<?php echo Lang::Get('tb_help_descr')?>">?</a> </li>
+    <?php if ($model->IsUpdateAllowed) { ?>
+		<li class="navEdit" data-dialog="songSourceDlg"> <a href="#songSourceDlg" title="<?php echo Lang::Get('tb_edit_descr')?>"><span></span><?php echo Lang::Get('tb_edit')?></a> </li>
+    <?php } ?>
 	</ul>
 </section>
 <!-- LAYOUT OPTIONS -->

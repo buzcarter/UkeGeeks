@@ -721,6 +721,9 @@ body {
 .navEdit.active span, .navEdit a:hover span {
 	background-position: -175px -50px;
 }
+.navEdit {
+  margin-left: 60px;
+}
 .navOptions span {
 	background-position: -200px 0px;
 }

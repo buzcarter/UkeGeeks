@@ -21,6 +21,7 @@ UkeGeeks is a songbook editor for ukulele made by [Buz Carter](http://pizzabythe
 
 #### Improvements, small fixes, QoL changes
 
+- Removed the edit button if no write access allowed
 - Added some missing chords
 - Non-intrusive popup on missing chords
 - Various pseudo-security fixes (.gitignore, separate config file, preventing some things to READ only users, ...)
