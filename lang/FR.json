@@ -56,7 +56,7 @@
   "sort_ref_diagram_alpha" : "Trier les accords par ordre alphabétique",
   "sort_ref_diagram_alpha_desc" : "Sinon c'est trié dans l'ordre de la chanson",
   "ignore_common_chords" : "Ignorer les accords courants",
-  "ignore_common_chords_desc" : "Ne pas créer de schéma pour ces accords",
+  "ignore_common_chords_desc" : "Ne pas créer de grilles pour ces accords",
   "chord_name" : "Nom de l'accord",
   "choose_finger" : "Choix doigt",
   "starting_fret" : "Frette de départ",
