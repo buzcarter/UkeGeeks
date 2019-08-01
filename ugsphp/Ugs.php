@@ -153,9 +153,7 @@ class Ugs{
         $builder = new Ajax_DeleteSong_Vmb();
         break;
       default:
-        $builder = Config::UseDetailedLists
-          ? new SongListDetailed_Vmb()
-          : new SongList_Vmb();
+        $builder = new SongListDetailed_Vmb();
         break;
 		}
 
@@ -242,7 +240,7 @@ class Ugs{
 	 */
 	private function GetViewName( $action ) {
 		switch($action){
-			case Actions::Song: return Config::UseEditableSong ? 'song-editable.php' : 'song.php';
+			case Actions::Song: 'song-editable.php';
 			case Actions::Edit: return 'song-editable.php';
 			case Actions::Source: return 'song-source.php';
 			case Actions::Reindex: return 'songs-rebuild-cache.php';
@@ -250,7 +248,7 @@ class Ugs{
 			case Actions::Login:
 				return 'login.php';
 		}
-		return Config::UseDetailedLists ? 'song-list-detailed.php' : 'song-list.php';
+		return 'song-list-detailed.php';
 	}
 
 }

@@ -62,21 +62,6 @@ class Config {
 	const UseModRewrite = false;
 
 	/**
-	 * if true the Songbook shows the dedtailed (title, artist, subtitle) song page and uses the song list cache.
-	 * If false the song list page uses the filenames for the link text (does minor tidy-up)
-	 * @constant(UseDetailedLists)
-	 * @var Boolean
-	 */
-	const UseDetailedLists = true;
-
-	/**
-	 * If true when visitor clicks to a page the full editor toolbar is present; if false only the song is displayed (no formatting or other features)
-	 * @constant(UseEditableSong)
-	 * @var Boolean
-	 */
-	const UseEditableSong = true;
-
-	/**
 	 * If true visitors must login to view or edit any page. Login must be enabled to Add or Update songs
 	 * @constant(IsLoginRequired)
 	 * @var Boolean
@@ -84,7 +69,7 @@ class Config {
 	const IsLoginRequired = false;
 
 	/**
-	 * File names used for song list cache files (only if "UseDetailedLists" enabled).
+	 * File names used for song list cache files
 	 * @constant(SongCacheKey_FileName)
 	 * @var string
 	 */

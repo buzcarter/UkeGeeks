@@ -18,6 +18,7 @@ UkeGeeks is a songbook editor for ukulele made by [Buz Carter](http://pizzabythe
 - **Sorted the song list** by artist and song name + layout change for better search
 - Removed **legacy browser** support
 - Added full **TRANSLATION support**. Currently ENGLISH and FRENCH (you can contribute :p)
+- Removed 'no detailed list' and 'no editable song' mode. We want full functionality, all the time
 
 #### Improvements, small fixes, QoL changes
 
