@@ -895,13 +895,13 @@ html .reformatDlg textarea {
 	height: 15em;
 }
 .layoutOptions {
-	left: 215px;
+	left: 125px;
 }
 .layoutOptions:after, .layoutOptions:before {
 	left: 22%;
 }
 .tuningOptions {
-	left: 260px;
+	left: 165px;
 }
 #transposeOptions em {
 	color: #ccc;
@@ -909,10 +909,10 @@ html .reformatDlg textarea {
 	font-size: 0.86em;
 }
 .otherOptions {
-	left: 375px;
+	left: 285px;
 }
 .helpOptions {
-	left: 435px;
+	left: 345px;
 }
 .hasSongbookLink .layoutOptions:after, .hasSongbookLink .layoutOptions:before {
 	left: 72%;
