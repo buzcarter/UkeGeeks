@@ -261,8 +261,8 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 						<label for="cdBldStartingFret" class="toolChip"><?php echo Lang::Get('starting_fret')?>
 							<select id="cdBldStartingFret"></select>
 						</label>
-						<a href="#slide-up" id="toolboxSlideUpBtn" class="toolChip arrowUp" data-direction="up" title="move all dots -1 fret"><?php echo Lang::Get('slide_up')?></a>
-						<a href="#slide-down" id="toolboxSlideDownBtn" class="toolChip arrowDown" data-direction="down" title="move all dots +1 fret"><?php echo Lang::Get('slide_down')?></a>
+						<a href="#slide-up" id="toolboxSlideUpBtn" class="toolChip arrowUp" data-direction="up" title="<?php echo Lang::Get('slide_up_tooltip'); ?>"><?php echo Lang::Get('slide_up')?></a>
+						<a href="#slide-down" id="toolboxSlideDownBtn" class="toolChip arrowDown" data-direction="down" title="<?php echo Lang::Get('slide_down_tooltip'); ?>"><?php echo Lang::Get('slide_down')?></a>
 					</div>
 				</div>
 				<canvas id="cdBldCursorCanvas" width="462" height="300"></canvas>
@@ -270,7 +270,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			</div>
 
 			<p class="">
-				<label for="cdBldShowOutputBtn"><input id="cdBldShowOutputBtn" type="checkbox" value="0" /><?php echo Lang::Get('show_chordpro_output')?></label>
+				<label for="cdBldShowOutputBtn"><input id="cdBldShowOutputBtn" type="checkbox" value="0" /> <?php echo Lang::Get('show_chordpro_output')?></label>
 			</p>
 			<p class="btnBar">
 				<input type="button" value="<?php echo Lang::Get('add')?>" class="baseBtn blueBtn" id="cdBldSaveBtn">
@@ -319,19 +319,19 @@ $(function()
 
   // Sticky chords at the top
   $(window).scroll(function(e)
-  { 
-    var $chords = $('#ukeChordsCanvas'); 
+  {
+    var $chords = $('#ukeChordsCanvas');
     var thresold = $chords.height() + 100;
 
     if ($(this).scrollTop() > thresold && !$chords.hasClass('chordsAlwaysOnTop'))
-    { 
-      $chords.addClass('chordsAlwaysOnTop'); 
+    {
+      $chords.addClass('chordsAlwaysOnTop');
     }
 
     if ($(this).scrollTop() < thresold && $chords.hasClass('chordsAlwaysOnTop'))
     {
-      $chords.removeClass('chordsAlwaysOnTop'); 
-    } 
+      $chords.removeClass('chordsAlwaysOnTop');
+    }
   });
 
 });
