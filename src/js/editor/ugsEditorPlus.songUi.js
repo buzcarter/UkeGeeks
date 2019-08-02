@@ -54,6 +54,9 @@ ugsEditorPlus.songUi = (function() {
 			h.innerHTML = s;
 			h.style.display = 'block';
 		}
+
+    // Update stickychords
+    ugsEditorPlus.stickyChords.init();
 	};
 
 	// ---------------------------------------

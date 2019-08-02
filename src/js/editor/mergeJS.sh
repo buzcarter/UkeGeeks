@@ -20,6 +20,7 @@ ugsEditorPlus.typeahead.js \
 ugsEditorPlus.resize.js \
 ugsEditorPlus.chordBuilder.js \
 ugsEditorPlus.songAmatic.js \
+ugsEditorPlus.stickyChords.js \
 ugsChordBuilder.js \
 ugsChordBuilder.chooserList.js \
 ugsChordBuilder.editorUi.js > ../../../js/ugsEditorPlus.merged.js
