@@ -64,6 +64,7 @@ class SimpleLogin{
 					$siteUser->Username = $account['user'];
 					$siteUser->MayEdit  = $account['mayEdit'];
 					$siteUser->DisplayName = $account['name'];
+					$siteUser->Language = $account['lang'];
 					$siteUser->IsAllowAccess = true;
 					$siteUser->IsAuthenticated = true;
 				}

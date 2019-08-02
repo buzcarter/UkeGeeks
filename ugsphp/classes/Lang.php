@@ -3,13 +3,17 @@ class Lang
 {
   private static $_langData = null;
 
-  public static function Init()
+  public static function Init($lang)
   {
-    $file = 'lang/'.Config::Lang.'.json';
+    // Fallback if necessary
+    if($lang == '')
+      $lang = Config::Lang;
+
+    $file = "lang/$lang.json";
 
     if(!file_exists($file))
     {
-      die ('FATAL ERROR : Please choose a VALID LANGUAGE in the config file (config.php) file :)');
+      die ("FATAL ERROR : '$lang' does NOT exists. Please choose a VALID LANGUAGE in the config file (config.php) file :)");
     }
     else
     {

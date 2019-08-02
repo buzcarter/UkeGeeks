@@ -9,6 +9,8 @@ class SiteUser
 	public $Username = 'anon';
 	public $DisplayName = 'Guest';
 	public $MayEdit = false;
+  public $Language = 'EN';
+
 	/**
 	 * May user access any of the site -- this does NOT mean that
 	 * they've logged in as would be the case where Config does not

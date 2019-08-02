@@ -17,17 +17,20 @@ class Ugs{
 		// Reads query param to pick appropriate Actions
 		$action = isset( $_GET['action'] ) ? Actions::ToEnum( $_GET['action'] ) : Actions::Songbook;
 
+		$user = $this->DoAuthenticate( $action );
+		if ( !$user->IsAllowAccess  ) {
+				return;
+			}
+
+    // Set user language if needed
+    Lang::Init($user->Language);
+
     // Special action : sending the language json
     if($action == Actions::GetLangData)
     {
       Lang::SendJsonData();
       exit;
     }
-
-		$user = $this->DoAuthenticate( $action );
-		if ( !$user->IsAllowAccess  ) {
-				return;
-			}
 
 		$builder = $this->GetBuilder( $action, $user );
 		$model = $builder->Build();
@@ -194,7 +197,7 @@ class Ugs{
 			}
 		}
 
-    Lang::Init();
+    Lang::Init(Config::Lang);
 	}
 
 	/**
