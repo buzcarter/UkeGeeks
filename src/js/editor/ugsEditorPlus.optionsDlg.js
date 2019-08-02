@@ -60,6 +60,13 @@ ugsEditorPlus.optionsDlg = (function() {
 			triggerNotify('hideCommonChords', this.checked);
 		};
 
+		// toggle enabling auto scrolling feature
+		ele = document.getElementById('chkEnableAutoScroll');
+		ele.checked = options.autoScrollFeature;
+		ele.onclick = function() {
+			triggerNotify('toggleEnableAutoScroll', this.checked);
+    };
+
 		// ugh! Event bubbling!
 		$('.checkboxBlock label, input[type=checkbox]').click(function(e) {
 			e.stopPropagation();

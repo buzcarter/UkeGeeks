@@ -67,6 +67,8 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		<textarea id="chordProSource" wrap="off"><?php echo($model->Body); ?></textarea>
 	</div>
 </section>
+<!-- AUTOSCROLL CONTROLS -->
+<div style='display: none;' id='autoScrollCtrl'>AutoScroll <span class='autoscrollBtn' id='autoscrollStateBtn'>OFF</span> <span class='autoscrollBtn' id='autoscrollFasterBtn'>+</span> <span class='autoscrollBtn' id='autoscrollSlowerBtn'>-</span></div>
 <!-- APP TOOLBAR -->
 <section id="ugsAppToolbar" class="ugsAppMenuBar">
 	<ul>
@@ -201,6 +203,12 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			</label>
 			<input type="text" id="commonChordList" value="" />
 		</p>
+		<p class="checkboxBlock">
+			<input type="checkbox" value="true" id="chkEnableAutoScroll" />
+			<label for="chkEnableAutoScroll"><?php echo Lang::Get('auto_scroll')?>
+				<span class="checkBoxFinePrint"><?php echo Lang::Get('auto_scroll_descr')?></span>
+			</label>
+		</p>
 	</fieldset>
 </aside>
 <!-- HELP (DIALOG) -->
@@ -318,6 +326,9 @@ $(function()
   {
     ugsEditorPlus.stickyChords.onScroll();
   });
+
+  // Setup autoscroll if needed
+  ugsEditorPlus.autoscroll.init();
 
 });
 </script>

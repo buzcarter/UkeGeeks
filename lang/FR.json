@@ -122,5 +122,7 @@
   "font_size" : "Taille du texte",
   "steps" : "ton(s)",
   "original_transpose" : "d'origine",
-  "type_your_song_here" : "SAISIR_LA_CHANSON_ICI"
+  "type_your_song_here" : "SAISIR_LA_CHANSON_ICI",
+  "auto_scroll" : "Scrolling automatique",
+  "auto_scroll_descr" : "Activer le scrolling auto de la chanson"
 }

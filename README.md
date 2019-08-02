@@ -14,6 +14,7 @@ UkeGeeks is a songbook editor for ukulele made by [Buz Carter](http://pizzabythe
 
 - Chords now **stay on top** when **scrolling** a song
 - Added a **DELETE SONG** button to the EDITOR
+- Added **Auto-Scrolling** of song
 - Added a **SONGBOOK** button when viewing a song (to go back)
 - **Sorted the song list** by artist and song name + layout change for better search
 - Removed **legacy browser** support

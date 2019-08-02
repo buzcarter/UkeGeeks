@@ -41,7 +41,8 @@ ugsEditorPlus.songAmatic = (function() {
 			hideChordEnclosures: !ukeGeeks.settings.opts.retainBrackets,
 			sortAlphabetical: ukeGeeks.settings.opts.sortAlphabetical,
 			ignoreCommonChords: ukeGeeks.settings.opts.ignoreCommonChords,
-			commonChords: ukeGeeks.settings.commonChords
+			commonChords: ukeGeeks.settings.commonChords,
+			autoScrollFeature: ukeGeeks.settings.opts.autoScrollFeature
 		};
 
 		return $.extend(ugsEditorPlus.options, opts, (typeof options === "object") ? options : {});

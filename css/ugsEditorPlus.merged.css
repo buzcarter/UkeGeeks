@@ -932,6 +932,33 @@ html .reformatDlg textarea {
 .hasSongbookLink .helpOptions:after, .hasSongbookLink .helpOptions:before {
 	left: 80%;
 }
+
+#autoScrollCtrl {
+  position: fixed;
+  bottom: 0%;
+  background-color: white;
+  border-radius: 10px;
+  margin: 0;
+  padding: 10px 40px 10px 40px;
+  box-shadow: inset 0 0 25px #c3c3c0;
+}
+.autoscrollBtn {
+  cursor:pointer;
+  margin-left: 10px;
+  border: 1px solid #a09e9e;
+  border-radius: 3px;
+  padding: 3px;
+  min-width: 20px;
+  display: inline-block;
+  text-align: center;
+}
+#autoscrollStateBtn {
+  min-width: 40px;
+}
+
+
+
+
 .theme-reversed {
 	background-color: #000;
 	color: #fff;
