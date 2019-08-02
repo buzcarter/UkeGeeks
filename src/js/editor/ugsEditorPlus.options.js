@@ -126,5 +126,15 @@ ugsEditorPlus.options = {
 	 * @type mixed
 	 * @default see UkeGeeks.settings
 	 */
-	commonChords: []
+	commonChords: [],
+
+	/**
+	 * If TRUE, autoScroll feature will be available and shown on screen
+	 * @example
+	 * Allowed values: true, false
+	 * @property autoScrollFeature
+	 * @type Boolean
+	 * @default see UkeGeeks.settings
+	 */
+	autoScrollFeature: true
 };

@@ -67,6 +67,8 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		<textarea id="chordProSource" wrap="off"><?php echo($model->Body); ?></textarea>
 	</div>
 </section>
+<!-- AUTOSCROLL CONTROLS -->
+<div style='display: none;' id='autoScrollCtrl'>AutoScroll <span class='autoscrollBtn' id='autoscrollStateBtn'>OFF</span> <span class='autoscrollBtn' id='autoscrollFasterBtn'>+</span> <span class='autoscrollBtn' id='autoscrollSlowerBtn'>-</span></div>
 <!-- APP TOOLBAR -->
 <section id="ugsAppToolbar" class="ugsAppMenuBar">
 	<ul>
@@ -201,6 +203,12 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			</label>
 			<input type="text" id="commonChordList" value="" />
 		</p>
+		<p class="checkboxBlock">
+			<input type="checkbox" value="true" id="chkEnableAutoScroll" />
+			<label for="chkEnableAutoScroll"><?php echo Lang::Get('auto_scroll')?>
+				<span class="checkBoxFinePrint"><?php echo Lang::Get('auto_scroll_descr')?></span>
+			</label>
+		</p>
 	</fieldset>
 </aside>
 <!-- HELP (DIALOG) -->
@@ -313,26 +321,14 @@ $(function()
     }
   ?>
 
-  // EXTREMELY IMPORTANT !
-  // Init the chord container height for it to match the height of the chords canvas
-  $('#ukeChordsCanvasWrapper').height($('#ukeChordsCanvas').height());
-
-  // Sticky chords at the top
+  // Set scroll listener for the sticky chords
   $(window).scroll(function(e)
   {
-    var $chords = $('#ukeChordsCanvas');
-    var thresold = $chords.height() + 100;
-
-    if ($(this).scrollTop() > thresold && !$chords.hasClass('chordsAlwaysOnTop'))
-    {
-      $chords.addClass('chordsAlwaysOnTop');
-    }
-
-    if ($(this).scrollTop() < thresold && $chords.hasClass('chordsAlwaysOnTop'))
-    {
-      $chords.removeClass('chordsAlwaysOnTop');
-    }
+    ugsEditorPlus.stickyChords.onScroll();
   });
+
+  // Setup autoscroll if needed
+  ugsEditorPlus.autoscroll.init();
 
 });
 </script>

@@ -114,6 +114,9 @@ ugsEditorPlus.actions = (function() {
 				setIgnoreCommon(value);
 				runRequired = true;
 				break;
+			case 'toggleEnableAutoScroll':
+				setAutoScrollFeature(value);
+				break;
 			case 'sortAlphabetical':
 				setSortAlphabetical(value);
 				runRequired = true;
@@ -148,6 +151,7 @@ ugsEditorPlus.actions = (function() {
 		setEnclosureVisible(!options.hideChordEnclosures);
 		setIgnoreCommon(options.ignoreCommonChords);
 		setCommonChordsList(options.commonChords);
+    setAutoScrollFeature(options.autoScrollFeature);
 		setSortAlphabetical(options.sortAlphabetical);
 	};
 
@@ -490,6 +494,11 @@ ugsEditorPlus.actions = (function() {
 		}
 
 		ukeGeeks.settings.commonChords = chordList;
+	};
+
+	var setAutoScrollFeature = function(isEnabled) {
+		ukeGeeks.settings.opts.autoScrollFeature = isEnabled;
+    $('#autoScrollCtrl').toggle(isEnabled);
 	};
 
 	// ---------------------------------------

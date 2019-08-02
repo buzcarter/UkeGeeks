@@ -98,21 +98,24 @@ class Config {
 			'pass' => '12345',
 			'name' => 'Almighty Admin',
 			'isActive' => true,
-			'mayEdit' => true
+			'mayEdit' => true,
+      'lang' => ''
 		),
 		array(
 			'user' => 'guest',
 			'pass' => '12345',
 			'name' => 'Honored Guest',
 			'isActive' => true,
-			'mayEdit' => false
+			'mayEdit' => false,
+      'lang' => ''
 		),
 		array(
 			'user' => 'jake',
 			'pass' => 'ukulelecake',
 			'name' => 'Jake S.',
 			'isActive' => false,
-			'mayEdit' => true
+			'mayEdit' => true,
+      'lang' => ''
 		)
 	);
 

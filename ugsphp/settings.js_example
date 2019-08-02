@@ -62,4 +62,9 @@
 	 * Allowed values (string or array of strings): as an  array of strings: ["A", "G"] or comma delimited list: "A, G"
 	 */
 	// "commonChords": ["A", "B", "C", "D", "E", "F", "G", "Am"]
+
+	/* Enable/disable the autoscroll feature
+	 * Allowed values : true, false
+	 */
+	// "autoScrollFeature": true
 }

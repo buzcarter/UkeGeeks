@@ -118,7 +118,7 @@ class FileWriter {
 		$content = '{title: ' . ( strlen( $title ) > 0 ? $title : 'untitled' ) . "}\n";
 		$content .= '{artist: ' . ( strlen( $artist ) > 0 ? $artist : 'traditional' ) . "}\n";
 
-		return $content. Lang::Get('type_your_song_here');
+		return $content."\n\n\n".Lang::Get('type_your_song_here');
 	}
 
 }

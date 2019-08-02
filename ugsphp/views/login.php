@@ -15,6 +15,7 @@ $errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
 </head>
 <body class="loginPage">
 <section class="contentWrap">
+  <h1 style='text-align:center'><?php echo Config::SongbookHeadline?></h1>
 </section>
 <section class="overlay">
 	<hgroup>

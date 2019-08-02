@@ -143,7 +143,17 @@ ugsEditorPlus.options = {
 	 * @type mixed
 	 * @default see UkeGeeks.settings
 	 */
-	commonChords: []
+	commonChords: [],
+
+	/**
+	 * If TRUE, autoScroll feature will be available and shown on screen
+	 * @example
+	 * Allowed values: true, false
+	 * @property autoScrollFeature
+	 * @type Boolean
+	 * @default see UkeGeeks.settings
+	 */
+	autoScrollFeature: true
 };
 /**
  * Does the work by providing "doAction" method to respond to events (does not
@@ -261,6 +271,9 @@ ugsEditorPlus.actions = (function() {
 				setIgnoreCommon(value);
 				runRequired = true;
 				break;
+			case 'toggleEnableAutoScroll':
+				setAutoScrollFeature(value);
+				break;
 			case 'sortAlphabetical':
 				setSortAlphabetical(value);
 				runRequired = true;
@@ -295,6 +308,7 @@ ugsEditorPlus.actions = (function() {
 		setEnclosureVisible(!options.hideChordEnclosures);
 		setIgnoreCommon(options.ignoreCommonChords);
 		setCommonChordsList(options.commonChords);
+    setAutoScrollFeature(options.autoScrollFeature);
 		setSortAlphabetical(options.sortAlphabetical);
 	};
 
@@ -639,12 +653,18 @@ ugsEditorPlus.actions = (function() {
 		ukeGeeks.settings.commonChords = chordList;
 	};
 
+	var setAutoScrollFeature = function(isEnabled) {
+		ukeGeeks.settings.opts.autoScrollFeature = isEnabled;
+    $('#autoScrollCtrl').toggle(isEnabled);
+	};
+
 	// ---------------------------------------
 	// return public interface "JSON handle"
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+/**
  * Handles transfering the easy text bits of a Song -- title, artist, etc -- to the page.
  * @class songUi
  * @namespace ugsEditorPlus
@@ -700,6 +720,9 @@ ugsEditorPlus.songUi = (function() {
 			h.innerHTML = s;
 			h.style.display = 'block';
 		}
+
+    // Update stickychords
+    ugsEditorPlus.stickyChords.init();
 	};
 
 	// ---------------------------------------
@@ -1111,6 +1134,13 @@ ugsEditorPlus.optionsDlg = (function() {
 			triggerNotify('hideCommonChords', this.checked);
 		};
 
+		// toggle enabling auto scrolling feature
+		ele = document.getElementById('chkEnableAutoScroll');
+		ele.checked = options.autoScrollFeature;
+		ele.onclick = function() {
+			triggerNotify('toggleEnableAutoScroll', this.checked);
+    };
+
 		// ugh! Event bubbling!
 		$('.checkboxBlock label, input[type=checkbox]').click(function(e) {
 			e.stopPropagation();
@@ -1134,7 +1164,8 @@ ugsEditorPlus.optionsDlg = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());var ugsEditorPlus = window.ugsEditorPlus || {};
+}());
+var ugsEditorPlus = window.ugsEditorPlus || {};
 
 /**
  * TK
@@ -2668,7 +2699,8 @@ ugsEditorPlus.songAmatic = (function() {
 			hideChordEnclosures: !ukeGeeks.settings.opts.retainBrackets,
 			sortAlphabetical: ukeGeeks.settings.opts.sortAlphabetical,
 			ignoreCommonChords: ukeGeeks.settings.opts.ignoreCommonChords,
-			commonChords: ukeGeeks.settings.commonChords
+			commonChords: ukeGeeks.settings.commonChords,
+			autoScrollFeature: ukeGeeks.settings.opts.autoScrollFeature
 		};
 
 		return $.extend(ugsEditorPlus.options, opts, (typeof options === "object") ? options : {});
@@ -2677,6 +2709,144 @@ ugsEditorPlus.songAmatic = (function() {
 	// ---------------------------------------
 	// return public interface "JSON handle"
 	// ---------------------------------------
+	return _public;
+
+}());
+/**
+ * Exposes the only method required to sticky the chords in Scriptasaurus Song-a-matic editor.
+ *
+ * @class stickyChords
+ * @namespace ugsEditorPlus
+ * @static
+ * @singleton
+ */
+ugsEditorPlus.stickyChords = (function() {
+
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
+
+	_public.init = function() {
+    // EXTREMELY IMPORTANT !
+    // Init the chord container height for it to match the height of the chords canvas
+    $('#ukeChordsCanvasWrapper').height($('#ukeChordsCanvas').height());
+  }
+
+  // Sticky chords at the top
+  _public.onScroll = function () {
+    var $chords = $('#ukeChordsCanvas');
+    var thresold = $chords.height() + 100;
+
+    if ($(document).scrollTop() > thresold && !$chords.hasClass('chordsAlwaysOnTop'))
+    {
+      $chords.addClass('chordsAlwaysOnTop');
+    }
+
+    if ($(document).scrollTop() < thresold && $chords.hasClass('chordsAlwaysOnTop'))
+    {
+      $chords.removeClass('chordsAlwaysOnTop');
+    }
+  }
+
+	// ------------------------
+	// return public interface 
+	// ------------------------
+	return _public;
+
+}());
+
+/**
+ * Exposes the only method required for autoscrolling in Scriptasaurus Song-a-matic editor.
+ *
+ * @class autoscroll
+ * @namespace ugsEditorPlus
+ * @static
+ * @singleton
+ */
+ugsEditorPlus.autoscroll = (function() {
+
+	/**
+	 * attach public members to this object
+	 * @property _public
+	 * @type JsonObject
+	 */
+	var _public = {};
+
+  var _currentScrollSpeed = 0;
+  var _isPaused = true;
+  var _scrollSpeeds = [200, 150, 100, 80, 60, 50, 30, 20, 10, 0];
+
+	_public.init = function() {
+    // Enable/disable autoscroll
+		document.getElementById('autoscrollStateBtn').onclick = function() {
+      if(_isPaused)
+      {
+        _isPaused = false;
+        $('#autoscrollStateBtn').html('ON');
+      }
+      else
+      {
+        _isPaused = true;
+        $('#autoscrollStateBtn').html('OFF');
+      }
+
+      _public.setScrollSpeed(_currentScrollSpeed);
+			return false;
+		};
+
+    // Faster autoscroll
+		document.getElementById('autoscrollFasterBtn').onclick = function() {
+      _public.setScrollSpeed(_currentScrollSpeed + 1);
+			return false;
+		};
+
+    // Slower autoscroll
+		document.getElementById('autoscrollSlowerBtn').onclick = function() {
+      _public.setScrollSpeed(_currentScrollSpeed - 1);
+			return false;
+		};
+
+    _public.setScrollSpeed(1);
+  }
+
+  // AutoScroll magic !
+  _public.autoScroll = function () {
+    $(window).scrollTop($(window).scrollTop() + 1);
+
+    // End of page ?
+    if($(window).scrollTop() + $(window).height() == $(document).height())
+    {
+      _isPaused = true;
+      _public.setScrollSpeed(_currentScrollSpeed);
+    }
+  }
+
+  // Set scroll speed
+  _public.setScrollSpeed = function (newScrollSpeed) {
+    if(newScrollSpeed < 0)
+    {
+      newScrollSpeed = 0;
+    }
+    else if(newScrollSpeed >= _scrollSpeeds.length)
+    {
+      newScrollSpeed = _scrollSpeeds.length - 1;
+    }
+
+    clearInterval(window.AutoScrollTimer);
+    _currentScrollSpeed = newScrollSpeed;
+
+    if(!_isPaused)
+    {
+      window.AutoScrollTimer = setInterval('ugsEditorPlus.autoscroll.autoScroll()', _scrollSpeeds[_currentScrollSpeed]);
+    }
+  }
+
+	// ------------------------
+	// return public interface 
+	// ------------------------
 	return _public;
 
 }());

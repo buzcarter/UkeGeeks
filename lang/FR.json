@@ -62,7 +62,9 @@
   "starting_fret" : "Frette de départ",
   "add_dot" : "Ajouter point",
   "slide_up" : "Glisser haut",
+  "slide_up_tooltip" : "Décaler les points 1 frette vers le haut",
   "slide_down" : "Glisser bas",
+  "slide_down_tooltip" : "Décaler les points 1 frette vers le bas",
   "show_chordpro_output" : "Afficher le ChordPro généré",
   "forgive_chord_unknown" : "Désolé, je ne connais pas les accords suivants",
   "none" : "Aucun",
@@ -120,5 +122,7 @@
   "font_size" : "Taille du texte",
   "steps" : "ton(s)",
   "original_transpose" : "d'origine",
-  "type_your_song_here" : "SAISIR_LA_CHANSON_ICI"
+  "type_your_song_here" : "SAISIR_LA_CHANSON_ICI",
+  "auto_scroll" : "Scrolling automatique",
+  "auto_scroll_descr" : "Activer le scrolling auto de la chanson"
 }
