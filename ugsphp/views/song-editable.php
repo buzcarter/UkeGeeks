@@ -43,7 +43,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 	</footer>
 </section>
 <!-- EDIT SONG (DIALOG) -->
-<section id="songSourceDlg" class="overlay <?php echo($editDlgCssClassName); ?>">
+<section id="songSourceDlg" style="display: none;" class="overlay <?php echo($editDlgCssClassName); ?>">
 	<hgroup>
 		<h3><?php echo Lang::Get('edit_song'); ?></h3>
 	</hgroup>
