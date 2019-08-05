@@ -3,10 +3,10 @@
 ![Ukegeeks-ng](./img/screenshot.png)
 ![Ukegeeks-ng song](./img/screenshot2.png)
 
-This fork is an attempt at an *enhanced/updated/modified/edited_to_fits_my_needs* version of UkeGeeks  
+This fork is an attempt at an *enhanced/updated/modified/edited_to_fits_my_needs* version of UkeGeeks    
 (since the original doesn't seems to accept pull request since early 2015).
 
-UkeGeeks is a songbook editor for ukulele made by [Buz Carter](http://pizzabytheslice.com) (buz@ukegeeks.com) :)
+UkeGeeks is a songbook editor for ukulele originally created by [Buz Carter](http://pizzabytheslice.com) (buz@ukegeeks.com) :)
 
 ### What's changed so far :
 
@@ -27,9 +27,10 @@ UkeGeeks is a songbook editor for ukulele made by [Buz Carter](http://pizzabythe
 
 #### Improvements, small fixes, QoL changes
 
-- Removed the edit button if no write access allowed
-- Added some missing chords
-- Non-intrusive popup on missing chords
+- Removed the **edit** button if **no write access** allowed
+- Added some missing **chords**
+- Proper **404 handling** (on **page** missing and on **song** missing)
+- **Non-intrusive popup** on missing chords
 - Various pseudo-security fixes (.gitignore, separate config file, preventing some things to READ only users, ...)
 - Switched some calls to HTTPS
 - Removed useless SOPRANO tuning references on each pages
