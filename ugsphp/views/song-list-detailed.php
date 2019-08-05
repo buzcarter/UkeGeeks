@@ -119,5 +119,6 @@ function BuildSongList($SongList)
 var qkSrch = ugsEditorPlus.typeahead();
 qkSrch.initialize();
 </script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/back-to-top.js"></script>
 </body>
 </html>
