@@ -13,17 +13,18 @@ class SongHelper {
 	public static  function parseSong($text) {
 		$song = (object) array(
 			 'isOK' => false,
-			 'title' => 'Sorry... Song Not Found',
+			 'title' => 'Song Not Found',
 			 'subtitle' => 'Check your link, please',
 			 'artist' => '',
 			 'album' => '',
-			 'body' => '[D]Where, oh, where has this [A7]stupid file gone?' . "\n" . 'Oh, [G]where or where can it [D]be?',
+			 'body' => '{title: '.Lang::Get('song_not_found_title').'}'."\n".'{subtitle: '.Lang::Get('song_not_found_subtitle').'}'."\n".
+                 '[D]Lalalaaaa [A7]Lalaaaaaaaaaaaaala ?' . "\n" . 'Lala [G]laaaaaalalalaaaaaaaaaa [D]la !',
 			 'meta' => array()
 		);
 		
-		if (!$text){
-			return $song;
-		}
+    if (!$text){
+      return $song;
+    }
 		
 		$song->isOK = true;
 		$song->title = self::getTitle($text);

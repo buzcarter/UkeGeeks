@@ -5,7 +5,6 @@ function GetDisplayStyle($value){
 }
 
 $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
-
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -38,6 +37,14 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			<pre><?php echo($model->Body); ?></pre>
 		</article>
 	</article>
+  <div style="margin-top:30px"><a href="/" class="baseBtn blueBtn">
+    <?php
+          if(!$model->isOK)
+          {
+            echo Lang::Get('not_found_click_here');
+          }
+    ?></a>
+  </div>
 	<footer>
     <?php //echo ($model->PoweredBy!=''?"Powered by ".$model->PoweredBy:''); ?>
 	</footer>
@@ -70,6 +77,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <!-- AUTOSCROLL CONTROLS -->
 <div style='display: none;' id='autoScrollCtrl'>AutoScroll <span class='autoscrollBtn' id='autoscrollStateBtn'>OFF</span> <span class='autoscrollBtn' id='autoscrollFasterBtn'>+</span> <span class='autoscrollBtn' id='autoscrollSlowerBtn'>-</span></div>
 <!-- APP TOOLBAR -->
+<?php if($model->isOK) {?>
 <section id="ugsAppToolbar" class="ugsAppMenuBar">
 	<ul>
 		<li class="navHome"> <a href="/" title="<?php echo Lang::Get('tb_songbook_desc')?>"><span></span><?php echo Lang::Get('tb_songbook')?></a> </li>
@@ -82,6 +90,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
     <?php } ?>
 	</ul>
 </section>
+<? } ?>
 <!-- LAYOUT OPTIONS -->
 <aside class="arrowBox layoutOptions" id="layoutOptions">
 	<fieldset class="arrowBoxContent enablePseudoSelects">

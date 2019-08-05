@@ -16,7 +16,7 @@ class Song_Vmb extends _base_Vmb {
 		$fileContent = FileHelper::getFile(Config::$SongDirectory . $filename);
 		$song = SongHelper::parseSong($fileContent);
 
-		$title = htmlspecialchars((($song->isOK) ? ($song->title . ((strlen($song->subtitle) > 0) ? (' | ' . $song->subtitle) : '')) : 'Not Found'));
+		$title = htmlspecialchars(($song->title . ((strlen($song->subtitle) > 0) ? (' | ' . $song->subtitle) : '')));
 
 		$viewModel = new Song_Vm();
 		$viewModel->PageTitle = $this->MakePageTitle($song, $filename);
@@ -33,6 +33,9 @@ class Song_Vmb extends _base_Vmb {
 		$viewModel->IsUpdateAllowed = $this->SiteUser->MayEdit && $this->SiteUser->IsAuthenticated;
 
 		$viewModel->EditorSettingsJson = $this->getSettings();
+
+    $viewModel->isOK = $song->isOK;
+
 		return $viewModel;
 	}
 
