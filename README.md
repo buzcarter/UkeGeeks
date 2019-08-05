@@ -36,9 +36,43 @@ UkeGeeks is a songbook editor for ukulele made by [Buz Carter](http://pizzabythe
 - Login page cleanup + ability to hide email
 - Made the advanced editor link more obvious + help displayed on startup
 
-### What's planned ?
+_______________________________________________________
+# Installation
 
-A lot. Read the issue tracking on github with the label "feature request".
+Nothing special here, you need Apache / Php.  
+Mod_rewrite is really recommanded too (for prettier url).
 
-Some features will be hard to implement with the actual code imho, but I'll try anyway without starting from scratch.  
-I have only limited time to work on the project...
+Just download the source and unzip-it (or use git clone) on your hosting space.
+
+**Important : By default, the Songbook assumes that it's installed in your web server's root directory.**
+If you want to change this, read below (installing in a different directory).
+
+## Setup username, preferences
+
+- **Step 1** : Rename the file **/ugsphp/Config_example.php** to **Config.php** and edit-it to suits your needs (username, passwords, language, etc)
+- **Step 2** : Rename the **/ugsphp/settings.js_example** to **settings.js** and edit-it to suits your preferences (diagram size, position, default theme, ...).
+
+And that's it, you should be good to go. Start adding songs :)
+
+#### Optional : installing in a different directory
+The Songbook assumes that it's installed in your web server's root directory, but you might want it in a subdirectory. Perhaps you want the URLs to be "mysite.com/hobbies/ukulele/music.php", for example. Excellent! To do this we just need to open config.php and change the subdirectory.
+
+By default this is set to the root:
+
+    const Subdirectory = '/';
+    
+You can just modify it to whatever you wish (include leading and trailing last forward slashes "/")
+
+    const Subdirectory = '/hobbies/ukulele/';
+ 
+#### Optional : changing Asset directories
+
+You may also move the JavaScript, Stylesheet, and Image "static" directories, however, they all should live in the same directory in order for the styles to work correctly.
+
+For example, you may change the StaticsPrefix option from the root '/' to:
+
+const StaticsPrefix = '/uke-static/';
+
+The Editor, for example, will now link to:
+
+http://mysite.com/uke-static/js/ukeGeeks.scriptasaurus.merged.js'
