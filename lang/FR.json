@@ -124,5 +124,10 @@
   "original_transpose" : "d'origine",
   "type_your_song_here" : "SAISIR_LA_CHANSON_ICI",
   "auto_scroll" : "Scrolling automatique",
-  "auto_scroll_descr" : "Activer le scrolling auto de la chanson"
+  "auto_scroll_descr" : "Activer le scrolling auto de la chanson",
+  "not_found_click_here" : "Cliquez ici pour retourner à l'accueil du songbook",
+  "not_found_msg" : "Hoho ! Page non trouvée !",
+  "not_found_title" : "Page non trouvée !",
+  "song_not_found_title" : "La chanson non trouvée",
+  "song_not_found_subtitle" : "Chanson introuvable, vérifiez le lien, merci !"
 }

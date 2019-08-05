@@ -5,10 +5,9 @@ function GetDisplayStyle($value){
 }
 
 $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
-
 ?>
 <!DOCTYPE HTML>
-<html lang="en">
+<html>
 <head>
 <meta charset="utf-8" />
 <title><?php echo($model->PageTitle); ?> | <?php echo Config::SongbookHeadline?></title>
@@ -31,19 +30,27 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 	</header>
 	<div class="metaInfo" id="songMeta"> </div>
 	<article id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
-    <div id="ukeChordsCanvasWrapper">
+    <div id="ukeChordsCanvasWrapper" class="ugs-diagrams-wrap ugs-grouped">
       <aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped"></aside>
     </div>
 		<article id="ukeSongText" class="ugs-source-wrap">
 			<pre><?php echo($model->Body); ?></pre>
 		</article>
 	</article>
+  <div style="margin-top:30px"><a href="/" class="baseBtn blueBtn">
+    <?php
+          if(!$model->isOK)
+          {
+            echo Lang::Get('not_found_click_here');
+          }
+    ?></a>
+  </div>
 	<footer>
     <?php //echo ($model->PoweredBy!=''?"Powered by ".$model->PoweredBy:''); ?>
 	</footer>
 </section>
 <!-- EDIT SONG (DIALOG) -->
-<section id="songSourceDlg" class="overlay <?php echo($editDlgCssClassName); ?>">
+<section id="songSourceDlg" style="display: none;" class="overlay <?php echo($editDlgCssClassName); ?>">
 	<hgroup>
 		<h3><?php echo Lang::Get('edit_song'); ?></h3>
 	</hgroup>
@@ -70,6 +77,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <!-- AUTOSCROLL CONTROLS -->
 <div style='display: none;' id='autoScrollCtrl'>AutoScroll <span class='autoscrollBtn' id='autoscrollStateBtn'>OFF</span> <span class='autoscrollBtn' id='autoscrollFasterBtn'>+</span> <span class='autoscrollBtn' id='autoscrollSlowerBtn'>-</span></div>
 <!-- APP TOOLBAR -->
+<?php if($model->isOK) {?>
 <section id="ugsAppToolbar" class="ugsAppMenuBar">
 	<ul>
 		<li class="navHome"> <a href="/" title="<?php echo Lang::Get('tb_songbook_desc')?>"><span></span><?php echo Lang::Get('tb_songbook')?></a> </li>
@@ -82,6 +90,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
     <?php } ?>
 	</ul>
 </section>
+<? } ?>
 <!-- LAYOUT OPTIONS -->
 <aside class="arrowBox layoutOptions" id="layoutOptions">
 	<fieldset class="arrowBoxContent enablePseudoSelects">

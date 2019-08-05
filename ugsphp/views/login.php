@@ -5,7 +5,7 @@ $errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
 
 ?>
 <!DOCTYPE HTML>
-<html lang="en">
+<html>
 <head>
 	<meta charset="utf-8" />
   <title><?php echo($model->PageTitle); ?> | <?php echo Config::SongbookHeadline?></title>

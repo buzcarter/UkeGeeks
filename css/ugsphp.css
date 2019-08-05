@@ -151,3 +151,12 @@ a {
 	font-size:.8em;
 }
 
+.NotFound404
+{
+  border: 2px solid gray;
+  text-align: center;
+  padding: 20px;
+  margin: 40px auto;
+  width: 650px;
+  border-radius: 10px;
+}

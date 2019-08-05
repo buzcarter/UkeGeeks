@@ -124,5 +124,10 @@
   "original_transpose" : "original",
   "type_your_song_here" : "SONGTEXT_HIER_EINGEBEN",
   "auto_scroll" : "Auto-Scroll song",
-  "auto_scroll_descr" : "Enable auto-scrolling of the song"
+  "auto_scroll_descr" : "Enable auto-scrolling of the song",
+  "not_found_click_here" : "Click here to go back to the Songbook",
+  "not_found_msg" : "Huho ! Page not found !",
+  "not_found_title" : "Page not found",
+  "song_not_found_title" : "The 404 Song",
+  "song_not_found_subtitle" : "Song not found, check your link please !"
 }
