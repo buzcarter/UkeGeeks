@@ -48,7 +48,7 @@ function BuildSongList($SongList)
  * ------------------------------------------------*/
 ?>
 <!DOCTYPE HTML>
-<html lang="en">
+<html>
 <head>
 	<meta charset="utf-8" />
 	<title><?php echo($model->PageTitle); ?></title>

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html>
 <head>
 	<meta charset="utf-8" />
 	<title>Song Index Rebuilt</title>
