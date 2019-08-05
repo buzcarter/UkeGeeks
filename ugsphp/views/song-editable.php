@@ -31,7 +31,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 	</header>
 	<div class="metaInfo" id="songMeta"> </div>
 	<article id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
-    <div id="ukeChordsCanvasWrapper">
+    <div id="ukeChordsCanvasWrapper" class="ugs-diagrams-wrap ugs-grouped">
       <aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped"></aside>
     </div>
 		<article id="ukeSongText" class="ugs-source-wrap">
