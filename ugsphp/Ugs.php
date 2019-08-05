@@ -25,13 +25,6 @@ class Ugs{
     // Set user language if needed
     Lang::Init($user->Language);
 
-    // Special action : sending the language json
-    if($action == Actions::GetLangData)
-    {
-      Lang::SendJsonData();
-      exit;
-    }
-
 		$builder = $this->GetBuilder( $action, $user );
 		$model = $builder->Build();
 
