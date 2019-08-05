@@ -18,7 +18,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.merged.css" title="ugsEditorCss" />
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.print.css" media="print" />
 </head>
-<body class="editableSongPage pageWidth_screen">
+<body class="editableSongPage pageWidth_screen" style="display: none;">
 <section id="scalablePrintArea" class="scalablePrintArea">
 	<header>
 		<hgroup class="ugs-songInfo">
@@ -317,6 +317,10 @@ var ugs_il8n = <?php echo Lang::GetJsonData() ?>;
 
 $(function()
 {
+  // Page loaded, display the song
+  // This prevents flashing of the unrendered chordpro
+  $('.editableSongPage').show();
+
 	var ugs_settings = window.ugs_settings || {};
 	ugsEditorPlus.songAmatic.init(ugs_settings);
 
@@ -336,7 +340,6 @@ $(function()
 
   // Setup autoscroll if needed
   ugsEditorPlus.autoscroll.init();
-
 });
 </script>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ukeGeeks.scriptasaurus.merged.js"></script>
