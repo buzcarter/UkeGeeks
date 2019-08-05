@@ -37,14 +37,12 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			<pre><?php echo($model->Body); ?></pre>
 		</article>
 	</article>
-  <div style="margin-top:30px"><a href="/" class="baseBtn blueBtn">
     <?php
-          if(!$model->isOK)
-          {
-            echo Lang::Get('not_found_click_here');
-          }
+      if(!$model->isOK)
+      {
+        echo '<div style="margin-top:30px"><a href="/" class="baseBtn blueBtn">'.Lang::Get('not_found_click_here').'</div>';
+      }
     ?></a>
-  </div>
 	<footer>
     <?php //echo ($model->PoweredBy!=''?"Powered by ".$model->PoweredBy:''); ?>
 	</footer>
