@@ -1,26 +1,27 @@
+# Prevent browsing the .git directory
+RedirectMatch 404 /\.git
+
 # Make this the default page served
-# DirectoryIndex  music.php index.php index.htm index.html
+DirectoryIndex  music.php index.php index.htm index.html
 
 # disable directory browsing
-# Options All -Indexes
+Options All -Indexes
 
 # Serve the songindex for "file not found" error
-# ErrorDocument 404 /music.php
+ErrorDocument 404 /music.php?action=NotFound404
 
 <IfModule mod_rewrite.c>
-### REWRITES ###
-RewriteEngine On
-RewriteBase /
+  RewriteEngine On
+  RewriteBase /
 
-RewriteRule ^songbook/?$ /music.php?action=songbook [L,QSA]
-RewriteRule ^songbook/(.*)$ /music.php?action=song&song=$1 [L,QSA]
-RewriteRule ^source/(.*)$ /music.php?action=source&song=$1 [L,QSA]
-RewriteRule ^edit/(.*)$ /music.php?action=edit&song=$1 [L,QSA]
-RewriteRule ^reindex/?$ /music.php?action=reindex [L,QSA]
-RewriteRule ^login/?$ /music.php?action=login [L,QSA]
-RewriteRule ^logout/?$ /music.php?action=logout [L,QSA]
-RewriteRule ^ajaxnewsong/?$ /music.php?action=ajaxnewsong [L,QSA]
-RewriteRule ^ajaxupdatesong/?$ /music.php?action=ajaxupdatesong [L,QSA]
-RewriteRule ^ajaxdeletesong/?$ /music.php?action=ajaxdeletesong [L,QSA]
-
+  RewriteRule ^songbook/?$ /music.php?action=songbook [L,QSA]
+  RewriteRule ^songbook/(.*)$ /music.php?action=song&song=$1 [L,QSA]
+  RewriteRule ^source/(.*)$ /music.php?action=source&song=$1 [L,QSA]
+  RewriteRule ^edit/(.*)$ /music.php?action=edit&song=$1 [L,QSA]
+  RewriteRule ^reindex/?$ /music.php?action=reindex [L,QSA]
+  RewriteRule ^login/?$ /music.php?action=login [L,QSA]
+  RewriteRule ^logout/?$ /music.php?action=logout [L,QSA]
+  RewriteRule ^ajaxnewsong/?$ /music.php?action=ajaxnewsong [L,QSA]
+  RewriteRule ^ajaxupdatesong/?$ /music.php?action=ajaxupdatesong [L,QSA]
+  RewriteRule ^ajaxdeletesong/?$ /music.php?action=ajaxdeletesong [L,QSA]
 </IfModule>

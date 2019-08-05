@@ -155,6 +155,9 @@ class Ugs{
       case Actions::AjaxDeleteSong:
         $builder = new Ajax_DeleteSong_Vmb();
         break;
+      case Actions::NotFound404:
+        $builder = new NotFound404_Vmb();
+        break;
       default:
         $builder = new SongListDetailed_Vmb();
         break;
@@ -250,6 +253,8 @@ class Ugs{
 			case Actions::Logout:
 			case Actions::Login:
 				return 'login.php';
+			case Actions::NotFound404:
+				return '404.php';
 		}
 		return 'song-list-detailed.php';
 	}
