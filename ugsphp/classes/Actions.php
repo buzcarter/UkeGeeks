@@ -15,7 +15,6 @@ final class Actions {
 	const AjaxNewSong = 7;
 	const AjaxUpdateSong = 8;
 	const AjaxDeleteSong = 9;
-  const GetLangData = 10;
   const NotFound404 = 11;
 
 	/**
@@ -34,7 +33,6 @@ final class Actions {
 		 	case 'ajaxnewsong': return self::AjaxNewSong;
 		 	case 'ajaxupdatesong': return self::AjaxUpdateSong;
 		 	case 'ajaxdeletesong': return self::AjaxDeleteSong;
-		 	case 'getlangdata': return self::GetLangData;
 		 	case 'notfound404': return self::NotFound404;
 		 }
 		 return self::Songbook;
@@ -56,7 +54,6 @@ final class Actions {
 			case self::AjaxNewSong: return 'AjaxNewSong';
 			case self::AjaxUpdateSong: return 'AjaxUpdateSong';
 			case self::AjaxDeleteSong: return 'AjaxDeleteSong';
-			case self::GetLangData: return 'GetLangData';
       case self::NotFound404: return 'notfound404';
 		}
 		return 'Songbook';

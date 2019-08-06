@@ -36,6 +36,7 @@ UkeGeeks is a songbook editor for ukulele originally created by [Buz Carter](htt
 - Removed useless SOPRANO tuning references on each pages
 - Login page cleanup + ability to hide email
 - Made the advanced editor link more obvious + help displayed on startup
+- Added a back to top button on the song list
 
 _______________________________________________________
 # Installation

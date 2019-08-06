@@ -110,7 +110,7 @@ ukeGeeks.chordPainter = function(){
 		if (_ignoreMatchList.length > 0) {
 			var para = document.createElement('p');
 			para.className = 'ugsIgnoredChords';
-			para.innerHTML = 'Also uses: ' + _ignoreMatchList.sort().join(', ');
+			para.innerHTML = ugs_il8n.also_uses + ' : ' + _ignoreMatchList.sort().join(', ');
 			_handles.diagrams.appendChild(para);
 		}
 	};

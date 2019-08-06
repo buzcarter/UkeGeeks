@@ -151,6 +151,7 @@ a {
 	font-size:.8em;
 }
 
+/*------------------------------------------- */
 .NotFound404
 {
   border: 2px solid gray;
@@ -160,3 +161,30 @@ a {
   width: 650px;
   border-radius: 10px;
 }
+/*------------------------------------------- */
+
+/*------------------------------------------- */
+#back-to-top {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 9999;
+    width: 64px;
+    height: 64px;
+    text-align: center;
+    line-height: 60px;
+    background: #f5f5f5;
+    color: #FF7E00;
+    cursor: pointer;
+    border: 0;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: opacity 0.2s ease-out;
+    display: none;
+    font-size: 1.6em;
+}
+#back-to-top:hover {
+    background: #e9ebec;
+}
+/*------------------------------------------- */
+

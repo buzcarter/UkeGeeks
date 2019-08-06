@@ -1673,6 +1673,10 @@ ukeGeeks.chordBrush = function() {
 			return;
 		}
 
+    // Add chord name data attribute
+    // (so we can later identify which canvas is for which chord)
+    ctx.canvas.setAttribute('data-chordname', chord.name);
+
 		if (!fontSettings) {
 			fontSettings = ukeGeeks.settings.fonts;
 		}
@@ -1868,7 +1872,8 @@ ukeGeeks.chordBrush = function() {
 	 */
 	return _public;
 
-};/**
+};
+/**
  * Reads an HTML (text) block looking for chords in format: [Emaj7]
  * Returns the HTML block with wrapped chords: &lt;code&gt;&lt;strong&gt;&lt;em&gt; 
  * @class chordParser
@@ -2656,7 +2661,7 @@ ukeGeeks.chordPainter = function(){
 		if (_ignoreMatchList.length > 0) {
 			var para = document.createElement('p');
 			para.className = 'ugsIgnoredChords';
-			para.innerHTML = 'Also uses: ' + _ignoreMatchList.sort().join(', ');
+			para.innerHTML = ugs_il8n.also_uses + ' : ' + _ignoreMatchList.sort().join(', ');
 			_handles.diagrams.appendChild(para);
 		}
 	};
@@ -2709,7 +2714,8 @@ ukeGeeks.chordPainter = function(){
 	/* return our public interface
 	 */
 	return _public;
-};/**
+};
+/**
  * Tablature renderer -- reads tab data and draws canvas elements.
  * Creates "packed" versions of the tabs, including a "key line" that's comprised
  * only of '-' and '*' -- the asterisks denoting where a dot will eventually be placed.
