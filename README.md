@@ -37,6 +37,7 @@ UkeGeeks is a songbook editor for ukulele originally created by [Buz Carter](htt
 - Login page cleanup + ability to hide email
 - Made the advanced editor link more obvious + help displayed on startup
 - Added a back to top button on the song list
+- Removed the StaticsPrefix const from the config file. Now it's handled automagically
 
 _______________________________________________________
 # Installation
@@ -67,14 +68,3 @@ You can just modify it to whatever you wish (include leading and trailing last f
 
     const Subdirectory = '/hobbies/ukulele/';
  
-#### Optional : changing Asset directories
-
-You may also move the JavaScript, Stylesheet, and Image "static" directories, however, they all should live in the same directory in order for the styles to work correctly.
-
-For example, you may change the StaticsPrefix option from the root '/' to:
-
-const StaticsPrefix = '/uke-static/';
-
-The Editor, for example, will now link to:
-
-http://mysite.com/uke-static/js/ukeGeeks.scriptasaurus.merged.js'

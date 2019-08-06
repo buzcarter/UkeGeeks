@@ -20,15 +20,8 @@ class Config {
 	static public $AppDirectory = '';
 
 	// --------------------------------------
-	// Alternate directory or path locations
+	// Alternate directory
 	// --------------------------------------
-
-	/**
-	 * Location of UGS asset directories, i.e. JavaScript (JS), Stylesheet (CSS), and Image (leave as "/" if standard install)
-	 * @constant(StaticsPrefix)
-	 * @var String
-	 */
-	const StaticsPrefix = '/';
 
 	/**
 	 * If you want your URLs to be prefixed with a subdirectory specify that here (leave as "/" if standard install)
