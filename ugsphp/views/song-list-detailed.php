@@ -86,12 +86,17 @@ function BuildSongList($SongList)
 	</div>
   <footer class='SongListFooter'><?php echo Lang::Get('poweredby')?> <a href='https://github.com/bloodybowlers/UkeGeeks-ng' target=_blank><?php echo $model->PoweredBy?></a></footer>
 	</section>
+
   <script type="text/javascript">
     // Uglyyyyyyyyyyyyyy
     var ugs_il8n = <?php echo Lang::GetJsonData() ?>;
   </script>
+
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.merged.js"></script>
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/bootstrap-typeahead.min.js"></script>
+  <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/back-to-top.js"></script>
+
 	<?php if ($model->IsNewAllowed) {
 		?>
 		<section class="overlay" style="top:100px; right:40%; display:none;" id="newSongForm">
@@ -114,11 +119,17 @@ function BuildSongList($SongList)
 		<?php
 	}
 	?>
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/bootstrap-typeahead.min.js"></script>
-<script type="text/javascript">
-var qkSrch = ugsEditorPlus.typeahead();
-qkSrch.initialize();
-</script>
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/back-to-top.js"></script>
+
+  <script type="text/javascript">
+    $(window).load(function() {
+      // Init Quick Search
+      var qkSrch = ugsEditorPlus.typeahead();
+      qkSrch.initialize();
+
+      // Init Back To Top button
+      BackToTop.init();
+    }());
+  </script>
+
 </body>
 </html>

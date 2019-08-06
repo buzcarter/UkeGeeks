@@ -1,36 +1,35 @@
 /***************************************************
  * Back to top
 /***************************************************/
-$( window ).load(function() {
 
-  $('body').append('<a href="#" id="back-to-top">&uarr;</a>');
+var BackToTop = (function() {
+  var self = {};
 
-  if ($('#back-to-top').length)
+  self.onScroll = function()
   {
-      var scrollTrigger = 150;
-      backToTop = function ()
-      {
-          var scrollTop = $(window).scrollTop();
-          if (scrollTop > scrollTrigger)
-          {
-              $('#back-to-top').show();
-          }
-          else
-          {
-              $('#back-to-top').hide();
-          }
-
-      };
-      backToTop();
-
-      $(window).on('scroll', function () {
-          backToTop();
-      });
-
-      $('#back-to-top').on('click', function (e)
-      {
-          e.preventDefault();
-          $('html,body').animate({ scrollTop: 0 }, 700);
-     });
+    var scrollTrigger = 150;
+    var scrollTop = $(window).scrollTop();
+    if (scrollTop > scrollTrigger)
+    {
+        $('#back-to-top').show();
+    }
+    else
+    {
+        $('#back-to-top').hide();
+    }
   }
-});
+
+  self.onClick = function()
+  {
+    $('html,body').animate({ scrollTop: 0 }, 700);
+  }
+
+  self.init = function()
+  {
+    $('body').append('<a href="#" id="back-to-top">&uarr;</a>');
+    $('#back-to-top').on('click', function (e) { self.onClick(); });
+    $(window).on('scroll', function (e) { e.preventDefault(); self.onScroll(); });
+  }
+
+  return self;
+}());
