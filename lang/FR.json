@@ -129,5 +129,6 @@
   "not_found_msg" : "Hoho ! Page non trouvée !",
   "not_found_title" : "Page non trouvée !",
   "song_not_found_title" : "La chanson non trouvée",
-  "song_not_found_subtitle" : "Chanson introuvable, vérifiez le lien, merci !"
+  "song_not_found_subtitle" : "Chanson introuvable, vérifiez le lien, merci !",
+  "also_uses" : "Utilise aussi"
 }

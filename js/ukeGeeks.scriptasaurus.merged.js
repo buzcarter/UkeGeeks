@@ -2661,7 +2661,7 @@ ukeGeeks.chordPainter = function(){
 		if (_ignoreMatchList.length > 0) {
 			var para = document.createElement('p');
 			para.className = 'ugsIgnoredChords';
-			para.innerHTML = 'Also uses: ' + _ignoreMatchList.sort().join(', ');
+			para.innerHTML = ugs_il8n.also_uses + ' : ' + _ignoreMatchList.sort().join(', ');
 			_handles.diagrams.appendChild(para);
 		}
 	};
@@ -2714,7 +2714,8 @@ ukeGeeks.chordPainter = function(){
 	/* return our public interface
 	 */
 	return _public;
-};/**
+};
+/**
  * Tablature renderer -- reads tab data and draws canvas elements.
  * Creates "packed" versions of the tabs, including a "key line" that's comprised
  * only of '-' and '*' -- the asterisks denoting where a dot will eventually be placed.

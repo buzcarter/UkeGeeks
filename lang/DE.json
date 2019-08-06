@@ -129,5 +129,6 @@
   "not_found_msg" : "Huho ! Page not found !",
   "not_found_title" : "Page not found",
   "song_not_found_title" : "The 404 Song",
-  "song_not_found_subtitle" : "Song not found, check your link please !"
+  "song_not_found_subtitle" : "Song not found, check your link please !",
+  "also_uses" : "Also uses"
 }
