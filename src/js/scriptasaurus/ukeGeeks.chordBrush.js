@@ -41,6 +41,10 @@ ukeGeeks.chordBrush = function() {
 			return;
 		}
 
+    // Add chord name data attribute
+    // (so we can later identify which canvas is for which chord)
+    ctx.canvas.setAttribute('data-chordname', chord.name);
+
 		if (!fontSettings) {
 			fontSettings = ukeGeeks.settings.fonts;
 		}

@@ -1673,6 +1673,10 @@ ukeGeeks.chordBrush = function() {
 			return;
 		}
 
+    // Add chord name data attribute
+    // (so we can later identify which canvas is for which chord)
+    ctx.canvas.setAttribute('data-chordname', chord.name);
+
 		if (!fontSettings) {
 			fontSettings = ukeGeeks.settings.fonts;
 		}
@@ -1868,7 +1872,8 @@ ukeGeeks.chordBrush = function() {
 	 */
 	return _public;
 
-};/**
+};
+/**
  * Reads an HTML (text) block looking for chords in format: [Emaj7]
  * Returns the HTML block with wrapped chords: &lt;code&gt;&lt;strong&gt;&lt;em&gt; 
  * @class chordParser
