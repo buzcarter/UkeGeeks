@@ -69,3 +69,10 @@ You can just modify it to whatever you wish (include leading and trailing last f
 
     const Subdirectory = '/hobbies/ukulele/';
  
+#### Optional : enabling URL rewriting (apache mod_rewrite)
+
+For nicer url you can enable mod_rewrite in the config.php file like this :
+
+    const UseModRewrite = true;
+
+Note : There is currently a bug (issue #37) if your install isn't in the root directory...
