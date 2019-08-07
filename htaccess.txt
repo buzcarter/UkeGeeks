@@ -24,4 +24,6 @@ ErrorDocument 404 /music.php?action=NotFound404
   RewriteRule ^ajaxnewsong/?$ /music.php?action=ajaxnewsong [L,QSA]
   RewriteRule ^ajaxupdatesong/?$ /music.php?action=ajaxupdatesong [L,QSA]
   RewriteRule ^ajaxdeletesong/?$ /music.php?action=ajaxdeletesong [L,QSA]
+  RewriteRule ^chordfinder/?$ /music.php?action=chordfinder [L,QSA]
+  RewriteRule ^reversechordfinder/?$ /music.php?action=reversechordfinder [L,QSA]
 </IfModule>

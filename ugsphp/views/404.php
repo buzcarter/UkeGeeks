@@ -14,7 +14,7 @@
   <h2 style='text-align:center'><?php echo Config::SongbookHeadline?></h2>
   <div class='NotFound404'>
     <h1><?php echo Lang::Get('not_found_msg')?></h1>
-    <a class="baseBtn blueBtn" href='<?php echo Config::Subdirectory?>'><?php echo Lang::Get('not_found_click_here')?></a>
+    <a class="baseBtn blueBtn" href='<?php echo Config::Subdirectory.(Config::UseModRewrite?'songbook/':'')?>'><?php echo Lang::Get('not_found_click_here')?></a>
   </div>
 </body>
 </html>
