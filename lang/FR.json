@@ -130,5 +130,7 @@
   "not_found_title" : "Page non trouvée !",
   "song_not_found_title" : "La chanson non trouvée",
   "song_not_found_subtitle" : "Chanson introuvable, vérifiez le lien, merci !",
-  "also_uses" : "Utilise aussi"
+  "also_uses" : "Utilise aussi",
+  "chord_finder" : "Recherche d'accords",
+  "reverse_chord_finder" : "Recherche d'accord inversée"
 }

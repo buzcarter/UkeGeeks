@@ -4206,6 +4206,291 @@ ugsChordBuilder.chooserList = (function() {
 	return _public;
 
 }());
+/**
+ *
+ * @class reverseFinder
+ * @namespace ugsChordBuilder
+ */
+ugsChordBuilder.reverseFinder = function() {
+  //console.log('ugsChordBuilder.reverseFinder');
+  var _cursorCanvas = null;
+
+  var _chordDictionary = [];
+
+  var _startingFret = 1;
+
+  var init = function() {
+    /*
+    var ele = document.getElementById('startingFret');
+    addStartingFretOptions(ele);
+    ele.addEventListener('change', onFretChange, false);
+    */
+
+    _cursorCanvas = document.getElementById('reverseChordFinderCursorCanvas');
+    if (!_cursorCanvas.getContext){
+      return false;
+    }
+
+    var cursorContext = _cursorCanvas.getContext('2d');
+    var diagramContext = document.getElementById('reverseChordFinderDiagramCanvas').getContext('2d');
+
+    _cursorCanvas.addEventListener('mousemove', onMouseMove, false);
+    _cursorCanvas.addEventListener('click', onMouseClick, false);
+
+    ugsChordBuilder.chordCanvas.init(diagramContext, _cursorCanvas);
+    ugsChordBuilder.cursorCanvas.init(cursorContext);
+
+    redraw();
+    return false;
+  };
+  /*
+  var addStartingFretOptions = function(ele) {
+    var s = '';
+    for (var i = 1; i < 17; i++) {
+      s += '<option value="' + i + '">' + i + '</option>';
+    };
+    ele.innerHTML = s;
+  };
+
+  var onFretChange = function(evt) {
+    _startingFret = parseInt(this.value);
+    redraw();
+  };
+*/
+  var onMouseMove = function(evt) {
+    ugsChordBuilder.cursorCanvas.draw(getPosition(_cursorCanvas, evt));
+  };
+
+  var onMouseClick = function(evt) {
+    var pos = getPosition(_cursorCanvas, evt);
+    var dot = ugsChordBuilder.tracking.toDot(pos);
+    if (dot) {
+      ugsChordBuilder.fretDots.toggleDot(dot);
+      redraw(pos);
+      updateMatchField();
+    }
+  };
+
+  var getPosition = function(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return new ugsChordBuilder.entities.Position(
+      evt.clientX - rect.left,
+      evt.clientY - rect.top
+    );
+  };
+
+  var redraw = function(pos) {
+    pos = pos || new ugsChordBuilder.entities.Position(0, 0);
+    ugsChordBuilder.chordCanvas.draw(pos, _startingFret);
+  };
+
+  var updateMatchField = function() {
+    var fingerprint = getFingerprint();
+    var matches = findMatches(fingerprint);
+    var s = '';
+    for (var i = 0; i < matches.length; i++) {
+      s += '<li>' + matches[i] + '</li>';
+    };
+    document.getElementById('reverseChordFinderMyMatches').innerHTML = s;
+    document.getElementById('reverseChordFinderFingerprint').innerHTML = fingerprint;
+  };
+
+  var preloadNotes = function() {
+    ukeGeeks.definitions.addInstrument(ukeGeeks.definitions.sopranoUkuleleGcea);
+    ukeGeeks.definitions.useInstrument();
+    var definitions = ukeGeeks.definitions.getChords();
+    _chordDictionary = [];
+    for (var i = 0; i < definitions.length; i++) {
+      _chordDictionary[definitions[i].name] = toNotes(definitions[i]);
+    }
+    //console.log(_chordDictionary['C']);
+  };
+
+  var findMatches = function(fingerprint) {
+    var c = [];
+    //console.log('find "' + fingerprint + '"');
+    for (var key in _chordDictionary) {
+      if (_chordDictionary[key] == fingerprint) {
+        c.push(key)
+      }
+    }
+    return c;
+  };
+
+  var getFingerprint = function() {
+    var strings = ugsChordBuilder.export.getPrimaryFrets(_startingFret);
+    for (var i = 0; i < strings.length; i++) {
+      strings[i] = toNoteName(i, strings[i]);
+    };
+    return arrayToUniqueString(strings);;
+  };
+
+  var toNoteName = function(stringIndex, fret) {
+    return ukeGeeks.transpose.shift(ugsChordBuilder.settings.fretBoard.stringNames[stringIndex], fret);
+  };
+
+  /**
+   * returns "signature" for given chord's frets.
+   * @method toNotes
+   * @return {string}
+   */
+  var toNotes = function(chord) {
+    var strings = [];
+    for (var i = 0; i < ugsChordBuilder.settings.fretBoard.stringNames.length; i++) {
+      strings.push(0);
+    };
+
+    for (var i = 0; i < chord.dots.length; i++) {
+      if (strings[chord.dots[i].string] < chord.dots[i].fret) {
+        strings[chord.dots[i].string] = chord.dots[i].fret;
+      }
+    };
+
+    for (var i = 0; i < strings.length; i++) {
+      strings[i] = toNoteName(i, strings[i]);
+    };
+
+    // TODO: include muted
+    // console.log(chord.name + ': ' + s);
+    return arrayToUniqueString(strings);
+  };
+
+  var toUnique = function(source) {
+    // http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+    var unique = {};
+    var copied = [];
+    for (var i = 0; i < source.length; i++) {
+      if (unique.hasOwnProperty(source[i])) {
+        continue;
+      }
+      unique[source[i]] = true;
+      copied.push(source[i]);
+    }
+    return copied;
+  };
+
+  var sortAlpha = function(source) {
+    // Sort credit:
+    // http://stackoverflow.com/questions/17522877/sorting-an-array-based-on-alphabets
+    return source.sort(function(a, b) {
+      var textA = a.toUpperCase();
+      var textB = b.toUpperCase();
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    });
+  };
+
+  var arrayToUniqueString = function(source) {
+    var copied = toUnique(source);
+    copied = sortAlpha(copied);
+    var s = '';
+    for (var i = 0; i < copied.length; i++) {
+      s += copied[i];
+      if (i < copied.length - 1) {
+        s += ' ';
+      }
+    };
+    return s;
+  };
+
+  this.run = function() {
+    init();
+    preloadNotes();
+  };
+
+};
+/**
+ *
+ * @class chordFinder
+ * @namespace ugsChordBuilder
+ */
+ugsChordBuilder.chordFinder = function() {
+  //console.log('ugsChordBuilder.chordFinder');
+  var _canvas = null,
+    _context = null
+
+  var _chord = {
+    rootNote: 'A',
+    chordType: ''
+  };
+
+  var init = function() {
+    _canvas = document.getElementById('chordFinderMyCanvas');
+    if (!_canvas.getContext){
+      return false;
+    }
+
+    _context = _canvas.getContext('2d');
+
+    var ele = document.getElementById('chordFinderRootNote');
+    addRootOptions(ele);
+    ele.addEventListener('change', onRootNoteChange, false);
+
+    ele = document.getElementById('chordFinderChordType');
+    addChordTypeOptions(ele);
+    ele.addEventListener('change', onChordTypeChange, false);
+
+    ukeGeeks.definitions.addInstrument(ukeGeeks.definitions.sopranoUkuleleGcea);
+    ukeGeeks.definitions.useInstrument();
+
+    ugsChordBuilder.chordCanvas.init(_context, _canvas);
+    redraw();
+    return true;
+  };
+
+  var addRootOptions = function(ele) {
+    var notes = ['A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab'];
+    var s = '';
+    var value = '';
+    for (var i = 0; i < notes.length; i++) {
+      value = notes[i].indexOf('/') > 0 ? notes[i].substring(0, notes[i].indexOf('/')) : notes[i];
+      s += '<option value="' + value + '">' + notes[i] + '</option>';
+    };
+    ele.innerHTML = s;
+  };
+
+  var addChordTypeOptions = function(ele) {
+    var chordTypes = ['maj', 'm', '7', 'm7', '7sus4', 'dim', 'aug', 'maj7', 'sus2', 'sus4', '6', 'm6', '9' ];
+    var s = '';
+    var value = '';
+    for (var i = 0; i < chordTypes.length; i++) {
+      value = chordTypes[i] == 'maj' ? '' : chordTypes[i];
+      s += '<option value="' + value + '">' + chordTypes[i] + '</option>';
+    };
+    ele.innerHTML = s;
+  };
+
+  var redraw = function() {
+    var name = _chord.rootNote + _chord.chordType;
+    var definition = ukeGeeks.definitions.get(name);
+    // clear
+    for (var i = 0; i < ugsChordBuilder.settings.fretBoard.stringNames.length; i++) {
+      ugsChordBuilder.fretDots.toggleDot(new ugsChordBuilder.entities.Dot(i));
+    };
+    // map definition to our render(er)
+    for (var i = 0; i < definition.dots.length; i++) {
+      if (definition.dots[i].fret > 0) {
+        ugsChordBuilder.fretDots.toggleDot(new ugsChordBuilder.entities.Dot(definition.dots[i].string, definition.dots[i].fret));
+      }
+    };
+    // draw, but hide the cursor
+    ugsChordBuilder.chordCanvas.draw(new ugsChordBuilder.entities.Position(-100, -100), 1);
+  };
+
+  var onRootNoteChange = function(evt) {
+    _chord.rootNote = this.value;
+    redraw();
+  };
+
+  var onChordTypeChange = function(evt) {
+    _chord.chordType = this.value;
+    redraw();
+  };
+
+  this.run = function() {
+    init();
+  };
+
+};
 
 /**
  * Doing

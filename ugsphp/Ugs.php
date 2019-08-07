@@ -151,6 +151,9 @@ class Ugs{
       case Actions::NotFound404:
         $builder = new NotFound404_Vmb();
         break;
+      case Actions::ChordFinder:
+        $builder = new ChordFinder_Vmb();
+        break;
       default:
         $builder = new SongListDetailed_Vmb();
         break;
@@ -248,6 +251,8 @@ class Ugs{
 				return 'login.php';
 			case Actions::NotFound404:
 				return '404.php';
+			case Actions::ChordFinder:
+				return 'chord-finder.php';
 		}
 		return 'song-list-detailed.php';
 	}
