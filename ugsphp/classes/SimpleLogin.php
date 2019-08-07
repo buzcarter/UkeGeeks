@@ -22,7 +22,7 @@ class SimpleLogin{
 		$username = strtolower(trim($username));
 		$password = trim($password);
 		$this->Set($this->ValidateUser($username, $password));
-		return $this->_user->IsAllowAccess ? 'Success!' : 'invalid username/password';
+		return $this->_user->IsAllowAccess ? Lang::Get('success') : Lang::Get('check_username_password');
 	}
 
 	/**

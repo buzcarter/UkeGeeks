@@ -151,6 +151,12 @@ class Ugs{
       case Actions::NotFound404:
         $builder = new NotFound404_Vmb();
         break;
+      case Actions::ChordFinder:
+        $builder = new ChordFinder_Vmb();
+        break;
+      case Actions::ReverseChordFinder:
+        $builder = new ReverseChordFinder_Vmb();
+        break;
       default:
         $builder = new SongListDetailed_Vmb();
         break;
@@ -171,13 +177,13 @@ class Ugs{
 	private function Bootstrap() {
 		// let's get Config setup
 		$appRoot = dirname(__FILE__);
-    if(!file_exists($appRoot.'/Config.php'))
+    if(!file_exists($appRoot.'/conf/Config.php'))
     {
       die ('FATAL ERROR : Please create the "config.php" file from the example one. Or read the installation doc :)');
     }
     else
     {
-      include_once $appRoot . '/Config.php';
+      include_once $appRoot . '/conf/Config.php';
     }
 
 		// some dependencies: make sure base classes are included first...
@@ -248,6 +254,10 @@ class Ugs{
 				return 'login.php';
 			case Actions::NotFound404:
 				return '404.php';
+			case Actions::ChordFinder:
+				return 'chord-finder.php';
+			case Actions::ReverseChordFinder:
+				return 'reverse-chord-finder.php';
 		}
 		return 'song-list-detailed.php';
 	}

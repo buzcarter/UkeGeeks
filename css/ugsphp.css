@@ -3,7 +3,7 @@
 /* Basic HTML
  ------------------------------------------- */
 html, body {
-	height: 100%;
+	/*height: 100%;*/
 }
 html {
 	background: url("../img/editor/subpage-stripe-bg.png") repeat scroll;
@@ -187,4 +187,14 @@ a {
     background: #e9ebec;
 }
 /*------------------------------------------- */
+
+.niceloginbg {
+  padding-bottom: 0;
+  height:100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url(../img/seasidebg.jpg);
+  cursor: default;
+}
 

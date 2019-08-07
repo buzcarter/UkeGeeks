@@ -24,4 +24,6 @@ ugsEditorPlus.stickyChords.js \
 ugsEditorPlus.autoscroll.js \
 ugsChordBuilder.js \
 ugsChordBuilder.chooserList.js \
+ugsChordBuilder.reverseChordFinder.js \
+ugsChordBuilder.chordFinder.js \
 ugsChordBuilder.editorUi.js > ../../../js/ugsEditorPlus.merged.js

@@ -1,0 +1,291 @@
+@import url(yuiReset.css);
+body {
+  font-family: Arial;
+  font-size: 12pt;
+}
+h1 {
+  font-size: 21pt;
+}
+h2 {
+  font-size: 13pt;
+  color: #999;
+}
+/* ________ pages: index ________ */
+.indexPage h2 {
+  margin-bottom: 1em;
+}
+.pageMenu {
+  text-align: left;
+}
+.pageMenu li {
+  margin-bottom: 1em;
+}
+.pageMenu em {
+  color: #777;
+  display: block;
+  font-size: .8em;
+  padding: .1em 1em 0;
+}
+.betaTag {
+  color: #399;
+  font-size: .9em;
+}
+/* ________ pages: narrow ________ */
+.narrow {
+  text-align: center;
+}
+.narrow section {
+  width: 305px;
+  margin: 0 auto;
+}
+.mobileWide section {
+  width: 480px;
+  margin: 0 auto;
+}
+mobileWide section {
+}
+/* add some mobile love */
+@media screen and (max-width: 480px) {
+  .mobileWide section,  .narrow section {
+    max-width: 100%;
+    overflow: hidden;
+  }
+}
+/* ________ pages: reverse lookup ________ */
+.matches {
+  font-size: 24pt;
+  font-weight: bold;
+}
+.fingerprint {
+  color: #aaa;
+  padding: 1em;
+}
+.bigLists {
+  margin-bottom: .6em;
+}
+.bigLists select {
+  border: solid 1px #999;
+  border-radius: 4px;
+  font-size: 18pt;
+  text-align: center;
+}
+.bigLists option {
+}
+/* ________ pages: chord builder ________ */
+.defineEditor {
+  padding: 1em;
+}
+.defineEditor input[type=text] {
+  border: 1px solid #D7D7D7;
+  border-radius: 5px 5px 5px 5px;
+  display: block;
+  font-size: 30pt;
+  text-align: center;
+  max-width: 100%;
+  width: 100%;
+}
+.defineEditor pre {
+  font-size: 12pt;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+/* ** canvas & editor stack */
+.editorSurface {
+  background-color: #fff;
+  border-radius: 5px ;
+  border: 1px solid #e1e1e1;
+  height: 350px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  width: 460px;
+  -moz-box-shadow:1px 3px 5px rgba(0, 0, 0, 0.3) inset;
+  -webkit-box-shadow:1px 3px 5px rgba(0, 0, 0, 0.3) inset;
+  box-shadow:1px 3px 5px rgba(0, 0, 0, 0.3) inset;
+}
+/* ** stacking order ** */
+.editorSurface canvas {
+  border: none;
+  cursor: none;
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+#reverseChordFinderDiagramCanvas {
+  z-index: 1;
+}
+#reverseChordFinderCursorCanvas {
+  z-index: 2;
+}
+.chordToolbox {
+  z-index: 3;
+}
+.toolboxEdgeShadow {
+  z-index: 4;
+}
+/* -- toolbox and its contents -- */
+.chordToolbox{
+  border: 0 solid #ccc;
+  background-color: #F0EEF0;/*464646;*/
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  height: 250px;
+  position: absolute;
+  top: 50px;
+  transition: all 0.4s ease 0s;
+  width: 135px;
+}
+.chordToolbox.open,
+.chordToolbox:hover {
+  background-color: #fafafa;
+  border-color: #8C8C8C;
+  box-shadow: 4px 6px 9px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s ease 0s;
+}
+.chordToolbox.leftEdge {
+  border-radius: 0 7px 7px 0;
+  border-width: 2px 2px 2px 0;
+  left: -110px;
+}
+.chordToolbox.leftEdge.open,
+.chordToolbox.leftEdge:hover {
+  left: 0;
+}
+.chordToolbox.rightEdge {
+  border-radius: 7px 0 0 7px;
+  border-width: 2px 0 2px 2px;
+  right: -110px;
+}
+.chordToolbox.rightEdge.open,
+.chordToolbox.rightEdge:hover {
+  right: 0;
+}
+.chordToolboxInner{
+  margin: 10px auto;
+  width: 100px;
+}
+/* forceed shadow over toolbox(es) */
+.toolboxEdgeShadow {
+  background-color: transparent;
+  height: 255px;
+  position: absolute;
+  top: 51px;
+  width: 10px;
+}
+.toolboxEdgeShadow.leftEdge{
+  box-shadow: 4px 0 6px rgba(0, 0, 0, 0.3);
+  left: -10px;
+}
+.toolboxEdgeShadow.rightEdge{
+  box-shadow: -4px 0 6px rgba(0, 0, 0, 0.3);
+  right: -10px;
+}
+/* --- */
+.toolChip {
+  background-color: #fafafa;
+  border: 1px solid #fafafa;
+  border-radius: 5px;
+  color: #C7681B;
+  cursor: pointer;
+  display: block;
+  margin-bottom:8px;
+  min-height: 70px;
+  padding: 5px 0;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.4s ease 0s;
+  width: 100%;
+}
+.toolChip:hover {
+  background-color: #FEFEFE;
+  border: 1px solid #EDEDED;
+  transition: all 0.6s ease 0s;
+}
+html .selected, 
+html .selected:hover {
+  border-color: #AAA73F;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+#fingerName {
+  color: #806753;
+  display: block;
+  font-size: .82em;
+}
+.input {
+  margin: 5px 0 10px;
+}
+.bigDot {
+  background-color: #E78333;
+  border: 3px solid #973100;
+  border-radius: 23px 23px 23px 23px;
+  display: block;
+  height: 23px;
+  margin: 5px auto;
+  width: 23px;
+}
+/* some "active" button (hover) efx */
+.toolChip img, 
+.toolChip .bigDot {
+  opacity: .75;
+}
+.selected img, 
+.selected .bigDot, 
+.toolChip:hover img, 
+.toolChip:hover .bigDot {
+  opacity: 1;
+}
+/* hand */
+#fingerDiagram {
+  display: block;
+  height: 83px;
+  margin: 0 auto;
+  position: relative;
+  width: 88px;
+}
+.fingerDot {
+  background-color: #F9F340;
+  border: solid 2px #AF9607;
+  border-radius: 8px;
+  display: block;
+  height: 8px;
+  position: absolute;
+  width: 8px;
+}
+.finger0 .fingerDot {
+  display: none;
+}
+.finger1 .fingerDot {
+  right: 22px;
+  top: 3px;
+}
+.finger2 .fingerDot {
+  right: 1px;
+  top: 11px;
+}
+.finger3 .fingerDot {
+  right: 1px;
+  top: 28px;
+}
+.finger4 .fingerDot {
+  right: 1px;
+  top: 44px;
+}
+/* sliders (up/down arrows) */
+label[for=startingFret],
+html .arrowUp, 
+html .arrowDown{
+  min-height: 52px;
+}
+html .arrowUp, html .arrowDown {
+  background-repeat: no-repeat;
+  background-position: center 29px;
+}
+html .arrowUp {
+  background-image: url("../img/basic-up-arrow.png");
+}
+html .arrowDown {
+  background-image: url("../img/basic-down-arrow.png");
+}
+

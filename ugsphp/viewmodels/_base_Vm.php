@@ -10,10 +10,18 @@ abstract class _base_Vm{
 	public $SupportEmail = Config::SupportEmail;
 	public $IsJson = false;
 	public $SiteUser = null;
-	public $StaticsPrefix = '/';
+	public $StaticsPrefix = '';
 
 	function __construct()
 	{
-		$this->StaticsPrefix = defined('Config::StaticsPrefix') ? Config::StaticsPrefix : '/';
+		$this->StaticsPrefix = defined('Config::Subdirectory') ? Config::Subdirectory : '/';
+
+    // Did the user forget the leading slash ?
+    if(substr($this->StaticsPrefix, 0, 1) != '/')
+      $this->StaticsPrefix = '/'.$this->StaticsPrefix;
+
+    // Did the user forget the trailing slash ?
+    if(substr($this->StaticsPrefix, -1) != '/')
+      $this->StaticsPrefix = $this->StaticsPrefix.'/';
 	}
 }

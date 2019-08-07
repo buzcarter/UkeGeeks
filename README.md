@@ -1,7 +1,7 @@
 # UkeGeeks-ng
 
 ![Ukegeeks-ng](./img/screenshot.png)
-![Ukegeeks-ng song](./img/screenshot2.png)
+![Ukegeeks-ng song](./img/screenshot2b.png)
 
 This fork is an attempt at an *enhanced/updated/modified/edited_to_fits_my_needs* version of UkeGeeks    
 (since the original doesn't seems to accept pull request since early 2015).
@@ -24,6 +24,7 @@ UkeGeeks is a songbook editor for ukulele originally created by [Buz Carter](htt
   - GERMAN (thanks to Louis-Coding)
   - (you can contribute :p)
 - Removed 'no detailed list' and 'no editable song' mode. We want full functionality, all the time
+- **Chord Finder** and **Reverse Chord Finder** (from UkeGeeks website 'tool' source code)
 
 #### Improvements, small fixes, QoL changes
 
@@ -37,6 +38,7 @@ UkeGeeks is a songbook editor for ukulele originally created by [Buz Carter](htt
 - Login page cleanup + ability to hide email
 - Made the advanced editor link more obvious + help displayed on startup
 - Added a back to top button on the song list
+- Removed the StaticsPrefix const from the config file. Now it's handled automagically
 
 _______________________________________________________
 # Installation
@@ -51,8 +53,8 @@ If you want to change this, read below (installing in a different directory).
 
 ## Setup username, preferences
 
-- **Step 1** : Rename the file **/ugsphp/Config_example.php** to **Config.php** and edit-it to suits your needs (username, passwords, language, etc)
-- **Step 2** : Rename the **/ugsphp/settings.js_example** to **settings.js** and edit-it to suits your preferences (diagram size, position, default theme, ...).
+- **Step 1** : Rename the file **/ugsphp/conf/Config_example.php** to **Config.php** and edit-it to suits your needs (username, passwords, language, etc)
+- **Step 2** : Rename the **/ugsphp/conf/settings.js_example** to **settings.js** and edit-it to suits your preferences (diagram size, position, default theme, ...).
 
 And that's it, you should be good to go. Start adding songs :)
 
@@ -67,14 +69,10 @@ You can just modify it to whatever you wish (include leading and trailing last f
 
     const Subdirectory = '/hobbies/ukulele/';
  
-#### Optional : changing Asset directories
+#### Optional : enabling URL rewriting (apache mod_rewrite)
 
-You may also move the JavaScript, Stylesheet, and Image "static" directories, however, they all should live in the same directory in order for the styles to work correctly.
+For nicer url you can enable mod_rewrite in the config.php file like this :
 
-For example, you may change the StaticsPrefix option from the root '/' to:
+    const UseModRewrite = true;
 
-const StaticsPrefix = '/uke-static/';
-
-The Editor, for example, will now link to:
-
-http://mysite.com/uke-static/js/ukeGeeks.scriptasaurus.merged.js'
+Note : There is currently a bug (issue #37) if your install isn't in the root directory...

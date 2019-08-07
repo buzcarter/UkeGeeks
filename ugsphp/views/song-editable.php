@@ -40,7 +40,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
     <?php
       if(!$model->isOK)
       {
-        echo '<div style="margin-top:30px"><a href="/" class="baseBtn blueBtn">'.Lang::Get('not_found_click_here').'</div>';
+        echo '<div style="margin-top:30px"><a href="'.Config::Subdirectory.(Config::UseModRewrite?'songbook/':'').'" class="baseBtn blueBtn">'.Lang::Get('not_found_click_here').'</div>';
       }
     ?></a>
 	<footer>
@@ -78,7 +78,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <?php if($model->isOK) {?>
 <section id="ugsAppToolbar" class="ugsAppMenuBar">
 	<ul>
-		<li class="navHome"> <a href="/" title="<?php echo Lang::Get('tb_songbook_desc')?>"><span></span><?php echo Lang::Get('tb_songbook')?></a> </li>
+		<li class="navHome"> <a href="<?php echo Config::Subdirectory.(Config::UseModRewrite?'songbook/':'')?>" title="<?php echo Lang::Get('tb_songbook_desc')?>"><span></span><?php echo Lang::Get('tb_songbook')?></a> </li>
 		<li class="navLayout showOptionsBox"> <a href="#layoutOptions" title="<?php echo Lang::Get('tb_layout_descr')?>"><span></span><?php echo Lang::Get('tb_layout')?></a></li>
 		<li class="navInstruments showOptionsBox"> <a href="#tuningOptions" title="<?php echo Lang::Get('tb_tuning_descr')?>"><span></span><?php echo Lang::Get('tb_tuning')?></a></li>
 		<li class="navOptions showOptionsBox"> <a href="#optionsDlg" title="<?php echo Lang::Get('tb_options_descr')?>"><span></span><?php echo Lang::Get('tb_options')?></a> </li>
@@ -222,12 +222,10 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <aside class="arrowBox helpOptions" id="helpDlg">
 	<fieldset class="arrowBoxContent linksList">
 		<ul>
-      <li><a href="https://github.com/bloodybowlers/UkeGeeks-ng" target="_blank">UkeGeeks-NG website</a></li>
+			<li><a href="<?php echo Config::Subdirectory.(Config::UseModRewrite?'chordfinder':'music.php?action=chordfinder')?>" target="_blank"><?php echo Lang::Get('chord_finder')?></a></li>
+			<li><a href="<?php echo Config::Subdirectory.(Config::UseModRewrite?'reversechordfinder':'music.php?action=reversechordfinder')?>" target="_blank"><?php echo Lang::Get('reverse_chord_finder')?></a></li>
       <li><hr></li>
-      <li><a href="http://ukegeeks.com" target="_blank">Original UkeGeeks website</a></li>
-			<li><a href="http://blog.ukegeeks.com/users-guide/" target="_blank" title="View the complete documentation including ChordPro tips">Online Ukegeeks's User Guide</a></li>
-			<li><a href="http://ukegeeks.com/tools/chord-finder.htm" target="_blank" title="Access the UkeGeeks library of common chords">Online Ukegeeks's Chord Finder</a></li>
-			<li><a href="http://ukegeeks.com/tools/reverse-chord-finder.htm" target="_blank" title="Find chord names by drawing the diagram">Online Ukegeeks's Reverse Chord Lookup</a></li>
+      <li><a href="#" onclick="$('#aboutDlg').fadeIn(); return false;"><?php echo Lang::Get('about_credits')?></a></li>
 		</ul>
 	</fieldset>
 </aside>
@@ -295,6 +293,22 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 				<pre id="cdBldOutput" class="chordPro-statement" title="Your ChordPro define tag"></pre>
 			</div>
 		</div>
+	</div>
+</section>
+
+<!-- ABOUT (DIALOG) -->
+<section id="aboutDlg" class="overlay isHidden">
+	<div>
+		<p class="title"><?php echo Lang::Get('about_credits')?></p>
+    <div>
+      <p><a href="https://github.com/bloodybowlers/UkeGeeks-ng" target=_blank>UkeGeeks-NG</a> is a fork of UkeGeeks.</p>
+      <p class="subsubtitle">A simple ukulele songbook editor :)</p>
+      <p>Original creator of the <a href="http://ukegeeks.com" target=_blank>UkeGeeks</a> project is Buzz Carter.
+      He made the Scriptasaurus engine and the Song-a-matic editor, as well as the ugsphp site.
+      </p>
+      <p><span class="subtitle">UkeGeeks-NG contributors :</span> BloodyBowlers, Louis-Coding.</p>
+			<input type="button" class="baseBtn blueBtn closebtn" onclick="$('#aboutDlg').fadeOut(); return false;" value="<?php echo Lang::Get('close')?>" />
+    </div>
 	</div>
 </section>
 

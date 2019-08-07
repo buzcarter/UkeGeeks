@@ -24,7 +24,7 @@ ugsEditorPlus.stickyChords = (function() {
   // Sticky chords at the top
   _public.onScroll = function () {
     var $chords = $('#ukeChordsCanvas');
-    var thresold = $chords.height() + 100;
+    var thresold = $chords.position().top - $('#ugsAppToolbar').height();
 
     if ($(document).scrollTop() > thresold && !$chords.hasClass('chordsAlwaysOnTop'))
     {
