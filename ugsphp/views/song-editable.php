@@ -224,10 +224,9 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 		<ul>
       <li><a href="https://github.com/bloodybowlers/UkeGeeks-ng" target="_blank">UkeGeeks-NG website</a></li>
 			<li><a href="<?php echo Config::Subdirectory?>music.php?action=chordfinder" target="_blank"><?php echo Lang::Get('chord_finder')?></a></li>
+			<li><a href="<?php echo Config::Subdirectory?>music.php?action=reversechordfinder" target="_blank"><?php echo Lang::Get('reverse_chord_finder')?></a></li>
       <li><hr></li>
       <li><a href="http://ukegeeks.com" target="_blank">Original UkeGeeks website</a></li>
-			<li><a href="http://blog.ukegeeks.com/users-guide/" target="_blank" title="View the complete documentation including ChordPro tips">Online Ukegeeks's User Guide</a></li>
-			<li><a href="http://ukegeeks.com/tools/chord-finder.htm" target="_blank" title="Access the UkeGeeks library of common chords">Online Ukegeeks's Chord Finder</a></li>
 		</ul>
 	</fieldset>
 </aside>

@@ -17,6 +17,7 @@ final class Actions {
 	const AjaxDeleteSong = 9;
   const NotFound404 = 11;
   const ChordFinder = 12;
+  const ReverseChordFinder = 13;
 
 	/**
 	 * convert passed in string value to corresponding Actions enum
@@ -36,6 +37,7 @@ final class Actions {
 		 	case 'ajaxdeletesong': return self::AjaxDeleteSong;
 		 	case 'notfound404': return self::NotFound404;
 		 	case 'chordfinder': return self::ChordFinder;
+		 	case 'reversechordfinder': return self::ReverseChordFinder;
 		 }
 		 return self::Songbook;
 	}
@@ -58,6 +60,7 @@ final class Actions {
 			case self::AjaxDeleteSong: return 'AjaxDeleteSong';
       case self::NotFound404: return 'notfound404';
       case self::ChordFinder: return 'chordfinder';
+      case self::ReverseChordFinder: return 'reversechordfinder';
 		}
 		return 'Songbook';
 	}

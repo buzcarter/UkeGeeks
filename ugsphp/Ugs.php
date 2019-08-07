@@ -154,6 +154,9 @@ class Ugs{
       case Actions::ChordFinder:
         $builder = new ChordFinder_Vmb();
         break;
+      case Actions::ReverseChordFinder:
+        $builder = new ReverseChordFinder_Vmb();
+        break;
       default:
         $builder = new SongListDetailed_Vmb();
         break;
@@ -253,6 +256,8 @@ class Ugs{
 				return '404.php';
 			case Actions::ChordFinder:
 				return 'chord-finder.php';
+			case Actions::ReverseChordFinder:
+				return 'reverse-chord-finder.php';
 		}
 		return 'song-list-detailed.php';
 	}
