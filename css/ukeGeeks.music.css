@@ -309,3 +309,32 @@
   z-index: 8;
 }
 
+#aboutDlg {
+  font-family: monospace;
+}
+#aboutDlg .title {
+  font-size: 1.3em;
+  font-style: italic;
+  text-shadow: 3px 3px 3px #f5e6df;
+  margin-bottom: 30px;
+}
+#aboutDlg .subtitle {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+#aboutDlg p {
+  margin: 10px;
+}
+#aboutDlg .subsubtitle
+{
+  color: #fffcfb;
+  background-color: #ff9900;
+  border-radius: 10px;
+  padding: 5px;
+}
+#aboutDlg .closebtn {
+  display: block;
+  margin: 20px auto 0 auto;
+  width: 300px;
+}
+

@@ -132,5 +132,6 @@
   "song_not_found_subtitle" : "Song not found, check your link please !",
   "also_uses" : "Also uses",
   "chord_finder" : "Chord Finder",
-  "reverse_chord_finder" : "Reverse chord finder"
+  "reverse_chord_finder" : "Reverse chord finder",
+  "about_credits" : "About & Credits..."
 }

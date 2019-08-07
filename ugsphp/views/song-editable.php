@@ -222,11 +222,10 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <aside class="arrowBox helpOptions" id="helpDlg">
 	<fieldset class="arrowBoxContent linksList">
 		<ul>
-      <li><a href="https://github.com/bloodybowlers/UkeGeeks-ng" target="_blank">UkeGeeks-NG website</a></li>
 			<li><a href="<?php echo Config::Subdirectory?>music.php?action=chordfinder" target="_blank"><?php echo Lang::Get('chord_finder')?></a></li>
 			<li><a href="<?php echo Config::Subdirectory?>music.php?action=reversechordfinder" target="_blank"><?php echo Lang::Get('reverse_chord_finder')?></a></li>
       <li><hr></li>
-      <li><a href="http://ukegeeks.com" target="_blank">Original UkeGeeks website</a></li>
+      <li><a href="#" onclick="$('#aboutDlg').fadeIn(); return false;"><?php echo Lang::Get('about_credits')?></a></li>
 		</ul>
 	</fieldset>
 </aside>
@@ -294,6 +293,22 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 				<pre id="cdBldOutput" class="chordPro-statement" title="Your ChordPro define tag"></pre>
 			</div>
 		</div>
+	</div>
+</section>
+
+<!-- ABOUT (DIALOG) -->
+<section id="aboutDlg" class="overlay isHidden">
+	<div>
+		<p class="title"><?php echo Lang::Get('about_credits')?></p>
+    <div>
+      <p><a href="https://github.com/bloodybowlers/UkeGeeks-ng" target=_blank>UkeGeeks-NG</a> is a fork of UkeGeeks.</p>
+      <p class="subsubtitle">A simple ukulele songbook editor :)</p>
+      <p>Original creator of the <a href="http://ukegeeks.com" target=_blank>UkeGeeks</a> project is Buzz Carter.
+      He made the Scriptasaurus engine and the Song-a-matic editor, as well as the ugsphp site.
+      </p>
+      <p><span class="subtitle">UkeGeeks-NG contributors :</span> BloodyBowlers, Louis-Coding.</p>
+			<input type="button" class="baseBtn blueBtn closebtn" onclick="$('#aboutDlg').fadeOut(); return false;" value="<?php echo Lang::Get('close')?>" />
+    </div>
 	</div>
 </section>
 

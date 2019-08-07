@@ -132,5 +132,6 @@
   "song_not_found_subtitle" : "Chanson introuvable, vérifiez le lien, merci !",
   "also_uses" : "Utilise aussi",
   "chord_finder" : "Recherche d'accords",
-  "reverse_chord_finder" : "Recherche d'accord inversée"
+  "reverse_chord_finder" : "Recherche d'accord inversée",
+  "about_credits" : "A propos..."
 }
