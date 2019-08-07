@@ -117,6 +117,6 @@ class Config {
 	 */
 	public static function Init() {
 		self::$SongDirectory = getcwd() . '/cpm/';
-		self::$AppDirectory = dirname(__FILE__) . '/';
+		self::$AppDirectory = dirname(__FILE__).'/../';
 	}
 }

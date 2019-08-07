@@ -177,13 +177,13 @@ class Ugs{
 	private function Bootstrap() {
 		// let's get Config setup
 		$appRoot = dirname(__FILE__);
-    if(!file_exists($appRoot.'/Config.php'))
+    if(!file_exists($appRoot.'/conf/Config.php'))
     {
       die ('FATAL ERROR : Please create the "config.php" file from the example one. Or read the installation doc :)');
     }
     else
     {
-      include_once $appRoot . '/Config.php';
+      include_once $appRoot . '/conf/Config.php';
     }
 
 		// some dependencies: make sure base classes are included first...
