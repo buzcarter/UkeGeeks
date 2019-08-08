@@ -133,5 +133,6 @@
   "also_uses" : "Verwendet auch",
   "chord_finder" : "Akkordsuche",
   "reverse_chord_finder" : "Akkordsuche rückwärts",
-  "about_credits" : "Über & Dank..."
+  "about_credits" : "Über & Dank...",
+  "confirm_delete_song" : "Soll dieser Song wirklich gelöscht werden?"
 }
