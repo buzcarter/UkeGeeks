@@ -6,7 +6,8 @@
  * @static
  * @singleton
  */
-ugsEditorPlus.options = {
+fdRequire.define('ugsEditorPlus/options', (require, module) => {
+  const options = {
   /**
    * If true attempts compatibility for versions of Microsoft Internet Explorer prior to IE9
    * @example
@@ -15,9 +16,9 @@ ugsEditorPlus.options = {
    * @type Boolean
    * @default false
    */
-  useLegacyIe: false,
+    useLegacyIe: false,
 
-  /**
+    /**
    * If true the Edit Song box is shown when the page loads; false hides it.
    * @example
    *  Allowed values: true, false
@@ -25,9 +26,9 @@ ugsEditorPlus.options = {
    * @type Boolean
    * @default true
    */
-  showEditOnLoad: true,
+    showEditOnLoad: true,
 
-  /**
+    /**
    * Lyric's font size (pts)
    * @example
    *  Allowed values: 6, 6.5, 7, 7.5, 8, 8.5, 9, 10, 11, 12, 13, 14
@@ -35,9 +36,9 @@ ugsEditorPlus.options = {
    * @type Number
    * @default 12
    */
-  fontSize: 12,
+    fontSize: 12,
 
-  /**
+    /**
    * Reference diagram size expressed as a percentage (100% being max)
    * @example
    *  Allowed values: 40 ("tiny"), 65 ("small"), 80 ("medium"), 90 ("large"), 100 ("x-large")
@@ -45,9 +46,9 @@ ugsEditorPlus.options = {
    * @type Integer
    * @default 100
    */
-  diagramSize: 100,
+    diagramSize: 100,
 
-  /**
+    /**
    * Specify where reference diagrams should be show
    * @example
    *  Allowed values: left, top, or none
@@ -55,9 +56,9 @@ ugsEditorPlus.options = {
    * @type Text
    * @default left
    */
-  diagramPosition: 'left',
+    diagramPosition: 'left',
 
-  /**
+    /**
    * Specify how chord names within lyrics should be shown
    * @example
    *  Allowed values: inline, above, or miniDiagrams
@@ -65,9 +66,9 @@ ugsEditorPlus.options = {
    * @type Text
    * @default above
    */
-  lyricStyle: 'above',
+    lyricStyle: 'above',
 
-  /**
+    /**
    * Specify page width (mock paper)
    * @example
    *  Allowed values: letter, a4, screen
@@ -75,9 +76,9 @@ ugsEditorPlus.options = {
    * @type Text
    * @default letter
    */
-  paper: 'letter',
+    paper: 'letter',
 
-  /**
+    /**
    * Theme shortname applied on page load.
    * @example
    *  Allowed values: frosty, jellyBean, justBlack, krampus, normal, notebook, pumpkin, reversed, western, zombie
@@ -85,9 +86,9 @@ ugsEditorPlus.options = {
    * @type Text
    * @default normal
    */
-  theme: 'normal',
+    theme: 'normal',
 
-  /**
+    /**
    * Ukulele tuning ("instrument") for drawing diagrams.
    * @example
    *  Allowed values: soprano or baritone
@@ -95,9 +96,9 @@ ugsEditorPlus.options = {
    * @type Text
    * @default soprano
    */
-  tuning: 'soprano',
+    tuning: 'soprano',
 
-  /**
+    /**
    * Show/hide the square brackets around chord names within lyrics, ex: [Am]
    * @example
    *  Allowed values: true, false
@@ -105,9 +106,9 @@ ugsEditorPlus.options = {
    * @type Boolean
    * @default see UkeGeeks.settings
    */
-  hideChordEnclosures: false,
+    hideChordEnclosures: false,
 
-  /**
+    /**
    * Order in which reference diagrams are sorted, either alphabetically (true) or order
    * in which they appear within the song (false).
    * @example
@@ -116,9 +117,9 @@ ugsEditorPlus.options = {
    * @type Boolean
    * @default see UkeGeeks.settings
    */
-  sortAlphabetical: false,
+    sortAlphabetical: false,
 
-  /**
+    /**
    * If TRUE chords in the "commonChords" list will be ignored (excluded from reference chord diagrams)
    * @example
    * Allowed values: true, false
@@ -126,9 +127,9 @@ ugsEditorPlus.options = {
    * @type Boolean
    * @default see UkeGeeks.settings
    */
-  ignoreCommonChords: false,
+    ignoreCommonChords: false,
 
-  /**
+    /**
    * Array of chords to be ignored when drawing reference diagrams (if "ignoreCommonChords" is enabled)
    * @example
    *  (string or array of strings): as an  array of strings: ["A", "G"] or comma delimited list: "A, G"
@@ -136,5 +137,10 @@ ugsEditorPlus.options = {
    * @type mixed
    * @default see UkeGeeks.settings
    */
-  commonChords: [],
-};
+    commonChords: [],
+  };
+
+  module.exports = {
+    options,
+  };
+});

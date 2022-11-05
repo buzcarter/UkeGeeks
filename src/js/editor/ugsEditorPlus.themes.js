@@ -5,13 +5,8 @@
  * @namespace ugsEditorPlus
  * @singleton
  */
-ugsEditorPlus.themes = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {};
+fdRequire.define('ugsEditorPlus/themes', (require, module) => {
+  const $ = require('jQuery');
 
   /**
    * available color schemes (see UkeGeeks.settings)
@@ -201,7 +196,7 @@ ugsEditorPlus.themes = (function () {
 
   };
 
-  const setBody = function (themeName) {
+  function setBody(themeName) {
     const $body = $('body');
     // see: http://stackoverflow.com/questions/921789/how-to-loop-through-javascript-object-literal-with-objects-as-members
     for (const key in _colorSchemes) {
@@ -210,7 +205,7 @@ ugsEditorPlus.themes = (function () {
       }
     }
     $body.addClass(`theme-${themeName}`);
-  };
+  }
 
   /**
    * Returns text to be deisplayed when the  specified theme is selected.
@@ -218,9 +213,9 @@ ugsEditorPlus.themes = (function () {
    * @param  {string} themeName
    * @return {string}
    */
-  _public.getDescription = function (themeName) {
+  function getDescription(themeName) {
     return _colorSchemes[themeName].selectText;
-  };
+  }
 
   /**
    * Populates the UL (identified via CSS/jQuery selector) with the color scheme List Items (LIs)
@@ -228,7 +223,7 @@ ugsEditorPlus.themes = (function () {
    * @param  {string} selector
    * @param {string} selectedValue value that should be "checked"
    */
-  _public.loadList = function (selector, selectedValue) {
+  function loadList(selector, selectedValue) {
     let s = '';
     for (const key in _colorSchemes) {
       if (_colorSchemes.hasOwnProperty(key)) {
@@ -237,14 +232,14 @@ ugsEditorPlus.themes = (function () {
       }
     }
     $(selector).html(s);
-  };
+  }
 
   /**
    * Sets body class and UkeGeeks settings to specified theme.
    * @method set
    * @param {string} themeName
    */
-  _public.set = function (themeName) {
+  function set(themeName) {
     setBody(themeName);
 
     const c = _colorSchemes[themeName];
@@ -252,10 +247,11 @@ ugsEditorPlus.themes = (function () {
     ukeGeeks.settings.tabs.lineColor = c.tabs.lines;
     ukeGeeks.settings.tabs.dotColor = c.tabs.dots;
     ukeGeeks.settings.tabs.textColor = c.tabs.text;
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    getDescription,
+    loadList,
+    set,
+  };
+});

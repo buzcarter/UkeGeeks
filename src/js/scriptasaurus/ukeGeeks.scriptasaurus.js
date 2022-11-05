@@ -1,19 +1,5 @@
-/**
- * Finds page HTML elements & creates ukeGeek objects;
- * Reads song text, parses, draws choard diagrams.
- *
- * @class scriptasaurus
- * @namespace ukeGeeks
- * @static
- * @singleton
- */
-ukeGeeks.scriptasaurus = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type {Object}
-   */
-  const _public = {};
+fdRequire.define('ukeGeeks/scriptasaurus', (require, module) => {
+  let errList = [];
 
   /**
    * Preps this class for running
@@ -21,7 +7,7 @@ ukeGeeks.scriptasaurus = (function () {
    * @param isIeFamily {bool} TRUE if UserAgent (Browser to you and me) is Internet Explorer
    * @return {void}
    */
-  _public.init = function (isIeFamily) {
+  function init(isIeFamily) {
     const defs = ukeGeeks.definitions;
 
     ukeGeeks.settings.environment.isIe = isIeFamily;
@@ -31,7 +17,7 @@ ukeGeeks.scriptasaurus = (function () {
     if (ukeGeeks.settings.defaultInstrument != defs.instrument.sopranoUke) {
       defs.useInstrument(ukeGeeks.settings.defaultInstrument);
     }
-  };
+  }
 
   /**
    * Runs all Scriptasaurus methods using the element Ids defined in the settings class.
@@ -39,46 +25,45 @@ ukeGeeks.scriptasaurus = (function () {
    * @method run
    * @return {songObject}
    */
-  _public.run = function () {
+  function run() {
     // console.log('run (Classic Mode)');
-    const handles = _getHandlesFromId();
+    const handles = getHandlesFromId();
     if (!handles || !handles.diagrams || !handles.text || !handles.wrap) {
       return null;
     }
-    _errList = [];
-    const song = _runSong(handles);
-    showErrors(_errList[0]);
+    errList = [];
+    const song = runSong(handles);
+    showErrors(errList[0]);
     return song;
-  };
+  }
 
   /**
    * Same as "run" except runs using class names, this allows you to have multiple songs on a single page.
    * @method runByClasses
    * @return {Array of songObject}
    */
-  _public.runByClasses = function () {
+  function runByClasses() {
     const songs = [];
     const songWraps = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.wrap);
     for (let i = 0; i < songWraps.length; i++) {
-      const handles = _getHandlesFromClass(songWraps[i]);
+      const handles = getHandlesFromClass(songWraps[i]);
       if (handles === null) {
         continue;
       }
-      songs.push(_runSong(handles));
+      songs.push(runSong(handles));
     }
     return songs;
-  };
+  }
 
   /**
    * Is this really nececessary?
    * @method setTuningOffset
    * @param offset {int} (optional) default 0. Number of semitones to shift the tuning. See ukeGeeks.definitions.instrument.
    */
-  _public.setTuningOffset = function (offset) {
+  function setTuningOffset(offset) {
     ukeGeeks.definitions.useInstrument(offset);
-  };
+  }
 
-  var _errList = [];
   // song
 
   /**
@@ -88,7 +73,7 @@ ukeGeeks.scriptasaurus = (function () {
    * @param handles {ukeGeeks.data.htmlHandles}
    * @return {songObj}
    */
-  var _runSong = function (handles) {
+  function runSong(handles) {
     // console.log('run Song');
 
     // read Music, find chords, generate HTML version of song:
@@ -118,7 +103,7 @@ ukeGeeks.scriptasaurus = (function () {
     tabs.replace(handles.text);
 
     // error reporting:
-    _errList.push(painter.getErrors());
+    errList.push(painter.getErrors());
 
     const container = handles.wrap;
     if (container) {
@@ -131,14 +116,14 @@ ukeGeeks.scriptasaurus = (function () {
 
     // done!
     return song;
-  };
+  }
 
   /**
    * Shows a JavaScript alert box containing list of unknown chords.
    * @method showErrors
    * @return {void}
    */
-  var showErrors = function (errs) {
+  function showErrors(errs) {
     if (errs.length < 1) {
       return;
     }
@@ -150,7 +135,7 @@ ukeGeeks.scriptasaurus = (function () {
       s += errs[i];
     }
     alert(`Forgive me, but I don't know the following chords: ${s}`);
-  };
+  }
 
   /**
    *
@@ -159,14 +144,14 @@ ukeGeeks.scriptasaurus = (function () {
    * @param wrap {domElement}
    * @return {ukeGeeks.data.htmlHandles}
    */
-  var _getHandlesFromClass = function (wrap) {
+  function getHandlesFromClass(wrap) {
     const diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
     const text = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.text, wrap);
     if ((diagrams === undefined) || (diagrams.length < 1) || (text === undefined) || (text.length < 1)) {
       return null;
     }
     return new ukeGeeks.data.htmlHandles(wrap, diagrams[0], text[0]);
-  };
+  }
 
   /**
    *
@@ -174,13 +159,24 @@ ukeGeeks.scriptasaurus = (function () {
    * @private
    * @return {ukeGeeks.data.htmlHandles}
    */
-  var _getHandlesFromId = function () {
+  function getHandlesFromId() {
     return new ukeGeeks.data.htmlHandles(
       document.getElementById(ukeGeeks.settings.ids.container),
       document.getElementById(ukeGeeks.settings.ids.canvas),
       document.getElementById(ukeGeeks.settings.ids.songText),
     );
-  };
+  }
 
-  return _public;
-}());
+  /**
+ * Finds page HTML elements & creates ukeGeek objects;
+ * Reads song text, parses, draws choard diagrams.
+ *
+ * @module
+ */
+  module.exports = {
+    init,
+    run,
+    runByClasses,
+    setTuningOffset,
+  };
+});

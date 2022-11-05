@@ -3,13 +3,8 @@
  * @class resize
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.resize = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {};
+fdRequire.define('ugsEditorPlus/resize', (require, module) => {
+  const $ = require('jQuery');
 
   let $dlg = null;
   let $aceLayer = null;
@@ -46,7 +41,7 @@ ugsEditorPlus.resize = (function () {
    * @private
    * @return {void}
    */
-  const setup = function (dlgElement) {
+  function setup(dlgElement) {
     $dlg = $(dlgElement);
     $('body').append('<div id="aceHeader"><button class="aceSideBtn" title="Show options &amp; help"><span></span><span></span><span></span></button><strong>Edit Song</strong><a href="#exit-fullscreen">Exit fullscreen</a></div><div id="aceEditor"></div><div id="aceHelp"></div>');
 
@@ -60,14 +55,14 @@ ugsEditorPlus.resize = (function () {
       hideAce();
     });
     $('#aceHeader button').click(onShowHelpClicked);
-  };
+  }
 
-  var onShowHelpClicked = function (e) {
+  function onShowHelpClicked(e) {
     e.preventDefault();
     showHelp(!isHelpOpen);
-  };
+  }
 
-  var showHelp = function (isShow) {
+  function showHelp(isShow) {
     isHelpOpen = isShow;
 
     if (isShow) {
@@ -85,7 +80,7 @@ ugsEditorPlus.resize = (function () {
         left: 0,
       }, SLIDE_SPEED);
     }
-  };
+  }
 
   /**
    * Returns the path of a linked script file (src) up to the starting position of fileName
@@ -93,10 +88,10 @@ ugsEditorPlus.resize = (function () {
    * @param  {string} fileName
    * @return {string}
    */
-  const getPath = function (fileName) {
+  function getPath(fileName) {
     let path = '';
-    let lower; let
-      pos;
+    let lower;
+    let pos;
 
     fileName = fileName.toLowerCase();
 
@@ -108,9 +103,9 @@ ugsEditorPlus.resize = (function () {
       }
     });
     return path;
-  };
+  }
 
-  const showAce = function () {
+  function showAce() {
     isBig = true;
 
     $('html').addClass('aceEditorActive');
@@ -138,14 +133,14 @@ ugsEditorPlus.resize = (function () {
 
       $help.html(ugsAce.helpHtml);
     });
-  };
+  }
 
-  var copySongToAce = function () {
+  function copySongToAce() {
     $aceLayer.fadeIn(FADE_SPEED);
     editor.setValue($('#chordProSource').val());
     editor.gotoLine(1);
     $help.fadeIn(1);
-  };
+  }
 
   /**
    * Restores overlay to original position(-ish -- not finished)
@@ -153,7 +148,7 @@ ugsEditorPlus.resize = (function () {
    * @private
    * @return {void}
    */
-  var hideAce = function () {
+  function hideAce() {
     isBig = false;
 
     $dlg.show();
@@ -165,7 +160,7 @@ ugsEditorPlus.resize = (function () {
 
     $('html').removeClass('aceEditorActive');
     showHelp(false);
-  };
+  }
 
   /**
    * Resizes passed in DOM element, toggling between fullscreen and "standard" size.
@@ -173,7 +168,7 @@ ugsEditorPlus.resize = (function () {
    * @param  {DOM-element} dlgElement handle to Overlay/dialog being resized
    * @return {void}
    */
-  _public.toggle = function (dlgElement) {
+  function toggle(dlgElement) {
     if ($dlg === null) {
       setup(dlgElement);
     }
@@ -184,10 +179,9 @@ ugsEditorPlus.resize = (function () {
       showAce();
     }
     return false;
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface "JSON handle"
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    toggle,
+  };
+});

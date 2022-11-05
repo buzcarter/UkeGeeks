@@ -4,14 +4,16 @@
  * @class topMenus
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.topMenus = (function () {
+fdRequire.define('ugsEditorPlus/topMenus', (require, module) => {
+  const $ = require('jQuery');
+
   /**
    * attaches events...
    * @method _init
    * @public
    * @return {void}
    */
-  const _init = function () {
+  function _init() {
     // $('#ugsAppToolbar > ul a')
     $('#ugsAppToolbar > ul li').not('[data-dialog]').children('a').click(_onMenuItemClick);
     $('.showOptionsBox a').click(_onShowOptionsClick);
@@ -19,7 +21,7 @@ ugsEditorPlus.topMenus = (function () {
     $('#ugsAppToolbar > ul li[data-dialog]').click(_onShowDlgBtnClick);
     $('.closeBtn').click(_onCloseBtnClick);
     $('.resizeBtn').click(_onResizeBtnClick);
-  };
+  }
 
   /**
    * Click handler for nav items that are NOT attached to a dialog box.
@@ -27,7 +29,7 @@ ugsEditorPlus.topMenus = (function () {
    * @private
    * @return {void}
    */
-  var _onMenuItemClick = function () {
+  function _onMenuItemClick() {
     // the clicked anchor tag
     const $parent = $(this).parent();
     const isOpen = $parent.hasClass('active');
@@ -36,7 +38,7 @@ ugsEditorPlus.topMenus = (function () {
       return;
     }
     $parent.addClass('active');
-  };
+  }
 
   /**
    * Deselects all items in app's top menu/nav bar (just removes active state from all items)
@@ -44,9 +46,9 @@ ugsEditorPlus.topMenus = (function () {
    * @private
    * @return {void}
    */
-  var _makeAllInactive = function () {
+  function _makeAllInactive() {
     $('#ugsAppToolbar > ul > li').removeClass('active');
-  };
+  }
 
   /**
    * Same as _makeAllInactive method PLUS closes any open drop down/arrow boxes.
@@ -54,11 +56,11 @@ ugsEditorPlus.topMenus = (function () {
    * @private
    * @return {void}
    */
-  const _closeAll = function () {
+  function _closeAll() {
     // hide any drop-down/arrow boxes currently open
     _makeAllInactive();
     $('.arrowBox').hide();
-  };
+  }
 
   /**
    * handles nav menu/toolbar click event. The data-dialog="X" attribute
@@ -69,7 +71,7 @@ ugsEditorPlus.topMenus = (function () {
    * @param e {event}
    * @return {bool} false to kill event bubbling
    */
-  var _onShowDlgBtnClick = function (e) {
+  function _onShowDlgBtnClick(e) {
     _closeAll();
 
     // now show dialog associated with the clicked button
@@ -78,7 +80,7 @@ ugsEditorPlus.topMenus = (function () {
 
     // prevent event bubbling
     return false;
-  };
+  }
 
   /**
    * dialog box's close button's click handler. Hides the first parent
@@ -88,18 +90,18 @@ ugsEditorPlus.topMenus = (function () {
    * @param e {event}
    * @return {bool} false to kill event bubbling
    */
-  var _onCloseBtnClick = function (e) {
+  function _onCloseBtnClick(e) {
     $(this).parents('.overlay').fadeOut();
     // prevent event bubbling
     return false;
-  };
+  }
 
-  var _onResizeBtnClick = function (e) {
+  function _onResizeBtnClick(e) {
     _closeAll();
     const dlg = $(this).parents('.overlay');
     ugsEditorPlus.resize.toggle(dlg);
     return false;
-  };
+  }
 
   /**
    * display a "tooltip" options dialog
@@ -108,7 +110,7 @@ ugsEditorPlus.topMenus = (function () {
    * @param e {event}
    * @return {bool} false to kill event bubbling
    */
-  var _onShowOptionsClick = function (e) {
+  function _onShowOptionsClick(e) {
     const id = $(this).attr('href');
 
     $('.arrowBox').not(id).hide();
@@ -121,13 +123,10 @@ ugsEditorPlus.topMenus = (function () {
 
     // prevent event bubbling
     return false;
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface
-  // ---------------------------------------
-  return {
+  module.exports = {
     init: _init,
     makeAllInactive: _makeAllInactive,
   };
-}());
+});

@@ -4,13 +4,8 @@
  * @class updateSong
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.updateSong = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {};
+fdRequire.define('ugsEditorPlus/updateSong', (require, module) => {
+  const $ = require('jQuery');
 
   let _ajaxUri = '';
   let _filename = '';
@@ -35,7 +30,7 @@ ugsEditorPlus.updateSong = (function () {
    */
   let _isUpdating = false;
 
-  _public.init = function (ajaxUri, filename) {
+  function init(ajaxUri, filename) {
     _ajaxUri = ajaxUri;
     _filename = filename;
 
@@ -54,24 +49,24 @@ ugsEditorPlus.updateSong = (function () {
         hideMessage();
         _isUpdating = false;
       });
-  };
+  }
 
-  var showBusy = function () {
+  function showBusy() {
     $(_selectors.message).hide().html();
     $(_selectors.messageBox).slideDown('fast');
     $(_selectors.spinner).show();
-  };
+  }
 
-  const showMessage = function (message) {
+  function showMessage(message) {
     $(_selectors.spinner).hide();
     $(_selectors.message).show().html(message);
-  };
+  }
 
-  var hideMessage = function () {
+  function hideMessage() {
     $(_selectors.messageBox).delay(3000).fadeOut('slow');
-  };
+  }
 
-  var doUpdate = function () {
+  function doUpdate() {
     if (_isUpdating) {
       return;
     }
@@ -97,15 +92,14 @@ ugsEditorPlus.updateSong = (function () {
         alert('Encountered a problem saving your Song. Please copy your song to another program until this issue is resolved.');
       },
     });
-  };
+  }
 
-  var doAjaxOk = function (data) {
+  function doAjaxOk(data) {
     // if (data.HasErrors)
     showMessage(data.Message);
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface "JSON handle"
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    init,
+  };
+});

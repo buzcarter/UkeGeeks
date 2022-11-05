@@ -1,40 +1,22 @@
-/**
- * Adds a chord diagram to the DOM
- * @class chordBrush
- * @namespace ukeGeeks
- */
-ukeGeeks.chordBrush = function () {
+fdRequire.define('ukeGeeks/chordBrush', (require, module) => {
   /**
-   * attach public members to this object
-   * @property _public
-   * @type {Object}
-   */
-  const _public = {};
-
-  /// //////////////////////////////////////////////////////////////////////////
-  //
-  // PUBLIC methods
-  //
-  /// //////////////////////////////////////////////////////////////////////////
+    * Again this is a constructor replacement
+    * @method init
+    * @return {void}
+    */
+  function init() {}
 
   /**
-   * Again this is a constructor replacement
-   * @method init
-   * @return {void}
-   */
-  _public.init = function () {};
-
-  /**
-   * Puts a new Canvas within ChordBox and draws the chord diagram on it.
-   * @method plot
-   * @param chordBox {DOMElement} Handle to the DOM element where the chord is to be drawn.
-   * @param chord {expandedChord} Chord Diagram to be drawn.
-   * @param fretBox {JSON} Appropriate ukeGeeks.settings.fretBox -- either "fretBox" or "inlineFretBox"
-   * @param {JSON} fontSettings (optional) Defaults to settings.fonts
-   * @param {JSON} colorSettings (optional) Defaults to settings.colors
-   * @return {void}
-   */
-  _public.plot = function (chordBox, chord, fretBox, fontSettings, colorSettings) {
+    * Puts a new Canvas within ChordBox and draws the chord diagram on it.
+    * @method plot
+    * @param chordBox {DOMElement} Handle to the DOM element where the chord is to be drawn.
+    * @param chord {expandedChord} Chord Diagram to be drawn.
+    * @param fretBox {JSON} Appropriate ukeGeeks.settings.fretBox -- either "fretBox" or "inlineFretBox"
+    * @param {JSON} fontSettings (optional) Defaults to settings.fonts
+    * @param {JSON} colorSettings (optional) Defaults to settings.colors
+    * @return {void}
+    */
+  function plot(chordBox, chord, fretBox, fontSettings, colorSettings) {
     const ugsImg = new ukeGeeks.image().newImage(fretBox.width, fretBox.height);
     if (!ugsImg) {
       return;
@@ -52,7 +34,7 @@ ukeGeeks.chordBrush = function () {
       x: fretBox.topLeftPos.x,
       y: fretBox.topLeftPos.y,
     };
-    _drawFretboard(ugsImg, pos, fretBox, colorSettings.fretLines);
+    drawFretboard(ugsImg, pos, fretBox, colorSettings.fretLines);
     // find where the circle centers should be:
     const centers = {
       x: pos.x,
@@ -61,7 +43,7 @@ ukeGeeks.chordBrush = function () {
 
     // find the vertical shift by dividing the freespace between top and bottom (freespace is the row height less circle diameter)
     const fudgeY = (fretBox.fretSpace - 2 * fretBox.dotRadius) / 2;
-    const fretRange = _getFretRange(chord.dots);
+    const fretRange = getFretRange(chord.dots);
     const firstFret = (fretRange.last <= 5) ? 1 : fretRange.last - 4;
 
     // now add Dots (with finger numbers, if present)
@@ -120,10 +102,10 @@ ukeGeeks.chordBrush = function () {
       });
     }
 
-    _mutedStrings(ugsImg, fretBox, chord.muted, colorSettings.xStroke);
+    mutedStrings(ugsImg, fretBox, chord.muted, colorSettings.xStroke);
     // ukeGeeks.imageCanvas.appendChild(chordBox, ugsImg);
     ukeGeeks.imageSvg.appendChild(chordBox, ugsImg, 'ugs-diagrams--chord-img');
-  };
+  }
 
   /// //////////////////////////////////////////////////////////////////////////
   //
@@ -132,14 +114,14 @@ ukeGeeks.chordBrush = function () {
   /// //////////////////////////////////////////////////////////////////////////
 
   /**
-   * @method _drawFretboard
-   * @private
-   * @param ugsImg {ukeGeeksImage} image builder tool instance
-   * @param pos {XYPosObject} Object with two properties: x & y ints, position in pixels
-   * @param fretBox {settings}
-   * @return {void}
-   */
-  var _drawFretboard = function (ugsImg, pos, fretBox, fretColor) {
+    * @method _drawFretboard
+    * @private
+    * @param ugsImg {ukeGeeksImage} image builder tool instance
+    * @param pos {XYPosObject} Object with two properties: x & y ints, position in pixels
+    * @param fretBox {settings}
+    * @return {void}
+    */
+  function drawFretboard(ugsImg, pos, fretBox, fretColor) {
     // width offset, a "subpixel" adjustment
     let i; const
       offset = fretBox.lineWidth / 2;
@@ -165,42 +147,42 @@ ukeGeeks.chordBrush = function () {
 
     fretboard.rectangle(pos.x + offset, pos.y + offset, fretWidth, stringHeight);
     fretboard.endGroup();
-  };
+  }
 
   /**
-   * TODO: Loop over the muted array, dropping X's whenever a string position is TRUE
-   * @method _mutedStrings
-   * @private
-   * @param  ugsImg {ukeGeeksImage} image builder tool instance
-   * @param  {JSON} fretBox  See Settings.fretBox
-   * @param  {bool} muted    Is this string "muted"?
-   * @param  {string} strokeColor Valid CSS hex color (shorthand not recommended)
-   * @return {void}
-   */
-  var _mutedStrings = function (ugsImg, fretBox, muted, strokeColor) {
+    * TODO: Loop over the muted array, dropping X's whenever a string position is TRUE
+    * @method _mutedStrings
+    * @private
+    * @param  ugsImg {ukeGeeksImage} image builder tool instance
+    * @param  {JSON} fretBox  See Settings.fretBox
+    * @param  {bool} muted    Is this string "muted"?
+    * @param  {string} strokeColor Valid CSS hex color (shorthand not recommended)
+    * @return {void}
+    */
+  function mutedStrings(ugsImg, fretBox, muted, strokeColor) {
     const x = fretBox.topLeftPos.x + fretBox.lineWidth / 2;
     const y = fretBox.topLeftPos.y + fretBox.lineWidth / 4;
     for (let i = 0; i < muted.length; i++) {
       if (muted[i]) {
-        _drawX(ugsImg, {
+        drawX(ugsImg, {
           x: x + i * fretBox.stringSpace,
           y,
         }, fretBox, strokeColor);
       }
     }
-  };
+  }
 
   /**
-   * Plots an "X" centered at POSITION
-   * @method _drawX
-   * @private
-   * @param ugsImg {ukeGeeksImage} image builder tool instance
-   * @param centerPos {XyPositionJson} JSON with two properties: x & y ints, position in pixels, format {x: <int>, y: <int>}
-   * @param  {JSON} fretBox  See Settings.fretBox
-   * @param  {string} strokeColor Valid CSS hex color (shorthand not recommended)
-   * @return {void}
-   */
-  var _drawX = function (ugsImg, pos, fretBox, strokeColor) {
+    * Plots an "X" centered at POSITION
+    * @method _drawX
+    * @private
+    * @param ugsImg {ukeGeeksImage} image builder tool instance
+    * @param centerPos {XyPositionJson} JSON with two properties: x & y ints, position in pixels, format {x: <int>, y: <int>}
+    * @param  {JSON} fretBox  See Settings.fretBox
+    * @param  {string} strokeColor Valid CSS hex color (shorthand not recommended)
+    * @return {void}
+    */
+  function drawX(ugsImg, pos, fretBox, strokeColor) {
     pos.x -= fretBox.xWidth / 2;
     pos.y -= fretBox.xWidth / 2;
 
@@ -210,16 +192,16 @@ ukeGeeks.chordBrush = function () {
     });
     x.line(pos.x, pos.y, pos.x + fretBox.xWidth, pos.y + fretBox.xWidth);
     x.line(pos.x, pos.y + fretBox.xWidth, pos.x + fretBox.xWidth, pos.y);
-  };
+  }
 
   /**
-   * Returns first & last frets, 0 if none found.
-   * @method _getFretRange
-   * @private
-   * @param dots {array<data.dot>} Array of ukeGeeks.data.dot objects
-   * @return {JSON}
-   */
-  var _getFretRange = function (dots) {
+    * Returns first & last frets, 0 if none found.
+    * @method _getFretRange
+    * @private
+    * @param dots {array<data.dot>} Array of ukeGeeks.data.dot objects
+    * @return {JSON}
+    */
+  function getFretRange(dots) {
     let max = -1;
     let min = 300;
 
@@ -235,9 +217,15 @@ ukeGeeks.chordBrush = function () {
       first: (min < 300) ? min : 0,
       last: (max > 0) ? max : 0,
     };
-  };
+  }
 
-  /* return our public interface
-   */
-  return _public;
-};
+  /**
+    * Adds a chord diagram to the DOM
+    * @module
+    * @namespace ukeGeeks
+    */
+  module.exports = {
+    init,
+    plot,
+  };
+});

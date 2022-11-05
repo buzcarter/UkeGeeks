@@ -3,7 +3,7 @@
  * @class songUi
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.songUi = (function () {
+fdRequire.define('ugsEditorPlus/songUi', (require, module) => {
   /**
    * attach public members to this object
    * @property _public
@@ -18,7 +18,7 @@ ugsEditorPlus.songUi = (function () {
    * @param id {string} element's Id
    * @param value {string} content value
    */
-  const trySet = function (id, value) {
+  function trySet(id, value) {
     const hasValue = value && (value.length > 0);
     const h = document.getElementById(id);
     if (!h) {
@@ -26,7 +26,7 @@ ugsEditorPlus.songUi = (function () {
     }
     h.innerHTML = hasValue ? value : '';
     h.style.display = hasValue ? 'block' : 'none';
-  };
+  }
 
   /**
    * Update various HTML parts (H1 &amp; H2 etc.) using TEXT values of Song
@@ -34,7 +34,7 @@ ugsEditorPlus.songUi = (function () {
    * @private
    * @param song {Song(Object)}
    */
-  _public.update = function (song) {
+  function update(song) {
     let h = document.getElementById('songTitle');
     h.innerHTML = (song.title.length > 0) ? song.title : 'Untitled-Song';
 
@@ -53,11 +53,9 @@ ugsEditorPlus.songUi = (function () {
       h.innerHTML = s;
       h.style.display = 'block';
     }
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface "JSON handle"
-  // ---------------------------------------
-  return _public;
-}()
-);
+  module.exports = {
+    update,
+  };
+});

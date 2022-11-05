@@ -1,3 +1,4 @@
+fdRequire.define('ukeGeeks/toolsLite', (require, module) => {
 /**
  * some jQuery-like tools (very, very crappy. wish we could count on jQuery being on the page.)
  * if you do want to use jQuery (and why wouldn't you) I'm not offended if you yank this out.
@@ -5,13 +6,6 @@
  * @namespace ukeGeeks
  * @singleton
  */
-ukeGeeks.toolsLite = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type {Object}
-   */
-  const _public = {};
 
   const regEx = {
     dbleSpace: /\s{2,}/g,
@@ -25,34 +19,34 @@ ukeGeeks.toolsLite = (function () {
    * @param className {string} CSS classname to add
    * @return {void}
    */
-  _public.addClass = function (element, className) {
-    if (!_public.hasClass(element, className)) {
+  function addClass(element, className) {
+    if (!hasClass(element, className)) {
       element.className += ` ${className}`;
     }
-  };
+  }
 
-  _public.hasClass = function (element, className) {
+  function hasClass(element, className) {
     return element.className.match(getRegEx(className));
-  };
+  }
 
-  _public.removeClass = function (element, className) {
-    if (_public.hasClass(element, className)) {
+  function removeClass(element, className) {
+    if (hasClass(element, className)) {
       const reg = getRegEx(className);
       element.className = element.className.replace(reg, ' ');
     }
-  };
+  }
 
-  _public.setClass = function (element, className, isActive) {
+  function setClass(element, className, isActive) {
     if (isActive) {
-      _public.addClass(element, className);
+      addClass(element, className);
     } else {
-      _public.removeClass(element, className);
+      removeClass(element, className);
     }
-  };
+  }
 
-  var getRegEx = function (className) {
+  function getRegEx(className) {
     return new RegExp(`(\\s|^)${className}(\\s|$)`);
-  };
+  }
 
   /**
    * Removes all white space at the begining and end of a string.
@@ -60,13 +54,13 @@ ukeGeeks.toolsLite = (function () {
    * @param str {String} String to trim.
    * @return {String} Returns string without leading and following white space characters.
    */
-  _public.trim = function (str) {
+  function trim(str) {
     return str.replace(regEx.trim, '');
-  };
+  }
 
-  _public.pack = function (value) {
+  function pack(value) {
     return value.replace(regEx.dbleSpace, ' ').replace(regEx.trim, '');
-  };
+  }
 
   /**
    * Searches within Node for tags with specified CSS class.
@@ -76,9 +70,9 @@ ukeGeeks.toolsLite = (function () {
    * @param tag {string} restrict search to a specific tag name. defaults to all tags.
    * @return {arrayDomElements}
    */
-  _public.getElementsByClass = function (searchClass, node, tag) {
-    let i; let
-      j;
+  function getElementsByClass(searchClass, node, tag) {
+    let i;
+    let j;
     // use falsey -- if ((node === null) || (node === undefined)) {
     if (!node) {
       node = document;
@@ -101,7 +95,15 @@ ukeGeeks.toolsLite = (function () {
       }
     }
     return classElements;
-  };
+  }
 
-  return _public;
-}());
+  module.exports = {
+    addClass,
+    getElementsByClass,
+    hasClass,
+    pack,
+    removeClass,
+    setClass,
+    trim,
+  };
+});

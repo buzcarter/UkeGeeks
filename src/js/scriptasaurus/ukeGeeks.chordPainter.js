@@ -1,15 +1,9 @@
+fdRequire.define('ukeGeeks/chordPainter', (require, module) => {
 /**
  * Draws large chord diagram grid (aka "reference" diagrams) on canvas
  * @class chordPainter
  * @namespace ukeGeeks
  */
-ukeGeeks.chordPainter = function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type {Object}
-   */
-  const _public = {};
 
   /**
    * ukeGeeks.chordBrush object handle
@@ -17,7 +11,7 @@ ukeGeeks.chordPainter = function () {
    * @type ukeGeeks.chordBrush instance handle
    * @private
    */
-  let _brush = null;
+  let brush = null;
 
   /**
    * keep an array of missing chords (strings)
@@ -25,9 +19,9 @@ ukeGeeks.chordPainter = function () {
    * @type array
    * @private
    */
-  let _errors = [];
+  let errors = [];
 
-  let _handles = null;
+  let handles = null;
 
   /**
    * If ignoreCommonChords option is true then this will contain list of
@@ -36,7 +30,7 @@ ukeGeeks.chordPainter = function () {
    * @type {Array}
    * @private
    */
-  let _ignoreMatchList = [];
+  let ignoreMatchList = [];
 
   /**
    * Ignore "tacet" or "no chord" chords
@@ -44,7 +38,9 @@ ukeGeeks.chordPainter = function () {
    * @type {RegExp}
    * @private
    */
-  const _tacet = /^(n.?\/?c.?|tacet)$/i;
+  const regExes = {
+    tacet: /^(n.?\/?c.?|tacet)$/i,
+  };
 
   /**
    * Again this is a constructor replacement
@@ -52,11 +48,11 @@ ukeGeeks.chordPainter = function () {
    * @param htmlHandles {ukeGeeks.data.htmlHandles} DOM Element object
    * @return {void}
    */
-  _public.init = function (htmlHandles) {
-    _brush = new ukeGeeks.chordBrush();
-    _brush.init();
-    _handles = htmlHandles;
-  };
+  function init(htmlHandles) {
+    brush = new ukeGeeks.chordBrush();
+    brush.init();
+    handles = htmlHandles;
+  }
 
   /**
      * Checks whether speicified chord (name) is on the ignore list.
@@ -64,14 +60,14 @@ ukeGeeks.chordPainter = function () {
      * @param  {string} chord Chord name
      * @return {boolean}  return TRUE if "chord" is on ignore list.
      */
-  const ignoreChord = function (chord) {
+  function ignoreChord(chord) {
     for (let i = 0; i < ukeGeeks.settings.commonChords.length; i++) {
       if (chord == ukeGeeks.settings.commonChords[i]) {
         return true;
       }
     }
     return false;
-  };
+  }
 
   /**
    * Plots the passed in chords (array of ) by adding canvas elements inside passed DOM element.
@@ -79,40 +75,40 @@ ukeGeeks.chordPainter = function () {
    * @param chords {array<expandedChord>} Array of chord objects to be plotted
    * @return {void}
    */
-  _public.show = function (chords) {
-    _handles.diagrams.innerHTML = '';
-    _errors = [];
-    _ignoreMatchList = [];
+  function show(chords) {
+    handles.diagrams.innerHTML = '';
+    errors = [];
+    ignoreMatchList = [];
 
     if (ukeGeeks.settings.opts.sortAlphabetical) {
       chords.sort();
     }
 
     for (let i = 0; i < chords.length; i++) {
-      if (_tacet.test(chords[i])) {
+      if (regExes.tacet.test(chords[i])) {
         continue;
       }
       if (ukeGeeks.settings.opts.ignoreCommonChords && ignoreChord(chords[i])) {
-        if ((typeof Array.prototype.indexOf === 'function') && (_ignoreMatchList.indexOf(chords[i]) == -1)) {
-          _ignoreMatchList.push(chords[i]);
+        if ((typeof Array.prototype.indexOf === 'function') && (ignoreMatchList.indexOf(chords[i]) == -1)) {
+          ignoreMatchList.push(chords[i]);
         }
         continue;
       }
       const chord = ukeGeeks.definitions.get(chords[i]);
       if (!chord) {
-        _errors.push(chords[i]);
+        errors.push(chords[i]);
         continue;
       }
-      _brush.plot(_handles.diagrams, chord, ukeGeeks.settings.fretBox);
+      brush.plot(handles.diagrams, chord, ukeGeeks.settings.fretBox);
     }
 
-    if (_ignoreMatchList.length > 0) {
+    if (ignoreMatchList.length > 0) {
       const para = document.createElement('p');
       para.className = 'ugsIgnoredChords';
-      para.innerHTML = `Also uses: ${_ignoreMatchList.sort().join(', ')}`;
-      _handles.diagrams.appendChild(para);
+      para.innerHTML = `Also uses: ${ignoreMatchList.sort().join(', ')}`;
+      handles.diagrams.appendChild(para);
     }
-  };
+  }
 
   /**
    * Plots chords "inline" with the lyrics. Searches for &lt;code data-chordName=&quot;Am7&quot;&gt;&lt;/code&gt;.
@@ -121,8 +117,8 @@ ukeGeeks.chordPainter = function () {
    * @param chords {array<expandedChord>} Array of chord objects to be plotted
    * @return {void}
    */
-  _public.showInline = function (chords) {
-    const e = _handles.text.getElementsByTagName('code');
+  function showInline(chords) {
+    const e = handles.text.getElementsByTagName('code');
     if (e.length < 1) {
       return;
     }
@@ -135,31 +131,35 @@ ukeGeeks.chordPainter = function () {
       }
       for (let j = 0; j < e.length; j++) {
         if (e[j].getAttribute('data-chordName') == chord.name) {
-          _brush.plot(e[j], chord, ukeGeeks.settings.inlineFretBox, ukeGeeks.settings.inlineFretBox.fonts);
+          brush.plot(e[j], chord, ukeGeeks.settings.inlineFretBox, ukeGeeks.settings.inlineFretBox.fonts);
         }
       }
     }
-  };
+  }
 
   /**
    * returns array of unknown chords
    * @method getErrors
    * @return {array}
    */
-  _public.getErrors = function () {
-    return _errors;
-  };
+  function getErrors() {
+    return errors;
+  }
 
   /**
    * List of chords excluded from the master chord diagrams
    * @method getIgnoredChords
    * @return {array} array of strings
    */
-  _public.getIgnoredChords = function () {
-    return _ignoreMatchList;
-  };
+  function getIgnoredChords() {
+    return ignoreMatchList;
+  }
 
-  /* return our public interface
-   */
-  return _public;
-};
+  module.exports = {
+    init,
+    show,
+    showInline,
+    getErrors,
+    getIgnoredChords,
+  };
+});

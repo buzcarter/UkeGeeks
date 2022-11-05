@@ -1,3 +1,4 @@
+fdRequire.define('ukeGeeks/overlapFixer', (require, module) => {
 /**
  * Singleton to correct overlapping chord names/diagrams in songs rendered by UGS
  * @class overlapFixer
@@ -5,10 +6,6 @@
  * @project UkeGeeks' Scriptasaurus
  * @singleton
  */
-ukeGeeks.overlapFixer = (function () {
-  // private
-  // ---------------------------
-  const _public = {};
 
   /**
    * returns TRUE if Box A overlaps Box B. Detailed horizontal check, we "cheat" the
@@ -19,7 +16,7 @@ ukeGeeks.overlapFixer = (function () {
    * @param  {object} "b" box
    * @return {boolean}
    */
-  const checkOverlap = function (a, b) {
+  function checkOverlap(a, b) {
     // "cheat" vertical check
     if (a.top != b.top) {
       return false;
@@ -36,7 +33,7 @@ ukeGeeks.overlapFixer = (function () {
       return true;
     }
     return false;
-  };
+  }
 
   /**
    * returns object with width and left & right offsets
@@ -44,7 +41,7 @@ ukeGeeks.overlapFixer = (function () {
    * @param  {DOM_element} element to be measured
    * @return {object}
    */
-  const getBox = function (ele) {
+  function getBox(ele) {
     const box = getOffsets(ele);
     box.width = getWidth(ele);
 
@@ -62,7 +59,7 @@ ukeGeeks.overlapFixer = (function () {
 
     box.right = box.left + box.width;
     return box;
-  };
+  }
 
   /**
    * source: http://www.cjboco.com/blog.cfm/post/determining-an-elements-width-and-height-using-javascript/
@@ -70,13 +67,13 @@ ukeGeeks.overlapFixer = (function () {
    * @param  {DOM_element} element to be measured
    * @return {int}
    */
-  var getWidth = function (ele) {
+  function getWidth(ele) {
     if (typeof ele.clip !== 'undefined') {
       return ele.clip.width;
     }
 
     return (ele.style.pixelWidth) ? ele.style.pixelWidth : ele.offsetWidth;
-  };
+  }
 
   /**
    * Returns JSON with left, right, top, and width properties. ONLY left and top are calculate,
@@ -86,7 +83,7 @@ ukeGeeks.overlapFixer = (function () {
    * @param  {DOM_element} element to be measured
    * @return {JSON}
    */
-  var getOffsets = function (ele) {
+  function getOffsets(ele) {
     const box = {
       top: 0,
       left: 0,
@@ -101,7 +98,7 @@ ukeGeeks.overlapFixer = (function () {
     }
 
     return box;
-  };
+  }
 
   /**
    * checks (and fixes if problem is presetn) two code tags
@@ -110,7 +107,7 @@ ukeGeeks.overlapFixer = (function () {
    * @param  {[DOM_element]} codeB [description]
    * @return {void}
    */
-  const checkChords = function (codeA, codeB) {
+  function checkChords(codeA, codeB) {
     const strongA = codeA.getElementsByTagName('strong')[0];
     const strongB = codeB.getElementsByTagName('strong')[0];
 
@@ -125,7 +122,7 @@ ukeGeeks.overlapFixer = (function () {
       const width = boxA.right - boxB.left + 1;
       codeA.style.paddingRight = `${width < 1 ? 1 : width}px`;
     }
-  };
+  }
 
   /**
    * Runs through the element looking for UkeGeek chords (based on HTML) and
@@ -133,7 +130,7 @@ ukeGeeks.overlapFixer = (function () {
    * @method Fix
    * @param  {DOM_element} element containing the UGS HTML song
    */
-  _public.Fix = function (ele) {
+  function Fix(ele) {
     let i;
     const elements = ele.getElementsByTagName('code');
 
@@ -144,7 +141,9 @@ ukeGeeks.overlapFixer = (function () {
     for (i = 0; i < (elements.length - 1); i++) {
       checkChords(elements[i], elements[i + 1]);
     }
-  };
+  }
 
-  return _public;
-}());
+  module.exports = {
+    Fix,
+  };
+});

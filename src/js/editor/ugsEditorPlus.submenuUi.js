@@ -5,13 +5,8 @@
  * @class submenuUi
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.submenuUi = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {};
+fdRequire.define('ugsEditorPlus/submenuUi', (require, module) => {
+  const $ = require('jQuery');
 
   let _open = null;
 
@@ -21,7 +16,7 @@ ugsEditorPlus.submenuUi = (function () {
    * @public
    * @return {[type]} [description]
    */
-  _public.init = function () {
+  function init() {
     ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect', ugsEditorPlus.options.theme);
     $('.enablePseudoSelects label').click(onLabelClick);
     $('.pseudoSelect li').click(onOptionClick);
@@ -29,7 +24,7 @@ ugsEditorPlus.submenuUi = (function () {
     $('.arrowBox').click(doCollapseAllLists);
 
     syncOptions(ugsEditorPlus.options);
-  };
+  }
 
   /**
    * a list item has been clicked
@@ -37,7 +32,7 @@ ugsEditorPlus.submenuUi = (function () {
    * @param  {event} e
    * @return {bool} false to kill event bubbling
    */
-  var onOptionClick = function (e) {
+  function onOptionClick(e) {
     const $optionItem = $(this);
     const value = stripHash($optionItem.children().attr('href'));
 
@@ -66,19 +61,20 @@ ugsEditorPlus.submenuUi = (function () {
 
     // prevent event bubbling
     return false;
-  };
+  }
 
-  var setChecked = function ($item) {
+  function setChecked($item) {
     if (!$item) {
       // console.log('item for option not found');
       return;
     }
     $item.siblings().removeClass('checked');
     $item.addClass('checked');
-  };
+  }
 
-  var syncOptions = function (options) {
-    let $item; let id;
+  function syncOptions(options) {
+    let $item;
+    let id;
     const map = [{
       action: 'zoomFonts',
       value: options.fontSize,
@@ -108,7 +104,7 @@ ugsEditorPlus.submenuUi = (function () {
       setChecked($item);
       $(`label[for=${id}] span`).text(getLabelText(map[i].action, map[i].value, $item));
     }
-  };
+  }
 
   /**
    * Label has been clicked, show associated options dialog box.
@@ -117,7 +113,7 @@ ugsEditorPlus.submenuUi = (function () {
    * @param  {event} e
    * @return {bool} false to kill event bubbling
    */
-  var onLabelClick = function (e) {
+  function onLabelClick(e) {
     const $thisLabel = $(this);
     const id = $thisLabel.attr('for');
     setActiveLabel($thisLabel);
@@ -136,17 +132,17 @@ ugsEditorPlus.submenuUi = (function () {
 
     // prevent event bubbling
     return false;
-  };
+  }
 
-  _public.reset = function ($dlg) {
+  function reset($dlg) {
     $dlg.find('dt').removeClass('active');
     $dlg.find('.event-userSelecting').removeClass('event-userSelecting');
-  };
+  }
 
-  var setActiveLabel = function ($label) {
+  function setActiveLabel($label) {
     $label.closest('dl').children('dt').removeClass('active');
     $label.closest('dt').addClass('active');
-  };
+  }
 
   /**
    * trying prevent the options not being set from being too distractive --
@@ -156,37 +152,37 @@ ugsEditorPlus.submenuUi = (function () {
    * @param  {Boolean} isInUse [description]
    * @return void
    */
-  var onListActive = function (ele, isInUse) {
+  function onListActive(ele, isInUse) {
     $(ele).parents('.enablePseudoSelects').toggleClass('event-userSelecting', isInUse);
-  };
+  }
 
   /**
    * @method  doCollapseAllLists
    * @param  {event} e
    * @return bool
    */
-  var doCollapseAllLists = function (e) {
+  function doCollapseAllLists(e) {
     if ($(e.target).is('a')) {
       return;
     }
     $(this).find('dd').hide();
     _open = null;
     return false;
-  };
+  }
 
   /**
    * user clicked off the current dialog -- close 'em all
    * @method closeAll
    * @param  {event} e
    */
-  var closeAll = function (e) {
+  function closeAll(e) {
     $('.arrowBox').fadeOut(270);
     ugsEditorPlus.topMenus.makeAllInactive();
-  };
+  }
 
-  var stripHash = function (value) {
+  function stripHash(value) {
     return (value[0] == '#') ? value.substr(1) : value;
-  };
+  }
 
   /* ----------------------------------------------------------------------------------- *|
   |* Display Text Methods
@@ -213,7 +209,7 @@ ugsEditorPlus.submenuUi = (function () {
    * @param  {jQueryElement} $ele jQuery element that ...
    * @return {string}
    */
-  var getLabelText = function (action, value, $ele) {
+  function getLabelText(action, value, $ele) {
     const index = $ele.index();
 
     switch (action) {
@@ -225,23 +221,25 @@ ugsEditorPlus.submenuUi = (function () {
         return `${_desriptions.zoomDiagrams[index]} diagrams`;
       case 'colors':
         return ugsEditorPlus.themes.getDescription(value);
-      case 'transpose':
+      case 'transpose': {
         if (value == 'up_0') {
           return 'Original key';
         }
-        var txt = $ele.text();
+        const txt = $ele.text();
         return `${txt.replace(' ', ' steps - "')}"`;
+      }
       default:
-       return _desriptions[action][index];
+        return _desriptions[action][index];
     }
-  };
+  }
 
-  _public.resetTransposeLabel = function () {
+  function resetTransposeLabel() {
     $('label[for=transposePicker] span').text('Original key');
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface "JSON handle"
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    init,
+    reset,
+    resetTransposeLabel,
+  };
+});

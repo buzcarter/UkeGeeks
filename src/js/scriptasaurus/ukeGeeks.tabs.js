@@ -1,3 +1,4 @@
+fdRequire.define('ukeGeeks/tabs', (require, module) => {
 /**
  * Tablature renderer -- reads tab data and draws canvas elements.
  * Creates "packed" versions of the tabs, including a "key line" that's comprised
@@ -6,14 +7,14 @@
  * @constructor
  * @namespace ukeGeeks
  */
-ukeGeeks.tabs = function () {
+
   /**
    * alias for external Settings dependencies (helps with complression, too)
    * @property tab_settings
    * @private
    * @type {JSON}
    */
-  const tab_settings = ukeGeeks.settings.tabs;
+  const myTabSettings = ukeGeeks.settings.tabs;
 
   // TODO: use ukeGeeks.settings.tuning for NUM_STRINGS and LAST_STRING_NAME??
 
@@ -43,7 +44,7 @@ ukeGeeks.tabs = function () {
    * @public
    * @return {void}
    */
-  const init = function () {};
+  function init() {}
 
   /**
    * Races through all &lt;pre&gt; tags within h, any with the CSS class of "ugsTabs" will be replaced with the canvas element.
@@ -52,7 +53,7 @@ ukeGeeks.tabs = function () {
    * @param h {DOM-element}
    * @return {void}
    */
-  const replace = function (h) {
+  function replace(h) {
     const tabBlocks = h.getElementsByTagName('pre');
     for (const i in tabBlocks) {
       if (tabBlocks[i].className == 'ugsTabs') {
@@ -61,7 +62,7 @@ ukeGeeks.tabs = function () {
         loadBlocks(s, tabBlocks[i]);
       }
     }
-  };
+  }
 
   /**
    *
@@ -70,7 +71,7 @@ ukeGeeks.tabs = function () {
    * @param outElement {string or DOM} Either: (string) the Id to a DOM element, or DOM element handle where the canvas/converted text will be placed.
    * @return {void}
    */
-  var loadBlocks = function (text, outElement) {
+  function loadBlocks(text, outElement) {
     const lines = text.split('\n');
     let tab = [];
     for (const i in lines) {
@@ -83,7 +84,7 @@ ukeGeeks.tabs = function () {
         tab = [];
       }
     }
-  };
+  }
 
   /**
    *
@@ -92,7 +93,7 @@ ukeGeeks.tabs = function () {
    * @param outElement {string or DOM} Either: (string) the Id to a DOM element, or DOM element handle where the canvas/converted text will be placed.
    * @return {void}
    */
-  var redraw = function (inTabs, outElement) {
+  function redraw(inTabs, outElement) {
     // validate inTabs input...
     // TODO: instead of this if it's text pop the entire processing back to loadBlocks!
     inTabs = (typeof (inTabs) === 'string') ? (inTabs.split('\n')) : inTabs;
@@ -101,27 +102,27 @@ ukeGeeks.tabs = function () {
     }
     // read tabs
     const tabInfo = readTabs(inTabs);
-    const labelOffset = (tabInfo.hasLabels) ? tab_settings.labelWidth : 0;
+    const labelOffset = (tabInfo.hasLabels) ? myTabSettings.labelWidth : 0;
     const { tabs } = tabInfo;
     // how much space?
-    const height = ((NUM_STRINGS - 1) * tab_settings.lineSpacing) + (2 * tab_settings.dotRadius) + tab_settings.bottomPadding;
+    const height = ((NUM_STRINGS - 1) * myTabSettings.lineSpacing) + (2 * myTabSettings.dotRadius) + myTabSettings.bottomPadding;
     // prep canvas
     outElement = (typeof (outElement) === 'string') ? document.getElementById(outElement) : outElement;
 
     const ugsImg = new ukeGeeks.image().newImage(getWidth(tabs, labelOffset, false), height);
     const pos = {
-      x: tab_settings.dotRadius + labelOffset,
-      y: 1 + tab_settings.dotRadius,
+      x: myTabSettings.dotRadius + labelOffset,
+      y: 1 + myTabSettings.dotRadius,
     };
     const lineWidth = getWidth(tabs, labelOffset, true);
-    drawStaff(ugsImg, pos, lineWidth, tab_settings);
-    drawNotes(ugsImg, pos, tabs, tab_settings, lineWidth);
+    drawStaff(ugsImg, pos, lineWidth, myTabSettings);
+    drawNotes(ugsImg, pos, tabs, myTabSettings, lineWidth);
     if (tabInfo.hasLabels) {
-      drawLabels(ugsImg, pos, tab_settings);
+      drawLabels(ugsImg, pos, myTabSettings);
     }
 
     outElement.innerHTML = ukeGeeks.imageSvg.toString(ugsImg);
-  };
+  }
 
   /**
    * This is insanely long, insanely kludgy, but, insanely, it works. This will read break a block of text into
@@ -132,7 +133,7 @@ ukeGeeks.tabs = function () {
    * @param ukeStrings {array<string>} Block of tablbabure to be parsed
    * @return {2-dimentional array}
    */
-  var readTabs = function (ukeStrings) {
+  function readTabs(ukeStrings) {
     const hasLabels = ukeStrings[NUM_STRINGS - 1][0] == LAST_STRING_NAME;
     if (hasLabels) {
       stripStringLabels(ukeStrings);
@@ -146,7 +147,7 @@ ukeGeeks.tabs = function () {
       tabs: getPackedLines(frets, symbols, guide, minLength),
       hasLabels,
     };
-  };
+  }
 
   /**
    * @method getWidth
@@ -156,21 +157,21 @@ ukeGeeks.tabs = function () {
    * @param isTruncate {bool} If TRUE returns the length of the line, allowing for a terminating "|" character, othwrwise, it's for canvas width
    * @return {int}
    */
-  var getWidth = function (tabs, labelOffset, isTruncate) {
+  function getWidth(tabs, labelOffset, isTruncate) {
     if (!isTruncate) {
-      return (tab_settings.noteSpacing * tabs[0].length) + labelOffset + tab_settings.dotRadius;
+      return (myTabSettings.noteSpacing * tabs[0].length) + labelOffset + myTabSettings.dotRadius;
     }
 
     let len = tabs[0].length;
-    let plusDot = tab_settings.dotRadius;
+    let plusDot = myTabSettings.dotRadius;
     if (tabs[0][len - 1] == '|') {
       // TODO: too much??? retest
       len -= 1;
       plusDot = 0;
     }
 
-    return tab_settings.noteSpacing * len + labelOffset + plusDot;
-  };
+    return myTabSettings.noteSpacing * len + labelOffset + plusDot;
+  }
 
   /**
    * Processes ukeStrings stripping the first character from each line
@@ -179,11 +180,11 @@ ukeGeeks.tabs = function () {
    * @param ukeStrings {array<string>}
    * @return {void}
    */
-  var stripStringLabels = function (ukeStrings) {
+  function stripStringLabels(ukeStrings) {
     for (let i = 0; i < NUM_STRINGS; i++) {
       ukeStrings[i] = ukeStrings[i].substr(1);
     }
-  };
+  }
 
   /**
    * Finds the frets in used for each line. In other words, ignoring
@@ -194,7 +195,7 @@ ukeGeeks.tabs = function () {
    * @param ukeStrings {array<string>}
    * @return {void}
    */
-  var getFretNumbers = function (ukeStrings) {
+  function getFretNumbers(ukeStrings) {
     // first, get the frets
     const reInts = /([0-9]+)/g;
     const frets = [];
@@ -202,7 +203,7 @@ ukeGeeks.tabs = function () {
       frets[i] = ukeStrings[i].match(reInts);
     }
     return frets;
-  };
+  }
 
   /**
    * Returns array of the strings with placeholders instead of the numbers.
@@ -212,7 +213,7 @@ ukeGeeks.tabs = function () {
    * @param ukeStrings {array<string>}
    * @return {void}
    */
-  var getSymbols = function (ukeStrings) {
+  function getSymbols(ukeStrings) {
     // convert to symbols
     const reDoubles = /([0-9]{2})/g;
     const reSingle = /([0-9])/g;
@@ -223,7 +224,7 @@ ukeGeeks.tabs = function () {
       symbols[i] = symbols[i].replace(reSingle, '*');
     }
     return symbols;
-  };
+  }
 
   /**
    * Run through all of the strings (array) and return the length of the shortest one.
@@ -234,7 +235,7 @@ ukeGeeks.tabs = function () {
    * @param ukeStrings {array<string>}
    * @return {void}
    */
-  var getMinLineLength = function (ukeStrings) {
+  function getMinLineLength(ukeStrings) {
     let minLength = 0;
     let line;
     const re = /-+$/gi;
@@ -246,7 +247,7 @@ ukeGeeks.tabs = function () {
       }
     }
     return minLength;
-  };
+  }
 
   /**
    * OK, having created symbolic representations for the lines in earlier steps
@@ -259,7 +260,7 @@ ukeGeeks.tabs = function () {
    * @param minLength {int}
    * @return {void}
    */
-  var getGuideLine = function (symbols, minLength) {
+  function getGuideLine(symbols, minLength) {
     // Build a master pattern "guide" and eliminate double dashes
     let guide = '';
     for (let i = 0; i < minLength; i++) {
@@ -282,7 +283,7 @@ ukeGeeks.tabs = function () {
       lastGuide = guide;
     }
     return guide;
-  };
+  }
 
   /**
    * Using the packed "guide" line we loop over the strings, rebuilding each string
@@ -297,7 +298,7 @@ ukeGeeks.tabs = function () {
    * @param minLength {int}
    * @return {void}
    */
-  var getPackedLines = function (frets, symbols, guide, minLength) {
+  function getPackedLines(frets, symbols, guide, minLength) {
     // pack it!
     const packed = [];
     let chrNote = ''; // a temp variable to hold the 'note'
@@ -327,7 +328,7 @@ ukeGeeks.tabs = function () {
       }
     }
     return packed;
-  };
+  }
 
   /**
    * Create the staff -- really the four tablature strings
@@ -339,7 +340,7 @@ ukeGeeks.tabs = function () {
    * @param settings {settingsObj}
    * @return {voie}
    */
-  var drawStaff = function (ugsImg, pos, length, settings) {
+  function drawStaff(ugsImg, pos, length, settings) {
     const offset = settings.lineWidth / 2;
     const x = pos.x + offset;
     let y = pos.y + offset;
@@ -352,7 +353,7 @@ ukeGeeks.tabs = function () {
       y += settings.lineSpacing;
     }
     staff.endGroup();
-  };
+  }
 
   /**
    * Loop over the normalized tabs emitting the dots/fingers on the passed in canvase
@@ -365,7 +366,7 @@ ukeGeeks.tabs = function () {
    * @param lineWidth {int} Length in pixels (used only when line ends with a measure mark)
    * @return {void}
    */
-  var drawNotes = function (ugsImg, pos, tabs, settings, lineWidth) {
+  function drawNotes(ugsImg, pos, tabs, settings, lineWidth) {
     let c;
     const center = {
       x: 0,
@@ -400,7 +401,7 @@ ukeGeeks.tabs = function () {
       }
       center.y += settings.lineSpacing;
     }
-  };
+  }
 
   /**
    * Draws a vertical "measure" demarcation line
@@ -412,13 +413,13 @@ ukeGeeks.tabs = function () {
    * @param heavy {bool} if TRUE hevy line
    * @return {void}
    */
-  var drawMeasure = function (ugsImg, pos, settings, heavy) {
+  function drawMeasure(ugsImg, pos, settings, heavy) {
     const offset = settings.lineWidth / 2;
     ugsImg.vLine(pos.x + offset, pos.y, (NUM_STRINGS - 1) * settings.lineSpacing).style({
       strokeColor: settings.lineColor,
       strokeWidth: (heavy ? 4.5 : 1) * settings.lineWidth,
     });
-  };
+  }
 
   /**
    * Adds the string letters on the left-side of the canvas, before the tablature string lines
@@ -429,7 +430,7 @@ ukeGeeks.tabs = function () {
    * @param settings {settingsObj}
    * @return {void}
    */
-  var drawLabels = function (ugsImg, pos, settings) {
+  function drawLabels(ugsImg, pos, settings) {
     // ['A','E','C','G'];
     const labels = ukeGeeks.settings.tuning.slice(0).reverse();
     for (let i = 0; i < NUM_STRINGS; i++) {
@@ -439,11 +440,10 @@ ukeGeeks.tabs = function () {
         textAlign: 'left',
       });
     }
-  };
+  }
 
-  /* return our public interface */
-  return {
+  module.exports = {
     init,
     replace,
   };
-};
+});

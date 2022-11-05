@@ -4,13 +4,8 @@
  * @class chordBuilder
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.chordBuilder = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {};
+fdRequire.define('ugsEditorPlus/chordBuilder', (require, module) => {
+  const $ = require('jQuery');
 
   let _builder = null;
 
@@ -19,29 +14,28 @@ ugsEditorPlus.chordBuilder = (function () {
    * on the location of the background image used on the Finger Tool.
    * @method  init
    */
-  _public.init = function () {
+  function init() {
     const fingerToolImage = $('.fingerToolImage').css('background-image');
     ugsChordBuilder.settings.cursor.imageUri = fingerToolImage.replace(/url\("(.*)hand.png"\)/i, '$1hand-cursor.png');
     _builder = new ugsChordBuilder.editorUi();
     _builder.init();
 
     $('#cdBldOpenBtn').click(onShowDlgBtnClick);
-  };
+  }
 
   /**
    * Button/Link click handler (shows the Chord Builder Overlay)
    * @method onShowDlgBtnClick
    * @param  {event} evt
    */
-  var onShowDlgBtnClick = function (evt) {
+  function onShowDlgBtnClick(evt) {
     evt.preventDefault();
     _builder.reload();
     const id = $(this).data('dialog');
     $(`#${id}`).fadeIn();
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface "JSON handle"
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    init,
+  };
+});

@@ -159,7 +159,7 @@ LazyLoad = (function (doc) {
   @private
   */
   function load(type, urls, callback, obj, context) {
-    var _finish = function () { finish(type); },
+    function _finish() { finish(type); },
         isCSS   = type === 'css',
         nodes   = [],
         i, len, node, p, pendingUrls, url;

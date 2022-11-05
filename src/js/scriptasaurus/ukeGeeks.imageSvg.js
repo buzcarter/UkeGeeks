@@ -1,59 +1,54 @@
-/**
- * Converts image JSON data to SVG XML.
- * Limits: no checks for unique Ids.
- * @class  imageSvg
- * @namespace ukeGeeks
- */
-ukeGeeks.imageSvg = (function () {
+fdRequire.define('ukeGeeks/imageSvg', (require, module) => {
   function getStyle(type, style) {
     if (!style) {
       return null;
     }
 
     let s = '';
-    let property; let
-      value;
+    let property;
+    let value;
 
-    for (const key in style) {
-      if (!style.hasOwnProperty(key)) {
-        continue;
-      }
+    Object.keys(style)
+      .forEach((key) => {
+        // if (!style.hasOwnProperty(key)) {
+        //   return;
+        // }
 
-      value = style[key];
-      switch (key) {
-        case 'fillColor':
-          property = 'fill';
-          break;
-        case 'fontFamily':
-          property = 'font';
-          break;
-        case 'textAlign':
-          property = 'text-anchor';
-          switch (value) {
-            case 'right':
-              value = 'end';
-              break;
-            case 'left':
-              value = 'start';
-              break;
-            default:
-              value = 'middle';
-          }
-          break;
-        case 'strokeColor':
-          property = 'stroke';
-          break;
-        case 'strokeWidth':
-          property = 'stroke-width';
-          break;
-        default:
-          property = null;
-      }
+        value = style[key];
+        switch (key) {
+          case 'fillColor':
+            property = 'fill';
+            break;
+          case 'fontFamily':
+            property = 'font';
+            break;
+          case 'textAlign':
+            property = 'text-anchor';
+            switch (value) {
+              case 'right':
+                value = 'end';
+                break;
+              case 'left':
+                value = 'start';
+                break;
+              default:
+                value = 'middle';
+            }
+            break;
+          case 'strokeColor':
+            property = 'stroke';
+            break;
+          case 'strokeWidth':
+            property = 'stroke-width';
+            break;
+          default:
+            property = null;
+        }
 
-      if (property && value) {
-        s += `${property}:${value};`;
-      }
-    }
+        if (property && value) {
+          s += `${property}:${value};`;
+        }
+      });
 
     if (type === 'text' && !style.textAlign) {
       s += 'text-anchor:middle;';
@@ -89,8 +84,8 @@ ukeGeeks.imageSvg = (function () {
 
   function renderLayers(layers) {
     let s = '';
-    let layer; let
-      style;
+    let layer;
+    let style;
     for (let i = 0; i < layers.length; i++) {
       layer = layers[i];
       if (layer.type === 'group') {
@@ -130,8 +125,13 @@ ukeGeeks.imageSvg = (function () {
     return wrapper;
   }
 
-  return {
+  /**
+   * @module
+   * Converts image JSON data to SVG XML.
+   * Limits: no checks for unique Ids.
+   */
+  module.exports = {
     toString,
     appendChild,
   };
-}());
+});

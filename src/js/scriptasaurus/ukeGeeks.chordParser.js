@@ -1,18 +1,12 @@
+fdRequire.define('ukeGeeks/chordParser', (require, module) => {
 /**
  * Reads an HTML (text) block looking for chords in format: [Emaj7]
  * Returns the HTML block with wrapped chords: &lt;code&gt;&lt;strong&gt;&lt;em&gt;
  * @class chordParser
  * @namespace ukeGeeks
  */
-ukeGeeks.chordParser = function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type {Object}
-   */
-  const _public = {};
 
-  let _chords = [];
+  let underscoreChords = [];
 
   /// //////////////////////////////////////////////////////////////////////////
   //
@@ -24,7 +18,7 @@ ukeGeeks.chordParser = function () {
    * @method init
    * @return {void}
    */
-  _public.init = function () {};
+  function init() {}
 
   /**
    * This does all of the work -- it's a Wrapper method that calls all of this classes other
@@ -33,21 +27,21 @@ ukeGeeks.chordParser = function () {
    * @param text {string} CPM Text Block to be parsed
    * @return {string}
    */
-  _public.parse = function (text) {
-    _chords = _findChords(text);
-    text = _encloseChords(text, _chords);
-    text = _packChords(text);
+  function parse(text) {
+    underscoreChords = findChords(text);
+    text = encloseChords(text, underscoreChords);
+    text = packChords(text);
     return text;
-  };
+  }
 
   /**
    * Getter method for _chords
    * @method getChords
    * @return {Array-chords}
    */
-  _public.getChords = function () {
-    return _chords;
-  };
+  function getChords() {
+    return underscoreChords;
+  }
 
   /// //////////////////////////////////////////////////////////////////////////
   //
@@ -62,9 +56,9 @@ ukeGeeks.chordParser = function () {
    * @param text {string} CPM Text Block to be parsed
    * @return {StringArray}
    */
-  var _findChords = function (text) {
-    let i; let
-      j;
+  function findChords(text) {
+    let i;
+    let j;
     const re = /\[(.+?)]/img;
     const m = text.match(re);
     if (!m) {
@@ -92,7 +86,7 @@ ukeGeeks.chordParser = function () {
     }
     // done
     return chords;
-  };
+  }
 
   /**
    * Returns the input string having replaced all of the "bracketed chord names" (i.e. [D7]) with HTML
@@ -103,7 +97,7 @@ ukeGeeks.chordParser = function () {
    * @param chords {StringArray}
    * @return {string}
    */
-  var _encloseChords = function (text, chords) {
+  function encloseChords(text, chords) {
     const openBracket = ukeGeeks.settings.opts.retainBrackets ? '[' : ' ';
     const closeBracket = ukeGeeks.settings.opts.retainBrackets ? ']' : ' ';
     for (const i in chords) {
@@ -122,7 +116,7 @@ ukeGeeks.chordParser = function () {
       text = text.replace(re, '<code data-chordName="' + this.chords[j] + '"><strong>[<em>' + this.chords[j] + '</em>]</strong></code>');
     }
     */
-  };
+  }
 
   /**
    * Looks for consecutive chords and strips the whitespace between them -- thus "packing" the
@@ -132,7 +126,7 @@ ukeGeeks.chordParser = function () {
    * @param text {string}
    * @return {string}
    */
-  var _packChords = function (text) {
+  function packChords(text) {
     let re;
 
     if (ukeGeeks.settings.inlineDiagrams) {
@@ -143,9 +137,11 @@ ukeGeeks.chordParser = function () {
 
     re = /<\/strong><\/code>[ \t]*<code data-chordName="[^"]*"><strong>/ig;
     return text.replace(re, ' ');
-  };
+  }
 
-  /* return our public interface
-   */
-  return _public;
-};
+  module.exports = {
+    init,
+    parse,
+    getChords,
+  };
+});

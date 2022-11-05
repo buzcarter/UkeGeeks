@@ -4,7 +4,7 @@
  * @constructor
  * @namespace ugsChordBuilder
  */
-ugsChordBuilder.editorUi = function () {
+fdRequire.define('ugsChordBuilder/editorUi', (require, module) => {
   const _ids = {
     // top-most container, the "master drawing surface"
     container: 'cdBldEditorSurface',
@@ -62,7 +62,7 @@ ugsChordBuilder.editorUi = function () {
    * @method init
    * @return {bool}
    */
-  this.init = function () {
+  function init() {
     _cursorCanvas = document.getElementById(_ids.cursorCanvas);
     if (!_cursorCanvas.getContext) {
       return false;
@@ -103,7 +103,7 @@ ugsChordBuilder.editorUi = function () {
     ugsChordBuilder.chooserList.init(setChord);
 
     return true;
-  };
+  }
 
   /**
    * Successively clicking the Finger tool cycles through index to pinky, then none, and so on.
@@ -114,39 +114,39 @@ ugsChordBuilder.editorUi = function () {
    * @private
    * @return {void}
    */
-  var updateFinger = function () {
+  function updateFinger() {
     _finger++;
     if (_finger > 4) {
       _finger = 0;
     }
     document.getElementById(_ids.btnFingerName).innerHTML = `${_fingerNames[_finger]} (${_finger})`;
     document.getElementById(_ids.btnHandPic).className = `fingerToolImage finger${_finger}`;
-  };
+  }
 
   /**
    * @method
    * @private
    * @return {void}
    */
-  var showOutputBox = function (evt) {
+  function showOutputBox(evt) {
     setClass(document.getElementById(_ids.outputBox), 'collapseOutput', !evt.target.checked);
-  };
+  }
 
   /**
    * Cancel button's click event handler
    * @method onCancelClick
    */
-  var onCancelClick = function (evt) {
+  function onCancelClick(evt) {
     evt.preventDefault();
     reset();
     ugsChordBuilder.chooserList.show(true);
-  };
+  }
 
   /**
    * Save button's click event handler
    * @method onSaveClick
    */
-  var onSaveClick = function (evt) {
+  function onSaveClick(evt) {
     evt.preventDefault();
     const d = {
       name: _currentName,
@@ -159,7 +159,7 @@ ugsChordBuilder.editorUi = function () {
       e.focus();
       e.select();
     }
-  };
+  }
 
   /**
    * DANGER!! this is really a public method! A reference to this is passed to the
@@ -167,7 +167,7 @@ ugsChordBuilder.editorUi = function () {
    * @method setChord
    * @param {Chord} chord
    */
-  var setChord = function (chord) {
+  function setChord(chord) {
     const isNew = chord == null;
     if (isNew) {
       reset();
@@ -177,7 +177,7 @@ ugsChordBuilder.editorUi = function () {
     const maxFret = findMaxFret(chord.dots);
     const startingFret = (maxFret > ugsChordBuilder.settings.fretBoard.numFrets) ? maxFret - ugsChordBuilder.settings.fretBoard.numFrets + 1 : 1;
     reset(chord.name, startingFret, convertDots(startingFret, chord.dots), false);
-  };
+  }
 
   /**
    * Converts standard scriptasaurus Dot array to chordBuilder dot array (fret changes)
@@ -186,7 +186,7 @@ ugsChordBuilder.editorUi = function () {
    * @param  {array} builderDots
    * @return {array}
    */
-  var convertDots = function (startingFret, builderDots) {
+  function convertDots(startingFret, builderDots) {
     const offset = startingFret - 1;
     const ugsDots = [];
     for (let i = 0; i < builderDots.length; i++) {
@@ -194,7 +194,7 @@ ugsChordBuilder.editorUi = function () {
       ugsDots.push(new ugsChordBuilder.entities.Dot(builderDots[i].string, (fret < 0 ? 0 : fret), builderDots[i].finger));
     }
     return ugsDots;
-  };
+  }
 
   /**
    * Loops over dots to find the largest fret value
@@ -202,7 +202,7 @@ ugsChordBuilder.editorUi = function () {
    * @param  {array} dots
    * @return {ing}
    */
-  var findMaxFret = function (dots) {
+  function findMaxFret(dots) {
     let max = 0;
     for (let i = 0; i < dots.length; i++) {
       if (dots[i].fret > max) {
@@ -210,7 +210,7 @@ ugsChordBuilder.editorUi = function () {
       }
     }
     return max;
-  };
+  }
 
   /**
    * Updates the "standard form-like inputs"
@@ -220,7 +220,7 @@ ugsChordBuilder.editorUi = function () {
    * @param {bool} isNew
    * @return {void}
    */
-  const resetInputs = function (name, startingFret, isNew) {
+  function resetInputs(name, startingFret, isNew) {
     _currentName = (name && name.length > 0) ? name : 'CHORDNAME';
     document.getElementById(_ids.chordName).value = _currentName;
 
@@ -231,13 +231,13 @@ ugsChordBuilder.editorUi = function () {
     setClass(document.getElementById(_ids.outputBox), 'collapseOutput', true);
 
     document.getElementById(_ids.saveBtn).value = isNew ? 'Add' : 'Update';
-  };
+  }
 
   /**
    * Updates the Toolbox's current tool to be "Add Dot"; sets properties required for cursor, etc.
    * @method resetCurrentTool
    */
-  const resetCurrentTool = function () {
+  function resetCurrentTool() {
     // restore current drawing tool (this is lame-o)
     // -----------------------------------------------
     _isDotToolActive = true;
@@ -247,7 +247,7 @@ ugsChordBuilder.editorUi = function () {
     setClass(_eleFingerBtn, 'selected', !_isDotToolActive);
     setClass(document.getElementById(_ids.toolbox), 'open', !_isDotToolActive);
     ugsChordBuilder.cursorCanvas.setCursor(_isDotToolActive, _finger);
-  };
+  }
 
   /**
    * Does a complete UI reset (if no values provided in params), otherwise this is kinda a "set"
@@ -257,7 +257,7 @@ ugsChordBuilder.editorUi = function () {
    * @param {array} dots
    * @param {bool} isNew Used to set the button text
    */
-  var reset = function (name, startingFret, dots, isNew) {
+  function reset(name, startingFret, dots, isNew) {
     isNew = arguments.length > 3 ? isNew : true;
     // fire cleanup on other classes...
     // -----------------------------------------------
@@ -279,14 +279,14 @@ ugsChordBuilder.editorUi = function () {
     // -----------------------------------------------
     redraw();
     exportDefinition();
-  };
+  }
 
   /**
    * @method
    * @private
    * @return {void}
    */
-  var toggleTool = function (evt) {
+  function toggleTool(evt) {
     evt.preventDefault();
     const useDotTool = evt.currentTarget.href.indexOf('#dots') >= 0;
     if (useDotTool == _isDotToolActive) {
@@ -303,7 +303,7 @@ ugsChordBuilder.editorUi = function () {
 
     _isDotToolActive = useDotTool;
     ugsChordBuilder.cursorCanvas.setCursor(_isDotToolActive, _finger);
-  };
+  }
 
   /**
    * Yet another poor man's jQuery envying add/remove CSS class method.
@@ -311,7 +311,7 @@ ugsChordBuilder.editorUi = function () {
    * @private
    * @return {void}
    */
-  var setClass = function (element, className, isSet) {
+  function setClass(element, className, isSet) {
     const hasClass = element.className.indexOf(className) >= 0;
     if (isSet && !hasClass) {
       // add
@@ -320,42 +320,42 @@ ugsChordBuilder.editorUi = function () {
       // remove
       element.className = element.className.replace(className, '').replace(/\s+/g, ' ');
     }
-  };
+  }
 
   /**
    * @method
    * @private
    * @return {void}
    */
-  var addStartingFretOptions = function (ele) {
+  function addStartingFretOptions(ele) {
     let s = '';
     const lastValue = ugsChordBuilder.settings.fretBoard.maxFret - ugsChordBuilder.settings.fretBoard.numFrets + 1;
     for (let i = 1; i <= lastValue; i++) {
       s += `<option value="${i}">${i}</option>`;
     }
     ele.innerHTML = s;
-  };
+  }
 
   /**
    * @method
    * @private
    * @return {void}
    */
-  var onNameChange = function (evt) {
+  function onNameChange(evt) {
     _currentName = this.value;
     exportDefinition();
-  };
+  }
 
   /**
    * @method
    * @private
    * @return {void}
    */
-  var onFretChange = function (evt) {
+  function onFretChange(evt) {
     _startingFret = parseInt(this.value, 10);
     exportDefinition();
     redraw();
-  };
+  }
 
   /**
    * Needs to watch for closed chords!
@@ -363,7 +363,7 @@ ugsChordBuilder.editorUi = function () {
    * @private
    * @return {void}
    */
-  var slide = function (evt) {
+  function slide(evt) {
     evt.preventDefault();
     let moveAllowed = false;
     const numSteps = evt.target.getAttribute('data-direction') == 'up' ? -1 : +1;
@@ -383,23 +383,23 @@ ugsChordBuilder.editorUi = function () {
       redraw();
       exportDefinition();
     }
-  };
+  }
 
   /**
    * @method
    * @private
    * @return {void}
    */
-  var onMouseMove = function (evt) {
+  function onMouseMove(evt) {
     ugsChordBuilder.cursorCanvas.draw(getPosition(this, evt));
-  };
+  }
 
   /**
    * @method
    * @private
    * @return {void}
    */
-  var onMouseClick = function (evt) {
+  function onMouseClick(evt) {
     const pos = getPosition(_cursorCanvas, evt);
     const dot = ugsChordBuilder.tracking.toDot(pos);
     if (!dot) {
@@ -414,43 +414,48 @@ ugsChordBuilder.editorUi = function () {
       redraw(pos);
       exportDefinition();
     }
-  };
+  }
 
   /**
    * @method
    * @private
    * @return {void}
    */
-  var getPosition = function (canvas, evt) {
+  function getPosition(canvas, evt) {
     const rect = canvas.getBoundingClientRect();
     return new ugsChordBuilder.entities.Position(
       evt.clientX - rect.left,
       evt.clientY - rect.top,
     );
-  };
+  }
 
   /**
    * @method
    * @private
    * @return {void}
    */
-  var redraw = function (pos) {
+  function redraw(pos) {
     pos = pos || new ugsChordBuilder.entities.Position(0, 0);
     ugsChordBuilder.chordCanvas.draw(pos, _startingFret);
-  };
+  }
 
   /**
    * @method
    * @private
    * @return {void}
    */
-  var exportDefinition = function () {
+  function exportDefinition() {
     document.getElementById(_ids.output).innerHTML = ugsChordBuilder.export.getDefinitionHtml(_currentName, _startingFret);
-  };
+  }
 
-  this.reload = function () {
+  function reload() {
     reset();
     ugsChordBuilder.chooserList.reset();
     ugsChordBuilder.chooserList.show(true);
+  }
+
+  module.exports = {
+    init,
+    reload,
   };
-};
+});

@@ -1,17 +1,4 @@
-/**
- * A container or Models library. ukegeeks.data is really a "Models" namespace. Please refactor.
- * @class data
- * @namespace ukeGeeks
- * @singleton
- */
-ukeGeeks.data = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type {Object}
-   */
-  const _public = {};
-
+fdRequire.define('ukeGeeks/data', (require, module) => {
   /**
    * Chord info sutiable for plotting on Canvas; has name and dot positions
    * @class expandedChord
@@ -19,7 +6,7 @@ ukeGeeks.data = (function () {
    * @for ukeGeeks.data
    * @namespace ukeGeeks.data
    */
-  _public.expandedChord = function (name) {
+  function expandedChord(name) {
     /**
      * string, i.e. 'C#6'
      * @property name
@@ -39,7 +26,7 @@ ukeGeeks.data = (function () {
      * @type array
      */
     this.muted = [];
-  };
+  }
 
   /**
    * Song object holds all meta info (Title, Subtitles) plus an array of plot
@@ -48,7 +35,7 @@ ukeGeeks.data = (function () {
    * @for ukeGeeks.data
    * @namespace ukeGeeks.data
    */
-  _public.song = function () {
+  function song() {
     /**
      * Song Title
      * @property title
@@ -113,7 +100,7 @@ ukeGeeks.data = (function () {
      * @type array(strings)
      */
     this.chords = [];
-  };
+  }
 
   /**
    * A single fretboard fingering "dot" -- the position on the Canvas object that a dot should occupy.
@@ -122,7 +109,7 @@ ukeGeeks.data = (function () {
    * @for ukeGeeks.data
    * @namespace ukeGeeks.data
    */
-  _public.dot = function (string, fret, finger) {
+  function dot(string, fret, finger) {
     /**
      * The ukulele's string, numbered from "top" (1) to "bottom" (4). Sporano uke strings would be ['G' => 1,'C' => 2,'E' => 3,'A' => 4]
      * @property string
@@ -142,7 +129,7 @@ ukeGeeks.data = (function () {
      * @type int
      */
     this.finger = finger;
-  };
+  }
 
   /**
    * @class instrument
@@ -152,18 +139,18 @@ ukeGeeks.data = (function () {
    * @param  {string} tuning
    * @param  {array} chords
    */
-  _public.instrument = function (key, name, tuning, chords) {
+  function instrument(key, name, tuning, chords) {
     this.key = key;
     this.name = name;
     this.tuning = tuning;
     this.chords = chords;
-  };
+  }
 
-  _public.htmlHandles = function (wrap, diagrams, text) {
+  function htmlHandles(wrap, diagrams, text) {
     this.wrap = wrap;
     this.diagrams = diagrams;
     this.text = text;
-  };
+  }
 
   // -----------------------------------------------------------------------------------------
   // *** DOCUMENTAION ONLY ***
@@ -210,5 +197,15 @@ ukeGeeks.data = (function () {
     * @for ukeGeeks.data.addInFinger
     */
 
-  return _public;
-}());
+  /**
+   * A container or Models library. ukegeeks.data is really a "Models" namespace. Please refactor.
+   * @module
+   */
+  module.exports = {
+    expandedChord,
+    song,
+    dot,
+    instrument,
+    htmlHandles,
+  };
+});

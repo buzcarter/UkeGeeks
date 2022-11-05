@@ -3,14 +3,7 @@
  * @class autoReformat
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.autoReformat = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {};
-
+fdRequire.define('ugsEditorPlus/autoReformat', (require, module) => {
   /**
    * associative array/JSON handles to key/frequently accessed DOM Elements (see init()
    * @property _ele
@@ -21,7 +14,7 @@ ugsEditorPlus.autoReformat = (function () {
   let _formatted;
   let _isDisabled = false;
 
-  _public.run = function (elements) {
+  function run(elements) {
     if (_isDisabled) {
       return;
     }
@@ -46,23 +39,23 @@ ugsEditorPlus.autoReformat = (function () {
     };
 
     runNow();
-  };
+  }
 
-  var doOk = function () {
+  function doOk() {
     _ele.cpmSource.value = _formatted;
     doClose();
     ugsEditorPlus.actions.run(true);
-  };
+  }
 
-  var doClose = function () {
+  function doClose() {
     ukeGeeks.toolsLite.addClass(_ele.reformatDlg, 'isHidden');
-  };
+  }
 
-  var doDisable = function (isDisabled) {
+  function doDisable(isDisabled) {
     _isDisabled = isDisabled;
-  };
+  }
 
-  var runNow = function () {
+  function runNow() {
     _formatted = ugsEditorPlus.reformat.run(_ele.cpmSource.value);
     _ele.reformatTextBox.innerHTML = _formatted;
 
@@ -71,10 +64,9 @@ ugsEditorPlus.autoReformat = (function () {
     }
 
     ukeGeeks.toolsLite.removeClass(_ele.reformatDlg, 'isHidden');
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface "JSON handle"
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    run,
+  };
+});

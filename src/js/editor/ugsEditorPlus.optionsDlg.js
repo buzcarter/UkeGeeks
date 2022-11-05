@@ -5,20 +5,15 @@
  * @class optionsDlg
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.optionsDlg = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {};
+fdRequire.define('ugsEditorPlus/optionsDlg', (require, module) => {
+  const $ = require('jQuery');
 
   /**
    * Sets up this class by attaching event handlers to form elements;
    * @method init
    * @public
    */
-  _public.init = function () {
+  function init() {
     let ele;
     const { options } = ugsEditorPlus;
 
@@ -69,17 +64,16 @@ ugsEditorPlus.optionsDlg = (function () {
       handle: 'hgroup',
       // containParent: true
     });
-  };
+  }
 
-  var triggerNotify = function (action, value) {
+  function triggerNotify(action, value) {
     $.event.trigger('option:click', {
       action,
       value,
     });
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface "JSON handle"
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    init,
+  };
+});

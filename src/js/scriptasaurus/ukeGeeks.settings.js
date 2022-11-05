@@ -1,3 +1,4 @@
+fdRequire.define('ukeGeeks/settings', (require, module) => {
 /**
  * Customize your installation. This JSON object controls appearance and
  * HTML element names. It's divided into four sections: graphics, ids, layout,
@@ -8,20 +9,13 @@
  * @static
  * @singleton
  */
-ukeGeeks.settings = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type {Object}
-   */
-  const _public = {};
 
   /**
    * Chord Diagram Font styles -- font size, font-weight, font-face stack, etc.
    * @property fonts
    * @type JSON Object
    */
-  _public.fonts = {
+  const fonts = {
     dot: '9pt Arial Black,Arial',
     text: 'bold 14pt Arial',
     fret: 'bold 13pt Arial',
@@ -33,7 +27,7 @@ ukeGeeks.settings = (function () {
    * @property colors
    * @type JSON Object
    */
-  _public.colors = {
+  const colors = {
     fretLines: '#003366',
     dots: '#ff0000',
     dotText: '#ffffff',
@@ -44,7 +38,7 @@ ukeGeeks.settings = (function () {
   };
 
   /* Standard Fretbox Options, these properties documented individually */
-  _public.fretBox = {
+  const fretBox = {
     /**
      * True if chord name and finger "number" are to be drawn on canvas.
      * By default normal chord diagrams have text (TRUE) whereas inlineDiagrams
@@ -120,7 +114,7 @@ ukeGeeks.settings = (function () {
    * @property layout
    * @type JSON Object
    */
-  _public.inlineFretBox = {
+  const inlineFretBox = {
     showText: false,
     height: 50,
     width: 40,
@@ -146,7 +140,7 @@ ukeGeeks.settings = (function () {
    * @property ids
    * @type JSON Object
    */
-  _public.ids = {
+  const ids = {
     songText: 'ukeSongText', // element holding the song's text
     canvas: 'ukeChordsCanvas', // canvas
     container: 'ukeSongContainer', // wraps BOTH Song Text and Chord Canvas
@@ -157,7 +151,7 @@ ukeGeeks.settings = (function () {
    * @property wrapClasses
    * @type JSON Object
    */
-  _public.wrapClasses = {
+  const wrapClasses = {
     wrap: 'ugs-song-wrap', // wraps BOTH Song Text and Chord Canvas
     diagrams: 'ugs-diagrams-wrap', // canvas
     text: 'ugs-source-wrap', // element holding the song's text
@@ -168,7 +162,7 @@ ukeGeeks.settings = (function () {
    * @property opts
    * @type JSON Object
    */
-  _public.opts = {
+  const opts = {
     columnsEnabled: true,
     /**
      * the [ and ] surrounding chord names often looks bad in print (usually only good when inline)
@@ -205,7 +199,7 @@ ukeGeeks.settings = (function () {
    * @property inlineDiagrams
    * @type Bool
    */
-  _public.inlineDiagrams = false;
+  const inlineDiagrams = false;
 
   /**
    * Number of frets to draw. Default is 5 (as this is as wide as my hand can go and
@@ -213,28 +207,28 @@ ukeGeeks.settings = (function () {
    * @property numFrets
    * @type int
    */
-  _public.numFrets = 5;
+  const numFrets = 5;
 
   /**
    * Array of string names, changes between baritone and soprano
    * @property tuning
    * @type string Array
    */
-  _public.tuning = ['G', 'C', 'E', 'A'];
+  const tuning = ['G', 'C', 'E', 'A'];
 
   /**
    * The initial tuning when page first loads, used in scriptasaurus.init.
    * @property defaultInstrument
    * @type {enum_int}
    */
-  _public.defaultInstrument = ukeGeeks.definitions.instrument.sopranoUke;
+  const defaultInstrument = ukeGeeks.definitions.instrument.sopranoUke;
 
   /**
    * TODO: Clean-up Tab Options!!
    * @property tabs
    * @type JSON Object
    */
-  _public.tabs = {
+  const tabs = {
     lineSpacing: 16, // pixels between lines (or strings)
     noteSpacing: 14, // pixels between finger dots
     lineWidth: 1, // pixels
@@ -249,7 +243,7 @@ ukeGeeks.settings = (function () {
   };
 
   // Info about runtime environment. Not really a setting.
-  _public.environment = {
+  const environment = {
     /**
      * set in scriptasaurus. True if UserAgent is Internet Explorer
      * @property environment.isIe
@@ -263,7 +257,7 @@ ukeGeeks.settings = (function () {
    * @property commonChords
    * @type string Array
    */
-  _public.commonChords = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'Am'];
+  const commonChords = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'Am'];
 
   /**
    * TODO: determine minimum value... 1?
@@ -273,18 +267,18 @@ ukeGeeks.settings = (function () {
    * @param mulitplier {int} see scale method's parameter
    * @return mixed
    */
-  var _scaleNode = function (node, mulitplier) {
+  function scaleNode(node, mulitplier) {
     if (typeof (node) === 'number') {
       return node * mulitplier;
     }
     if (typeof (node) === 'object') {
       for (const i in node) {
-        node[i] = _scaleNode(node[i], mulitplier);
+        node[i] = scaleNode(node[i], mulitplier);
       }
       return node;
     }
     return node;
-  };
+  }
 
   const _sizeRe = /\b(\d+)(pt|px)\b/;
 
@@ -296,14 +290,14 @@ ukeGeeks.settings = (function () {
    * @param mulitplier {int} see scale method's parameter
    * @return {void}
    */
-  const _scaleFont = function (font, mulitplier) {
+  function scaleFont(font, mulitplier) {
     const bits = font.match(_sizeRe);
     if (bits.length < 2) {
       return font;
     }
     const size = parseInt(bits[1], 10) * mulitplier;
     return font.replace(_sizeRe, size + bits[2]);
-  };
+  }
 
   /**
    * Scales the standard chord diagram's dimensions and font sizes by multiplying
@@ -313,20 +307,34 @@ ukeGeeks.settings = (function () {
    * @param mulitplier {int}
    * @return {void}
    */
-  _public.scale = function (mulitplier) {
+  function scale(mulitplier) {
     if (mulitplier == 1.0) {
       return;
     }
 
     for (const i in this.fonts) {
-      this.fonts[i] = _scaleFont(this.fonts[i], mulitplier);
+      this.fonts[i] = scaleFont(this.fonts[i], mulitplier);
     }
 
     // Note getting x/y scaled.
-    this.fretBox = _scaleNode(this.fretBox, mulitplier);
-  };
+    this.fretBox = scaleNode(this.fretBox, mulitplier);
+  }
 
-  /* return our public interface
-   */
-  return _public;
-}());
+  module.exports = {
+    colors,
+    commonChords,
+    defaultInstrument,
+    environment,
+    fonts,
+    fretBox,
+    ids,
+    inlineDiagrams,
+    inlineFretBox,
+    numFrets,
+    opts,
+    scale,
+    tabs,
+    tuning,
+    wrapClasses,
+  };
+});

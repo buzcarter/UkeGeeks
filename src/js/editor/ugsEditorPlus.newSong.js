@@ -4,13 +4,8 @@
  * @class newSong
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.newSong = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {};
+fdRequire.define('ugsEditorPlus/newSong', (require, module) => {
+  const $ = require('jQuery');
 
   /**
    * lock-down the Submit (Update) button to avoid double posts;
@@ -21,7 +16,7 @@ ugsEditorPlus.newSong = (function () {
 
   let _ajaxUri = '';
 
-  _public.init = function (ajaxUri) {
+  function init(ajaxUri) {
     _ajaxUri = ajaxUri;
 
     $('#newSongBtn').click(function (e) {
@@ -52,17 +47,17 @@ ugsEditorPlus.newSong = (function () {
         $spinner.hide();
         _isUpdating = false;
       });
-  };
+  }
 
-  const doAjaxOk = function (data) {
+  function doAjaxOk(data) {
     showErrors(data.HasErrors, data.Message);
     if (data.HasErrors) {
       return;
     }
     document.location.href = data.ContinueUri;
-  };
+  }
 
-  var doPost = function () {
+  function doPost() {
     if (_isUpdating) {
       return;
     }
@@ -85,18 +80,18 @@ ugsEditorPlus.newSong = (function () {
         showErrors(true, 'Failed to create the song file.<br/>Please have your admin check the CPM directory permissions.');
       },
     });
-  };
+  }
 
-  var doValidate = function () {
+  function doValidate() {
     const $title = $('#songTitle');
     const title = $title.val().trim();
     $title.val(title);
     const ok = title.length > 2;
     showErrors(!ok, 'Song\'s title is required<br/><em>(you may change it later, must be at least 2 characters)</em>');
     return ok;
-  };
+  }
 
-  var showErrors = function (hasErrors, message) {
+  function showErrors(hasErrors, message) {
     const $err = $('#newSongForm .errorMessage');
     if (hasErrors) {
       $err.show().html(message);
@@ -104,24 +99,23 @@ ugsEditorPlus.newSong = (function () {
     } else {
       $err.hide();
     }
-  };
+  }
 
-  var closeDlg = function (e) {
+  function closeDlg(e) {
     $('#newSongForm').fadeOut();
-  };
+  }
 
-  var resetFields = function () {
+  function resetFields() {
     $('#songTitle, #songArtist').val('');
-  };
+  }
 
-  var onEscape = function (e) {
+  function onEscape(e) {
     if (e.which == 27) {
       closeDlg();
     }
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface "JSON handle"
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    init,
+  };
+});

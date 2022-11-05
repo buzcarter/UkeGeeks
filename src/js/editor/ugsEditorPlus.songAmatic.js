@@ -6,13 +6,8 @@
  * @static
  * @singleton
  */
-ugsEditorPlus.songAmatic = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {};
+fdRequire.define('ugsEditorPlus/songAmatic', (require, module) => {
+  const $ = require('jQuery');
 
   /**
    * attaches event handlers, preps variables, and runs UGS
@@ -20,7 +15,7 @@ ugsEditorPlus.songAmatic = (function () {
    * @param options {OBJECT} (optional) Object/JSON with any of the ugsEditorPlus.options
    * @return {void}
    */
-  _public.init = function (options) {
+  function init(options) {
     const opts = mergeOptions(options);
 
     ukeGeeks.settings.opts.retainBrackets = !opts.hideChordEnclosures;
@@ -34,9 +29,9 @@ ugsEditorPlus.songAmatic = (function () {
     ugsEditorPlus.optionsDlg.init();
     ugsEditorPlus.chordBuilder.init();
     ugsEditorPlus.actions.run();
-  };
+  }
 
-  var mergeOptions = function (options) {
+  function mergeOptions(options) {
     const opts = {
       hideChordEnclosures: !ukeGeeks.settings.opts.retainBrackets,
       sortAlphabetical: ukeGeeks.settings.opts.sortAlphabetical,
@@ -45,10 +40,9 @@ ugsEditorPlus.songAmatic = (function () {
     };
 
     return $.extend(ugsEditorPlus.options, opts, (typeof options === 'object') ? options : {});
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface "JSON handle"
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    init,
+  };
+});

@@ -4,55 +4,48 @@
  * @namespace ugsEditorPlus
  * @singleton
  */
-ugsEditorPlus.styles = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {
-    Rules: null,
-  };
+fdRequire.define('ugsEditorPlus/styles', (require, module) => {
+  let Rules = null;
 
   let _sheet = null;
 
-  _public.getSheet = function (title) {
+  function getSheet(title) {
     _sheet = _getSheet(title);
-    _public.Rules = _getRules();
+    Rules = _getRules();
     return this;
-  };
+  }
 
-  var _getSheet = function (title) {
+  function _getSheet(title) {
     for (let i = 0; i < document.styleSheets.length; i++) {
       if (document.styleSheets[i].title == title) {
         return document.styleSheets[i];
       }
     }
     return null;
-  };
+  }
 
-  var _getRules = function () {
+  function _getRules() {
     if (_sheet == null) {
       return [];
     }
     return _sheet.cssRules ? _sheet.cssRules : _sheet.rules;
-  };
+  }
 
-  _public.find = function (selector) {
+  function find(selector) {
     selector = selector.toLowerCase();
-    for (let i = 0; i < _public.Rules.length; i++) {
-      if (!_public.Rules[i].selectorText) {
+    for (let i = 0; i < Rules.length; i++) {
+      if (!Rules[i].selectorText) {
         continue;
       }
-      if (_public.Rules[i].selectorText.toLowerCase() == selector) {
-        return _public.Rules[i];
+      if (Rules[i].selectorText.toLowerCase() == selector) {
+        return Rules[i];
       }
     }
     return null;
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    find,
+    getSheet,
+  };
+});

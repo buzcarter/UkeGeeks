@@ -1,3 +1,4 @@
+fdRequire.define('ukeGeeks/transpose', (require, module) => {
 /**
  * Can shift a single chord or list of chords up/down by a series of steps. Hangles
  * finding equivalent chord names (i.e. A# is same as Bb)
@@ -7,13 +8,6 @@
  * @static
  * @singleton
  */
-ukeGeeks.transpose = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type {Object}
-   */
-  const _public = {};
 
   const re = /^([A-G][#b]?)(.*)/;
   const tones = {
@@ -43,7 +37,7 @@ ukeGeeks.transpose = (function () {
    * @param steps (int) number of semitones to transpose
    * @return string
    */
-  _public.shift = function (name, steps) {
+  function shift(name, steps) {
     const t = getTone(name);
     if (t === null) {
       return null;
@@ -59,7 +53,7 @@ ukeGeeks.transpose = (function () {
       }
     }
     return null;
-  };
+  }
 
   /**
    * Returns object with name (A - G with flat/sharp), integer value (0 - 11), and its "suffix" (minor, 7th, etc)
@@ -67,7 +61,7 @@ ukeGeeks.transpose = (function () {
    * @param name (string)
    * @return JSON
    */
-  var getTone = function (name) {
+  function getTone(name) {
     const m = name.match(re);
     if (!m || m.length < 1) {
       return null;
@@ -77,7 +71,7 @@ ukeGeeks.transpose = (function () {
       prefix: m[1],
       suffix: m[2],
     };
-  };
+  }
 
   /**
    * Returns a mapping -- an array of JSON with "original" chord name and "transposed" chord names.
@@ -85,7 +79,7 @@ ukeGeeks.transpose = (function () {
    * @param offset (int) optional
    * @return {array}
    */
-  _public.retune = function () {
+  function retune() {
     const offset = (arguments.length > 0) ? arguments[0] : 0;
     const chords = ukeGeeks.definitions.getChords();
     const s = [];
@@ -100,12 +94,12 @@ ukeGeeks.transpose = (function () {
       for (const z in chords) {
         s.push({
           original: chords[z].name,
-          transposed: _public.shift(chords[z].name, offset),
+          transposed: shift(chords[z].name, offset),
         });
       }
     }
     return s;
-  };
+  }
 
   /**
    * returns copy of input string array shifted by number of steps
@@ -114,16 +108,18 @@ ukeGeeks.transpose = (function () {
    * @param  int steps  number of semitone steps (up or down)
    * @return array<strings>
    */
-  _public.shiftChords = function (chords, steps) {
+  function shiftChords(chords, steps) {
     const newChords = [];
     for (let i = 0; i < chords.length; i++) {
-      newChords.push(_public.shift(chords[i], steps));
+      newChords.push(shift(chords[i], steps));
     }
     return newChords;
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    shift,
+    getTone,
+    retune,
+    shiftChords,
+  };
+});

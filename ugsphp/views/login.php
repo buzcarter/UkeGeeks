@@ -42,20 +42,18 @@ $errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
 </div>
 </section>
 <script type="text/javascript">
-ugsLogin = (function(){
-	/**
-	 * attach public members to this object
-	 * @property _public
-	 * @type JsonObject
-	 */
-	var _public = {};
+fdRequire.app('ugsLoginApp', (require, module) => {
+  const debugLog = require('Fandango/debugLog');
+  const { checkDependencies } = require('fd-require-audit');
 
-	_public.init = function(){
-		window.onload = readyForm;
-		document.getElementById('loginForm').onsubmit = function(){ return doSubmit(); };
-	};
+  function run() {
+    checkDependencies(module.name, debugLog);
 
-	var readyForm = function(){
+    window.onload = readyForm;
+    document.getElementById('loginForm').onsubmit = () => doSubmit();
+  }
+
+	function readyForm(){
 		h = document.getElementById('username');
 		if (h.value.length < 1){
 			h.focus();
@@ -65,7 +63,7 @@ ugsLogin = (function(){
 		}
 	};
 
-	var doSubmit = function(){
+	function doSubmit(){
 		var ok = (document.getElementById('username').value.length > 3) && (document.getElementById('password').value.length > 3);
 		var err = document.getElementById('loginErrorMessage');
 		if (!ok){
@@ -76,15 +74,8 @@ ugsLogin = (function(){
 		return ok;
 	};
 
-	// ---------------------------------------
-	// return public interface
-	// ---------------------------------------
-	return _public;
-
-}());
-
-ugsLogin.init();
-
+  run();
+});
 </script>
 </body>
 </html>

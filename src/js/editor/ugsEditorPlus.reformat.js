@@ -6,14 +6,7 @@ const ugsEditorPlus = window.ugsEditorPlus || {};
  * @namespace ugsEditorPlus
  * @singleton
  */
-ugsEditorPlus.reformat = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {};
-
+fdRequire.define('ugsEditorPlus/reformat', (require, module) => {
   let _hasChords = false;
 
   /**
@@ -37,14 +30,14 @@ ugsEditorPlus.reformat = (function () {
    * @constructor
    * @for reformat
    */
-  const LineObj = function () {
+  function LineObj() {
     this.source = '';
     this.wordCount = 0;
     this.spaceCount = 0;
     this.words = [];
     this.chordCount = 0;
     this.lineType = _enums.lineTypes.blank;
-  };
+  }
 
   const _re = {
     words: /\b(\S+)\b/gi,
@@ -75,20 +68,20 @@ ugsEditorPlus.reformat = (function () {
    * @return {string} ChordPro format text block
    * @for reformat
    */
-  _public.run = function (text) {
+  function run(text) {
     _hasChords = false;
     const lines = read(text);
     return merge(lines);
-  };
+  }
 
   /**
    * TRUE if one or more chord lines detected
    * @method hasChords
    * @return {bool}
    */
-  _public.hasChords = function () {
+  function hasChords() {
     return _hasChords;
-  };
+  }
 
   /**
    * Accepts a text block
@@ -96,7 +89,7 @@ ugsEditorPlus.reformat = (function () {
    * @param text {string} string RAW song
    * @return {array of Lines}
    */
-  var read = function (text) {
+  function read(text) {
     const lineAry = [];
     text = text.replace('  ', '    ');
     const lines = text.split('\n');
@@ -117,7 +110,7 @@ ugsEditorPlus.reformat = (function () {
       lineAry.push(l);
     }
     return lineAry;
-  };
+  }
 
   /**
    * Guesses as to the line's tyupe --
@@ -125,7 +118,7 @@ ugsEditorPlus.reformat = (function () {
    * @param line {line}
    * @return {_enums.lineTypes}
    */
-  var toLineType = function (line) {
+  function toLineType(line) {
     if ((line.spaceCount + line.wordCount) < 1) {
       return _enums.lineTypes.blank;
     }
@@ -142,7 +135,7 @@ ugsEditorPlus.reformat = (function () {
     }
 
     return t;
-  };
+  }
 
   /**
    * Looks for supported chords.
@@ -150,7 +143,7 @@ ugsEditorPlus.reformat = (function () {
    * @param words {array of words}
    * @return [int] number found
    */
-  var countChords = function (words) {
+  function countChords(words) {
     let count = 0;
     for (let i = 0; i < words.length; i++) {
       if (words[i].match(_re.chordNames)) {
@@ -158,7 +151,7 @@ ugsEditorPlus.reformat = (function () {
       }
     }
     return count;
-  };
+  }
 
   /**
    * Return merged song -- chords embedded within lyrics
@@ -166,10 +159,10 @@ ugsEditorPlus.reformat = (function () {
    * @param lines {array of Lines}
    * @return [string]
    */
-  var merge = function (lines) {
+  function merge(lines) {
     let s = '';
-    let thisLine; let
-      nextLine;
+    let thisLine;
+    let nextLine;
     for (let i = 0; i < lines.length;) {
       thisLine = lines[i];
       nextLine = lines[i + 1];
@@ -198,7 +191,7 @@ ugsEditorPlus.reformat = (function () {
       s += `${mergeLines(thisLine.source, nextLine.source)}\n`;
     }
     return s;
-  };
+  }
 
   /**
    * TRUE if we can make a Tab block using this and the following 3 linrd (we need a set of four tab lines followed by a non-tab line)
@@ -207,7 +200,7 @@ ugsEditorPlus.reformat = (function () {
    * @param index {int} current line's index within line array
    * @return [bool]
    */
-  var isTabBlock = function (lines, index) {
+  function isTabBlock(lines, index) {
     if (index + 3 >= lines.length) {
       return false;
     }
@@ -217,7 +210,7 @@ ugsEditorPlus.reformat = (function () {
       }
     }
     return true;
-  };
+  }
 
   /**
    * Return a single line
@@ -226,7 +219,7 @@ ugsEditorPlus.reformat = (function () {
    * @param lyricsLine {string} the line of lyrics
    * @return [string] merged lines
    */
-  var mergeLines = function (chordLine, lyricsLine) {
+  function mergeLines(chordLine, lyricsLine) {
     while (lyricsLine.length < chordLine.length) {
       lyricsLine += ' ';
     }
@@ -246,7 +239,7 @@ ugsEditorPlus.reformat = (function () {
       s += lyricsLine.substr(offset, lyricsLine.length);
     }
     return s;
-  };
+  }
 
   /**
    * Wraps the words on the line within square brackets " C D " is returned as "[C] [D]"
@@ -254,7 +247,7 @@ ugsEditorPlus.reformat = (function () {
    * @param chordLine {string} the line containing the chord names
    * @return [string] each word of input line gets bracketed
    */
-  var wrapChords = function (chordLine) {
+  function wrapChords(chordLine) {
     const chords = chordLine.replace(_re.spaces, ' ').split(' ');
     let s = '';
     for (let i = 0; i < chords.length; i++) {
@@ -263,10 +256,10 @@ ugsEditorPlus.reformat = (function () {
       }
     }
     return s;
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    run,
+    hasChords,
+  };
+});

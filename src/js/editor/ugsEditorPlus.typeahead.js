@@ -1,4 +1,7 @@
-/**
+fdRequire.define('ugsEditorPlus/typeahead', (require, module) => {
+  const $ = require('jQuery');
+
+  /**
  * Search on the song list page for songs.
  * Dependencies: jQuery and Twitter Bootstrap's typeahead plugin
  * Based on tutorial:
@@ -7,13 +10,6 @@
  * @constructor
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.typeahead = function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @type JsonObject
-   */
-  const _public = {};
 
   // private
   // ---------------------------
@@ -37,8 +33,8 @@ ugsEditorPlus.typeahead = function () {
    * keys, searchable text, and display text
    * @method listFromHtml
    */
-  const listFromHtml = function () {
-    $('li').each(function (index) {
+  function listFromHtml() {
+    $('li').each(function () {
       const $this = $(this);
       const plainText = crushText($this.text());
       const href = $this.children('a').attr('href');
@@ -59,18 +55,18 @@ ugsEditorPlus.typeahead = function () {
       };
       _keysList.push(key);
     });
-  };
+  }
 
-  var crushText = function (value) {
+  function crushText(value) {
     return value
       .toLowerCase()
       .replace(_re.noise, '')
       .replace(_re.common, ' ')
       .replace(_re.space, ' ')
       .trim();
-  };
+  }
 
-  const _ta_source = function (query, process) {
+  function taSource(query, process) {
     _scrubbedQuery = crushText(query);
     _words = _scrubbedQuery.split(' ');
     let regGroup = '';
@@ -82,14 +78,14 @@ ugsEditorPlus.typeahead = function () {
     }
     _regex = new RegExp(`(${regGroup})`, 'gi');
     process(_keysList);
-  };
+  }
 
-  const _ta_updater = function (item) {
+  function taUpdater(item) {
     window.location = _keysToDetailsDict[item].href;
     return _keysToDetailsDict[item].searchText;
-  };
+  }
 
-  const _ta_matcher = function (item) {
+  function taMatcher(item) {
     const detailed = _keysToDetailsDict[item];
     for (let i = 0; i < _words.length; i++) {
       if (detailed.searchText.indexOf(_words[i]) == -1) {
@@ -97,42 +93,41 @@ ugsEditorPlus.typeahead = function () {
       }
     }
     return true;
-  };
+  }
 
-  const _ta_sorter = function (items) {
+  function taSorter(items) {
     return items.sort((a, b) => (_keysToDetailsDict[a].searchText > _keysToDetailsDict[b].searchText));
-  };
+  }
 
-  const _ta_highligher = function (item) {
+  function taHighligher(item) {
     const $temp = $('<div/>').html(_keysToDetailsDict[item].html);
 
-    $('em, .bigger', $temp).each(function (index) {
+    $('em, .bigger', $temp).each(function () {
       const $ele = $(this);
       const text = $ele.html();
       $ele.html(text.replace(_regex, '<strong>$1</strong>'));
     });
     return $temp.html();
-  };
+  }
 
-  _public.initialize = function () {
+  function initialize() {
     listFromHtml();
 
     $('#quickSearch')
       .typeahead({
-        source: _ta_source,
-        updater: _ta_updater,
-        matcher: _ta_matcher,
-        sorter: _ta_sorter,
-        highlighter: _ta_highligher,
+        source: taSource,
+        updater: taUpdater,
+        matcher: taMatcher,
+        sorter: taSorter,
+        highlighter: taHighligher,
         minLength: 2,
         items: 50,
       })
       .val('')
       .focus();
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface "JSON handle"
-  // ---------------------------------------
-  return _public;
-};
+  module.exports = {
+    initialize,
+  };
+});

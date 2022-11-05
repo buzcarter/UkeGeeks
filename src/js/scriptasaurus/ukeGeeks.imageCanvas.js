@@ -1,9 +1,9 @@
+fdRequire.define('ukeGeeks/imageCanvas', (require, module) => {
 /**
  * Converts image JSON data to a Canvas element
  * @class  imageCanvas
  * @namespace ukeGeeks
  */
-ukeGeeks.imageCanvas = (function () {
   function addCanvas(element, width, height) {
     const canvas = document.createElement('canvas');
     if (!canvas) {
@@ -102,8 +102,8 @@ ukeGeeks.imageCanvas = (function () {
   }
 
   function renderLayers(ctx, layers, parentStyle) {
-    let layer; let
-      style;
+    let layer;
+    let style;
     for (let i = 0; i < layers.length; i++) {
       layer = layers[i];
       if (layer.type === 'group') {
@@ -125,7 +125,7 @@ ukeGeeks.imageCanvas = (function () {
     return ctx;
   }
 
-  return {
+  module.exports = {
     appendChild: process,
   };
-}());
+});

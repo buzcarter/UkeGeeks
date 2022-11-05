@@ -6,14 +6,8 @@
  * @namespace ugsEditorPlus
  * @module ugsEditorPlus
  */
-ugsEditorPlus.actions = (function () {
-  /**
-   * attach public members to this object
-   * @property _public
-   * @public
-   * @type JsonObject
-   */
-  const _public = {};
+fdRequire.define('ugsEditorPlus/actions', (require, module) => {
+  const $ = require('jQuery');
 
   /**
    * associative array/JSON handles to key/frequently accessed DOM Elements (see init()
@@ -49,7 +43,7 @@ ugsEditorPlus.actions = (function () {
    * @method init
    * @public
    */
-  _public.init = function () {
+  function init() {
     _ele = {
       songText: document.getElementById('ukeSongText'),
       songContainer: document.getElementById('ukeSongContainer'),
@@ -62,7 +56,7 @@ ugsEditorPlus.actions = (function () {
     });
 
     syncOptions(ugsEditorPlus.options);
-  };
+  }
 
   /* ----------------------------------------------------------------------------------- *|
   |* Common "All Powerful" Helper Methods
@@ -75,7 +69,7 @@ ugsEditorPlus.actions = (function () {
    * @param action {string} Action's name; must match one of those defined in the switch below
    * @param value {string} Value used by Action (OK, a couple methods assume this is boolean/falsy)
    */
-  var doAction = function (action, value) {
+  function doAction(action, value) {
     // actions that modify song's HTML or reference diagrams require rerunning Scriptasaurus
     let runRequired = false;
 
@@ -130,11 +124,11 @@ ugsEditorPlus.actions = (function () {
     }
 
     if (runRequired) {
-      _public.run();
+      run();
     }
-  };
+  }
 
-  var syncOptions = function (options) {
+  function syncOptions(options) {
     // direct menus
     doSetFontSize(options.fontSize);
     doSetDiagramSize(options.diagramSize);
@@ -149,23 +143,23 @@ ugsEditorPlus.actions = (function () {
     setIgnoreCommon(options.ignoreCommonChords);
     setCommonChordsList(options.commonChords);
     setSortAlphabetical(options.sortAlphabetical);
-  };
+  }
 
   /**
    * Rerun for new song text; updates UI
    * @method doUpdate
    * @private
    */
-  var doUpdate = function () {
-    _public.run(true);
-  };
+  function doUpdate() {
+    run(true);
+  }
 
   /**
    * Rebuilds song, info, chord diagrams using current settings.
    * @method run
    * @param isDoBackup {bool} true forces backup; optional, default false.
    */
-  _public.run = function (isDoBackup) {
+  function run(isDoBackup) {
     isDoBackup = (arguments.length > 0) && isDoBackup;
     _ele.songText.innerHTML = `<pre>${_ele.cpmSource.value}</pre>`;
     _song = ukeGeeks.scriptasaurus.run();
@@ -185,7 +179,7 @@ ugsEditorPlus.actions = (function () {
         resetTranspose(key);
       }
     }
-  };
+  }
 
   /* ----------------------------------------------------------------------------------- *|
   |* Zoom Methods
@@ -197,10 +191,10 @@ ugsEditorPlus.actions = (function () {
    * @private
    * @param value {string} point-size; value of the clicked value item
    */
-  var doSetFontSize = function (value) {
+  function doSetFontSize(value) {
     const pt = parseFloat(value, 10);
     _ele.scalableArea.style.fontSize = `${pt}pt`;
-  };
+  }
 
   /**
    * Zooms (scales) chord diagrams
@@ -208,7 +202,7 @@ ugsEditorPlus.actions = (function () {
    * @private
    * @param value {string} percentage, integer between 0 and, well, 100?; value of the clicked value item
    */
-  var doSetDiagramSize = function (value) {
+  function doSetDiagramSize(value) {
     const prct = parseInt(value, 10) / 100;
     // apologies for the magic number...
     const columnWidth = Math.round(prct * 225);
@@ -227,7 +221,7 @@ ugsEditorPlus.actions = (function () {
 
     m = s.find('.scalablePrintArea .ugs-source-wrap');
     m.style.marginLeft = `${25 + columnWidth}px`;
-  };
+  }
 
   /* ----------------------------------------------------------------------------------- *|
   |* Layout (Reference Diagram Position) Methods
@@ -239,12 +233,12 @@ ugsEditorPlus.actions = (function () {
    * @private
    * @param value {string} value of the clicked value item
    */
-  var doLayout = function (value) {
+  function doLayout(value) {
     $('body')
       .toggleClass('diagramsOnTop', value == 'top')
       .toggleClass('diagramsOnSide', value == 'left')
       .toggleClass('ugsHideDiagrams', value == 'none');
-  };
+  }
 
   /* ----------------------------------------------------------------------------------- *|
   |* Chord Name Placement Methods
@@ -257,7 +251,7 @@ ugsEditorPlus.actions = (function () {
    * @param value {string} value of the clicked value item
    * @return {Boolean}
    */
-  var doPlacement = function (value) {
+  function doPlacement(value) {
     let isRunRequired = false;
     ukeGeeks.toolsLite.setClass(_ele.songContainer, 'ugsInline', (value == 'inline'));
 
@@ -280,7 +274,7 @@ ugsEditorPlus.actions = (function () {
     _prevValues.placement = value;
 
     return isRunRequired;
-  };
+  }
 
   /* ----------------------------------------------------------------------------------- *|
   |* Color Methods
@@ -292,9 +286,9 @@ ugsEditorPlus.actions = (function () {
    * @private
    * @param value {string} value of the clicked value item
    */
-  var doSetTheme = function (value) {
+  function doSetTheme(value) {
     ugsEditorPlus.themes.set(value);
-  };
+  }
 
   /* ----------------------------------------------------------------------------------- *|
   |* Page Width Methods
@@ -306,14 +300,14 @@ ugsEditorPlus.actions = (function () {
    * @private
    * @param value {string} currently selected option value
    */
-  var doSetPageWidth = function (value) {
+  function doSetPageWidth(value) {
     const opts = ['letter', 'a4', 'screen'];
     const $body = $('body');
     for (let i = 0; i < opts.length; i++) {
       $body.removeClass(`pageWidth_${opts[i]}`);
     }
     $body.addClass(`pageWidth_${value}`);
-  };
+  }
 
   /* ----------------------------------------------------------------------------------- *|
   |* Instrument & Tuning Methods
@@ -325,7 +319,7 @@ ugsEditorPlus.actions = (function () {
    * @private
    * @param value {string} value of the clicked value item
    */
-  var doTuning = function (value) {
+  function doTuning(value) {
     let tuning = ukeGeeks.definitions.instrument.sopranoUke;
     let msg = 'Standard <strong>GCEA</strong> Soprano Ukulele';
 
@@ -336,7 +330,7 @@ ugsEditorPlus.actions = (function () {
 
     $('#footTuningInfo').html(msg);
     ukeGeeks.scriptasaurus.setTuningOffset(tuning);
-  };
+  }
 
   /**
    * Parses Value to decide number of steps "up" or "down", then fires off transpose
@@ -344,18 +338,18 @@ ugsEditorPlus.actions = (function () {
    * @private
    * @param value {string} value of the clicked value item
    */
-  var doTranspose = function (value) {
+  function doTranspose(value) {
     const sign = value[0] == 'u' ? 1 : -1;
     const steps = parseInt(value[value.length - 1], 10);
     transpose(sign * steps);
-  };
+  }
 
   /**
    * Rebuilds song as "run", but first transposes chords
    * @method transpose
    * @param steps {int} number of semitones, +/-6
    */
-  var transpose = function (steps) {
+  function transpose(steps) {
     const safeChords = [];
     let bad = '';
     let i;
@@ -403,8 +397,8 @@ ugsEditorPlus.actions = (function () {
 
     // manipulations done, ready to...
     _ele.cpmSource.value = s;
-    _public.run();
-  };
+    run();
+  }
 
   /**
    * Sets Transpose menu's selected value to "Original"; adds example chord names
@@ -412,7 +406,7 @@ ugsEditorPlus.actions = (function () {
    * @private
    * @param keyChord {string}
    */
-  var resetTranspose = function (keyChord) {
+  function resetTranspose(keyChord) {
     const ul = document.getElementById('transposeOptions');
     const items = ul.getElementsByTagName('li');
     let sample;
@@ -431,7 +425,7 @@ ugsEditorPlus.actions = (function () {
       }
       steps++;
     }
-  };
+  }
 
   /* ----------------------------------------------------------------------------------- *|
   |* "Other Options" Methods
@@ -444,9 +438,9 @@ ugsEditorPlus.actions = (function () {
    * @private
    * @param isVisible {bool}
    */
-  var setEnclosureVisible = function (isVisible) {
+  function setEnclosureVisible(isVisible) {
     ukeGeeks.settings.opts.retainBrackets = isVisible;
-  };
+  }
 
   /**
    * (option dialog) change whether reference diagrams are sorted alphabetically or by their "song order"
@@ -454,9 +448,9 @@ ugsEditorPlus.actions = (function () {
    * @private
    * @param isAlphabetical {bool}
    */
-  var setSortAlphabetical = function (isAlphabetical) {
+  function setSortAlphabetical(isAlphabetical) {
     ukeGeeks.settings.opts.sortAlphabetical = isAlphabetical;
-  };
+  }
 
   /**
    * "Ignore Common" was checked, need to update master chord diagrams
@@ -464,9 +458,9 @@ ugsEditorPlus.actions = (function () {
    * @private
    * @param isIgnore {bool}
    */
-  var setIgnoreCommon = function (isIgnore) {
+  function setIgnoreCommon(isIgnore) {
     ukeGeeks.settings.opts.ignoreCommonChords = isIgnore;
-  };
+  }
 
   /**
    * the list of common chords has been change; update UGS setting
@@ -475,7 +469,7 @@ ugsEditorPlus.actions = (function () {
    * @param chordList {mixed} Either string, as comma seperated values list, or array of chord names
    * @return {void}
    */
-  var setCommonChordsList = function (chordList) {
+  function setCommonChordsList(chordList) {
     if (typeof chordList === 'string') {
       const inputList = chordList.split(/[ ,]+/);
       const cleanList = [];
@@ -491,10 +485,10 @@ ugsEditorPlus.actions = (function () {
     }
 
     ukeGeeks.settings.commonChords = chordList;
-  };
+  }
 
-  // ---------------------------------------
-  // return public interface "JSON handle"
-  // ---------------------------------------
-  return _public;
-}());
+  module.exports = {
+    init,
+    run,
+  };
+});

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const gulp = require('gulp');
 const rename = require('gulp-rename');
 const concat = require('gulp-concat');
@@ -95,12 +96,12 @@ const config = {
   }],
 };
 
-const stylesTask = function () {
+function stylesTask() {
   console.log('Building LESS Styles');
 
   if (!config.styles) {
     console.log('No styles found in the config');
-    return;
+    return null;
   }
 
   return gulp.src(config.styles.files)
@@ -115,10 +116,9 @@ const stylesTask = function () {
     }))
     .pipe(minifyCSS())
     .pipe(gulp.dest(config.styles.outputDir));
-};
+}
 
-const jsTask = function () {
-  let merged;
+function jsTask() {
   console.log('Merging & minifying JavaScript files');
 
   if (!config.scripts) {
@@ -126,7 +126,7 @@ const jsTask = function () {
     return;
   }
 
-  config.scripts.forEach((task, index, ary) => {
+  config.scripts.forEach((task) => {
     console.log(`building ${task.filename}`);
 
     gulp.src(task.files)
@@ -139,9 +139,9 @@ const jsTask = function () {
       .pipe(uglify())
       .pipe(gulp.dest(task.outputDir));
   });
-};
+}
 
-const watchTask = function () {
+function watchTask() {
   console.log('Watching files');
 
   if (config.styles) {
@@ -149,11 +149,11 @@ const watchTask = function () {
   }
 
   if (config.scripts) {
-    config.scripts.forEach((task, index, ary) => {
+    config.scripts.forEach((task) => {
       gulp.watch(task.files, ['build-scripts']);
     });
   }
-};
+}
 
 gulp
   .task('build-styles', stylesTask)

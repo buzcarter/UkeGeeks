@@ -24,7 +24,6 @@ module.exports = {
     node: true,
   },
   globals: {
-    ukeGeeks: true,
   },
   ignorePatterns: [
     '/js/**/*.js',
@@ -61,15 +60,12 @@ module.exports = {
       '**/*.test.js',
     ],
     globals: {
-      _: true,
       $: true,
       debug: true,
       fdRequire: true,
       fdRequireJest: true,
       jest: true,
       mockComponents: true,
-      resetState: true,
-      setState: true,
     },
   }],
 };
