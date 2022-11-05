@@ -4,132 +4,130 @@
  * @class topMenus
  * @namespace ugsEditorPlus
  */
-ugsEditorPlus.topMenus = (function() {
+ugsEditorPlus.topMenus = (function () {
+  /**
+   * attaches events...
+   * @method _init
+   * @public
+   * @return {void}
+   */
+  const _init = function () {
+    // $('#ugsAppToolbar > ul a')
+    $('#ugsAppToolbar > ul li').not('[data-dialog]').children('a').click(_onMenuItemClick);
+    $('.showOptionsBox a').click(_onShowOptionsClick);
 
-	/**
-	 * attaches events...
-	 * @method _init
-	 * @public
-	 * @return {void}
-	 */
-	var _init = function() {
-		// $('#ugsAppToolbar > ul a')
-		$('#ugsAppToolbar > ul li').not('[data-dialog]').children('a').click(_onMenuItemClick);
-		$('.showOptionsBox a').click(_onShowOptionsClick);
+    $('#ugsAppToolbar > ul li[data-dialog]').click(_onShowDlgBtnClick);
+    $('.closeBtn').click(_onCloseBtnClick);
+    $('.resizeBtn').click(_onResizeBtnClick);
+  };
 
-		$('#ugsAppToolbar > ul li[data-dialog]').click(_onShowDlgBtnClick);
-		$('.closeBtn').click(_onCloseBtnClick);
-		$('.resizeBtn').click(_onResizeBtnClick);
-	};
+  /**
+   * Click handler for nav items that are NOT attached to a dialog box.
+   * @method _onMenuItemClick
+   * @private
+   * @return {void}
+   */
+  var _onMenuItemClick = function () {
+    // the clicked anchor tag
+    const $parent = $(this).parent();
+    const isOpen = $parent.hasClass('active');
+    _makeAllInactive();
+    if (isOpen) {
+      return;
+    }
+    $parent.addClass('active');
+  };
 
-	/**
-	 * Click handler for nav items that are NOT attached to a dialog box.
-	 * @method _onMenuItemClick
-	 * @private
-	 * @return {void}
-	 */
-	var _onMenuItemClick = function() {
-		// the clicked anchor tag
-		var $parent = $(this).parent();
-		var isOpen = $parent.hasClass('active');
-		_makeAllInactive();
-		if (isOpen) {
-			return;
-		}
-		$parent.addClass('active');
-	};
+  /**
+   * Deselects all items in app's top menu/nav bar (just removes active state from all items)
+   * @method _makeAllInactive
+   * @private
+   * @return {void}
+   */
+  var _makeAllInactive = function () {
+    $('#ugsAppToolbar > ul > li').removeClass('active');
+  };
 
-	/**
-	 * Deselects all items in app's top menu/nav bar (just removes active state from all items)
-	 * @method _makeAllInactive
-	 * @private
-	 * @return {void}
-	 */
-	var _makeAllInactive = function() {
-		$('#ugsAppToolbar > ul > li').removeClass('active');
-	};
+  /**
+   * Same as _makeAllInactive method PLUS closes any open drop down/arrow boxes.
+   * @method _closeAll
+   * @private
+   * @return {void}
+   */
+  const _closeAll = function () {
+    // hide any drop-down/arrow boxes currently open
+    _makeAllInactive();
+    $('.arrowBox').hide();
+  };
 
-	/**
-	 * Same as _makeAllInactive method PLUS closes any open drop down/arrow boxes.
-	 * @method _closeAll
-	 * @private
-	 * @return {void}
-	 */
-	var _closeAll = function() {
-		// hide any drop-down/arrow boxes currently open
-		_makeAllInactive();
-		$('.arrowBox').hide();
-	};
+  /**
+   * handles nav menu/toolbar click event. The data-dialog="X" attribute
+   * on the element assocaites the menu item with the dialog box (the
+   * box's id)
+   * @method _onShowDlgBtnClick
+   * @private
+   * @param e {event}
+   * @return {bool} false to kill event bubbling
+   */
+  var _onShowDlgBtnClick = function (e) {
+    _closeAll();
 
-	/**
-	 * handles nav menu/toolbar click event. The data-dialog="X" attribute
-	 * on the element assocaites the menu item with the dialog box (the
-	 * box's id)
-	 * @method _onShowDlgBtnClick
-	 * @private
-	 * @param e {event}
-	 * @return {bool} false to kill event bubbling
-	 */
-	var _onShowDlgBtnClick = function(e) {
-		_closeAll();
+    // now show dialog associated with the clicked button
+    const id = $(this).data('dialog');
+    $(`#${id}`).fadeIn();
 
-		// now show dialog associated with the clicked button
-		var id = $(this).data('dialog');
-		$('#' + id).fadeIn();
+    // prevent event bubbling
+    return false;
+  };
 
-		// prevent event bubbling
-		return false;
-	};
+  /**
+   * dialog box's close button's click handler. Hides the first parent
+   * with class.
+   * @method _onCloseBtnClick
+   * @private
+   * @param e {event}
+   * @return {bool} false to kill event bubbling
+   */
+  var _onCloseBtnClick = function (e) {
+    $(this).parents('.overlay').fadeOut();
+    // prevent event bubbling
+    return false;
+  };
 
-	/**
-	 * dialog box's close button's click handler. Hides the first parent
-	 * with class.
-	 * @method _onCloseBtnClick
-	 * @private
-	 * @param e {event}
-	 * @return {bool} false to kill event bubbling
-	 */
-	var _onCloseBtnClick = function(e) {
-		$(this).parents('.overlay').fadeOut();
-		// prevent event bubbling
-		return false;
-	};
+  var _onResizeBtnClick = function (e) {
+    _closeAll();
+    const dlg = $(this).parents('.overlay');
+    ugsEditorPlus.resize.toggle(dlg);
+    return false;
+  };
 
-	var _onResizeBtnClick = function(e) {
-		_closeAll();
-		var dlg = $(this).parents('.overlay');
-		ugsEditorPlus.resize.toggle(dlg);
-		return false;
-	};
+  /**
+   * display a "tooltip" options dialog
+   * @method _onShowOptionsClick
+   * @private
+   * @param e {event}
+   * @return {bool} false to kill event bubbling
+   */
+  var _onShowOptionsClick = function (e) {
+    const id = $(this).attr('href');
 
-	/**
-	 * display a "tooltip" options dialog
-	 * @method _onShowOptionsClick
-	 * @private
-	 * @param e {event}
-	 * @return {bool} false to kill event bubbling
-	 */
-	var _onShowOptionsClick = function(e) {
-		var id = $(this).attr('href');
+    $('.arrowBox').not(id).hide();
 
-		$('.arrowBox').not(id).hide();
+    const $dlg = $(id);
+    $dlg.find('dd').hide();
+    $dlg.fadeToggle();
 
-		var $dlg = $(id);
-		$dlg.find('dd').hide();
-		$dlg.fadeToggle();
+    ugsEditorPlus.submenuUi.reset($dlg);
 
-		ugsEditorPlus.submenuUi.reset($dlg);
+    // prevent event bubbling
+    return false;
+  };
 
-		// prevent event bubbling
-		return false;
-	};
-
-	// ---------------------------------------
-	// return public interface
-	// ---------------------------------------
-	return {
-		init: _init,
-		makeAllInactive: _makeAllInactive
-	};
-
+  // ---------------------------------------
+  // return public interface
+  // ---------------------------------------
+  return {
+    init: _init,
+    makeAllInactive: _makeAllInactive,
+  };
 }());

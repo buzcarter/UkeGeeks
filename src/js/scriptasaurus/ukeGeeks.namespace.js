@@ -18,4 +18,4 @@
  * @module ukeGeeks
  * @main ukeGeeks
   */
-var ukeGeeks = window.ukeGeeks || {};
+const ukeGeeks = window.ukeGeeks || {};
