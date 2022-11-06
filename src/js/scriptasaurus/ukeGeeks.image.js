@@ -1,4 +1,4 @@
-fdRequire.define('ukeGeeks/ugsImage', (require, module) => {
+fdRequire.define('scriptasaurus/ukeGeeks.image', (require, module) => {
   /**
    * Stores, in an output-format agnostic manner, data for drawing images. Usage:
    * all methods are chainable except getData.
@@ -134,6 +134,6 @@ fdRequire.define('ukeGeeks/ugsImage', (require, module) => {
   }
 
   module.exports = {
-    UGSImage,
+    image: UGSImage,
   };
 });

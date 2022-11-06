@@ -1,4 +1,4 @@
-fdRequire.define('ukeGeeks/overlapFixer', (require, module) => {
+fdRequire.define('scriptasaurus/ukeGeeks.overlapFixer', (require, module) => {
 /**
  * Singleton to correct overlapping chord names/diagrams in songs rendered by UGS
  * @class overlapFixer

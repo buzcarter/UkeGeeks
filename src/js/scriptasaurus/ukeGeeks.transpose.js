@@ -1,13 +1,5 @@
-fdRequire.define('ukeGeeks/transpose', (require, module) => {
-/**
- * Can shift a single chord or list of chords up/down by a series of steps. Hangles
- * finding equivalent chord names (i.e. A# is same as Bb)
- *
- * @class transpose
- * @namespace ukeGeeks
- * @static
- * @singleton
- */
+fdRequire.define('scriptasaurus/ukeGeeks.transpose', (require, module) => {
+  const definitions = require('scriptasaurus/ukeGeeks.definitions');
 
   const re = /^([A-G][#b]?)(.*)/;
   const tones = {
@@ -81,7 +73,7 @@ fdRequire.define('ukeGeeks/transpose', (require, module) => {
    */
   function retune() {
     const offset = (arguments.length > 0) ? arguments[0] : 0;
-    const chords = ukeGeeks.definitions.getChords();
+    const chords = definitions.getChords();
     const s = [];
     if (offset === 0) {
       for (const i in chords) {
@@ -116,6 +108,12 @@ fdRequire.define('ukeGeeks/transpose', (require, module) => {
     return newChords;
   }
 
+  /**
+ * Can shift a single chord or list of chords up/down by a series of steps. Hangles
+ * finding equivalent chord names (i.e. A# is same as Bb)
+ *
+ * @module
+ */
   module.exports = {
     shift,
     getTone,

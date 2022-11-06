@@ -1,5 +1,7 @@
-fdRequire.define('ukeGeeks/settings', (require, module) => {
-/**
+fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
+  const definitions = require('scriptasaurus/ukeGeeks.definitions');
+
+  /**
  * Customize your installation. This JSON object controls appearance and
  * HTML element names. It's divided into four sections: graphics, ids, layout,
  * and "options".
@@ -221,7 +223,7 @@ fdRequire.define('ukeGeeks/settings', (require, module) => {
    * @property defaultInstrument
    * @type {enum_int}
    */
-  const defaultInstrument = ukeGeeks.definitions.instrument.sopranoUke;
+  const defaultInstrument = definitions.instrument.sopranoUke;
 
   /**
    * TODO: Clean-up Tab Options!!

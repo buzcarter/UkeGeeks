@@ -6,9 +6,10 @@ const http = require('http');
 const serveStatic = require('serve-static');
 const swig = require('swig');
 
-const PORT = 3034;
+const PORT = 3000;
 
 const app = express();
+const isDevelopment = app.get('env') === 'development';
 
 // setup Swig
 swig.setDefaults({
@@ -20,6 +21,7 @@ app.set('views', join(__dirname, 'ugsphp/views'));
 
 // add my middleware
 const middleware = require('./ugsphp/middleware');
+app.use(middleware.logger);
 app.use(middleware.layout);
 
 // add res.locals & `state` for client
@@ -39,9 +41,15 @@ app.expose({
 });
 
 // serve scripts, images, fonts, and styles from my assets directory automatically
-app.use(serveStatic(join(__dirname, 'src'), {
+const root = join(__dirname, './');
+app.use(serveStatic(join(root, 'assets'), {
   maxAge: 0,
 }));
+if (isDevelopment) {
+  // eslint-disable-next-line no-console
+  console.log('Serving dev sources enabled');
+  app.use(express.static(join(root, 'src')));
+}
 
 // add my routes
 const routes = require('./ugsphp/configs/routes.json');
@@ -69,5 +77,5 @@ Object.keys(routes)
 http.createServer(app)
   .listen(PORT, () => {
     // eslint-disable-next-line no-console
-    console.log('I am listening on port ', PORT);
+    console.log(`Listening on port ${PORT} (${isDevelopment ? 'Development' : 'Production'})`);
   });

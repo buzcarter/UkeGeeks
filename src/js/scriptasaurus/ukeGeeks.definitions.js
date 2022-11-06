@@ -1,11 +1,7 @@
-fdRequire.define('ukeGeeks/definitions', (require, module) => {
-/**
- * Defines chords and provides simple lookup (find) tools.
- * @class definitions
- * @namespace ukeGeeks
- * @static
- * @singleton
- */
+fdRequire.define('scriptasaurus/ukeGeeks.definitions', (require, module) => {
+  const transpose = require('scriptasaurus/ukeGeeks.transpose');
+  const chordImport = require('scriptasaurus/ukeGeeks.chordImport');
+  const ugsData = require('scriptasaurus/ukeGeeks.data');
 
   /**
    * Array of "user" defined chords, in compactChord format. Use "Add" method.
@@ -36,12 +32,11 @@ fdRequire.define('ukeGeeks/definitions', (require, module) => {
   ------------------------------------ */
   /**
    * Define an instrument's chord dictionary, this makes this instrument avaiable for showing its chord diagrams.
-   * @method addInstrument
-   * @param definitions {mixed} (Either string or array of strings) Block of CPM text -- specifically looks for instrurment, tuning, and define statements.
+   * @param {[Defs]|string} definitions (Either string or array of strings) Block of CPM text -- specifically looks for instrurment, tuning, and define statements.
    * @return {void}
    */
   function addInstrument(definitions) {
-    if (typeof definitions === 'object') {
+    if (Array.isArray(definitions)) {
       // flatten the array
       definitions = definitions.join('\n');
     }
@@ -51,7 +46,6 @@ fdRequire.define('ukeGeeks/definitions', (require, module) => {
   /**
    * Choose which instrument's chord dictionary you want used for the chord
    * diagrams. NOTE: .
-   * @method useInstrument
    * @param offset {int} (optional) default 0. Number of semitones to shif the tuning.
    * @return {void}
    */
@@ -59,25 +53,19 @@ fdRequire.define('ukeGeeks/definitions', (require, module) => {
     offset = (arguments.length > 0) ? offset : instrument.sopranoUke;
     underscoreOffset = parseInt(offset, 10);
     if (underscoreOffset > 0) {
-      map = ukeGeeks.transpose.retune(underscoreOffset);
+      map = transpose.retune(underscoreOffset);
     }
-    setChords(ukeGeeks.chordImport.runBlock(instruments[0]).chords);
+    setChords(chordImport.runBlock(instruments[0]).chords);
   }
 
   /**
    * Returns expanded ChordObject for requested "chord"
-   * @method get
    * @param chordName {string} Chord name
    * @return {expandedChord}
    */
   function get(chordName) {
-    let i;
-    let c;
-    let chrd;
-    let name;
-
     // try User Defined chords first
-    for (i = 0; i < userChords.length; i++) {
+    for (let i = 0; i < userChords.length; i++) {
       if (chordName == userChords[i].name) {
         return userChords[i];
       }
@@ -89,12 +77,12 @@ fdRequire.define('ukeGeeks/definitions', (require, module) => {
 
     // user has retuned the chords, need to find chord name "as-is",
     // but get the fingering from the mapping
-    name = getAlias(chordName);
-    for (i in map) {
+    const name = getAlias(chordName);
+    for (const i in map) {
       if (name == map[i].original) {
-        c = underscoreGet(map[i].transposed);
+        const c = underscoreGet(map[i].transposed);
         if (c) {
-          chrd = new ukeGeeks.data.expandedChord(chordName);
+          const chrd = new ugsData.expandedChord(chordName);
           chrd.dots = c.dots;
           chrd.muted = c.muted;
           return chrd;
@@ -121,7 +109,6 @@ fdRequire.define('ukeGeeks/definitions', (require, module) => {
    *
    * Returns original chord name if there is no defined alias.
    *
-   * @method _getAlias
    * @param  {string} chordName [
    * @return {string}
    */
@@ -133,7 +120,6 @@ fdRequire.define('ukeGeeks/definitions', (require, module) => {
   /**
    * Pass in "standard" chord name, returns match from defined chords or null if not found
    * @private
-   * @method _get
    * @param chordName {string} Chord name
    * @return {expandedChord}
    */
@@ -143,7 +129,7 @@ fdRequire.define('ukeGeeks/definitions', (require, module) => {
     const name = getAlias(chordName);
     for (i = 0; i < underscoreChords.length; i++) {
       if (name == underscoreChords[i].name) {
-        chrd = new ukeGeeks.data.expandedChord(chordName);
+        chrd = new ugsData.expandedChord(chordName);
         chrd.dots = underscoreChords[i].dots;
         chrd.muted = underscoreChords[i].muted;
         return chrd;
@@ -153,7 +139,6 @@ fdRequire.define('ukeGeeks/definitions', (require, module) => {
   }
 
   /**
-   * @method add
    * @param data {array} array of expanded chord objects
    * @return {int}
    */
@@ -167,7 +152,6 @@ fdRequire.define('ukeGeeks/definitions', (require, module) => {
   }
 
   /**
-   * @method replace
    * @param data {array} array of expanded chord objects
    * @return {int}
    */
@@ -178,7 +162,6 @@ fdRequire.define('ukeGeeks/definitions', (require, module) => {
 
   /**
    * Getter for chord array (compactChord format) -- full library of predefined chords. Mainly used for debugging.
-   * @method getChords
    * @return {arrayChords}
    */
   function getChords() {
@@ -189,6 +172,10 @@ fdRequire.define('ukeGeeks/definitions', (require, module) => {
     underscoreChords = value;
   }
 
+  /**
+ * @module
+ * Defines chords and provides simple lookup (find) tools.
+ */
   module.exports = {
     add,
     addInstrument,

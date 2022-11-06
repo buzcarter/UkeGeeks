@@ -1,55 +1,116 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>{{ PageTitle }} </title>
-<meta name="generator" content="{{ PoweredBy }}" />
-<link rel="stylesheet" type="text/css" href="{{ StaticsPrefix }}/css/yuiReset.css" />
-<link rel="stylesheet" type="text/css" href="{{ StaticsPrefix }}/css/basic-page-layout.css" media="all" />
-<link rel="stylesheet" type="text/css" href="{{ StaticsPrefix }}/css/ukeGeeks.music.css" media="all" />
-<link rel="stylesheet" href="{{ StaticsPrefix }}/css/ukeGeeks.musicPrint.css" media="print" />
-<style>
-header aside a{
-	padding-left: 1em;
-}
-</style>
+  <meta charset="utf-8" />
+  <title>{{ PageTitle }} </title>
+  <meta name="generator" content="{{ PoweredBy }}" />
+  <link type="text/css" href="{{ StaticsPrefix }}/css/yuiReset.css" />
+  <link type="text/css" href="{{ StaticsPrefix }}/css/basic-page-layout.css" media="all" />
+  <link type="text/css" href="{{ StaticsPrefix }}/css/ukeGeeks.music.css" media="all" />
+  <link href="{{ StaticsPrefix }}/css/ukeGeeks.musicPrint.css" media="print" />
+  <style>
+  header aside a{
+    padding-left: 1em;
+  }
+  </style>
 </head>
 <body>
-<section>
-	<header>
-		<hgroup>
-			<aside>
-				<a href="{{ EditUri }}" title="switch to Edit/Customize view (great for Print!)">Customize</a>
-				<a href="{{ SourceUri }}" target="_blank" title="view original song text">Source</a>
-			</aside>
-			<h1 class="ugsSongTitle">{{ SongTitle }}</h1>
-      {% if Artist %}
-        <h2 class="ugsArtist">{{ Artist }}</h2>
+  <!-- salt=song -->
+  <main>
+    <header>
+      <hgroup>
+        <aside>
+          <a href="{{ EditUri }}" title="switch to Edit/Customize view (great for Print!)">Customize</a>
+          <a href="{{ SourceUri }}" target="_blank" title="view original song text">Source</a>
+        </aside>
+        <h1 class="ugsSongTitle">{{ SongTitle }}</h1>
+        {% if Artist %}
+          <h2 class="ugsArtist">{{ Artist }}</h2>
+        {% endif %}
+        <h2 class="ugsSubtitle">{{ Subtitle }}</h2>
+        {% if Album %}
+          <h3 class="ugsAlbum">{{ Album }}</h3>
+        {% endif %}
+      </hgroup>
+    </header>
+      {% if UgsMeta %}
+        <div class="metaInfo">
+          {% for meta in UgsMeta %}
+            <p>{{ $meta }}</p>
+          {% endfor %}
+          </div>
+          <!-- /.metaInfo -->
       {% endif %}
-			<h2 class="ugsSubtitle">{{ Subtitle }}</h2>
-      {% if Album %}
-        <h3 class="ugsAlbum">{{ Album }}</h3>
-      {% endif %}
-		</hgroup>
-	</header>
-		<?php
-		if ($model->UgsMeta){
-			echo('<div class="metaInfo">');
-			foreach($model->UgsMeta as $meta){
-				echo('<p>' . $meta . '</p>');
-			}
-			echo('</div><!-- /.metaInfo -->');
-		}
-		?>
-	<div id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
-		<aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped"></aside>
-		<article id="ukeSongText" class="ugs-source-wrap"><pre>{{ Body }}</pre></article>
-	</div>
-</section>
-<footer>
-	<p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by UkeGeeks' Scriptasaurus &bull; ukegeeks.com</small></p>
-</footer>
-<script type="text/javascript" src="{{ StaticsPrefix }}/js/ukeGeeks.scriptasaurus.min.js"></script>
-<script type="text/javascript" src="{{ StaticsPrefix }}/js/startup.js"></script>
+    <div id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
+      <aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped"></aside>
+      <article id="ukeSongText" class="ugs-source-wrap"><pre>{{ Body }}</pre></article>
+    </div>
+  </main>
+  <footer>
+    <p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by UkeGeeks' Scriptasaurus &bull; ukegeeks.com</small></p>
+  </footer>
+  <script>
+    {{ state | safe }} // this is where the Fandango object gets inserted into the window
+  </script>
+  {% if !isDev %}
+    <script src="{{ StaticsPrefix }}/js/ukeGeeks.scriptasaurus.min.js"></script>
+    <script src="{{ StaticsPrefix }}/js/startup.js"></script>
+  {% else %}
+    <!-- core -->
+    <script src="/js/fdRequire/fd-require.js"></script>
+    <script src="/js/fdRequire/fd-require-audit.js"></script>
+    <!-- ordered (for destructuring) -->
+    <script src="/js/scriptasaurus/ukeGeeks.definitions.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.settings.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.data.js"></script>
+    <!-- normal module includes -->
+    <script src="/js/scriptasaurus/ukeGeeks.toolsLite.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.chordImport.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.transpose.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.definitions.sopranoUkuleleGcea.js"></script>
+    <!-- <script src="/js/scriptasaurus/ukeGeeks.canvasTools.js"></script> -->
+    <script src="/js/scriptasaurus/ukeGeeks.chordBrush.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.chordParser.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.cpmParser.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.chordPainter.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.tabs.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.overlapFixer.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.image.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.imageSvg.js"></script>
+    <script src="/js/scriptasaurus/ukeGeeks.scriptasaurus.js"></script>
+    <script>
+    fdRequire.app('songApp', (require, module) => {
+      const { checkDependencies } = require('fd-require-audit');
+
+      const scriptasaurus = require('scriptasaurus/ukeGeeks.scriptasaurus');
+      const settings = require('scriptasaurus/ukeGeeks.settings');
+
+      /**
+       * For demo purposes allows one to turn on/off the inlineDiagrams setting.
+       * @method checkUrlOpts
+       * @return {void}
+       */
+      function checkUrlOpts() {
+        const re = new RegExp('[?&]inline=([^&]*)', 'i');
+        const m = (`${window.location}`).match(re);
+        if (!m || m.length < 1) {
+          return;
+        }
+
+        settings.inlineDiagrams = true;
+      }
+
+      function run() {
+        checkDependencies(module.name, console);
+
+        checkUrlOpts();
+        scriptasaurus.init(false);
+        scriptasaurus.run();
+      }
+
+      run();
+    });
+    </script>
+  {% endif %}
 </body>
 </html>

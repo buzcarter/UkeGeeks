@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "commonjs",
+    "paths": {
+      "fd-require":             ["fdRequire/fd-require.js"],
+      "fd-require-audit":       ["fdRequire/fd-require-audit.js"],
+    }
+  }
+}

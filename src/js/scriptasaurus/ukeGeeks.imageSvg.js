@@ -1,4 +1,4 @@
-fdRequire.define('ukeGeeks/imageSvg', (require, module) => {
+fdRequire.define('scriptasaurus/ukeGeeks.imageSvg', (require, module) => {
   function getStyle(type, style) {
     if (!style) {
       return null;

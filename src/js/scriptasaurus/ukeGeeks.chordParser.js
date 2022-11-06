@@ -1,10 +1,5 @@
-fdRequire.define('ukeGeeks/chordParser', (require, module) => {
-/**
- * Reads an HTML (text) block looking for chords in format: [Emaj7]
- * Returns the HTML block with wrapped chords: &lt;code&gt;&lt;strong&gt;&lt;em&gt;
- * @class chordParser
- * @namespace ukeGeeks
- */
+fdRequire.define('scriptasaurus/ukeGeeks.chordParser', (require, module) => {
+  const settings = require('scriptasaurus/ukeGeeks.settings');
 
   let underscoreChords = [];
 
@@ -98,8 +93,8 @@ fdRequire.define('ukeGeeks/chordParser', (require, module) => {
    * @return {string}
    */
   function encloseChords(text, chords) {
-    const openBracket = ukeGeeks.settings.opts.retainBrackets ? '[' : ' ';
-    const closeBracket = ukeGeeks.settings.opts.retainBrackets ? ']' : ' ';
+    const openBracket = settings.opts.retainBrackets ? '[' : ' ';
+    const closeBracket = settings.opts.retainBrackets ? ']' : ' ';
     for (const i in chords) {
       do {}
       while (text.length != (text = text.replace(
@@ -129,7 +124,7 @@ fdRequire.define('ukeGeeks/chordParser', (require, module) => {
   function packChords(text) {
     let re;
 
-    if (ukeGeeks.settings.inlineDiagrams) {
+    if (settings.inlineDiagrams) {
       /* TODO: problem with packing */
       re = /(<\/strong><\/code>)[ \t]*(<code data-chordName="[^"]*"><strong>)/ig;
       return text.replace(re, '$1<span class="ugsInlineSpacer">&nbsp;</span>$2');
@@ -139,6 +134,11 @@ fdRequire.define('ukeGeeks/chordParser', (require, module) => {
     return text.replace(re, ' ');
   }
 
+  /**
+   * @module
+   * Reads an HTML (text) block looking for chords in format: [Emaj7]
+   * Returns the HTML block with wrapped chords: &lt;code&gt;&lt;strong&gt;&lt;em&gt;
+   */
   module.exports = {
     init,
     parse,

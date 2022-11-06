@@ -1,11 +1,11 @@
-fdRequire.define('ukeGeeks/definitions/sopranoUkuleleGcea', (require, module) => {
+fdRequire.define('scriptasaurus/ukeGeeks.definitions.sopranoUkuleleGcea', (require, module) => {
 // -------------------------------------------------------
 // Scriptasaurus preloads Soprano Uke chord dictionary.
 // Unusual array joined to make multi-lined super string
 // being used to avoid JsLint warnings about JS string
 // continuation character: \
 // -------------------------------------------------------
-  const defs = [
+  const definitions = [
   // Required: Instruement Name and Tuning (string names)
   // -------------------------------------------------------
     '{instrument: Soprano Ukulele}',
@@ -214,6 +214,6 @@ fdRequire.define('ukeGeeks/definitions/sopranoUkuleleGcea', (require, module) =>
   ];
 
   module.exports = {
-    defs,
+    definitions,
   };
 });

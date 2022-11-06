@@ -1,4 +1,4 @@
-fdRequire.define('ukeGeeks/imageCanvas', (require, module) => {
+fdRequire.define('scriptasaurus/ukeGeeks.imageCanvas', (require, module) => {
 /**
  * Converts image JSON data to a Canvas element
  * @class  imageCanvas

@@ -1,9 +1,7 @@
-fdRequire.define('ukeGeeks/chordPainter', (require, module) => {
-/**
- * Draws large chord diagram grid (aka "reference" diagrams) on canvas
- * @class chordPainter
- * @namespace ukeGeeks
- */
+fdRequire.define('scriptasaurus/ukeGeeks.chordPainter', (require, module) => {
+  const definitions = require('scriptasaurus/ukeGeeks.definitions');
+  const settings = require('scriptasaurus/ukeGeeks.settings');
+  const chordBrush = require('scriptasaurus/ukeGeeks.chordBrush');
 
   /**
    * ukeGeeks.chordBrush object handle
@@ -11,7 +9,7 @@ fdRequire.define('ukeGeeks/chordPainter', (require, module) => {
    * @type ukeGeeks.chordBrush instance handle
    * @private
    */
-  let brush = null;
+  // let brush = null;
 
   /**
    * keep an array of missing chords (strings)
@@ -49,8 +47,7 @@ fdRequire.define('ukeGeeks/chordPainter', (require, module) => {
    * @return {void}
    */
   function init(htmlHandles) {
-    brush = new ukeGeeks.chordBrush();
-    brush.init();
+    chordBrush.init();
     handles = htmlHandles;
   }
 
@@ -61,8 +58,8 @@ fdRequire.define('ukeGeeks/chordPainter', (require, module) => {
      * @return {boolean}  return TRUE if "chord" is on ignore list.
      */
   function ignoreChord(chord) {
-    for (let i = 0; i < ukeGeeks.settings.commonChords.length; i++) {
-      if (chord == ukeGeeks.settings.commonChords[i]) {
+    for (let i = 0; i < settings.commonChords.length; i++) {
+      if (chord == settings.commonChords[i]) {
         return true;
       }
     }
@@ -80,7 +77,7 @@ fdRequire.define('ukeGeeks/chordPainter', (require, module) => {
     errors = [];
     ignoreMatchList = [];
 
-    if (ukeGeeks.settings.opts.sortAlphabetical) {
+    if (settings.opts.sortAlphabetical) {
       chords.sort();
     }
 
@@ -88,18 +85,18 @@ fdRequire.define('ukeGeeks/chordPainter', (require, module) => {
       if (regExes.tacet.test(chords[i])) {
         continue;
       }
-      if (ukeGeeks.settings.opts.ignoreCommonChords && ignoreChord(chords[i])) {
+      if (settings.opts.ignoreCommonChords && ignoreChord(chords[i])) {
         if ((typeof Array.prototype.indexOf === 'function') && (ignoreMatchList.indexOf(chords[i]) == -1)) {
           ignoreMatchList.push(chords[i]);
         }
         continue;
       }
-      const chord = ukeGeeks.definitions.get(chords[i]);
+      const chord = definitions.get(chords[i]);
       if (!chord) {
         errors.push(chords[i]);
         continue;
       }
-      brush.plot(handles.diagrams, chord, ukeGeeks.settings.fretBox);
+      chordBrush.plot(handles.diagrams, chord, settings.fretBox);
     }
 
     if (ignoreMatchList.length > 0) {
@@ -123,7 +120,7 @@ fdRequire.define('ukeGeeks/chordPainter', (require, module) => {
       return;
     }
     for (let i = 0; i < chords.length; i++) {
-      const chord = ukeGeeks.definitions.get(chords[i]);
+      const chord = definitions.get(chords[i]);
       if (!chord) {
         /* TODO: error reporting if not found */
         // _errors.push(chords[i]);
@@ -131,7 +128,7 @@ fdRequire.define('ukeGeeks/chordPainter', (require, module) => {
       }
       for (let j = 0; j < e.length; j++) {
         if (e[j].getAttribute('data-chordName') == chord.name) {
-          brush.plot(e[j], chord, ukeGeeks.settings.inlineFretBox, ukeGeeks.settings.inlineFretBox.fonts);
+          chordBrush.plot(e[j], chord, settings.inlineFretBox, settings.inlineFretBox.fonts);
         }
       }
     }
@@ -155,6 +152,10 @@ fdRequire.define('ukeGeeks/chordPainter', (require, module) => {
     return ignoreMatchList;
   }
 
+  /**
+   * Draws large chord diagram grid (aka "reference" diagrams) on canvas
+   * @module
+   */
   module.exports = {
     init,
     show,

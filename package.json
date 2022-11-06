@@ -1,52 +1,52 @@
 {
-	"name": "ukegeeks-scriptasaurus",
-	"version": "0.0.0",
-	"description": "Merge & minify JavaScript, run LESS, merge and minify CSS",
-  "main": "music.js",
-	"engines": {
+  "name": "ukegeeks-scriptasaurus",
+  "version": "0.0.0",
+  "description": "Merge & minify JavaScript, run LESS, merge and minify CSS",
+  "main": "server.js",
+  "engines": {
     "node": "16",
-		"npm": "8"
-	},
-	"scripts": {
+    "npm": "8"
+  },
+  "scripts": {
     "build": "gulpfile.js",
     "lint": "eslint .",
-		"lint:fix": "eslint --fix .",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/buzcarter/UkeGeeks.git"
-	},
-	"keywords": [
-		"UkeGeeks",
-		"Ukulele",
-		"Chords",
-		"Songs",
-		"ChordPro",
-		"Gulp",
-		"Build"
-	],
-	"author": "Buz Carter",
-	"license": "BSD",
-	"bugs": {
-		"url": "https://github.com/buzcarter/UkeGeeks/issues"
-	},
-	"homepage": "https://github.com/buzcarter/UkeGeeks",
-	"devDependencies": {
-		"eslint": "^8.26.0",
-		"eslint-config-airbnb-base": "^15.0.0",
-		"eslint-plugin-import": "^2.26.0",
-		"gulp": "~3.9.0",
-		"gulp-concat": "~2.6.0",
-		"gulp-less": "~3.0.3",
-		"gulp-minify-css": "~1.2.0",
-		"gulp-rename": "~1.2.2",
-		"gulp-uglify": "~1.2.0"
-	},
-	"dependencies": {
-		"express": "^4.18.2",
-		"express-state": "^2.0.0",
-		"serve-static": "^1.15.0",
-		"swig": "^1.4.2"
-	}
+    "lint:fix": "eslint --fix .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/buzcarter/UkeGeeks.git"
+  },
+  "keywords": [
+    "UkeGeeks",
+    "Ukulele",
+    "Chords",
+    "Songs",
+    "ChordPro",
+    "Gulp",
+    "Build"
+  ],
+  "author": "Buz Carter",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/buzcarter/UkeGeeks/issues"
+  },
+  "homepage": "https://github.com/buzcarter/UkeGeeks",
+  "devDependencies": {
+    "eslint": "^8.26.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "gulp": "~3.9.0",
+    "gulp-concat": "~2.6.0",
+    "gulp-less": "~3.0.3",
+    "gulp-minify-css": "~1.2.0",
+    "gulp-rename": "~1.2.2",
+    "gulp-uglify": "~1.2.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-state": "^2.0.0",
+    "serve-static": "^1.15.0",
+    "swig": "^1.4.2"
+  }
 }

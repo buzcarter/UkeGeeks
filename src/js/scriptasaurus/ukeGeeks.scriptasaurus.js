@@ -1,4 +1,15 @@
-fdRequire.define('ukeGeeks/scriptasaurus', (require, module) => {
+fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
+  const chordPainter = require('scriptasaurus/ukeGeeks.chordPainter');
+  const chordParser = require('scriptasaurus/ukeGeeks.chordParser');
+  const cpmParser = require('scriptasaurus/ukeGeeks.cpmParser');
+  const definitions = require('scriptasaurus/ukeGeeks.definitions');
+  const overlapFixer = require('scriptasaurus/ukeGeeks.overlapFixer');
+  const settings = require('scriptasaurus/ukeGeeks.settings');
+  const sopranoUkuleleGcea = require('scriptasaurus/ukeGeeks.definitions.sopranoUkuleleGcea');
+  const tabs = require('scriptasaurus/ukeGeeks.tabs');
+  const toolsLite = require('scriptasaurus/ukeGeeks.toolsLite');
+  const ugsData = require('scriptasaurus/ukeGeeks.data');
+
   let errList = [];
 
   /**
@@ -8,14 +19,12 @@ fdRequire.define('ukeGeeks/scriptasaurus', (require, module) => {
    * @return {void}
    */
   function init(isIeFamily) {
-    const defs = ukeGeeks.definitions;
-
-    ukeGeeks.settings.environment.isIe = isIeFamily;
+    settings.environment.isIe = isIeFamily;
     // TODO: known problem -- need to preload Sorprano chord libarary then we can retune if needed
-    defs.addInstrument(defs.sopranoUkuleleGcea);
-    defs.useInstrument(defs.instrument.sopranoUke);
-    if (ukeGeeks.settings.defaultInstrument != defs.instrument.sopranoUke) {
-      defs.useInstrument(ukeGeeks.settings.defaultInstrument);
+    definitions.addInstrument(sopranoUkuleleGcea.definitions);
+    definitions.useInstrument(definitions.instrument.sopranoUke);
+    if (settings.defaultInstrument != definitions.instrument.sopranoUke) {
+      definitions.useInstrument(settings.defaultInstrument);
     }
   }
 
@@ -44,7 +53,7 @@ fdRequire.define('ukeGeeks/scriptasaurus', (require, module) => {
    */
   function runByClasses() {
     const songs = [];
-    const songWraps = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.wrap);
+    const songWraps = toolsLite.getElementsByClass(settings.wrapClasses.wrap);
     for (let i = 0; i < songWraps.length; i++) {
       const handles = getHandlesFromClass(songWraps[i]);
       if (handles === null) {
@@ -61,7 +70,7 @@ fdRequire.define('ukeGeeks/scriptasaurus', (require, module) => {
    * @param offset {int} (optional) default 0. Number of semitones to shift the tuning. See ukeGeeks.definitions.instrument.
    */
   function setTuningOffset(offset) {
-    ukeGeeks.definitions.useInstrument(offset);
+    definitions.useInstrument(offset);
   }
 
   // song
@@ -77,41 +86,37 @@ fdRequire.define('ukeGeeks/scriptasaurus', (require, module) => {
     // console.log('run Song');
 
     // read Music, find chords, generate HTML version of song:
-    const cpm = new ukeGeeks.cpmParser();
-    cpm.init();
-    const song = cpm.parse(handles.text.innerHTML);
-    ukeGeeks.definitions.replace(song.defs);
+    cpmParser.init();
+    const song = cpmParser.parse(handles.text.innerHTML);
+    definitions.replace(song.defs);
 
-    const chrdPrsr = new ukeGeeks.chordParser();
-    chrdPrsr.init();
-    handles.text.innerHTML = chrdPrsr.parse(song.body);
-    song.chords = chrdPrsr.getChords();
+    chordParser.init();
+    handles.text.innerHTML = chordParser.parse(song.body);
+    song.chords = chordParser.getChords();
 
     // Draw the Chord Diagrams:
-    const painter = new ukeGeeks.chordPainter();
-    painter.init(handles);
-    painter.show(song.chords);
+    chordPainter.init(handles);
+    chordPainter.show(song.chords);
     // Show chord diagrams inline with lyrics
-    if (ukeGeeks.settings.inlineDiagrams) {
-      ukeGeeks.toolsLite.addClass(handles.wrap, 'ugsInlineDiagrams');
-      painter.showInline(song.chords);
+    if (settings.inlineDiagrams) {
+      toolsLite.addClass(handles.wrap, 'ugsInlineDiagrams');
+      chordPainter.showInline(song.chords);
     }
 
     // Do Tablature:
-    const tabs = new ukeGeeks.tabs();
     tabs.init();
     tabs.replace(handles.text);
 
     // error reporting:
-    errList.push(painter.getErrors());
+    errList.push(chordPainter.getErrors());
 
     const container = handles.wrap;
     if (container) {
-      ukeGeeks.toolsLite.setClass(container, 'ugsNoChords', !song.hasChords);
+      toolsLite.setClass(container, 'ugsNoChords', !song.hasChords);
     }
 
-    if (ukeGeeks.settings.opts.autoFixOverlaps) {
-      ukeGeeks.overlapFixer.Fix(handles.text);
+    if (settings.opts.autoFixOverlaps) {
+      overlapFixer.Fix(handles.text);
     }
 
     // done!
@@ -145,25 +150,25 @@ fdRequire.define('ukeGeeks/scriptasaurus', (require, module) => {
    * @return {ukeGeeks.data.htmlHandles}
    */
   function getHandlesFromClass(wrap) {
-    const diagrams = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.diagrams, wrap);
-    const text = ukeGeeks.toolsLite.getElementsByClass(ukeGeeks.settings.wrapClasses.text, wrap);
+    const diagrams = toolsLite.getElementsByClass(settings.wrapClasses.diagrams, wrap);
+    const text = toolsLite.getElementsByClass(settings.wrapClasses.text, wrap);
     if ((diagrams === undefined) || (diagrams.length < 1) || (text === undefined) || (text.length < 1)) {
       return null;
     }
-    return new ukeGeeks.data.htmlHandles(wrap, diagrams[0], text[0]);
+    return new ugsData.htmlHandles(wrap, diagrams[0], text[0]);
   }
 
   /**
    *
    * @method _getHandlesFromId
    * @private
-   * @return {ukeGeeks.data.htmlHandles}
+   * @return {data.htmlHandles}
    */
   function getHandlesFromId() {
-    return new ukeGeeks.data.htmlHandles(
-      document.getElementById(ukeGeeks.settings.ids.container),
-      document.getElementById(ukeGeeks.settings.ids.canvas),
-      document.getElementById(ukeGeeks.settings.ids.songText),
+    return new ugsData.htmlHandles(
+      document.getElementById(settings.ids.container),
+      document.getElementById(settings.ids.canvas),
+      document.getElementById(settings.ids.songText),
     );
   }
 

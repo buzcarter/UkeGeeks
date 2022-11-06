@@ -1,11 +1,7 @@
-fdRequire.define('ukeGeeks/chordImport', (require, module) => {
-/**
- * Converts text to JSON objects. Accetps either large text blocks or single lines of
- * text written in CPM syntax (looks for instrument, tuning, and define statements).
- * @class chordImport
- * @namespace ukeGeeks
- * @singleton
- */
+fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
+  const settings = require('scriptasaurus/ukeGeeks.settings');
+  const toolsLite = require('scriptasaurus/ukeGeeks.toolsLite');
+  const ugsData = require('scriptasaurus/ukeGeeks.data');
 
   /**
    * Internal storage of partially converted "define" statements. The Definition (string) and addIn (array<strings>)
@@ -54,7 +50,7 @@ fdRequire.define('ukeGeeks/chordImport', (require, module) => {
    * @return {array<chordParts>}
    */
   function lineToParts(line) {
-    const s = ukeGeeks.toolsLite.pack(line);
+    const s = toolsLite.pack(line);
     if (s.length > 1 && s[0] != '#') {
       const m = s.match(regExes.define);
       if (m && m.length > 1) {
@@ -109,7 +105,7 @@ fdRequire.define('ukeGeeks/chordImport', (require, module) => {
    */
   function getInstrument(text) {
     const c = text.match(regExes.instr);
-    return !c ? null : ukeGeeks.toolsLite.pack(c[1]);
+    return !c ? null : toolsLite.pack(c[1]);
   }
 
   /**
@@ -204,11 +200,11 @@ fdRequire.define('ukeGeeks/chordImport', (require, module) => {
    */
   function toDots(frets, fingers) {
     const dots = [];
-    const { tuning } = ukeGeeks.settings;
+    const { tuning } = settings;
     for (let j = 0; j < tuning.length; j++) {
       const n = parseInt(frets[j], 10);
       if (n > 0) {
-        dots.push(new ukeGeeks.data.dot(j, n, (fingers.length - 1 >= j) ? parseInt(fingers[j], 10) : 0));
+        dots.push(new ugsData.dot(j, n, (fingers.length - 1 >= j) ? parseInt(fingers[j], 10) : 0));
       }
     }
     return dots;
@@ -229,7 +225,7 @@ fdRequire.define('ukeGeeks/chordImport', (require, module) => {
     for (const i in adds) {
       const a = adds[i].match(regExes.addin);
       if (a && a.length > 2) {
-        dots.push(new ukeGeeks.data.dot(parseInt(a[1], 10) - 1, parseInt(a[2], 10), parseInt(a[3], 10)));
+        dots.push(new ugsData.dot(parseInt(a[1], 10) - 1, parseInt(a[2], 10), parseInt(a[3], 10)));
       }
     }
   }
@@ -258,7 +254,7 @@ fdRequire.define('ukeGeeks/chordImport', (require, module) => {
       log(`bad "define" instruction: frets not found: ${text}`);
       return null;
     }
-    const chrd = new ukeGeeks.data.expandedChord(name);
+    const chrd = new ugsData.expandedChord(name);
     // chrd.name = name;
     const dots = toDots(frets, fingers);
     addInDots(dots, adds);
@@ -331,7 +327,7 @@ fdRequire.define('ukeGeeks/chordImport', (require, module) => {
     const parts = textToParts(linesAry);
     const name = getInstrument(text);
     const tuning = getTuning(text);
-    return new ukeGeeks.data.instrument(
+    return new ugsData.instrument(
       getKey(name, tuning), // key
       name, // name
       tuning, // tuning
@@ -339,6 +335,11 @@ fdRequire.define('ukeGeeks/chordImport', (require, module) => {
     );
   }
 
+  /**
+ * @module
+ * Converts text to JSON objects. Accetps either large text blocks or single lines of
+ * text written in CPM syntax (looks for instrument, tuning, and define statements).
+ */
   module.exports = {
     runLine,
     runBlock,

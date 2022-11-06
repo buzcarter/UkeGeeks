@@ -6,6 +6,7 @@
     "SongbookSubHeadline": "Sample Styled Songbook &raquo;",
     "SupportEmail": "buz@your-domain-not-mine.com"
   },
+
   "ResponseExposePaths": {
     "ROOT": "Fandango.context"
   }

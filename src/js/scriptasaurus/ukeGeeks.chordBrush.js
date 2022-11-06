@@ -1,4 +1,8 @@
-fdRequire.define('ukeGeeks/chordBrush', (require, module) => {
+fdRequire.define('scriptasaurus/ukeGeeks.chordBrush', (require, module) => {
+  const imageSvg = require('scriptasaurus/ukeGeeks.imageSvg');
+  const settings = require('scriptasaurus/ukeGeeks.settings');
+  const ugsImage = require('scriptasaurus/ukeGeeks.image');
+
   /**
     * Again this is a constructor replacement
     * @method init
@@ -17,16 +21,16 @@ fdRequire.define('ukeGeeks/chordBrush', (require, module) => {
     * @return {void}
     */
   function plot(chordBox, chord, fretBox, fontSettings, colorSettings) {
-    const ugsImg = new ukeGeeks.image().newImage(fretBox.width, fretBox.height);
+    const ugsImg = new ugsImage.image().newImage(fretBox.width, fretBox.height);
     if (!ugsImg) {
       return;
     }
 
     if (!fontSettings) {
-      fontSettings = ukeGeeks.settings.fonts;
+      fontSettings = settings.fonts;
     }
     if (!colorSettings) {
-      colorSettings = ukeGeeks.settings.colors;
+      colorSettings = settings.colors;
     }
 
     // starting top-left position for chord diagram
@@ -104,7 +108,7 @@ fdRequire.define('ukeGeeks/chordBrush', (require, module) => {
 
     mutedStrings(ugsImg, fretBox, chord.muted, colorSettings.xStroke);
     // ukeGeeks.imageCanvas.appendChild(chordBox, ugsImg);
-    ukeGeeks.imageSvg.appendChild(chordBox, ugsImg, 'ugs-diagrams--chord-img');
+    imageSvg.appendChild(chordBox, ugsImg, 'ugs-diagrams--chord-img');
   }
 
   /// //////////////////////////////////////////////////////////////////////////
@@ -125,7 +129,7 @@ fdRequire.define('ukeGeeks/chordBrush', (require, module) => {
     // width offset, a "subpixel" adjustment
     let i; const
       offset = fretBox.lineWidth / 2;
-    const stringHeight = ukeGeeks.settings.numFrets * fretBox.fretSpace;
+    const stringHeight = settings.numFrets * fretBox.fretSpace;
     const fretWidth = 3 * fretBox.stringSpace;
 
     const fretboard = ugsImg.newGroup('fretboard').style({
@@ -140,7 +144,7 @@ fdRequire.define('ukeGeeks/chordBrush', (require, module) => {
       fretboard.vLine(x, pos.y + offset, stringHeight);
     }
     // add frets
-    for (i = 1; i < ukeGeeks.settings.numFrets; i++) {
+    for (i = 1; i < settings.numFrets; i++) {
       const y = pos.y + i * fretBox.fretSpace + offset;
       fretboard.hLine(pos.x + offset, y, fretWidth);
     }

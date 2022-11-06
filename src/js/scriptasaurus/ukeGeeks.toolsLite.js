@@ -1,12 +1,4 @@
-fdRequire.define('ukeGeeks/toolsLite', (require, module) => {
-/**
- * some jQuery-like tools (very, very crappy. wish we could count on jQuery being on the page.)
- * if you do want to use jQuery (and why wouldn't you) I'm not offended if you yank this out.
- * @class toolsLite
- * @namespace ukeGeeks
- * @singleton
- */
-
+fdRequire.define('scriptasaurus/ukeGeeks.toolsLite', (require, module) => {
   const regEx = {
     dbleSpace: /\s{2,}/g,
     trim: /^\s+|\s+$/g,
@@ -97,6 +89,11 @@ fdRequire.define('ukeGeeks/toolsLite', (require, module) => {
     return classElements;
   }
 
+  /**
+ * @module
+ * some jQuery-like tools (very, very crappy. wish we could count on jQuery being on the page.)
+ * if you do want to use jQuery (and why wouldn't you) I'm not offended if you yank this out.
+ */
   module.exports = {
     addClass,
     getElementsByClass,

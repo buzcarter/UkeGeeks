@@ -1,4 +1,4 @@
-fdRequire.define('ukeGeeks/data', (require, module) => {
+fdRequire.define('scriptasaurus/ukeGeeks.data', (require, module) => {
   /**
    * Chord info sutiable for plotting on Canvas; has name and dot positions
    * @class expandedChord

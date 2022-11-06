@@ -1,12 +1,7 @@
-fdRequire.define('ukeGeeks/cpmParser', (require, module) => {
-/**
- * Reads a text block and returns an object containing whatever ChordPro elements it recognizes.
- *
- * A cleaned, HTML version of song is included.
- *
- * @class cpmParser
- * @namespace ukeGeeks
- */
+fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
+  const ugsData = require('scriptasaurus/ukeGeeks.data');
+  const chordImport = require('scriptasaurus/ukeGeeks.chordImport');
+  const toolsLite = require('scriptasaurus/ukeGeeks.toolsLite');
 
   /**
   * Number of columns defined
@@ -48,7 +43,7 @@ fdRequire.define('ukeGeeks/cpmParser', (require, module) => {
    * @return {songObject}
    */
   function parse(text) {
-    const song = new ukeGeeks.data.song();
+    const song = new ugsData.song();
     text = stripHtml(text);
     let songDom = domParse(text);
     songDom = parseInstr(songDom);
@@ -102,7 +97,7 @@ fdRequire.define('ukeGeeks/cpmParser', (require, module) => {
     tmp = getInfo(songDom, blockTypeEnum.ChordDefinition);
     if (tmp.length > 0) {
       for (const i in tmp) {
-        song.defs.push(ukeGeeks.chordImport.runLine(`{define: ${tmp[i]}}`));
+        song.defs.push(chordImport.runLine(`{define: ${tmp[i]}}`));
       }
     }
     return song;
@@ -301,7 +296,7 @@ fdRequire.define('ukeGeeks/cpmParser', (require, module) => {
           tmpBlk.lines.push(lines[i]);
         }
       } else {
-        const s = ukeGeeks.toolsLite.trim(lines[i]);
+        const s = toolsLite.trim(lines[i]);
         if (s.length > 0) {
           tmpBlk.lines.push(s);
         }
@@ -375,7 +370,7 @@ fdRequire.define('ukeGeeks/cpmParser', (require, module) => {
               tmpBlk.type = `Undefined-${verb}`;
               break;
           }
-          tmpBlk.lines[0] = ukeGeeks.toolsLite.trim(args);
+          tmpBlk.lines[0] = toolsLite.trim(args);
           song[i].lines[j] = tmpBlk;
         }
       }
@@ -451,7 +446,7 @@ fdRequire.define('ukeGeeks/cpmParser', (require, module) => {
 
         chordFound = regEx.chord.test(line);
         hasChords = hasChords || chordFound;
-        hasOnlyChords = chordFound && (ukeGeeks.toolsLite.trim(line.replace(regEx.allChords, '')).length < 1);
+        hasOnlyChords = chordFound && (toolsLite.trim(line.replace(regEx.allChords, '')).length < 1);
         // need to find
         song[i].lines[j] = {
           type: (hasOnlyChords ? blockTypeEnum.ChordOnlyText : (chordFound ? blockTypeEnum.ChordText : blockTypeEnum.PlainText)),
@@ -508,6 +503,12 @@ fdRequire.define('ukeGeeks/cpmParser', (require, module) => {
     return text.replace(regEx.pre, '').replace(regEx.htmlComment, '');
   }
 
+  /**
+ * @module
+ * Reads a text block and returns an object containing whatever ChordPro elements it recognizes.
+ *
+ * A cleaned, HTML version of song is included.
+ */
   module.exports = {
     init,
     parse,

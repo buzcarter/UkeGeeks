@@ -1,5 +1,10 @@
-fdRequire.define('ukeGeeks/tabs', (require, module) => {
-/**
+fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
+  const settings = require('scriptasaurus/ukeGeeks.settings');
+  const toolsLite = require('scriptasaurus/ukeGeeks.toolsLite');
+  const imageSvg = require('scriptasaurus/ukeGeeks.imageSvg');
+  const ugsImage = require('scriptasaurus/ukeGeeks.image');
+
+  /**
  * Tablature renderer -- reads tab data and draws canvas elements.
  * Creates "packed" versions of the tabs, including a "key line" that's comprised
  * only of '-' and '*' -- the asterisks denoting where a dot will eventually be placed.
@@ -14,7 +19,7 @@ fdRequire.define('ukeGeeks/tabs', (require, module) => {
    * @private
    * @type {JSON}
    */
-  const myTabSettings = ukeGeeks.settings.tabs;
+  const myTabSettings = settings.tabs;
 
   // TODO: use ukeGeeks.settings.tuning for NUM_STRINGS and LAST_STRING_NAME??
 
@@ -75,7 +80,7 @@ fdRequire.define('ukeGeeks/tabs', (require, module) => {
     const lines = text.split('\n');
     let tab = [];
     for (const i in lines) {
-      const s = ukeGeeks.toolsLite.trim(lines[i]);
+      const s = toolsLite.trim(lines[i]);
       if (s.length > 0) {
         tab.push(s);
       }
@@ -109,7 +114,7 @@ fdRequire.define('ukeGeeks/tabs', (require, module) => {
     // prep canvas
     outElement = (typeof (outElement) === 'string') ? document.getElementById(outElement) : outElement;
 
-    const ugsImg = new ukeGeeks.image().newImage(getWidth(tabs, labelOffset, false), height);
+    const ugsImg = new ugsImage.image().newImage(getWidth(tabs, labelOffset, false), height);
     const pos = {
       x: myTabSettings.dotRadius + labelOffset,
       y: 1 + myTabSettings.dotRadius,
@@ -121,7 +126,7 @@ fdRequire.define('ukeGeeks/tabs', (require, module) => {
       drawLabels(ugsImg, pos, myTabSettings);
     }
 
-    outElement.innerHTML = ukeGeeks.imageSvg.toString(ugsImg);
+    outElement.innerHTML = imageSvg.toString(ugsImg);
   }
 
   /**
@@ -337,20 +342,20 @@ fdRequire.define('ukeGeeks/tabs', (require, module) => {
    * @param ugsImg {ukeGeeksImage} image builder tool instance
    * @param pos {xyPos} JSON (x,y) position
    * @param length {int} Length in pixels
-   * @param settings {settingsObj}
+   * @param mySettings {settingsObj}
    * @return {voie}
    */
-  function drawStaff(ugsImg, pos, length, settings) {
-    const offset = settings.lineWidth / 2;
+  function drawStaff(ugsImg, pos, length, mySettings) {
+    const offset = mySettings.lineWidth / 2;
     const x = pos.x + offset;
     let y = pos.y + offset;
     const staff = ugsImg.newGroup('staff').style({
-      strokeColor: settings.lineColor,
-      strokeWidth: settings.lineWidth,
+      strokeColor: mySettings.lineColor,
+      strokeWidth: mySettings.lineWidth,
     });
     for (let i = 0; i < NUM_STRINGS; i++) {
       staff.hLine(x, y, length);
-      y += settings.lineSpacing;
+      y += mySettings.lineSpacing;
     }
     staff.endGroup();
   }
@@ -362,11 +367,11 @@ fdRequire.define('ukeGeeks/tabs', (require, module) => {
    * @param ugsImg {ukeGeeksImage} image builder tool instance
    * @param pos {xyPos} JSON (x,y) position
    * @param tabs {array} Array of normalized string data -- space (character) or int (fret number)
-   * @param settings {settingsObj}
+   * @param mySettings {settingsObj}
    * @param lineWidth {int} Length in pixels (used only when line ends with a measure mark)
    * @return {void}
    */
-  function drawNotes(ugsImg, pos, tabs, settings, lineWidth) {
+  function drawNotes(ugsImg, pos, tabs, mySettings, lineWidth) {
     let c;
     const center = {
       x: 0,
@@ -387,19 +392,19 @@ fdRequire.define('ukeGeeks/tabs', (require, module) => {
           drawMeasure(ugsImg, {
             x: (chrIdx == tabs[strIdx].length - 1) ? pos.x + lineWidth : center.x,
             y: pos.y,
-          }, settings, heavy);
+          }, mySettings, heavy);
         } else if (!isNaN(c)) {
-          ugsImg.circle(center.x, center.y, settings.dotRadius).style({
-            fillColor: settings.dotColor,
+          ugsImg.circle(center.x, center.y, mySettings.dotRadius).style({
+            fillColor: mySettings.dotColor,
           });
-          ugsImg.text(center.x, center.y + 0.5 * settings.dotRadius, c).style({
-            fontFamily: settings.textFont,
-            fillColor: settings.textColor,
+          ugsImg.text(center.x, center.y + 0.5 * mySettings.dotRadius, c).style({
+            fontFamily: mySettings.textFont,
+            fillColor: mySettings.textColor,
           });
         }
-        center.x += settings.noteSpacing;
+        center.x += mySettings.noteSpacing;
       }
-      center.y += settings.lineSpacing;
+      center.y += mySettings.lineSpacing;
     }
   }
 
@@ -409,15 +414,15 @@ fdRequire.define('ukeGeeks/tabs', (require, module) => {
    * @private
    * @param ugsImg {ukeGeeksImage} image builder tool instance
    * @param pos {xyPos} JSON (x,y) position
-   * @param settings {settingsObj}
+   * @param mySettings {settingsObj}
    * @param heavy {bool} if TRUE hevy line
    * @return {void}
    */
-  function drawMeasure(ugsImg, pos, settings, heavy) {
-    const offset = settings.lineWidth / 2;
-    ugsImg.vLine(pos.x + offset, pos.y, (NUM_STRINGS - 1) * settings.lineSpacing).style({
-      strokeColor: settings.lineColor,
-      strokeWidth: (heavy ? 4.5 : 1) * settings.lineWidth,
+  function drawMeasure(ugsImg, pos, mySettings, heavy) {
+    const offset = mySettings.lineWidth / 2;
+    ugsImg.vLine(pos.x + offset, pos.y, (NUM_STRINGS - 1) * mySettings.lineSpacing).style({
+      strokeColor: mySettings.lineColor,
+      strokeWidth: (heavy ? 4.5 : 1) * mySettings.lineWidth,
     });
   }
 
@@ -427,16 +432,16 @@ fdRequire.define('ukeGeeks/tabs', (require, module) => {
    * @private
    * @param ugsImg {ukeGeeksImage} image builder tool instance
    * @param pos {xyPos} JSON (x,y) position
-   * @param settings {settingsObj}
+   * @param mySettings {settingsObj}
    * @return {void}
    */
-  function drawLabels(ugsImg, pos, settings) {
+  function drawLabels(ugsImg, pos, mySettings) {
     // ['A','E','C','G'];
-    const labels = ukeGeeks.settings.tuning.slice(0).reverse();
+    const labels = settings.tuning.slice(0).reverse();
     for (let i = 0; i < NUM_STRINGS; i++) {
-      ugsImg.text(1, (pos.y + (i + 0.3) * settings.lineSpacing), labels[i]).style({
-        fontFamily: settings.labelFont,
-        fillColor: settings.lineColor,
+      ugsImg.text(1, (pos.y + (i + 0.3) * mySettings.lineSpacing), labels[i]).style({
+        fontFamily: mySettings.labelFont,
+        fillColor: mySettings.lineColor,
         textAlign: 'left',
       });
     }
