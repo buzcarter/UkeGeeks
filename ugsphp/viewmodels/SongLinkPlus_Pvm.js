@@ -1,4 +1,4 @@
-<?php
+
 
 class SongLinkPlus_Pvm {
 	public $Uri = '';
@@ -10,7 +10,7 @@ class SongLinkPlus_Pvm {
 }
 
 /**
- * 
+ *
  */
 class SongListPlus_Pvm {
 	public $SongList = array();

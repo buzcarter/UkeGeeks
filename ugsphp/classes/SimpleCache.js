@@ -1,4 +1,4 @@
-<?php
+
 /**
   * Down and dirty file-based cache class...
   * Yes, needs lots of work.
@@ -6,11 +6,11 @@
 	*/
 class SimpleCache
 {
-	private $cacheDir = 'cache';  
-	private $expiryInterval = 2592000; //30*24*60*60;  
+	private $cacheDir = 'cache';
+	private $expiryInterval = 2592000; //30*24*60*60;
 
-	public function setCacheDir($val) {  $this->cacheDir = $val; }  
-	public function setExpiryInterval($val) {  $this->expiryInterval = $val; }  
+	public function setCacheDir($val) {  $this->cacheDir = $val; }
+	public function setExpiryInterval($val) {  $this->expiryInterval = $val; }
 
 	/**
 	 *

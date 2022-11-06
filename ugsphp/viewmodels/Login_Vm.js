@@ -1,6 +1,7 @@
-<?php
+const BaseViewModel = require('./_base_Vm');
 
-class Login_Vm extends _base_Vm {
+
+class Login_Vm extends BaseViewModel {
 	public $ErrorMessage = '';
 	public $Username = '';
 	public $FormPostUri = '';

@@ -1,6 +1,7 @@
-<?php 
+const BaseViewModel = require('./_base_Vm');
 
-class RebuildSongCache_Vm extends _base_Vm {
+
+class RebuildSongCache_Vm extends BaseViewModel {
 	public $ElapsedTime = 0.0;
 	public $SongCount = 0;
 

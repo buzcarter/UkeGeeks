@@ -3,17 +3,17 @@
 <head>
 	<meta charset="utf-8" />
 	<title>List All Songs</title>
-	<meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
+	<meta name="generator" content="{{ PoweredBy }}" />
 </head>
 <body>
-<h1>List All Songs</h1>
-<p><?php echo(count($model->SongList)); ?> songs</p>
-<ol>
-	<?php
-	foreach($model->SongList as $song){
-		echo('<li><a href="' . $song->Uri . '">' . $song->Title . '</a></li>');
-	}
-	?>
-</ol>
+  <main>
+    <h1>List All Songs</h1>
+    <p>{{ SongList.length }} songs</p>
+    <ol>
+      {% for song in SongList %}
+        <li><a href="{{ song.Uri }}">{{ song.Title }}</a></li>
+      {% endfor %}
+    </ol>
+  </main>
 </body>
 </html>

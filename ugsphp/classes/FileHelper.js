@@ -1,4 +1,4 @@
-<?php 
+
 
 /**
  * Shared file access methods
@@ -6,7 +6,7 @@
 class FileHelper {
 	/**
 	 * Parses URL looks for song query string param value
-	 * @return string 
+	 * @return string
 	 */
 	public static function getFilename() {
 		$s = (isset($_GET['song'])) ? $_GET['song'] : '';
@@ -24,7 +24,7 @@ class FileHelper {
 	/**
 	 * tries to open and read the requested file
 	 * @param string $fname
-	 * @return string 
+	 * @return string
 	 */
 	public static function getFile($fname) {
 		$data = '';
@@ -39,10 +39,10 @@ class FileHelper {
 	}
 
 	/**
-	 * 
-	 * @private 
-	 * @method getFilenames 
-	 * @param string $dir 
+	 *
+	 * @private
+	 * @method getFilenames
+	 * @param string $dir
 	 * @return array
 	 */
 	public static function getFilenames($dir) {
@@ -51,13 +51,13 @@ class FileHelper {
 			var_dump('failed to open -> ' . $dir);
 			return array();
 		}
-		
+
 		// Open a known directory, and proceed to read its contents
 		// yes, the assignment below is deliberate.
 		if (!($dh = opendir($dir))) {
 			return array();
 		}
-		
+
 		$f = array();
 		while (($file = readdir($dh)) !== false) {
 			if ((filetype($dir . $file) == 'file') && (preg_match(Config::FileNamePattern, $file) === 1)){

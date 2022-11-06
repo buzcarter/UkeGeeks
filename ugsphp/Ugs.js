@@ -1,4 +1,4 @@
-<?php
+
 
 /**
  * a "lite" MVC-ish Controller

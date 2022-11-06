@@ -1,4 +1,4 @@
-<?php
+
 /**
  * View Model Builder --
  * @class SongListDetailed_Vmb

@@ -1,46 +1,48 @@
-<?php
+const fs = require('fs');
+const serverConfig = require('../configs/server.json');
+const SongViewModel = require('../viewmodels/Song_Vm');
+const Config = require('../Config');
 
 /**
- * View Model Builder -- Creates a "Song List" View Model
- * @class SongList_Vmb
+ * Populates SongList View Model by reading and parsing filenames in the source directory
+ * @return {SongViewModel}
  */
-class SongList_Vmb extends _base_Vmb {
+function Build(req, res) {
+  // serverConfig.SongDirectory
+  const files = fs.readdirSync('cpm');
+  const viewModel = new SongViewModel();
 
-	/**
-	 * Populates SongList View Model by reading and parsing filenames in the source directory
-	 * @return SongList_Vm
-	 */
-	public function Build() {
-		$files = FileHelper::getFilenames(Config::$SongDirectory);
-		$viewModel = new SongList_Vm();
+  files.forEach((filename) => {
+    // Parse the filename (to make a Title) and create URL.
+    const s = filename.replace(Config.FileNamePattern, '');
+    viewModel.Add(
+      getTitle(s),
+      // Ugs.MakeUri(Actions.Song, s)
+    );
+  });
 
-		foreach ($files as $filename) {
-			// Parse the filename (to make a Title) and create URL.
-			$s = preg_replace(Config::FileNamePattern, '$1', $filename);
-			$viewModel->Add(
-				$this->getTitle($s),
-				Ugs::MakeUri(Actions::Song, $s)
-			);
-		}
+  viewModel.Sort();
 
-		$viewModel->Sort();
-
-		return $viewModel;
-	}
-
-	/**
-	 * Handles titles beginning with "The"
-	 * @method getTitle
-	 * @param string $filename
-	 * @return string
-	 */
-	private function getTitle($filename) {
-		$title = trim(ucwords(str_replace('-', ' ', str_replace('_', ' ', $filename))));
-		$pos = strpos($title, 'The ');
-		if (($pos !== false) && ($pos == 0)) {
-			$title = substr($title, 4, strlen($title)) . ', The';
-		}
-		return $title;
-	}
-
+  res.render('song-list', viewModel);
 }
+
+/**
+ * Handles titles beginning with "The"
+ * @method getTitle
+ * @param string filename
+ * @return string
+ */
+function getTitle(filename) {
+  // let title = trim(ucwords(str_replace('-', ' ', str_replace('_', ' ', filename))));
+  // pos = strpos(title, 'The ');
+  // if ((pos !== false) && (pos == 0)) {
+  //   title = `${substr(title, 4, strlen(title))}, The`;
+  // }
+  // return title;
+  return filename;
+}
+
+/**
+ * View Model Builder -- Creates a "Song" View Model
+ */
+module.exports = Build;

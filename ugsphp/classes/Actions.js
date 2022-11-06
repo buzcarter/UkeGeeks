@@ -1,4 +1,4 @@
-<?php
+
 /**
  * Enum for possible Actions (url to ViewModel mappings)
  * @class Actions

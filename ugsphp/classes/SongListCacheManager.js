@@ -1,4 +1,4 @@
-<?php
+
 
 /**
  * Builds the SongList array, either reading from or writint to the SimpleCache.

@@ -1,4 +1,4 @@
-<?php
+
 
 /**
  * View Model Builder -- Creates a "Login" View Model

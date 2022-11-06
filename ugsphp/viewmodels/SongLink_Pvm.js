@@ -1,12 +1,12 @@
-<?php 
+class SongLinkPartialViewModel {
+  Title = '';
 
-class SongLink_Pvm {
-	public $Title = '';
-	public $Uri = '';
+  Uri = '';
 
-	function __construct($title, $uri){
-		$this->Title = $title;
-		$this->Uri = $uri;
-	}
+  constructor(title, uri) {
+    this.Title = title;
+    this.Uri = uri;
+  }
 }
 
+module.exports = SongLinkPartialViewModel;

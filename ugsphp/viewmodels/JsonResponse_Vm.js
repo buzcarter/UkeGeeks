@@ -1,4 +1,4 @@
-<?php
+
 
 class JsonResponse_Vm {
 	public $HasErrors = true;

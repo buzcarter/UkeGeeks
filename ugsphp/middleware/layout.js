@@ -6,6 +6,7 @@ module.exports = (req, res, next) => {
     isDev: process.env.NODE_ENV !== 'production',
     EditUri: '#EditUri',
     StaticsPrefix: 'http://localhost:3034',
+    SiteUser: null,
   };
 
   next();

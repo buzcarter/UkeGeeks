@@ -1,4 +1,4 @@
-<?php
+
 class NewSong_Vm {
 	public $IsHttpPost = false;
 	public $HasErrors = false;

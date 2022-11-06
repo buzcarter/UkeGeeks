@@ -1,4 +1,4 @@
-<?php
+
 
 /**
  * All site visitors have an instance of Site User, by

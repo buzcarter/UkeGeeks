@@ -1,4 +1,4 @@
-<?php
+
 
 class Ajax_NewSong_Vmb extends _base_Vmb{
 

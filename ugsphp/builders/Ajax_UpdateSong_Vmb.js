@@ -1,4 +1,4 @@
-<?php
+
 class Ajax_UpdateSong_Vmb extends _base_Vmb {
 
 	public function Build(){

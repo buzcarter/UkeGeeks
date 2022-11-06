@@ -1,4 +1,4 @@
-<?php
+
 
 class SimpleLogin{
 	const SessionKey = 'user';
