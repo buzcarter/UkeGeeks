@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "PageTitleSuffix": " | UkeGeek's Scriptasaurus",
+    "PoweredBy": "UkeGeeks-Scriptasaurus-v1.4",
+    "SongbookHeadline": "'The BIG UKE Book",
+    "SongbookSubHeadline": "Sample Styled Songbook &raquo;",
+    "SupportEmail": "buz@your-domain-not-mine.com"
+  },
+  "ResponseExposePaths": {
+    "ROOT": "Fandango.context"
+  }
+}
