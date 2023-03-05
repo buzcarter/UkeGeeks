@@ -1,6 +1,6 @@
 {
   "name": "ukegeeks-scriptasaurus",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Merge & minify JavaScript, run LESS, merge and minify CSS",
   "main": "server.js",
   "engines": {
@@ -11,6 +11,7 @@
     "build": "gulpfile.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
+    "server": "node ./ugsphp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -46,6 +47,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "express-state": "^2.0.0",
+    "nunjucks": "^3.2.3",
     "serve-static": "^1.15.0",
     "swig": "^1.4.2"
   }

@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [{
+    "name": "Attach to Process",
+    "port": 9229,
+    "protocol": "inspector",
+    "request": "attach",
+    "restart": true,
+    "type": "node"
+  }, {
+    "name": "App/Server Startup",
+    "args": [],
+    "program": "${workspaceRoot}/ugsphp/index.js",
+    "request": "launch",
+    "type": "node"
+  }]
+}
