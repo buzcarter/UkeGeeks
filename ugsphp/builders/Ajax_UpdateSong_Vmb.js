@@ -13,7 +13,7 @@ class Ajax_UpdateSong_Vmb extends _base_Vmb {
 			return $viewModel;
 		}
 
-		$json = Ugs::GetJsonObject();
+		$json = Ugs.GetJsonObject();
 		$viewModel->Id = $json->filename;
 		$song = $json->song;
 
@@ -22,7 +22,7 @@ class Ajax_UpdateSong_Vmb extends _base_Vmb {
 			return $viewModel;
 		}
 
-		$fullFilePath = Config::$SongDirectory . $viewModel->Id;
+		$fullFilePath = Config.$SongDirectory . $viewModel->Id;
 
 		if (!file_exists($fullFilePath)) {
 			$viewModel->Message = 'Song file not found; can\'t update.';

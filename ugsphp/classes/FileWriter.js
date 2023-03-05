@@ -33,7 +33,7 @@ class FileWriter {
 		$filename = '';
 		while ( true ) {
 			$m = microtime();
-			$filename = $baseFilename . self::ID_PREFIX . ( ( $m - floor( $m ) ) * 1000000 ) . $extenstion;
+			$filename = $baseFilename . self.ID_PREFIX . ( ( $m - floor( $m ) ) * 1000000 ) . $extenstion;
 			if ( !file_exists( $directory . $baseFilename ) ) {
 				break;
 			}
@@ -59,7 +59,7 @@ class FileWriter {
 			return '';
 		}
 
-		$value = preg_replace( self::$dupeSpacersRegEx, '_', preg_replace( self::$allowedCharsRegEx, '_', $value ) );
+		$value = preg_replace( self.$dupeSpacersRegEx, '_', preg_replace( self.$allowedCharsRegEx, '_', $value ) );
 		$value = substr( $value, 0, $maxLength );
 
 		return preg_replace( '/^_/', '', preg_replace( '/_$/', '', $value ) );
@@ -74,12 +74,12 @@ class FileWriter {
 	 * @return string
 	 */
 	public function MakeFile( $title, $artist ) {
-		$f = $this->ScrubForFilename( $title, self::MAX_TITLE_LENGTH );
+		$f = $this->ScrubForFilename( $title, self.MAX_TITLE_LENGTH );
 		if ( strlen( $f ) < 1 ) {
 			$f = 'untitled';
 		}
 
-		$a = $this->ScrubForFilename( $artist, self::MAX_ARTIST_NAME );
+		$a = $this->ScrubForFilename( $artist, self.MAX_ARTIST_NAME );
 		if ( strlen( $a ) > 0 ) {
 			$f .= '.' . $a;
 		}
@@ -87,15 +87,15 @@ class FileWriter {
 		$content = $this->MakeChordProStub( $title, $artist );
 
 		try {
-			if (!is_writable(Config::$SongDirectory)){
+			if (!is_writable(Config.$SongDirectory)){
 				return '';
 			}
-		$filename = $this->UniqueFilename( Config::$SongDirectory, $f, Config::FileExtension );
+		$filename = $this->UniqueFilename( Config.$SongDirectory, $f, Config.FileExtension );
 			if (strlen($filename) < 1){
 				return '';
 			}
 
-		$filesize = file_put_contents( Config::$SongDirectory . $filename, $content );
+		$filesize = file_put_contents( Config.$SongDirectory . $filename, $content );
 
 		return ( $filesize > 0 ) ? $filename : '';
 		}

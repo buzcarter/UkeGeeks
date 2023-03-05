@@ -1,4 +1,12 @@
+const SongViewModelBuilder = require('./Song_Vmb');
+const SongListViewModelBuilder = require('./SongList_Vmb');
+
+function homeHandler(req, res) {
+  res.render('song');
+}
+
 module.exports = {
-  song: require('./Song_Vmb'),
-  songList: require('./SongList_Vmb'),
+  home: homeHandler,
+  song: SongViewModelBuilder,
+  songList: SongListViewModelBuilder,
 };

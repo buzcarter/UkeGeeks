@@ -1,11 +1,11 @@
-const controllers = require('../controllers');
+const builders = require('../builders');
 
 module.exports = {
   loadRoutes(app, routes) {
     Object.keys(routes)
       .forEach((routeName) => {
         const { path, controller } = routes[routeName];
-        const controllerFn = controllers[controller];
+        const controllerFn = builders[controller];
         if (typeof controllerFn !== 'function' || controllerFn.length < 2) {
           throw new Error(`controller for "${routeName}" not a valid handler function`);
         }

@@ -58,7 +58,7 @@ class SimpleLogin{
 	 */
 	private function ValidateUser($username, $password){
 		$siteUser = new SiteUser();
-		foreach(Config::$Accounts as $account) {
+		forEach(Config.$Accounts as $account) {
 			if (($username == strtolower($account['user'])) && ($password == $account['pass'])) {
 				if ($account['isActive']) {
 					$siteUser->Username = $account['user'];
@@ -90,14 +90,14 @@ class SimpleLogin{
 	 * @param [SiteUser] $siteUser
 	 */
 	private function SetSession($siteUser){
-		$_SESSION[self::SessionKey] = $siteUser;
+		$_SESSION[self.SessionKey] = $siteUser;
 	}
 
 	/**
 	 * returns current user object from session; returns null if not found.
 	 */
 	private function GetSession(){
-		return isset($_SESSION[self::SessionKey]) ? $_SESSION[self::SessionKey] : null;
+		return isset($_SESSION[self.SessionKey]) ? $_SESSION[self.SessionKey] : null;
 	}
 
 	/**

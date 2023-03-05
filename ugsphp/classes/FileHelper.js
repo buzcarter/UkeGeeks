@@ -11,13 +11,13 @@ class FileHelper {
 	public static function getFilename() {
 		$s = (isset($_GET['song'])) ? $_GET['song'] : '';
 		if (strlen($s) < 1){
-			return Config::NotFound_404File;
+			return Config.NotFound_404File;
 		}
 		if (strpos($s, '.txt') || strpos($s, '.cpm')){
 			return $s;
 		}
 		$pattern = '/(.*[\/])?(.*?)(\.html?)?$/';
-		$s = preg_replace($pattern, '$2', $s) . Config::FileExtension;
+		$s = preg_replace($pattern, '$2', $s) . Config.FileExtension;
 		return $s;
 	}
 
@@ -33,7 +33,7 @@ class FileHelper {
 			// die($errPrefix." &quot;".$fname."&quot; not found.");
 		}
 		$fh = fopen($fname, 'r');
-		$data = fread($fh, Config::MaxFileSize);
+		$data = fread($fh, Config.MaxFileSize);
 		fclose($fh);
 		return $data;
 	}
@@ -60,7 +60,7 @@ class FileHelper {
 
 		$f = array();
 		while (($file = readdir($dh)) !== false) {
-			if ((filetype($dir . $file) == 'file') && (preg_match(Config::FileNamePattern, $file) === 1)){
+			if ((filetype($dir . $file) == 'file') && (preg_match(Config.FileNamePattern, $file) === 1)){
 				$f[] = $file;
 			}
 		}

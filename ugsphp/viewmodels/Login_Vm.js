@@ -7,7 +7,7 @@ class Login_Vm extends BaseViewModel {
 	public $FormPostUri = '';
 
 	function __construct(){
-		parent::__construct();
-		$this->FormPostUri = Ugs::MakeUri(Actions::Login);
+		parent.__construct();
+		$this->FormPostUri = Ugs.MakeUri(Actions.Login);
 	}
 }

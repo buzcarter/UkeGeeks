@@ -6,7 +6,7 @@ class RebuildSongCache_Vm extends BaseViewModel {
 	public $SongCount = 0;
 
 	function __construct(){
-		parent::__construct();
-		$this->SongbooktUri = Ugs::MakeUri(Actions::Songbook);
+		parent.__construct();
+		$this->SongbooktUri = Ugs.MakeUri(Actions.Songbook);
 	}
 }

@@ -13,7 +13,7 @@ class Ajax_NewSong_Vmb extends _base_Vmb{
 			return $viewModel;
 		}
 
-		$json = Ugs::GetJsonObject();
+		$json = Ugs.GetJsonObject();
 		if ($this->CreateSongFile($json->songTitle, $json->songArtist, $viewModel)){
 			$cache = new SongListCacheManager();
 			$cache->Rebuild();
@@ -41,7 +41,7 @@ class Ajax_NewSong_Vmb extends _base_Vmb{
 			return false;
 		}
 
-		$viewModel->ContinueUri = Ugs::MakeUri( Actions::Edit, $viewModel->Id);
+		$viewModel->ContinueUri = Ugs.MakeUri( Actions.Edit, $viewModel->Id);
 		return true;
 	}
 

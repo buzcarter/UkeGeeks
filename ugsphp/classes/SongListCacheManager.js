@@ -13,7 +13,7 @@ class SongListCacheManager {
 	// -----------------------------------------
 	function SongListCacheManager(){
 		$this->cache = new SimpleCache();
-		$this->cache->setCacheDir(Config::$AppDirectory . 'cache/');
+		$this->cache->setCacheDir(Config.$AppDirectory . 'cache/');
 	}
 
 	/**
@@ -23,10 +23,10 @@ class SongListCacheManager {
 	public function Rebuild() {
 		// large song collections (1,000's of songs) might timeout, set max number of seconds for this task
 		set_time_limit(45);
-		$files = FileHelper::getFilenames(Config::$SongDirectory);
+		$files = FileHelper.getFilenames(Config.$SongDirectory);
 		$songList = $this->buildFileList($files);
 
-		$this->cache->put(Config::SongCacheKey_FileName, serialize($songList));
+		$this->cache->put(Config.SongCacheKey_FileName, serialize($songList));
 
 		return $songList;
 	}
@@ -35,11 +35,11 @@ class SongListCacheManager {
 	 * returns the song list -- tries to fetch from cache, if that fails, rebuilds
 	 */
 	public function Get(){
-		if (!$this->cache->exists(Config::SongCacheKey_FileName)){
+		if (!$this->cache->exists(Config.SongCacheKey_FileName)){
 			return $this->Rebuild();
 		}
 
-		$cachedSongList = $this->cache->get(Config::SongCacheKey_FileName);
+		$cachedSongList = $this->cache->get(Config.SongCacheKey_FileName);
 		return unserialize($cachedSongList);
 	}
 
@@ -56,14 +56,14 @@ class SongListCacheManager {
 
 		$list = new SongListPlus_Pvm();
 
-		foreach ($files as $fname) {
-			$s = preg_replace(Config::FileNamePattern, '$1', $fname);
+		forEach ($files as $fname) {
+			$s = preg_replace(Config.FileNamePattern, '$1', $fname);
 
-			$content = FileHelper::getFile(Config::$SongDirectory . $fname);
-			$parsed = SongHelper::parseSong($content);
+			$content = FileHelper.getFile(Config.$SongDirectory . $fname);
+			$parsed = SongHelper.parseSong($content);
 
 			$song = new SongLinkPlus_Pvm();
-			$song->Uri = Ugs::MakeUri(Actions::Song, $s);
+			$song->Uri = Ugs.MakeUri(Actions.Song, $s);
 			$song->HasInfo = (strlen($parsed->title) + strlen($parsed->artist)) > 0;
 			$song->Title = $this->fixLeadingArticle((strlen($parsed->title) > 0) ? $parsed->title : $this->filenameToTitle($s));
 			$song->Subtitle = $parsed->subtitle;

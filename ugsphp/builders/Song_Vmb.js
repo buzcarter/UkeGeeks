@@ -1,5 +1,4 @@
 const fs = require('fs');
-const serverConfig = require('../configs/server.json');
 const SongHelper = require('../classes/SongHelper');
 const SongViewModel = require('../viewmodels/Song_Vm');
 
@@ -10,7 +9,13 @@ const SongViewModel = require('../viewmodels/Song_Vm');
 function Build(req, res) {
   // Config.SongDirectory;
   const filename = `cpm/${req.params.cpm}.cpm.txt`;
-  const fileContent = fs.readFileSync(filename, { encoding: 'utf8', flag: 'r' });
+  let fileContent;
+  try {
+    fileContent = fs.readFileSync(filename, { encoding: 'utf8', flag: 'r' });
+  } catch (error) {
+    res.send({ error, filename });
+    return;
+  }
 
   const song = SongHelper.parseSong(fileContent);
 
@@ -33,7 +38,16 @@ function Build(req, res) {
     EditorSettingsJson: null, // $this.getSettings()
   });
 
-  res.render('song', viewModel);
+  // Temp SuperKludge: Nunjucks is unable to use class getters, and normal serialization misses function (getters) and
+  // SO solutions seem to have issue with private variables. So... Life is Short!
+  const fixedViewModel = {
+    ...viewModel,
+    PageTitle: viewModel.PageTitle,
+    PoweredBy: viewModel.PoweredBy,
+    StaticsPrefix: viewModel.StaticsPrefix,
+    SupportEmail: viewModel.SupportEmail,
+  };
+  res.render('song', fixedViewModel);
 }
 
 /**
@@ -57,7 +71,7 @@ function MakePageTitle(song, filename) {
     // title = htmlspecialchars(title);
   }
 
-  return `${title || filename} ${serverConfig.PageTitleSuffix}`;
+  return title || filename;
 }
 
 /**

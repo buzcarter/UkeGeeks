@@ -78,7 +78,7 @@ function getMeta(text) {
   // const regEx = RegExes.META;
   // preg_match_all(regEx, text, matches);
   // if (count(matches[2]) > 0) {
-  //   // foreach(matches[2] as m) {
+  //   // forEach(matches[2] as m) {
   //   //   rtn[] = m;
   //   // }
   // }

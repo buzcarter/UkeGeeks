@@ -15,7 +15,7 @@ class Ugs{
 		$this->Bootstrap();
 
 		// Reads query param to pick appropriate Actions
-		$action = isset( $_GET['action'] ) ? Actions::ToEnum( $_GET['action'] ) : Actions::Songbook;
+		$action = isset( $_GET['action'] ) ? Actions.ToEnum( $_GET['action'] ) : Actions.Songbook;
 
 		$user = $this->DoAuthenticate( $action );
 		if ( !$user->IsAllowAccess  ) {
@@ -42,8 +42,8 @@ class Ugs{
 	 * @param [Actions(int)] $action
 	 */
 	private function RenderView( $model, $action ) {
-		header('X-Powered-By: ' . Config::PoweredBy);
-		include_once Config::$AppDirectory . 'views/' . $this->GetViewName( $action );
+		header('X-Powered-By: ' . Config.PoweredBy);
+		include_once Config.$AppDirectory . 'views/' . $this->GetViewName( $action );
 	}
 
 
@@ -71,7 +71,7 @@ class Ugs{
 	 */
 	private function DoAuthenticate( $action ) {
 
-		if (! Config::IsLoginRequired ) {
+		if (! Config.IsLoginRequired ) {
 			$user = new SiteUser();
 			$user->IsAllowAccess = true;
 			return  $user;
@@ -79,31 +79,31 @@ class Ugs{
 
 		$login = new SimpleLogin();
 
-		if ($action == Actions::Logout){
+		if ($action == Actions.Logout){
 			$login->Logout();
-			header('Location: ' . self::MakeUri(Actions::Login));
+			header('Location: ' . self.MakeUri(Actions.Login));
 			return  $login->GetUser();
 		}
 
 		$user = $login->GetUser();
 		if ( !$user->IsAllowAccess ) {
-			$builder = $this->GetBuilder( Actions::Login, $user );
+			$builder = $this->GetBuilder( Actions.Login, $user );
 			$model = $builder->Build($login);
 			$user = $login->GetUser();
 
 			// during form post the builder automatically attempts a login -- let's check whether that succeeded...
 			if ( !$user->IsAllowAccess ) {
-				$this->RenderView( $model, Actions::Login );
+				$this->RenderView( $model, Actions.Login );
 				return  $user;
 			}
 
 			// successful login we redirect:
-			header( 'Location: ' . self::MakeUri( Actions::Songbook ) );
+			header( 'Location: ' . self.MakeUri( Actions.Songbook ) );
 			return  $user;
 		}
-		elseif ($action == Actions::Login){
+		elseif ($action == Actions.Login){
 			// if for some reason visitor is already logged in but attempting to view the Login page, redirect:
-			header( 'Location: ' . self::MakeUri( Actions::Songbook ) );
+			header( 'Location: ' . self.MakeUri( Actions.Songbook ) );
 			return $user;
 		}
 
@@ -122,28 +122,28 @@ class Ugs{
 		$builder = null;
 
 		switch($action){
-			case Actions::Edit:
-			case Actions::Song:
+			case Actions.Edit:
+			case Actions.Song:
 				$builder = new Song_Vmb();
 				break;
-			case Actions::Source:
+			case Actions.Source:
 				$builder = new Source_Vmb();
 				break;
-			case Actions::Reindex:
+			case Actions.Reindex:
 				$builder = new RebuildSongCache_Vmb();
 				break;
-			case Actions::Logout:
-			case Actions::Login:
+			case Actions.Logout:
+			case Actions.Login:
 				$builder = new Login_Vmb();
 				break;
-		case Actions::AjaxNewSong:
+		case Actions.AjaxNewSong:
 			$builder = new Ajax_NewSong_Vmb();
 			break;
-		case Actions::AjaxUpdateSong:
+		case Actions.AjaxUpdateSong:
 			$builder = new Ajax_UpdateSong_Vmb();
 			break;
 			default:
-				$builder = Config::UseDetailedLists
+				$builder = Config.UseDetailedLists
 					? new SongListDetailed_Vmb()
 					: new SongList_Vmb();
 				break;
@@ -171,38 +171,16 @@ class Ugs{
 		include_once $appRoot . '/viewmodels/_base_Vm.php';
 		include_once $appRoot . '/builders/_base_Vmb.php';
 
-		Config::Init();
+		Config.Init();
 
-		foreach (array('classes', 'viewmodels', 'builders') as $directory) {
-			foreach (glob($appRoot . '/' . $directory . '/*.php') as $filename) {
+		forEach (array('classes', 'viewmodels', 'builders') as $directory) {
+			forEach (glob($appRoot . '/' . $directory . '/*.php') as $filename) {
 				include_once $filename;
 			}
 		}
 
 	}
 
-	/**
-	 * builds (relative) URL
-	 *
-	 * @param Actions(enum) $action [description]
-	 * @param string  $param  (optional) extra query param value (right now only "song")
-	 * @return  string
-	 */
-	public static function MakeUri($action, $param = ''){
-		$directory = defined('Config::Subdirectory') ? Config::Subdirectory : '/';
-		$actionName = Actions::ToName($action);
-		$param = trim($param);
-
-		if (!Config::UseModRewrite){
-			$actionParams = strlen($param) > 0 ? '&song=' . $param : '';
-			return $directory . 'music.php?action=' . $actionName . $actionParams;
-		}
-
-		if ($action == Actions::Song ) {
-			$actionName = 'songbook';
-		}
-		return $directory . strtolower($actionName) . '/' . $param;
-	}
 
 	/**
 	 * The rather quirky way to interface with jQuery.ajax with serialize,
@@ -224,15 +202,15 @@ class Ugs{
 	 */
 	private function GetViewName( $action ) {
 		switch($action){
-			case Actions::Song: return Config::UseEditableSong ? 'song-editable.php' : 'song.php';
-			case Actions::Edit: return 'song-editable.php';
-			case Actions::Source: return 'song-source.php';
-			case Actions::Reindex: return 'songs-rebuild-cache.php';
-			case Actions::Logout:
-			case Actions::Login:
+			case Actions.Song: return Config.UseEditableSong ? 'song-editable.php' : 'song.php';
+			case Actions.Edit: return 'song-editable.php';
+			case Actions.Source: return 'song-source.php';
+			case Actions.Reindex: return 'songs-rebuild-cache.php';
+			case Actions.Logout:
+			case Actions.Login:
 				return 'login.php';
 		}
-		return Config::UseDetailedLists ? 'song-list-detailed.php' : 'song-list.php';
+		return Config.UseDetailedLists ? 'song-list-detailed.php' : 'song-list.php';
 	}
 
 }

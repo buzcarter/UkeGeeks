@@ -1,25 +1,36 @@
-// const serverConfig = require('../configs/server.json');
+const serverConfig = require('../configs/server.json');
 
+/* eslint-disable class-methods-use-this */
 /**
  * base class for all View Models with visible Views (as opposed to AJAX etc)
  * @class _base_Vm
  */
 class BaseViewModel {
-  // constructor() {
-  //   this.StaticsPrefix = serverConfig.StaticsPrefix || '/';
-  // }
+  #pageTitle = '';
 
-  // PoweredBy = serverConfig.PoweredBy;
+  get PageTitle() {
+    return `${this.#pageTitle} ${serverConfig.meta.PageTitleSuffix || ''}`;
+  }
 
-  PageTitle = '';
-
-  // SupportEmail = serverConfig.SupportEmail;
+  set PageTitle(value) {
+    this.#pageTitle = value;
+  }
 
   IsJson = false;
 
+  get PoweredBy() {
+    return serverConfig.meta.PoweredBy || '';
+  }
+
   SiteUser = null;
 
-  // StaticsPrefix = '/';
+  get StaticsPrefix() {
+    return serverConfig.meta.StaticsPrefix || '/';
+  }
+
+  get SupportEmail() {
+    return serverConfig.meta.SupportEmail || '';
+  }
 }
 
 module.exports = BaseViewModel;

@@ -66,7 +66,7 @@ function MakeRowHtml($song){
 		<label for="quickSearch">Quick search:</label> <input class="quickSearch" id="quickSearch" autocomplete="off" type="text" /></p>
 	<ol class="songList">
 		<?php
-		foreach($model->SongList as $song){
+		forEach($model->SongList as $song){
 			echo('<li>' . MakeRowHtml($song) . '</li>');
 		}
 		?>

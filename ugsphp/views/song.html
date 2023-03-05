@@ -52,10 +52,7 @@
   <script>
     {{ state | safe }} // this is where the Fandango object gets inserted into the window
   </script>
-  {% if !isDev %}
-    <script src="{{ StaticsPrefix }}/js/ukeGeeks.scriptasaurus.min.js"></script>
-    <script src="{{ StaticsPrefix }}/js/startup.js"></script>
-  {% else %}
+
     <!-- core -->
     <script src="/js/fdRequire/fd-require.js"></script>
     <script src="/js/fdRequire/fd-require-audit.js"></script>
@@ -111,6 +108,6 @@
       run();
     });
     </script>
-  {% endif %}
+
 </body>
 </html>

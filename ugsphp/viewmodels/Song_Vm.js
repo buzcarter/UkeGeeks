@@ -38,7 +38,7 @@ class SongViewModel extends BaseViewModel {
   constructor() {
     super();
     this.UpdateAjaxUri = '';
-    // $this->UpdateAjaxUri = Ugs::MakeUri( Actions::AjaxUpdateSong);
+    // $this->UpdateAjaxUri = Ugs.MakeUri( Actions.AjaxUpdateSong);
   }
 }
 

@@ -31,7 +31,7 @@ class SongListPlus_Pvm {
 		$titlesList = array();
 		$titleKey = '';
 
-		foreach ($this->SongList as $song) {
+		forEach ($this->SongList as $song) {
 			$titleKey = scrub($song->Title);
 			if (!isset($temp[$titleKey])){
 				$titleKey .= ' _' . $tieBreaker . '_ugs87!';
@@ -44,7 +44,7 @@ class SongListPlus_Pvm {
 		sort($titlesList);
 
 		$this->SongList = array();
-		foreach ($titlesList as $key) {
+		forEach ($titlesList as $key) {
 			$this->SongList[] = $songsListRekeyed[$key];
 		}
 		return $this->SongList;
