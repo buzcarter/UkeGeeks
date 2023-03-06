@@ -20,7 +20,7 @@ class SongListPlus_Pvm {
 	 * @method Sort
 	 * @return (SongLinkPlus_Pvm array)
 	 */
-	public function Sort() {
+	Sort() {
 
 		function scrub($val){
 			return trim(preg_replace('/\s+/', ' ', preg_replace('/\W/', ' ', strtolower($val))));
@@ -31,8 +31,8 @@ class SongListPlus_Pvm {
 		$titlesList = array();
 		$titleKey = '';
 
-		forEach ($this->SongList as $song) {
-			$titleKey = scrub($song->Title);
+		forEach ($this.SongList as $song) {
+			$titleKey = scrub($song.Title);
 			if (!isset($temp[$titleKey])){
 				$titleKey .= ' _' . $tieBreaker . '_ugs87!';
 				$tieBreaker++;
@@ -43,11 +43,11 @@ class SongListPlus_Pvm {
 
 		sort($titlesList);
 
-		$this->SongList = array();
+		$this.SongList = array();
 		forEach ($titlesList as $key) {
-			$this->SongList[] = $songsListRekeyed[$key];
+			$this.SongList[] = $songsListRekeyed[$key];
 		}
-		return $this->SongList;
+		return $this.SongList;
 	}
 
 }

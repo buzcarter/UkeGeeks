@@ -6,27 +6,27 @@
  */
 class SongListCacheManager {
 
-	private $cache;
+	#cache;
 
 	// -----------------------------------------
 	// PUBLIC METHODS
 	// -----------------------------------------
-	function SongListCacheManager(){
-		$this->cache = new SimpleCache();
-		$this->cache->setCacheDir(Config.$AppDirectory . 'cache/');
+	SongListCacheManager(){
+		$this.cache = new SimpleCache();
+		$this.cache.setCacheDir(Config.$AppDirectory + 'cache/');
 	}
 
 	/**
 	 * Rebuilds the cache file by reading & parsing all ChordPro song files.
 	 * @return array song list
 	 */
-	public function Rebuild() {
+	Rebuild() {
 		// large song collections (1,000's of songs) might timeout, set max number of seconds for this task
 		set_time_limit(45);
 		$files = FileHelper.getFilenames(Config.$SongDirectory);
-		$songList = $this->buildFileList($files);
+		$songList = $this.buildFileList($files);
 
-		$this->cache->put(Config.SongCacheKey_FileName, serialize($songList));
+		$this.cache.put(Config.SongCacheKey_FileName, serialize($songList));
 
 		return $songList;
 	}
@@ -34,12 +34,12 @@ class SongListCacheManager {
 	/**
 	 * returns the song list -- tries to fetch from cache, if that fails, rebuilds
 	 */
-	public function Get(){
-		if (!$this->cache->exists(Config.SongCacheKey_FileName)){
-			return $this->Rebuild();
+	Get(){
+		if (!$this.cache.exists(Config.SongCacheKey_FileName)){
+			return $this.Rebuild();
 		}
 
-		$cachedSongList = $this->cache->get(Config.SongCacheKey_FileName);
+		$cachedSongList = $this.cache.get(Config.SongCacheKey_FileName);
 		return unserialize($cachedSongList);
 	}
 
@@ -52,7 +52,7 @@ class SongListCacheManager {
 	 * @method buildFileList
 	 * @return (song array)
 	 */
-	private function buildFileList($files) {
+	#buildFileList($files) {
 
 		$list = new SongListPlus_Pvm();
 
@@ -63,16 +63,16 @@ class SongListCacheManager {
 			$parsed = SongHelper.parseSong($content);
 
 			$song = new SongLinkPlus_Pvm();
-			$song->Uri = Ugs.MakeUri(Actions.Song, $s);
-			$song->HasInfo = (strlen($parsed->title) + strlen($parsed->artist)) > 0;
-			$song->Title = $this->fixLeadingArticle((strlen($parsed->title) > 0) ? $parsed->title : $this->filenameToTitle($s));
-			$song->Subtitle = $parsed->subtitle;
-			$song->Album = $parsed->album;
-			$song->Artist = $parsed->artist;
+			$song.Uri = Ugs.MakeUri(Actions.Song, $s);
+			$song.HasInfo = (strlen($parsed.title) + strlen($parsed.artist)) > 0;
+			$song.Title = $this.fixLeadingArticle((strlen($parsed.title) > 0) ? $parsed.title : $this.filenameToTitle($s));
+			$song.Subtitle = $parsed.subtitle;
+			$song.Album = $parsed.album;
+			$song.Artist = $parsed.artist;
 
-			$list->SongList[] = $song;
+			$list.SongList[] = $song;
 		}
-		return $list->Sort();
+		return $list.Sort();
 	}
 
 	/**
@@ -81,7 +81,7 @@ class SongListCacheManager {
 	 * @param string $filename
 	 * @return string
 	 */
-	private function filenameToTitle($filename) {
+	#filenameToTitle($filename) {
 		return trim(ucwords(str_replace('-', ' ', str_replace('_', ' ', $filename))));
 	}
 
@@ -91,7 +91,7 @@ class SongListCacheManager {
 	 * @param string $title
 	 * @return string
 	 */
-	private function fixLeadingArticle($title) {
+	#fixLeadingArticle($title) {
 		$r = '/^(the|a|an) (.*)$/i';
 		if (preg_match($r, $title)){
 			$title = preg_replace($r, '$2, $1', $title);

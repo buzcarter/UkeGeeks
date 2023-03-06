@@ -1,9 +1,13 @@
+class JsonResponseViewModel {
+  HasErrors = true;
 
+  Message = '';
 
-class JsonResponse_Vm {
-	public $HasErrors = true;
-	public $Message = '';
-	public $Id = '';
-	public $ContinueUri = '';
-	public $IsJson = true;
+  Id = '';
+
+  ContinueUri = '';
+
+  IsJson = true;
 }
+
+module.exports = JsonResponseViewModel;

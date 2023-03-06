@@ -28,7 +28,7 @@ class FileWriter {
 	 * @param string  $extenstion   (optional) file's extension, please include the dot!
 	 * @return string final file name
 	 */
-	private function UniqueFilename( $directory, $baseFilename, $extenstion = '.txt' ) {
+	#UniqueFilename( $directory, $baseFilename, $extenstion = '.txt' ) {
 		try {
 		$filename = '';
 		while ( true ) {
@@ -53,7 +53,7 @@ class FileWriter {
 	 * @param integer $maxLength (optional) maximum lenght (might be off by two characters as trimming leading _ happens last)
 	 * @return string
 	 */
-	public function ScrubForFilename( $value, $maxLength = 35 ) {
+	ScrubForFilename( $value, $maxLength = 35 ) {
 		$value = str_replace( '\'', '', trim( strtolower( $value ) ) );
 		if ( strlen( $value ) < 1 ) {
 			return '';
@@ -73,24 +73,24 @@ class FileWriter {
 	 * @param [string] $artist
 	 * @return string
 	 */
-	public function MakeFile( $title, $artist ) {
-		$f = $this->ScrubForFilename( $title, self.MAX_TITLE_LENGTH );
+	MakeFile( $title, $artist ) {
+		$f = $this.ScrubForFilename( $title, self.MAX_TITLE_LENGTH );
 		if ( strlen( $f ) < 1 ) {
 			$f = 'untitled';
 		}
 
-		$a = $this->ScrubForFilename( $artist, self.MAX_ARTIST_NAME );
+		$a = $this.ScrubForFilename( $artist, self.MAX_ARTIST_NAME );
 		if ( strlen( $a ) > 0 ) {
 			$f .= '.' . $a;
 		}
 
-		$content = $this->MakeChordProStub( $title, $artist );
+		$content = $this.MakeChordProStub( $title, $artist );
 
 		try {
 			if (!is_writable(Config.$SongDirectory)){
 				return '';
 			}
-		$filename = $this->UniqueFilename( Config.$SongDirectory, $f, Config.FileExtension );
+		$filename = $this.UniqueFilename( Config.$SongDirectory, $f, Config.FileExtension );
 			if (strlen($filename) < 1){
 				return '';
 			}
@@ -111,7 +111,7 @@ class FileWriter {
 	 * @param [string] $artist song's artist (optional)
 	 * @return string
 	 */
-	private function MakeChordProStub( $title = '', $artist = '' ) {
+	#MakeChordProStub( $title = '', $artist = '' ) {
 		$title = trim( $title );
 		$artist = trim( $artist );
 

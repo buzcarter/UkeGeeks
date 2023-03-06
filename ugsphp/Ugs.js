@@ -11,27 +11,27 @@ class Ugs{
 	/**
 	 * Boostraps and runs the entire danged system!
 	 */
-	function __construct() {
-		$this->Bootstrap();
+	 constructor() {
+		$this.Bootstrap();
 
 		// Reads query param to pick appropriate Actions
 		$action = isset( $_GET['action'] ) ? Actions.ToEnum( $_GET['action'] ) : Actions.Songbook;
 
-		$user = $this->DoAuthenticate( $action );
-		if ( !$user->IsAllowAccess  ) {
+		$user = $this.DoAuthenticate( $action );
+		if ( !$user.IsAllowAccess  ) {
 				return;
 			}
 
-		$builder = $this->GetBuilder( $action, $user );
-		$model = $builder->Build();
+		$builder = $this.GetBuilder( $action, $user );
+		$model = $builder.Build();
 
 		// all done, time to render
-		if ( $model->IsJson ) {
-			$this->RenderJson( $model );
+		if ( $model.IsJson ) {
+			$this.RenderJson( $model );
 		}
 		else {
-			$model->SiteUser = $user;
-			$this->RenderView( $model, $action );
+			$model.SiteUser = $user;
+			$this.RenderView( $model, $action );
 		}
 	}
 
@@ -41,9 +41,9 @@ class Ugs{
 	 * @param [ViewModel] $model  appropriate view model entity
 	 * @param [Actions(int)] $action
 	 */
-	private function RenderView( $model, $action ) {
+	#RenderView( $model, $action ) {
 		header('X-Powered-By: ' . Config.PoweredBy);
-		include_once Config.$AppDirectory . 'views/' . $this->GetViewName( $action );
+		include_once Config.$AppDirectory . 'views/' . $this.GetViewName( $action );
 	}
 
 
@@ -52,12 +52,12 @@ class Ugs{
 	 *
 	 * @param unknown $model
 	 */
-	private function RenderJson( $model ) {
+	#RenderJson( $model ) {
 		header( 'Content-Type: application/json' );
-		if ( isset( $model->HasErrors ) && $model->HasErrors ) {
+		if ( isset( $model.HasErrors ) && $model.HasErrors ) {
 			header( 'HTTP/1.1 500' );
 		}
-		unset($model->IsJson);
+		unset($model.IsJson);
 		echo json_encode( $model );
 	}
 
@@ -69,31 +69,31 @@ class Ugs{
 	 * @param Actions(enum) $action
 	 * @return SiteUser
 	 */
-	private function DoAuthenticate( $action ) {
+	#DoAuthenticate( $action ) {
 
 		if (! Config.IsLoginRequired ) {
 			$user = new SiteUser();
-			$user->IsAllowAccess = true;
+			$user.IsAllowAccess = true;
 			return  $user;
 		}
 
 		$login = new SimpleLogin();
 
 		if ($action == Actions.Logout){
-			$login->Logout();
+			$login.Logout();
 			header('Location: ' . self.MakeUri(Actions.Login));
-			return  $login->GetUser();
+			return  $login.GetUser();
 		}
 
-		$user = $login->GetUser();
-		if ( !$user->IsAllowAccess ) {
-			$builder = $this->GetBuilder( Actions.Login, $user );
-			$model = $builder->Build($login);
-			$user = $login->GetUser();
+		$user = $login.GetUser();
+		if ( !$user.IsAllowAccess ) {
+			$builder = $this.GetBuilder( Actions.Login, $user );
+			$model = $builder.Build($login);
+			$user = $login.GetUser();
 
 			// during form post the builder automatically attempts a login -- let's check whether that succeeded...
-			if ( !$user->IsAllowAccess ) {
-				$this->RenderView( $model, Actions.Login );
+			if ( !$user.IsAllowAccess ) {
+				$this.RenderView( $model, Actions.Login );
 				return  $user;
 			}
 
@@ -107,7 +107,7 @@ class Ugs{
 			return $user;
 		}
 
-		// $user->IsAllowAccess = true;
+		// $user.IsAllowAccess = true;
 		return $user;
 	}
 
@@ -118,7 +118,7 @@ class Ugs{
 	 * @param SiteUser $siteUser current visitor
 	 * @return ViewModelBuilder-Object (Instantiated class)
 	 */
-	private function GetBuilder( $action, $siteUser ) {
+	#GetBuilder( $action, $siteUser ) {
 		$builder = null;
 
 		switch($action){
@@ -149,7 +149,7 @@ class Ugs{
 				break;
 		}
 
-		$builder->SiteUser = $siteUser;
+		$builder.SiteUser = $siteUser;
 		return $builder;
 	}
 
@@ -161,7 +161,7 @@ class Ugs{
 	 *
 	 * @private
 	 */
-	private function Bootstrap() {
+	#Bootstrap() {
 		// let's get Config setup
 		$appRoot = dirname(__FILE__);
 		include_once $appRoot . '/Config.php';
@@ -200,7 +200,7 @@ class Ugs{
 	 * @param Actions(int-enum) $action
 	 * @return  string
 	 */
-	private function GetViewName( $action ) {
+	#GetViewName( $action ) {
 		switch($action){
 			case Actions.Song: return Config.UseEditableSong ? 'song-editable.php' : 'song.php';
 			case Actions.Edit: return 'song-editable.php';

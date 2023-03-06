@@ -48,7 +48,7 @@ class FileHelper {
 	public static function getFilenames($dir) {
 		opendir($dir);
 		if (!is_dir($dir)) {
-			var_dump('failed to open -> ' . $dir);
+			var_dump('failed to open . ' . $dir);
 			return array();
 		}
 

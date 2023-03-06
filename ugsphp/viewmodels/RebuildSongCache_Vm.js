@@ -7,6 +7,6 @@ class RebuildSongCache_Vm extends BaseViewModel {
 
 	function __construct(){
 		parent.__construct();
-		$this->SongbooktUri = Ugs.MakeUri(Actions.Songbook);
+		$this.SongbooktUri = Ugs.MakeUri(Actions.Songbook);
 	}
 }
