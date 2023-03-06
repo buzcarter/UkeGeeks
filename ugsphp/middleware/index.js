@@ -1,5 +1,6 @@
 /* eslint-disable global-require */
 module.exports = {
   layout: require('./layout'),
-  logger: require('./logger'),
+  poweredBy: require('./poweredBy'),
+  requestLogger: require('./requestLogger'),
 };

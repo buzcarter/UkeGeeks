@@ -25,7 +25,7 @@ class BaseViewModel {
   SiteUser = null;
 
   get StaticsPrefix() {
-    return serverConfig.meta.StaticsPrefix || '/';
+    return serverConfig.meta.StaticsPrefix || '';
   }
 
   get SupportEmail() {

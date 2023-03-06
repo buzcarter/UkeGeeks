@@ -1,6 +1,6 @@
 const { join } = require('path');
 const express = require('express');
-const requestLogger = require('./middleware/requestLogger');
+const middleware = require('./middleware');
 const routes = require('./configs/routes.json');
 const router = require('./startUp/router');
 const nunjucks = require('nunjucks');
@@ -25,7 +25,8 @@ function main() {
   app.use(express.static(join(__dirname, '../assets')));
   app.use(express.static(join(__dirname, '../src')));
 
-  app.use(requestLogger);
+  app.use(middleware.requestLogger);
+  app.use(middleware.poweredBy);
 
   router.loadRoutes(app, routes);
 
