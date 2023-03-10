@@ -31,8 +31,8 @@ app.set('state namespace', ResponseExposePaths.ROOT);
 // add global state values
 app.locals.config = {
   meta: {
-    titleSuffix: '| Fandango',
-    ogDescription: 'Fandango is where we toil',
+    titleSuffix: '| UkeGeeks',
+    ogDescription: 'UkeGeeks is where we toil',
   },
 };
 

@@ -13,11 +13,6 @@ function MakeUri(action, param = '') {
   let actionName = Actions.ToName(action);
   param = param.trim();
 
-  // if (!Config.UseModRewrite) {
-  //   const actionParams = param.length ? `&song=${param}` : '';
-  //   return `${directory}}'music.php?action='}${actionName}${actionParams}`;
-  // }
-
   if (action === Actions.Song) {
     actionName = 'songbook';
   }

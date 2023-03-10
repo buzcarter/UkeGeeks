@@ -95,11 +95,10 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
     }
     // Chord Definitions
     tmp = getInfo(songDom, blockTypeEnum.ChordDefinition);
-    if (tmp.length > 0) {
-      for (const i in tmp) {
-        song.defs.push(chordImport.runLine(`{define: ${tmp[i]}}`));
-      }
-    }
+
+    tmp.forEach((t) => {
+      song.defs.push(chordImport.runLine(`{define: ${t}}`));
+    });
     return song;
   }
 

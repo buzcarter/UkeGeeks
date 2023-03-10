@@ -8,6 +8,6 @@
   },
 
   "ResponseExposePaths": {
-    "ROOT": "Fandango.context"
+    "ROOT": "UkeGeeks.context"
   }
 }
