@@ -1,6 +1,7 @@
 # **/*.gitignore
 
 # Our Gulp Build Files
+dist/
 node_modules/
 
 # Files from difference tools

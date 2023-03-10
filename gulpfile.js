@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
-const gulp = require('gulp');
-const rename = require('gulp-rename');
 const concat = require('gulp-concat');
-const uglify = require('gulp-uglify');
-const minifyCSS = require('gulp-minify-css');
+const gulp = require('gulp');
 const less = require('gulp-less');
+const minifyCSS = require('gulp-minify-css');
+const rename = require('gulp-rename');
+const ts = require('gulp-typescript');
+const uglify = require('gulp-uglify');
 
 const SRC_DIR_CORE = './src/js/scriptasaurus/';
 const SRC_DIR_EDITOR = './src/js/editor/';
@@ -101,10 +102,10 @@ function stylesTask() {
 
   if (!config.styles) {
     console.log('No styles found in the config');
-    return null;
+    return gulp;
   }
 
-  return gulp.src(config.styles.files)
+  gulp.src(config.styles.files)
     .pipe(rename((path) => {
       path.extname = '.merged.css';
     }))
@@ -116,6 +117,7 @@ function stylesTask() {
     }))
     .pipe(minifyCSS())
     .pipe(gulp.dest(config.styles.outputDir));
+  return gulp;
 }
 
 function jsTask() {
@@ -123,7 +125,7 @@ function jsTask() {
 
   if (!config.scripts) {
     console.log('No scripts defined in the config');
-    return;
+    return gulp;
   }
 
   config.scripts.forEach((task) => {
@@ -139,6 +141,8 @@ function jsTask() {
       .pipe(uglify())
       .pipe(gulp.dest(task.outputDir));
   });
+
+  return gulp;
 }
 
 function watchTask() {
@@ -153,10 +157,28 @@ function watchTask() {
       gulp.watch(task.files, ['build-scripts']);
     });
   }
+  return gulp;
 }
 
-gulp
-  .task('build-styles', stylesTask)
-  .task('build-scripts', jsTask)
-  .task('watch', watchTask)
-  .task('default', ['build-styles', 'build-scripts', 'watch']);
+// gulp
+//   .task('build-styles', stylesTask)
+//   .task('build-scripts', jsTask)
+//   .task('watch', watchTask)
+//   .task('default', ['build-styles', 'build-scripts', 'watch']);
+
+module.exports = {
+  'build-styles': stylesTask,
+  'build-scripts': jsTask,
+  build() {
+    gulp.parallel(stylesTask, jsTask);
+  },
+  watch: watchTask,
+  ts() {
+    const tsProject = ts.createProject('tsconfig.json');
+    return tsProject.src()
+      .pipe(tsProject())
+      .js
+      .pipe(gulp.dest('./dist/js/scriptasaurus'));
+  },
+  // default: ['build-styles', 'build-scripts', 'watch'],
+};

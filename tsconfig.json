@@ -1,0 +1,11 @@
+{
+  "include": [
+    "src/js/scriptasaurus/**/*"
+  ],
+  "compilerOptions": {
+    "outDir": "./dist/js/scriptasaurus",
+    "allowJs": true,
+    "noImplicitAny": true,
+    "target": "es6"
+  }
+}
