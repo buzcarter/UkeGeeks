@@ -20,12 +20,13 @@ fdRequire.define('scriptasaurus/ukeGeeks.definitions', (require, module) => {
 
   /**
    * Enum (simple JSON name/value pairs) defining instrument tunings (offsets from standard Soprano Ukulele)
-   * @property instrument
    * @type JSON
    */
   const instrument = {
-    sopranoUke: 0, // GCEA
-    baritoneUke: 5, // DGBA -- Baritone's "A" fingering is the Soprano's "D"
+    /** GCEA */
+    sopranoUke: 0,
+    /** DGBA  -- Baritone's "A" fingering is the Soprano's "D" */
+    baritoneUke: 5,
   };
 
   /* PUBLIC METHODS
@@ -78,19 +79,18 @@ fdRequire.define('scriptasaurus/ukeGeeks.definitions', (require, module) => {
     // user has retuned the chords, need to find chord name "as-is",
     // but get the fingering from the mapping
     const name = getAlias(chordName);
-    for (const i in map) {
-      if (name == map[i].original) {
-        const c = underscoreGet(map[i].transposed);
-        if (c) {
-          const chrd = new ugsData.expandedChord(chordName);
-          chrd.dots = c.dots;
-          chrd.muted = c.muted;
-          return chrd;
-        }
-      }
-    }
+    const result = map
+      .filter((t) => name == t.original)
+      .map((t) => underscoreGet(t.transposed))
+      .filter(Boolean)
+      .reduce((acc, c) => Object.assign(
+        new ugsData.expandedChord(chordName),
+        {
+          dots: c.dots,
+          muted: c.muted,
+        }));
 
-    return null;
+    return result || null;
   }
 
   // local substitions (replacements for identical chord shapes)

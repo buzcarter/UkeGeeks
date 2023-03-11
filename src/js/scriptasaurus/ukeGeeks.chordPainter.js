@@ -4,18 +4,8 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordPainter', (require, module) => {
   const chordBrush = require('scriptasaurus/ukeGeeks.chordBrush');
 
   /**
-   * ukeGeeks.chordBrush object handle
-   * @property _brush
-   * @type ukeGeeks.chordBrush instance handle
-   * @private
-   */
-  // let brush = null;
-
-  /**
    * keep an array of missing chords (strings)
-   * @property _errors
-   * @type array
-   * @private
+   * @type {[string]}
    */
   let errors = [];
 
@@ -24,27 +14,18 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordPainter', (require, module) => {
   /**
    * If ignoreCommonChords option is true then this will contain list of
    * matched chords: ones defined in the ignore list that were also found in the song
-   * @property _ignoreMatchList
-   * @type {Array}
-   * @private
+   * @type {[string]}
    */
   let ignoreMatchList = [];
 
-  /**
-   * Ignore "tacet" or "no chord" chords
-   * @property _tacet
-   * @type {RegExp}
-   * @private
-   */
   const regExes = {
+    /** Ignore "tacet" or "no chord" chords */
     tacet: /^(n.?\/?c.?|tacet)$/i,
   };
 
   /**
    * Again this is a constructor replacement
-   * @method init
    * @param htmlHandles {ukeGeeks.data.htmlHandles} DOM Element object
-   * @return {void}
    */
   function init(htmlHandles) {
     chordBrush.init();
@@ -52,25 +33,17 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordPainter', (require, module) => {
   }
 
   /**
-     * Checks whether speicified chord (name) is on the ignore list.
-   * @method ignoreChord
-     * @param  {string} chord Chord name
-     * @return {boolean}  return TRUE if "chord" is on ignore list.
-     */
+   * Checks whether speicified chord (name) is on the ignore list.
+   * @param  {string} chord Chord name
+   * @return {boolean}  return TRUE if "chord" is on ignore list.
+   */
   function ignoreChord(chord) {
-    for (let i = 0; i < settings.commonChords.length; i++) {
-      if (chord == settings.commonChords[i]) {
-        return true;
-      }
-    }
-    return false;
+    return settings.commonChords.includes(chord);
   }
 
   /**
    * Plots the passed in chords (array of ) by adding canvas elements inside passed DOM element.
-   * @method show
    * @param chords {array<expandedChord>} Array of chord objects to be plotted
-   * @return {void}
    */
   function show(chords) {
     handles.diagrams.innerHTML = '';
@@ -100,19 +73,18 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordPainter', (require, module) => {
     }
 
     if (ignoreMatchList.length > 0) {
-      const para = document.createElement('p');
-      para.className = 'ugsIgnoredChords';
-      para.innerHTML = `Also uses: ${ignoreMatchList.sort().join(', ')}`;
+      const para = Object.assign(document.createElement('p'), {
+        className: 'ugsIgnoredChords',
+        innerHTML: `Also uses: ${ignoreMatchList.sort().join(', ')}`,
+      });
       handles.diagrams.appendChild(para);
     }
   }
 
   /**
-   * Plots chords "inline" with the lyrics. Searches for &lt;code data-chordName=&quot;Am7&quot;&gt;&lt;/code&gt;.
+   * Plots chords "inline" with the lyrics. Searches for `<code data-chordName="Am7"></code>;`.
    * When found adds canvas element and draws chord named in data-chordName attribute
-   * @method showInline
-   * @param chords {array<expandedChord>} Array of chord objects to be plotted
-   * @return {void}
+   * @param chords {[expandedChord]} Array of chord objects to be plotted
    */
   function showInline(chords) {
     const e = handles.text.getElementsByTagName('code');
@@ -136,8 +108,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordPainter', (require, module) => {
 
   /**
    * returns array of unknown chords
-   * @method getErrors
-   * @return {array}
    */
   function getErrors() {
     return errors;
@@ -145,8 +115,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordPainter', (require, module) => {
 
   /**
    * List of chords excluded from the master chord diagrams
-   * @method getIgnoredChords
-   * @return {array} array of strings
    */
   function getIgnoredChords() {
     return ignoreMatchList;

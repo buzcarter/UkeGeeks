@@ -189,61 +189,73 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
   function doExport(song) {
     const nl = '\n';
     let html = '';
-    for (let i = 0; i < song.length; i++) {
+    let nextType;
+    song.forEach((songBlock, i) => {
+      const { type } = songBlock;
       /*
-      if (song[i].type == _blockTypeEnum.Title){
-        html += '<h1>' + song[i].lines[0] + '</h1>' + nl;
+      if (type == _blockTypeEnum.Title){
+        html += '<h1>' + songBlock.lines[0] + '</h1>' + nl;
       }
-      else if (song[i].type == _blockTypeEnum.Subtitle){
-        html += '<h2>' + song[i].lines[0] + '</h2>' + nl;
+      else if (type == _blockTypeEnum.Subtitle){
+        html += '<h2>' + songBlock.lines[0] + '</h2>' + nl;
       }
-      else if (song[i].type == _blockTypeEnum.Album){
-        html += '<h3 class="ugsAlbum">' + song[i].lines[0] + '</h3>' + nl;
+      else if (type == _blockTypeEnum.Album){
+        html += '<h3 class="ugsAlbum">' + songBlock.lines[0] + '</h3>' + nl;
       }
-      else if (song[i].type == _blockTypeEnum.UkeGeeksMeta){
-        html += '<h3>' + song[i].lines[0] + '</h3>' + nl;
+      else if (type == _blockTypeEnum.UkeGeeksMeta){
+        html += '<h3>' + songBlock.lines[0] + '</h3>' + nl;
       }
       else
       */
-      if (song[i].type == blockTypeEnum.Comment) {
-        html += `<h6 class="${classNames.Comment}">${song[i].lines[0]}</h6>${nl}`;
-      } else if (song[i].type == blockTypeEnum.NewPage) {
-        html += `<hr class="${classNames.NewPage}" />${nl}`;
-      } else if ((song[i].type == blockTypeEnum.ChordText) || (song[i].type == blockTypeEnum.PlainText) || (song[i].type == blockTypeEnum.ChordOnlyText)) {
-        // TODO: beware undefined's!!!
-        // Repack the text, only open/close <pre> tags when type changes
-        // problem: exacerbates WebKit browsers' first chord position bug.
-        if (song[i].lines[0].length < 1) {
-          // prevent empty blocks (usually caused by comments mixed in header tags)
-          continue;
+      switch (type) {
+        case blockTypeEnum.Comment:
+          html += `<h6 class="${classNames.Comment}">${songBlock.lines[0]}</h6>${nl}`;
+          break;
+        case blockTypeEnum.NewPage:
+          html += `<hr class="${classNames.NewPage}" />${nl}`;
+          break;
+        case blockTypeEnum.ChordText:
+        case blockTypeEnum.PlainText:
+        case blockTypeEnum.ChordOnlyText: {
+          // TODO: beware undefined's!!!
+          // Repack the text, only open/close <pre> tags when type changes
+          // problem: exacerbates WebKit browsers' first chord position bug.
+          if (songBlock.lines[0].length < 1) {
+            // prevent empty blocks (usually caused by comments mixed in header tags)
+            return;
+          }
+          let myClass = (type == blockTypeEnum.PlainText) ? classNames.PrePlain : classNames.PreChords;
+          if (type == blockTypeEnum.ChordOnlyText) {
+            myClass += ` ${classNames.NoLyrics}`;
+          }
+          const myType = type;
+          const lastType = ((i - 1) >= 0) ? song[i - 1].type : blockTypeEnum.Undefined;
+          nextType = ((i + 1) < song.length) ? nextType = song[i + 1].type : blockTypeEnum.Undefined;
+          html += (lastType != myType) ? (`<pre class="${myClass}">`) : nl;
+          html += songBlock.lines[0];
+          html += (nextType != myType) ? (`</pre>${nl}`) : '';
         }
-        let myClass = (song[i].type == blockTypeEnum.PlainText) ? classNames.PrePlain : classNames.PreChords;
-        if (song[i].type == blockTypeEnum.ChordOnlyText) {
-          myClass += ` ${classNames.NoLyrics}`;
-        }
-        const myType = song[i].type;
-        const lastType = ((i - 1) >= 0) ? song[i - 1].type : blockTypeEnum.Undefined;
-        var nextType = ((i + 1) < song.length) ? nextType = song[i + 1].type : blockTypeEnum.Undefined;
-        html += (lastType != myType) ? (`<pre class="${myClass}">`) : nl;
-        html += song[i].lines[0];
-        html += (nextType != myType) ? (`</pre>${nl}`) : '';
-      } else if (song[i].type == blockTypeEnum.ChorusBlock) {
-        html += `<div class="${classNames.Chorus}">${nl}`;
-        html += doExport(song[i].lines);
-        html += `</div>${nl}`;
-      } else if (song[i].type == blockTypeEnum.TabBlock) {
-        html += `<pre class="${classNames.Tabs}">`;
-        for (const j in song[i].lines) {
-          html += song[i].lines[j] + nl;
-        }
-        html += `</pre>${nl}`;
-      } else if (song[i].type == blockTypeEnum.TextBlock) {
-        html += doExport(song[i].lines);
-      } else if (song[i].type == blockTypeEnum.ColumnBreak) {
-        html += `</div><div class="${classNames.Column}">`;
+          break;
+        case blockTypeEnum.ChorusBlock:
+          html += `<div class="${classNames.Chorus}">${nl}`;
+          html += doExport(songBlock.lines);
+          html += `</div>${nl}`;
+          break;
+        case blockTypeEnum.TabBlock:
+          html += `<pre class="${classNames.Tabs}">`;
+          songBlock.lines.forEach((line) => {
+            html += line + nl;
+          });
+          html += `</pre>${nl}`;
+          break;
+        case blockTypeEnum.TextBlock:
+          html += doExport(songBlock.lines);
+          break;
+        case blockTypeEnum.ColumnBreak:
+          html += `</div><div class="${classNames.Column}">`;
+          break;
       }
-      // else {}
-    }
+    });
     return html;
   }
 
@@ -253,14 +265,17 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
    * @private
    * @param song {songNodeArray}
    * @return {void}
-   */
+  */
+  // eslint-disable-next-line no-unused-vars
   function echo(song) {
-    for (const i in song) {
-      console.log(`>> ${i}. ${song[i].type} node, ${song[i].lines.length} lines`);
-      for (const j in song[i].lines) {
-        console.log(song[i].lines[j]);
-      }
-    }
+    song.forEach((songBlock, i) => {
+      // eslint-disable-next-line no-console
+      console.log(`>> ${i}. ${songBlock.type} node, ${songBlock.lines.length} lines`);
+      songBlock.lines.forEach((line) => {
+        // eslint-disable-next-line no-console
+        console.log(line);
+      });
+    });
   }
 
   /**
@@ -271,109 +286,111 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
    * @return {songNodeArray}
    */
   function domParse(text) {
-    const lines = text.split('\n');
     const song = [];
-    let tmpBlk = null;
-    let isMarker; // block marker
-    for (const i in lines) {
-      // strip comments
-      if ((lines[i].length > 0) && (lines[i][0] == '#')) {
-        continue;
-      }
-      isMarker = regExes.blocks.test(lines[i]);
-      if (isMarker || tmpBlk === null) {
-        // save last block, start new one...
-        if (tmpBlk !== null) {
-          song.push(tmpBlk);
+    let block = null;
+    text.split('\n')
+      .filter((line) => line[0] !== '#')
+      .forEach((line) => {
+        const isMarker = regExes.blocks.test(line);
+        if (isMarker || block === null) {
+          // save last block, start new one...
+          if (block !== null) {
+            song.push(block);
+          }
+          block = {
+            type: getBlockType(line),
+            lines: [],
+          };
+          if (!isMarker) {
+            // Don't miss that first line!
+            block.lines.push(line);
+          }
+        } else {
+          const s = toolsLite.trim(line);
+          if (s.length > 0) {
+            block.lines.push(s);
+          }
         }
-        tmpBlk = {
-          type: getBlockType(lines[i]),
-          lines: [],
-        };
-        if (!isMarker) {
-          // Don't miss that first line!
-          tmpBlk.lines.push(lines[i]);
-        }
-      } else {
-        const s = toolsLite.trim(lines[i]);
-        if (s.length > 0) {
-          tmpBlk.lines.push(s);
-        }
-      }
+      });
+
+    if (block.lines.length) {
+      song.push(block);
     }
-    if (tmpBlk.lines.length > 0) {
-      song.push(tmpBlk);
-    }
+
     return song;
   }
 
   /**
-   * Goes through songNodes, those nodes that are "instructions" are exploded and
-   * a "the resulting "songDomElement" built, this songDomElement then replaces the
-   * original line.
-   *
-   * The regular expression look for instructions with this format:
-   * {commandVerb: commandArguments}
-   *
-   * @method _parseInstr
-   * @private
-   * @param song {songNodeArray}
-   * @return {songNodeArray}
-   */
+ * Goes through songNodes, those nodes that are "instructions" are exploded and
+ * a "the resulting "songDomElement" built, this songDomElement then replaces the
+ * original line.
+ *
+ * The regular expression look for instructions with this format:
+ * {commandVerb: commandArguments}
+ *
+ * @method _parseInstr
+ * @private
+ * @param song {songNodeArray}
+ * @return {songNodeArray}
+ */
   function parseInstr(song) {
     const regEx = {
       instr: /\{[^}]+?:.*?\}/im,
       cmdArgs: /\{.+?:(.*)\}/gi,
       cmdVerb: /\{(.+?)\s*:.*\}/gi,
     };
-    for (const i in song) {
-      for (const j in song[i].lines) {
-        if (regEx.instr.test(song[i].lines[j])) {
-          const args = song[i].lines[j].replace(regEx.cmdArgs, '$1');
-          let verb = song[i].lines[j].replace(regEx.cmdVerb, '$1').toLowerCase();
-          verb = verb.replace(/\r/, ''); // IE7 bug
-          const tmpBlk = {
-            type: '',
-            lines: [],
-          };
-          switch (verb) {
-            case 'title':
-            case 't':
-              tmpBlk.type = blockTypeEnum.Title;
-              break;
-            case 'artist':
-              tmpBlk.type = blockTypeEnum.Artist;
-              break;
-            case 'subtitle':
-            case 'st':
-              tmpBlk.type = blockTypeEnum.Subtitle;
-              break;
-            case 'album':
-              tmpBlk.type = blockTypeEnum.Album;
-              break;
-            case 'comment':
-            case 'c':
-              tmpBlk.type = blockTypeEnum.Comment;
-              break;
-            case 'key':
-            case 'k':
-              tmpBlk.type = blockTypeEnum.Key;
-              break;
-            case 'define':
-              tmpBlk.type = blockTypeEnum.ChordDefinition;
-              break;
-            case 'ukegeeks-meta':
-              tmpBlk.type = blockTypeEnum.UkeGeeksMeta;
-              break;
-            default:
-              tmpBlk.type = `Undefined-${verb}`;
-              break;
-          }
-          tmpBlk.lines[0] = toolsLite.trim(args);
-          song[i].lines[j] = tmpBlk;
+
+    song.forEach((songBlock) => {
+      songBlock.lines = songBlock.lines.map((line) => {
+        if (!regEx.instr.test(line)) {
+          return line;
         }
-      }
-    }
+
+        const args = line.replace(regEx.cmdArgs, '$1');
+        let verb = line.replace(regEx.cmdVerb, '$1').toLowerCase();
+        verb = verb.replace(/\r/, ''); // IE7 bug
+        let blockType;
+
+        switch (verb) {
+          case 'title':
+          case 't':
+            blockType = blockTypeEnum.Title;
+            break;
+          case 'artist':
+            blockType = blockTypeEnum.Artist;
+            break;
+          case 'subtitle':
+          case 'st':
+            blockType = blockTypeEnum.Subtitle;
+            break;
+          case 'album':
+            blockType = blockTypeEnum.Album;
+            break;
+          case 'comment':
+          case 'c':
+            blockType = blockTypeEnum.Comment;
+            break;
+          case 'key':
+          case 'k':
+            blockType = blockTypeEnum.Key;
+            break;
+          case 'define':
+            blockType = blockTypeEnum.ChordDefinition;
+            break;
+          case 'ukegeeks-meta':
+            blockType = blockTypeEnum.UkeGeeksMeta;
+            break;
+          default:
+            blockType = `Undefined-${verb}`;
+            break;
+        }
+
+        return {
+          type: blockType,
+          lines: [toolsLite.trim(args)],
+        };
+      });
+    });
     return song;
   }
 
@@ -388,30 +405,34 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
     const regEx = {
       columnBreak: /\s*{\s*(column_break|colb|np|new_page)\s*}\s*/im,
     };
-    for (const i in song) {
-      for (const j in song[i].lines) {
-        if (regEx.columnBreak.test(song[i].lines[j])) {
-          const verb = song[i].lines[j].replace(regEx.columnBreak, '$1').toLowerCase();
-          switch (verb) {
-            case 'column_break':
-            case 'colb':
-              columnCount++;
-              song[i].lines[j] = {
-                type: blockTypeEnum.ColumnBreak,
-                lines: [],
-              };
-              break;
-            case 'new_page':
-            case 'np':
-              song[i].lines[j] = {
-                type: blockTypeEnum.NewPage,
-                lines: [],
-              };
-              break;
-          }
+    song.forEach((songBlock) => {
+      songBlock.lines = songBlock.lines.map((line) => {
+        if (!regEx.columnBreak.test(line)) {
+          return line;
         }
-      }
-    }
+
+        const verb = line.replace(regEx.columnBreak, '$1').toLowerCase();
+        switch (verb) {
+          case 'column_break':
+          case 'colb':
+            columnCount++;
+            line = {
+              type: blockTypeEnum.ColumnBreak,
+              lines: [],
+            };
+            break;
+          case 'new_page':
+          case 'np':
+            line = {
+              type: blockTypeEnum.NewPage,
+              lines: [],
+            };
+            break;
+        }
+        return line;
+      });
+    });
+
     return song;
   }
 
@@ -431,35 +452,34 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
     let chordFound;
     let hasOnlyChords;
-    let line;
 
-    for (const i in song) {
-      if ((song[i].type != blockTypeEnum.TextBlock) && (song[i].type != blockTypeEnum.ChorusBlock)) {
-        continue;
-      }
-      for (const j in song[i].lines) {
-        line = song[i].lines[j];
-        if (typeof (line) !== 'string') {
-          continue;
-        }
-
-        chordFound = regEx.chord.test(line);
-        hasChords = hasChords || chordFound;
-        hasOnlyChords = chordFound && (toolsLite.trim(line.replace(regEx.allChords, '')).length < 1);
-        // need to find
-        song[i].lines[j] = {
-          type: (hasOnlyChords ? blockTypeEnum.ChordOnlyText : (chordFound ? blockTypeEnum.ChordText : blockTypeEnum.PlainText)),
-          lines: [line],
-        };
-
-        if (chordFound && firstChord === '') {
-          const m = line.match(regEx.chord);
-          if (m) {
-            firstChord = m[1];
+    song
+      .filter((songBlock) => songBlock.type == blockTypeEnum.TextBlock || songBlock.type === blockTypeEnum.ChorusBlock)
+      .forEach((songBlock) => {
+        songBlock.lines = songBlock.lines.map((line) => {
+          if (typeof line !== 'string') {
+            return line;
           }
-        }
-      }
-    }
+
+          chordFound = regEx.chord.test(line);
+          hasChords = hasChords || chordFound;
+          hasOnlyChords = chordFound && (toolsLite.trim(line.replace(regEx.allChords, '')).length < 1);
+
+          if (chordFound && firstChord === '') {
+            const m = line.match(regEx.chord);
+            if (m) {
+              firstChord = m[1];
+            }
+          }
+
+          return {
+            // eslint-disable-next-line no-nested-ternary
+            type: (hasOnlyChords ? blockTypeEnum.ChordOnlyText : (chordFound ? blockTypeEnum.ChordText : blockTypeEnum.PlainText)),
+            lines: [line],
+          };
+        });
+      });
+
     return song;
   }
 
@@ -473,17 +493,15 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
    */
   function getInfo(song, type) {
     const rtn = [];
-    for (const i in song) {
-      if (song[i].type == type) {
-        rtn.push(song[i].lines[0]);
-      } else if (song[i].type == blockTypeEnum.TextBlock) {
-        for (const j in song[i].lines) {
-          if (song[i].lines[j].type == type) {
-            rtn.push(song[i].lines[j].lines[0]);
-          }
-        }
+    song.forEach((songBlock) => {
+      if (songBlock.type === type) {
+        rtn.push(songBlock.lines[0]);
+      } else if (songBlock.type === blockTypeEnum.TextBlock) {
+        songBlock.lines
+          .filter((line) => line.type === type)
+          .forEach((line) => rtn.push(line.lines[0]));
       }
-    }
+    });
     return rtn;
   }
 

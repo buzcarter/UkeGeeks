@@ -1,53 +1,60 @@
-
-
+/* eslint-disable max-classes-per-file, camelcase */
 class SongLinkPlus_Pvm {
-	public $Uri = '';
-	public $Title = '';
-	public $Subtitle = '';
-	public $Album = '';
-	public $Artist = '';
-	public $HasInfo = false;
+  Uri = '';
+
+  Title = '';
+
+  Subtitle = '';
+
+  Album = '';
+
+  Artist = '';
+
+  HasInfo = false;
 }
 
 /**
  *
  */
 class SongListPlus_Pvm {
-	public $SongList = array();
+  SongList = [];
 
-	/**
-	 * Sorts the Song List based on title
-	 * @method Sort
-	 * @return (SongLinkPlus_Pvm array)
-	 */
-	Sort() {
+  /**
+   * Sorts the Song List based on title
+   * @method Sort
+   * @return (SongLinkPlus_Pvm array)
+   */
+  Sort() {
+    function scrub(val) {
+      return val.toLowerCase().replace(/\W/g, ' ').replace(/\s+/g, ' ').trim();
+    }
 
-		function scrub($val){
-			return trim(preg_replace('/\s+/', ' ', preg_replace('/\W/', ' ', strtolower($val))));
-		}
+    let tieBreaker = 0;
+    const songsListRekeyed = [];
+    const titlesList = [];
+    const uniqueTitleKeys = {};
 
-		$tieBreaker = 0;
-		$songsListRekeyed = array();
-		$titlesList = array();
-		$titleKey = '';
+    this.SongList.forEach((song) => {
+      let titleKey = scrub(song.Title);
+      if (uniqueTitleKeys[titleKey]) {
+        titleKey += ` _${tieBreaker}_ugs87!`;
+        tieBreaker++;
+      }
+      titlesList.push(titleKey);
+      songsListRekeyed[titleKey] = song;
+    });
 
-		forEach ($this.SongList as $song) {
-			$titleKey = scrub($song.Title);
-			if (!isset($temp[$titleKey])){
-				$titleKey .= ' _' . $tieBreaker . '_ugs87!';
-				$tieBreaker++;
-			}
-			$titlesList[] = $titleKey;
-			$songsListRekeyed[$titleKey] = $song;
-		}
+    titlesList.sort();
 
-		sort($titlesList);
-
-		$this.SongList = array();
-		forEach ($titlesList as $key) {
-			$this.SongList[] = $songsListRekeyed[$key];
-		}
-		return $this.SongList;
-	}
-
+    this.SongList = [];
+    titlesList.forEach((key) => {
+      this.SongList.push(songsListRekeyed[key]);
+    });
+    return this.SongList;
+  }
 }
+
+module.exports = {
+  SongLinkPlus_Pvm,
+  SongListPlus_Pvm,
+};

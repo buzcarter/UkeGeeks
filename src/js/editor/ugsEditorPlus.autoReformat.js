@@ -4,6 +4,11 @@
  * @namespace ugsEditorPlus
  */
 fdRequire.define('ugsEditorPlus/autoReformat', (require, module) => {
+  const actions = require('ugsEditorPlus/actions');
+  // const autoReformat = require('ugsEditorPlus/autoReformat');
+  const toolsLite = require('scriptasaurus/ukeGeeks.toolsLite');
+  const reformat = require('ugsEditorPlus/reformat');
+
   /**
    * associative array/JSON handles to key/frequently accessed DOM Elements (see init()
    * @property _ele
@@ -22,11 +27,11 @@ fdRequire.define('ugsEditorPlus/autoReformat', (require, module) => {
     _ele.reformatTextBox = document.getElementById('reformatSource');
     _ele.reformatDlg = document.getElementById('reformatDlg');
 
-    document.getElementById('reformatYesBtn').onclick = function () {
+    document.getElementById('reformatYesBtn').onclick = () => {
       doOk();
       return false;
     };
-    document.getElementById('reformatNoBtn').onclick = function () {
+    document.getElementById('reformatNoBtn').onclick = () => {
       doClose();
       return false;
     };
@@ -34,7 +39,7 @@ fdRequire.define('ugsEditorPlus/autoReformat', (require, module) => {
     // need to reset on reload
     const chk = document.getElementById('reformatDisable');
     chk.checked = false;
-    chk.onclick = function () {
+    chk.onclick = () => {
       doDisable(this.checked);
     };
 
@@ -44,11 +49,11 @@ fdRequire.define('ugsEditorPlus/autoReformat', (require, module) => {
   function doOk() {
     _ele.cpmSource.value = _formatted;
     doClose();
-    ugsEditorPlus.actions.run(true);
+    actions.run(true);
   }
 
   function doClose() {
-    ukeGeeks.toolsLite.addClass(_ele.reformatDlg, 'isHidden');
+    toolsLite.addClass(_ele.reformatDlg, 'isHidden');
   }
 
   function doDisable(isDisabled) {
@@ -56,14 +61,14 @@ fdRequire.define('ugsEditorPlus/autoReformat', (require, module) => {
   }
 
   function runNow() {
-    _formatted = ugsEditorPlus.reformat.run(_ele.cpmSource.value);
+    _formatted = reformat.run(_ele.cpmSource.value);
     _ele.reformatTextBox.innerHTML = _formatted;
 
-    if (!ugsEditorPlus.reformat.hasChords()) {
+    if (!reformat.hasChords()) {
       return;
     }
 
-    ukeGeeks.toolsLite.removeClass(_ele.reformatDlg, 'isHidden');
+    toolsLite.removeClass(_ele.reformatDlg, 'isHidden');
   }
 
   module.exports = {

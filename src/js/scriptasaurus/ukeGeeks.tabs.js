@@ -59,14 +59,14 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
    * @return {void}
    */
   function replace(h) {
-    const tabBlocks = h.getElementsByTagName('pre');
-    for (const i in tabBlocks) {
-      if (tabBlocks[i].className == 'ugsTabs') {
-        const s = tabBlocks[i].innerHTML;
-        tabBlocks[i].innerHTML = '';
-        loadBlocks(s, tabBlocks[i]);
-      }
-    }
+    h.querySelectorAll('pre')
+      .forEach((preBlock) => {
+        if (preBlock.className == 'ugsTabs') {
+          const s = preBlock.innerHTML;
+          preBlock.innerHTML = '';
+          loadBlocks(s, preBlock);
+        }
+      });
   }
 
   /**

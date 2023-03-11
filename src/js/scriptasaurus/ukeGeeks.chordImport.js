@@ -21,26 +21,28 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @type JSON Object of Regular Expressions
    * @private
    */
+  /* eslint-disable key-spacing */
   const regExes = {
-    // first pass filters
-    define: /\s*{?define\s*:(.*?)(}|add:)/i,
-    add: /(add:.*?)(}|add:)/i,
+  // first pass filters
+    define:     /\s*{?define\s*:(.*?)(}|add:)/i,
+    add:        /(add:.*?)(}|add:)/i,
     // chord building filters
-    name: /(\S+)\s+/,
-    frets: /\s+frets\s+([\dx]{4}|(([\dx]{1,2}\s){3})[\dx]{1,2})/i,
-    fingers: /\s+fingers\s+((\d\s+){3}\d|\d{4})/i,
-    muted: /\s+mute\s+(\d\s){0,3}\d?/i,
+    name:       /(\S+)\s+/,
+    frets:      /\s+frets\s+([\dx]{4}|(([\dx]{1,2}\s){3})[\dx]{1,2})/i,
+    fingers:    /\s+fingers\s+((\d\s+){3}\d|\d{4})/i,
+    muted:      /\s+mute\s+(\d\s){0,3}\d?/i,
     // TODO: ignores "base-fret 1"
     // filter "add-in" chord fingers
-    addin: /add:\s*string\s*(\S+)\s+fret\s+(\d+)\sfinger\s(\d)/i,
+    addin:      /add:\s*string\s*(\S+)\s+fret\s+(\d+)\sfinger\s(\d)/i,
     // extra commands
-    instr: /{\s*instrument\s*:\s*(.*?)\s*}/i,
-    tuning: /{\s*tuning\s*:\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*}/i,
+    instr:      /{\s*instrument\s*:\s*(.*?)\s*}/i,
+    tuning:     /{\s*tuning\s*:\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*}/i,
     // single digit numbers
     // num: /(\d)/g,
-    numOrX: /(\d{1,2}|x)/gi,
-    any: /(.)/g,
+    numOrX:     /(\d{1,2}|x)/gi,
+    any:        /(.)/g,
   };
+  /* eslint-enable key-spacing */
 
   /**
    * TODO:
@@ -68,14 +70,13 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @return {void}
    */
   function textToParts(lines) {
-    const p = [];
-    for (const i in lines) {
-      const c = lineToParts(lines[i]);
+    return lines.reduce((acc, line) => {
+      const c = lineToParts(line);
       if (c) {
-        p.push(c);
+        acc.push(c);
       }
-    }
-    return p;
+      return acc;
+    }, []);
   }
 
   /**
@@ -142,9 +143,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    */
   function getKey(name, tuning) {
     let s = name.replace(' ', '-');
-    for (const i in tuning) {
-      s += `-${tuning[i]}`;
-    }
+    tuning.forEach((t) => {
+      s += `-${t}`;
+    });
     return s.toLowerCase();
   }
 
@@ -219,15 +220,15 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @return {void}
    */
   function addInDots(dots, adds) {
-    if (!adds || adds.length < 1) {
+    if (!adds?.length) {
       return;
     }
-    for (const i in adds) {
-      const a = adds[i].match(regExes.addin);
-      if (a && a.length > 2) {
+    adds.forEach((value) => {
+      const a = value.match(regExes.addin);
+      if (a?.length > 2) {
         dots.push(new ugsData.dot(parseInt(a[1], 10) - 1, parseInt(a[2], 10), parseInt(a[3], 10)));
       }
-    }
+    });
   }
 
   /**
@@ -271,15 +272,13 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @return {void}
    */
   function partsToChords(parts) {
-    const c = [];
-    let x = null;
-    for (const i in parts) {
-      x = getExpandedChord(parts[i].define, parts[i].adds);
-      if (x) {
-        c.push(x);
+    return parts.reduce((result, { define, adds }) => {
+      const chord = getExpandedChord(define, adds);
+      if (chord) {
+        result.push(chord);
       }
-    }
-    return c;
+      return result;
+    }, []);
   }
 
   /**
@@ -295,10 +294,10 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   let errs = [];
 
+  // eslint-disable-next-line no-unused-vars
   function echoLog() {
-    for (const i in errs) {
-      console.log(`${i}. ${errs[i]}`);
-    }
+    // eslint-disable-next-line no-console
+    errs.forEach((e, i) => console.log(`${i}. ${e}`));
   }
 
   /**

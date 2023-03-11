@@ -1,5 +1,3 @@
-const ugsEditorPlus = window.ugsEditorPlus || {};
-
 /**
  * TK
  * @class reformat
@@ -175,7 +173,8 @@ fdRequire.define('ugsEditorPlus/reformat', (require, module) => {
 
       // OK, we've complicated things a bit by adding tabs, so we'll handle this in a helper...
       if ((thisLine.lineType == _enums.lineTypes.tabs) && isTabBlock(lines, i)) {
-        s += `{start_of_tab}\n${thisLine.source.replace(_re.leadingSpace, '')}\n${nextLine.source.replace(_re.leadingSpace, '')}\n${lines[i + 1].source.replace(_re.leadingSpace, '')}\n${lines[i + 2].source.replace(_re.leadingSpace, '')}\n` + '{end_of_tab}\n';
+        s += `{start_of_tab}\n${thisLine.source.replace(_re.leadingSpace, '')}\n${nextLine.source.replace(_re.leadingSpace, '')}\n${lines[i + 1].source.replace(_re.leadingSpace, '')}\n${lines[i + 2].source.replace(_re.leadingSpace, '')}\n`
+          + '{end_of_tab}\n';
         i += 3;
         continue;
       }

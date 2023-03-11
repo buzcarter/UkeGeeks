@@ -2,25 +2,27 @@ fdRequire.define('scriptasaurus/ukeGeeks.transpose', (require, module) => {
   const definitions = require('scriptasaurus/ukeGeeks.definitions');
 
   const re = /^([A-G][#b]?)(.*)/;
+  /* eslint-disable key-spacing */
   const tones = {
-    A: 0,
-    'A#': 1,
-    Bb: 1,
-    B: 2,
-    C: 3,
-    'C#': 4,
-    Db: 4,
-    D: 5,
-    'D#': 6,
-    Eb: 6,
-    E: 7,
-    F: 8,
-    'F#': 9,
-    Gb: 9,
-    G: 10,
-    'G#': 11,
-    Ab: 11,
+    A:      0,
+    'A#':   1,
+    Bb:     1,
+    B:      2,
+    C:      3,
+    'C#':   4,
+    Db:     4,
+    D:      5,
+    'D#':   6,
+    Eb:     6,
+    E:      7,
+    F:      8,
+    'F#':   9,
+    Gb:     9,
+    G:     10,
+    'G#':  11,
+    Ab:    11,
   };
+  /* eslint-enable key-spacing */
 
   /**
    * Pass in a chord name returns new chord name for the original chord shifted by "steps" semitones.
@@ -39,12 +41,12 @@ fdRequire.define('scriptasaurus/ukeGeeks.transpose', (require, module) => {
     if (tone < 0) {
       tone += 12;
     }
-    for (const key in tones) {
-      if (tone == tones[key]) {
-        return key + t.suffix;
-      }
-    }
-    return null;
+
+    const result = Object.keys(tones)
+      .filter((key) => tone == tones[key])
+      .reduce((acc, key) => key + t.suffix);
+
+    return result || null;
   }
 
   /**
@@ -55,7 +57,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.transpose', (require, module) => {
    */
   function getTone(name) {
     const m = name.match(re);
-    if (!m || m.length < 1) {
+    if (!m?.length) {
       return null;
     }
     return {

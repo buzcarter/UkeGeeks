@@ -8,6 +8,11 @@
 fdRequire.define('ugsChordBuilder/chooserList', (require, module) => {
   const $ = require('jQuery');
 
+  const actions = require('ugsEditorPlus/actions');
+
+  const chordBrush = require('scriptasaurus/ukeGeeks.chordBrush');
+  const chordImport = require('scriptasaurus/ukeGeeks.chordImport');
+
   // array of custom chords defined in this song
   let _chordDictionary = [];
   // handle to HTML UL element
@@ -206,7 +211,7 @@ fdRequire.define('ugsChordBuilder/chooserList', (require, module) => {
 
     let chord = null;
     if (_currentChord != null) {
-      chord = ukeGeeks.chordImport.runLine(_currentChord.definition);
+      chord = chordImport.runLine(_currentChord.definition);
       if (hasMutedStrings(chord)) {
         alert('Uh-oh! This chord uses muted strings!\nCurrently the Chord Builder does not support muted strings -- \nsaving edits will result in mutes being lost.');
       }
@@ -323,11 +328,11 @@ fdRequire.define('ugsChordBuilder/chooserList', (require, module) => {
   function listAddDiagram(id) {
     const element = listGetItem(id);
     const defintion = dictionaryFind(id);
-    const chord = ukeGeeks.chordImport.runLine(defintion.definition);
-    // var fretBox = ukeGeeks.settings.inlineFretBox;
-    // var fontSettings = ukeGeeks.settings.inlineFretBox.fonts;
+    const chord = chordImport.runLine(defintion.definition);
+    // var fretBox = settings.inlineFretBox;
+    // var fontSettings = settings.inlineFretBox.fonts;
     if (_ugsBrushTool == null) {
-      _ugsBrushTool = new ukeGeeks.chordBrush();
+      _ugsBrushTool = new chordBrush();
     }
     _ugsBrushTool.plot(element, chord, _diagramSettings.dimensions, _diagramSettings.fonts, _diagramSettings.colors);
   }
@@ -358,7 +363,7 @@ fdRequire.define('ugsChordBuilder/chooserList', (require, module) => {
   function songReplace(oldDefinition, newDefinition) {
     const e = document.getElementById(_ids.source);
     e.value = replaceAll(e.value, oldDefinition, newDefinition);
-    ugsEditorPlus.actions.run();
+    actions.run();
   }
 
   /**
@@ -401,7 +406,7 @@ fdRequire.define('ugsChordBuilder/chooserList', (require, module) => {
       html = `${definition}\n${choProText.value}`;
     }
     choProText.value = html;
-    ugsEditorPlus.actions.run();
+    actions.run();
   }
 
   /**

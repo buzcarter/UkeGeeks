@@ -273,10 +273,10 @@ fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
     if (typeof (node) === 'number') {
       return node * mulitplier;
     }
-    if (typeof (node) === 'object') {
-      for (const i in node) {
-        node[i] = scaleNode(node[i], mulitplier);
-      }
+    if (node && typeof (node) === 'object') {
+      Object.keys(node).forEach((key) => {
+        node[key] = scaleNode(node[key], mulitplier);
+      });
       return node;
     }
     return node;
@@ -314,9 +314,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
       return;
     }
 
-    for (const i in this.fonts) {
-      this.fonts[i] = scaleFont(this.fonts[i], mulitplier);
-    }
+    Object.keys(this.fonts).forEach((key) => {
+      this.fonts[key] = scaleFont(this.fonts[key], mulitplier);
+    });
 
     // Note getting x/y scaled.
     this.fretBox = scaleNode(this.fretBox, mulitplier);

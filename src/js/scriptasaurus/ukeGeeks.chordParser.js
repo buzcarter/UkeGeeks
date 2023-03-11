@@ -52,8 +52,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordParser', (require, module) => {
    * @return {StringArray}
    */
   function findChords(text) {
-    let i;
-    let j;
     const re = /\[(.+?)]/img;
     const m = text.match(re);
     if (!m) {
@@ -63,9 +61,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordParser', (require, module) => {
     // why not use associative array?
     const chords = [];
     let found;
-    for (i = 0; i < m.length; i++) {
+    for (let i = 0; i < m.length; i++) {
       found = false;
-      for (j = 0; j < chords.length; j++) {
+      for (let j = 0; j < chords.length; j++) {
         if (chords[j] == m[i]) {
           found = true;
           break;
@@ -76,9 +74,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordParser', (require, module) => {
       }
     }
     // clean 'em
-    for (j in chords) {
-      chords[j] = chords[j].replace('[', '').replace(']', '');
-    }
+    chords.forEach((c, j) => chords[j].replace('[', '').replace(']', ''));
     // done
     return chords;
   }
