@@ -4,15 +4,20 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
   const ugsData = require('scriptasaurus/ukeGeeks.data');
 
   /**
-   * Internal storage of partially converted "define" statements. The Definition (string) and addIn (array<strings>)
-   * @class chordImport.chordParts
-   * @constructor
-   * @type ClassDefinition
-   * @private
+   * Internal storage of partially converted "define" statements.
    */
-  function chordParts(definition, addIns) {
-    this.define = definition;
-    this.adds = addIns;
+  class ChordParts {
+    constructor(definition, addIns) {
+      this.define = definition;
+      this.adds = addIns || null;
+    }
+
+    definition = '';
+
+    /**
+     * @type {[string]}
+     */
+    adds = [];
   }
 
   /**
@@ -22,7 +27,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @private
    */
   /* eslint-disable key-spacing */
-  const regExes = {
+  const regExes = Object.freeze({
   // first pass filters
     define:     /\s*{?define\s*:(.*?)(}|add:)/i,
     add:        /(add:.*?)(}|add:)/i,
@@ -41,22 +46,20 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
     // num: /(\d)/g,
     numOrX:     /(\d{1,2}|x)/gi,
     any:        /(.)/g,
-  };
+  });
   /* eslint-enable key-spacing */
 
   /**
    * TODO:
-   * @method _lineToParts
-   * @private
-   * @param line {string} Single line (string with one statment)
-   * @return {array<chordParts>}
+   * @param {string} line Single line (string with one statment)
+   * @return {[ChordParts]}
    */
-  function lineToParts(line) {
+  function getChordParts(line) {
     const s = toolsLite.pack(line);
     if (s.length > 1 && s[0] != '#') {
       const m = s.match(regExes.define);
-      if (m && m.length > 1) {
-        return new chordParts(m[1], getAddIns(s));
+      if (m?.length > 1) {
+        return new ChordParts(m[1], getAddIns(s));
       }
     }
     return null;
@@ -64,14 +67,12 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * TODO:
-   * @method _textToParts
-   * @private
-   * @param line {array<string>} Array of lines (stings) each wtih one statment
-   * @return {void}
+   * @param {[string]} lines Array of lines (stings) each wtih one statment
+   * @return {[ChordParts]}
    */
-  function textToParts(lines) {
+  function getChordPartsAry(lines) {
     return lines.reduce((acc, line) => {
-      const c = lineToParts(line);
+      const c = getChordParts(line);
       if (c) {
         acc.push(c);
       }
@@ -81,38 +82,31 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * TODO:
-   * @method _getAddIns
-   * @private
-   * @param txt {string}
-   * @return {void}
+   * @param text {string}
    */
-  function getAddIns(txt) {
-    const finds = [];
-    let m = txt.match(regExes.add);
-    while (m && m.length > 1) {
-      finds.push(m[1]);
-      txt = txt.replace(m[1], '');
-      m = txt.match(regExes.add);
+  function getAddIns(text) {
+    const results = [];
+    let m = text.match(regExes.add);
+    while (m?.length > 1) {
+      results.push(m[1]);
+      text = text.replace(m[1], '');
+      m = text.match(regExes.add);
     }
-    return finds;
+    return results;
   }
 
   /**
    * TODO:
-   * @method _getInstrument
-   * @private
    * @param text {string} Single statement to be searched
    * @return {string}
    */
   function getInstrument(text) {
-    const c = text.match(regExes.instr);
-    return !c ? null : toolsLite.pack(c[1]);
+    const m = text.match(regExes.instr);
+    return !m ? null : toolsLite.pack(m[1]);
   }
 
   /**
    * TODO: expects FOUR strings.
-   * @method _getTuning
-   * @private
    * @param text {string} Single statement to be searched
    * @return {string}
    */
@@ -123,8 +117,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * TODO:
-   * @method _getName
-   * @private
    * @param text {string} Single statement to be searched
    * @return {string}
    */
@@ -135,8 +127,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * TODO:
-   * @method _getKey
-   * @private
    * @param name {string}
    * @param tuning {array<string>}
    * @return {string}
@@ -152,8 +142,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
   /**
    * TODO: Change will affect "packed" chord fingers -- spaces required. No longer accepts "frets 1231", it must be "frets 1 2 3 1"
    * Replaces _getFrets. Sets frets and muted arrays.
-   * @method _fretOMatic
-   * @private
    * @param text {string} string to be searched
    * @param frets {array<int>}
    * @param muted {array<bool>}
@@ -174,8 +162,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * TODO:
-   * @method _getFingers
-   * @private
    * @param text {string} string to be searched
    * @return {array<string>}
    */
@@ -193,8 +179,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * Pass in integer arrays, frets is list of frets, plus corresponding fingers array
-   * @method _toDots
-   * @private
    * @param frets {array}
    * @param fingers {array}
    * @return {array<ukeGeeks.data.dot>} array of dots
@@ -213,8 +197,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * If a valid "add" instruction is present pushes a new dot object into dots array.
-   * @method _addInDots
-   * @private
    * @param dots {array<ukeGeeks.data.dot>}
    * @param adds {array<string>} array of "add instruction" to be parsed (i.e. "add: string G fret 1 finger 1")
    * @return {void}
@@ -233,11 +215,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * TODO:
-   * @method _getExpandedChord
-   * @private
-   * @param text {type}
+   * @param text {string}
    * @param adds {type}
-   * @return {void}
+   * @return {expandedChord}
    */
   function getExpandedChord(text, adds) {
     const frets = [];
@@ -266,9 +246,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * TODO:
-   * @method _partsToChords
-   * @private
-   * @param parts {type}
+   * @param parts {[ChordParts]}
    * @return {void}
    */
   function partsToChords(parts) {
@@ -283,8 +261,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * Add an error. As one would with console.log("blah").
-   * @private
-   * @method _log
    * @param msg {string} Error message to be added
    * @return {void}
    */
@@ -302,28 +278,26 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * Returns an expandedChord object (JSON) converted from single statement text input line.
-   * @method runLine
    * @param line {string} Single line (string with one statment)
    * @return {ukeGeeks.data.expandedChord}
    */
   function runLine(line) {
-    const c = lineToParts(line);
+    const c = getChordParts(line);
     return !c ? null : getExpandedChord(c.define, c.adds);
   }
 
   /**
    * Returns array of expandedChord objects (JSON), converted from text input.
-   * @method runBlock
    * @param text {string} Multiline text block containing definition, instrument, and tuning statements.
    * @return {ukeGeeks.data.instrument}
    */
   function runBlock(text) {
     // TODO: newlines get lost in strings, do I always rely on "{"?
-    let linesAry = text.split('\n');
-    if (linesAry.length < 2) {
-      linesAry = text.split('{');
+    let lines = text.split('\n');
+    if (lines.length < 2) {
+      lines = text.split('{');
     }
-    const parts = textToParts(linesAry);
+    const parts = getChordPartsAry(lines);
     const name = getInstrument(text);
     const tuning = getTuning(text);
     return new ugsData.instrument(
@@ -335,10 +309,10 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
   }
 
   /**
- * @module
- * Converts text to JSON objects. Accetps either large text blocks or single lines of
- * text written in CPM syntax (looks for instrument, tuning, and define statements).
- */
+   * @module
+   * Converts text to JSON objects. Accetps either large text blocks or single lines of
+   * text written in CPM syntax (looks for instrument, tuning, and define statements).
+   */
   module.exports = {
     runLine,
     runBlock,

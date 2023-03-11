@@ -13,7 +13,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "server": "node ./ugsphp",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --config misc/jest/jest.config.js",
+    "test:coverage": "jest --config misc/jest/jest.config.js --coverage",
+    "test:watch": "jest --config misc/jest/jest.config.js --watch",
     "ts": "gulp ts"
   },
   "repository": {
@@ -47,6 +49,9 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "gulp-uglify": "^3.0.2",
     "gulp-watch": "^5.0.1",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "jest-environment-jsdom-global": "^4.0.0",
     "nodemon": "^2.0.21",
     "typescript": "^4.9.5"
   },

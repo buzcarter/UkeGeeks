@@ -1,6 +1,7 @@
 # **/*.gitignore
 
 # Our Gulp Build Files
+coverage/
 dist/
 node_modules/
 

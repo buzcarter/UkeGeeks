@@ -129,7 +129,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
    * @return {void}
    */
   function showErrors(errs) {
-    if (errs.length < 1) {
+    if (!errs.length) {
       return;
     }
 

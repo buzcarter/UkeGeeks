@@ -5,8 +5,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
   /**
   * Number of columns defined
-   * @property _columnCount
-  * @private
   * @type int
   */
   let columnCount = 1;
@@ -15,16 +13,12 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
   * Under development, bool indicating whether any chords were found within the lyrics.
   * Helpful for tablature-only arrangements.
   * TODO: do not rely on this!!!
-   * @property _hasChords
-  * @private
   * @type bool
   */
   let hasChords = false; // TODO:
 
   /**
    * Song's key. May be set via command tag {key: C} otherwise use the first chord found (if available)
-   * @property _firstChord
-   * @private
    * @type string
    */
   let firstChord = '';
@@ -38,7 +32,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
   /**
    * Accepts CPM text, returning HTML marked-up text
-   * @method parse
    * @param text {string} string RAW song
    * @return {songObject}
    */
@@ -46,8 +39,8 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
     const song = new ugsData.song();
     text = stripHtml(text);
     let songDom = domParse(text);
-    songDom = parseInstr(songDom);
-    songDom = parseSimpleInstr(songDom);
+    songDom = parseInstructions(songDom);
+    songDom = parseSimpleInstructions(songDom);
     songDom = markChordLines(songDom);
     song.body = doExport(songDom);
     if (columnCount > 1) {
@@ -59,17 +52,17 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
     let tmp;
     // Song Title
     tmp = getInfo(songDom, blockTypeEnum.Title);
-    if (tmp.length > 0) {
+    if (tmp.length) {
       song.title = tmp[0];
     }
     // Artist
     tmp = getInfo(songDom, blockTypeEnum.Artist);
-    if (tmp.length > 0) {
+    if (tmp.length) {
       song.artist = tmp[0];
     }
     // Song Subtitle
     tmp = getInfo(songDom, blockTypeEnum.Subtitle);
-    if (tmp.length > 0) {
+    if (tmp.length) {
       song.st = tmp[0];
     }
     if (tmp.length > 1) {
@@ -77,17 +70,17 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
     }
     // Album
     tmp = getInfo(songDom, blockTypeEnum.Album);
-    if (tmp.length > 0) {
+    if (tmp.length) {
       song.album = tmp[0];
     }
     // UkeGeeks "Extras"
     tmp = getInfo(songDom, blockTypeEnum.UkeGeeksMeta);
-    if (tmp.length > 0) {
+    if (tmp.length) {
       song.ugsMeta = tmp;
     }
     // Key
     tmp = getInfo(songDom, blockTypeEnum.Key);
-    if (tmp.length > 0) {
+    if (tmp.length) {
       song.key = tmp[0];
     } else if (firstChord !== '') {
       // Setting Key to first chord found
@@ -113,11 +106,8 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
   };
 
   /**
-  * All of the CSS classnames used by UkeGeeks JavaScript
-   * @property _classNames
-  * @private
-  * @type JSON
-  */
+   * All of the CSS classnames used by UkeGeeks JavaScript
+   */
   let classNames = {
     Comment: 'ugsComment',
     Tabs: 'ugsTabs',
@@ -132,39 +122,37 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
   };
 
   /**
-  * Enumeration defining the types of nodes used within this class to parse CPM
-   * @property _blockTypeEnum
-  * @private
-  * @type JSON-enum
-  */
-  let blockTypeEnum = {
-    // Multiline Nodes
-    TextBlock: 1, // temporary type, should be replaced with Chord Text or Plain Text
-    ChorusBlock: 2,
-    TabBlock: 3,
+   * Enumeration defining the types of nodes used within this class to parse CPM
+   * @type JSON-enum
+   */
+  /* eslint-disable key-spacing */
+  const blockTypeEnum = Object.freeze({
+  // Multiline Nodes
+    TextBlock:            1, // temporary type, should be replaced with Chord Text or Plain Text
+    ChorusBlock:          2,
+    TabBlock:             3,
     // Single Line "Instruction" Nodes
-    Comment: 101,
-    Title: 102,
-    Subtitle: 103,
-    Album: 104,
-    ChordDefinition: 105,
-    UkeGeeksMeta: 106,
-    ColumnBreak: 107, // Defining this as an instruction instead of a node since I'm not requiring a Begin/End syntax and it simplifies processing
-    Artist: 108,
-    NewPage: 109,
-    Key: 110,
+    Comment:            101,
+    Title:              102,
+    Subtitle:           103,
+    Album:              104,
+    ChordDefinition:    105,
+    UkeGeeksMeta:       106,
+    ColumnBreak:        107, // Defining this as an instruction instead of a node since I'm not requiring a Begin/End syntax and it simplifies processing
+    Artist:             108,
+    NewPage:            109,
+    Key:                110,
     // Text Types
-    ChordText: 201,
-    PlainText: 202,
-    ChordOnlyText: 203, //
+    ChordText:          201,
+    PlainText:          202,
+    ChordOnlyText:      203, //
     // Undefined
-    Undefined: 666,
-  };
+    Undefined:          666,
+  });
+  /* eslint-enable key-spacing */
 
   /**
    * Retuns the block type (_blockTypeEnum) of passed in line.
-   * @method _getBlockType
-   * @private
    * @param line {songNode}
    * @return {_blockTypeEnum}
    */
@@ -181,8 +169,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
   /**
    * Convert passed in song to HTML block
-   * @method _export
-   * @private
    * @param song {songNodeArray}
    * @return {strings}
    */
@@ -261,11 +247,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
   /**
    * Debugging tool for Firebug. Echos the song's structure.
-   * @method _echo
-   * @private
    * @param song {songNodeArray}
    * @return {void}
-  */
+   */
   // eslint-disable-next-line no-unused-vars
   function echo(song) {
     song.forEach((songBlock, i) => {
@@ -280,8 +264,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
   /**
    * Explodes passed in text block into an array of songNodes ready for further parsing.
-   * @method _domParse
-   * @private
    * @param text {string}
    * @return {songNodeArray}
    */
@@ -321,19 +303,17 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
   }
 
   /**
- * Goes through songNodes, those nodes that are "instructions" are exploded and
- * a "the resulting "songDomElement" built, this songDomElement then replaces the
- * original line.
- *
- * The regular expression look for instructions with this format:
- * {commandVerb: commandArguments}
- *
- * @method _parseInstr
- * @private
- * @param song {songNodeArray}
- * @return {songNodeArray}
- */
-  function parseInstr(song) {
+   * Goes through songNodes, those nodes that are "instructions" are exploded and
+   * a "the resulting "songDomElement" built, this songDomElement then replaces the
+   * original line.
+   *
+   * The regular expression look for instructions with this format:
+   * {commandVerb: commandArguments}
+   *
+   * @param song {songNodeArray}
+   * @return {songNodeArray}
+   */
+  function parseInstructions(song) {
     const regEx = {
       instr: /\{[^}]+?:.*?\}/im,
       cmdArgs: /\{.+?:(.*)\}/gi,
@@ -396,12 +376,10 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
   /**
    * A "Simple Instruction" is one that accepts no arguments. Presently this only handles Column Breaks.
-   * @method _parseSimpleInstr
-   * @private
    * @param song {songNodeArray}
    * @return {songNodeArray}
    */
-  function parseSimpleInstr(song) {
+  function parseSimpleInstructions(song) {
     const regEx = {
       columnBreak: /\s*{\s*(column_break|colb|np|new_page)\s*}\s*/im,
     };
@@ -439,8 +417,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
   /**
    * Runs through songNodes and if the line contains at least one chord it's type is et to
    * ChordText, otherwise it's marked as "PlainText", meaning straight lyrics
-   * @method _markChordLines
-   * @private
    * @param song {songNodeArray}
    * @return {songNodeArray}
    */
@@ -485,8 +461,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
   /**
    * Searches the songNodes for the specified block type, retunrs all matching node line (text) values.
-   * @method _getInfo
-   * @private
    * @param song {songNodeArray}
    * @param type {_blockTypeEnum}
    * @return {array}
@@ -507,26 +481,29 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
   /**
    * Removes HTML "pre" tags and comments.
-   * @method _stripHtml
-   * @private
    * @param text {string}
    * @return {string}
    */
   function stripHtml(text) {
     const regEx = {
-      pre: /<\/?pre>/img, // HTML <pre></pre>
-      htmlComment: /<!--(.|\n)*?-->/gm, // HTML <!-- Comment -->
+      /** HTML <pre></pre> */
+      pre: /<\/?pre>/img,
+      /** HTML <!-- Comment --> */
+      htmlComment: /<!--(.|\n)*?-->/gm,
     };
     return text.replace(regEx.pre, '').replace(regEx.htmlComment, '');
   }
 
   /**
- * @module
- * Reads a text block and returns an object containing whatever ChordPro elements it recognizes.
- *
- * A cleaned, HTML version of song is included.
- */
+   * @module
+   * Reads a text block and returns an object containing whatever ChordPro elements it recognizes.
+   *
+   * A cleaned, HTML version of song is included.
+   */
   module.exports = {
+    __test__: {
+      stripHtml,
+    },
     init,
     parse,
   };
