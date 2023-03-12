@@ -14,8 +14,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
 
   /**
    * Chord Diagram Font styles -- font size, font-weight, font-face stack, etc.
-   * @property fonts
-   * @type JSON Object
    */
   const fonts = {
     dot: '9pt Arial Black,Arial',
@@ -26,8 +24,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
   /**
    * Chord Diagram Colors for fretboard's grid lines and text. Don't use shorthand (i.e. "#0ff")
    * as this might cause a problem with IE canvas.
-   * @property colors
-   * @type JSON Object
    */
   const colors = {
     fretLines: '#003366',
@@ -113,8 +109,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
   /**
    * Layout of Chord Digrams when inlineFredBoxes are being used. Identical in
    * structure to "fretBox". See fretBox for properties.
-   * @property layout
-   * @type JSON Object
    */
   const inlineFretBox = {
     showText: false,
@@ -139,8 +133,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
 
   /**
    * ID's of key HTML page elements
-   * @property ids
-   * @type JSON Object
    */
   const ids = {
     songText: 'ukeSongText', // element holding the song's text
@@ -150,8 +142,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
 
   /**
    * CSS Class names used to find page elements-- be careful if renaming!
-   * @property wrapClasses
-   * @type JSON Object
    */
   const wrapClasses = {
     wrap: 'ugs-song-wrap', // wraps BOTH Song Text and Chord Canvas
@@ -161,8 +151,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
 
   /**
    * Options (Features) you can turn on or off
-   * @property opts
-   * @type JSON Object
    */
   const opts = {
     columnsEnabled: true,
@@ -263,8 +251,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
 
   /**
    * TODO: determine minimum value... 1?
-   * @method _scaleNode
-   * @private
    * @param node {datatype} Description
    * @param mulitplier {int} see scale method's parameter
    * @return mixed
@@ -286,8 +272,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
 
   /**
    * TODO: determine minimum font size... 5pt/px?
-   * @method _scaleFont
-   * @private
    * @param font {string} Description
    * @param mulitplier {int} see scale method's parameter
    * @return {void}
@@ -305,7 +289,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.settings', (require, module) => {
    * Scales the standard chord diagram's dimensions and font sizes by multiplying
    * all falues by passed in value. Note: this is currently a destructive change: no
    * backup of original values is retained.
-   * @method scale
    * @param mulitplier {int}
    * @return {void}
    */

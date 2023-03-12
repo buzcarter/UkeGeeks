@@ -38,24 +38,24 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordParser', (require, module) => {
    */
   function findChords(text) {
     const re = /\[(.+?)]/img;
-    const m = text.match(re);
-    if (!m) {
+    const matches = text.match(re);
+    if (!matches) {
       return [];
     }
 
     // why not use associative array?
     const chords = [];
     let found;
-    for (let i = 0; i < m.length; i++) {
+    for (let i = 0; i < matches.length; i++) {
       found = false;
       for (let j = 0; j < chords.length; j++) {
-        if (chords[j] == m[i]) {
+        if (chords[j] == matches[i]) {
           found = true;
           break;
         }
       }
       if (!found) {
-        chords.push(m[i]);
+        chords.push(matches[i]);
       }
     }
 

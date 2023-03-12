@@ -22,9 +22,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
 
   /**
    * All regular expressions used in this class. Note, Changed parsing from "\n" to "{" which means "define: ..." cannot depend on that opening curly-brace!
-   * @property regEx
-   * @type JSON Object of Regular Expressions
-   * @private
    */
   /* eslint-disable key-spacing */
   const regExes = Object.freeze({
@@ -55,11 +52,11 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @return {[ChordParts]}
    */
   function getChordParts(line) {
-    const s = toolsLite.pack(line);
-    if (s.length > 1 && s[0] != '#') {
-      const m = s.match(regExes.define);
-      if (m?.length > 1) {
-        return new ChordParts(m[1], getAddIns(s));
+    line = toolsLite.pack(line);
+    if (line.length > 1 && line[0] != '#') {
+      const matches = line.match(regExes.define);
+      if (matches?.length > 1) {
+        return new ChordParts(matches[1], getAddIns(line));
       }
     }
     return null;
@@ -72,9 +69,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    */
   function getChordPartsAry(lines) {
     return lines.reduce((acc, line) => {
-      const c = getChordParts(line);
-      if (c) {
-        acc.push(c);
+      const chordPart = getChordParts(line);
+      if (chordPart) {
+        acc.push(chordPart);
       }
       return acc;
     }, []);
@@ -86,11 +83,11 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    */
   function getAddIns(text) {
     const results = [];
-    let m = text.match(regExes.add);
-    while (m?.length > 1) {
-      results.push(m[1]);
-      text = text.replace(m[1], '');
-      m = text.match(regExes.add);
+    let matches = text.match(regExes.add);
+    while (matches?.length > 1) {
+      results.push(matches[1]);
+      text = text.replace(matches[1], '');
+      matches = text.match(regExes.add);
     }
     return results;
   }
@@ -101,8 +98,8 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @return {string}
    */
   function getInstrument(text) {
-    const m = text.match(regExes.instr);
-    return !m ? null : toolsLite.pack(m[1]);
+    const matches = text.match(regExes.instr);
+    return !matches ? null : toolsLite.pack(matches[1]);
   }
 
   /**
@@ -111,8 +108,8 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @return {string}
    */
   function getTuning(text) {
-    const c = text.match(regExes.tuning);
-    return !c ? null : [c[1], c[2], c[3], c[4]];
+    const matches = text.match(regExes.tuning);
+    return !matches ? null : [matches[1], matches[2], matches[3], matches[4]];
   }
 
   /**
@@ -121,8 +118,8 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @return {string}
    */
   function getName(text) {
-    const c = text.match(regExes.name);
-    return !c ? null : c[1];
+    const matches = text.match(regExes.name);
+    return !matches ? null : matches[1];
   }
 
   /**
@@ -132,11 +129,11 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @return {string}
    */
   function getKey(name, tuning) {
-    let s = name.replace(' ', '-');
+    let result = name.replace(' ', '-');
     tuning.forEach((t) => {
-      s += `-${t}`;
+      result += `-${t}`;
     });
-    return s.toLowerCase();
+    return result.toLowerCase();
   }
 
   /**
@@ -148,14 +145,14 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @return {void}
    */
   function fretOMatic(text, frets, muted) {
-    const f = text.match(regExes.frets);
-    if (!f) {
+    const fretMatches = text.match(regExes.frets);
+    if (!fretMatches) {
       return;
     }
-    const m = (f[1].length == 4) ? f[1].match(regExes.any) : f[1].match(regExes.numOrX);
-    for (let i = 0; i < m.length; i++) {
-      const isX = m[i] == 'x' || m[i] == 'X';
-      frets[i] = isX ? 0 : parseInt(m[i], 10);
+    const matches = (fretMatches[1].length == 4) ? fretMatches[1].match(regExes.any) : fretMatches[1].match(regExes.numOrX);
+    for (let i = 0; i < matches.length; i++) {
+      const isX = matches[i] == 'x' || matches[i] == 'X';
+      frets[i] = isX ? 0 : parseInt(matches[i], 10);
       muted[i] = isX;
     }
   }
@@ -166,11 +163,11 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
    * @return {array<string>}
    */
   function getFingers(text) {
-    const f = text.match(regExes.fingers);
-    if (!f) {
+    const matches = text.match(regExes.fingers);
+    if (!matches) {
       return [];
     }
-    let x = f[1];
+    let x = matches[1];
     if (x.length == 4) {
       x = x.replace(regExes.any, '$1 ');
     }
@@ -187,9 +184,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
     const dots = [];
     const { tuning } = settings;
     for (let j = 0; j < tuning.length; j++) {
-      const n = parseInt(frets[j], 10);
-      if (n > 0) {
-        dots.push(new ugsData.dot(j, n, (fingers.length - 1 >= j) ? parseInt(fingers[j], 10) : 0));
+      const fretNumber = parseInt(frets[j], 10);
+      if (fretNumber > 0) {
+        dots.push(new ugsData.dot(j, fretNumber, (fingers.length - 1 >= j) ? parseInt(fingers[j], 10) : 0));
       }
     }
     return dots;
@@ -206,9 +203,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordImport', (require, module) => {
       return;
     }
     adds.forEach((value) => {
-      const a = value.match(regExes.addin);
-      if (a?.length > 2) {
-        dots.push(new ugsData.dot(parseInt(a[1], 10) - 1, parseInt(a[2], 10), parseInt(a[3], 10)));
+      const matches = value.match(regExes.addin);
+      if (matches?.length > 2) {
+        dots.push(new ugsData.dot(parseInt(matches[1], 10) - 1, parseInt(matches[2], 10), parseInt(matches[3], 10)));
       }
     });
   }

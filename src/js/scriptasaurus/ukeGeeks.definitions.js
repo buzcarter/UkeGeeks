@@ -5,9 +5,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.definitions', (require, module) => {
 
   /**
    * Array of "user" defined chords, in compactChord format. Use "Add" method.
-   * @property _userChords
-   * @type array
-   * @private
    */
   let userChords = [];
 
@@ -20,7 +17,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.definitions', (require, module) => {
 
   /**
    * Enum (simple JSON name/value pairs) defining instrument tunings (offsets from standard Soprano Ukulele)
-   * @type JSON
    */
   const instrument = {
     /** GCEA */
@@ -119,7 +115,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.definitions', (require, module) => {
 
   /**
    * Pass in "standard" chord name, returns match from defined chords or null if not found
-   * @private
    * @param chordName {string} Chord name
    * @return {expandedChord}
    */

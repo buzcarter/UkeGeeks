@@ -207,9 +207,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
    */
   function doExport(song) {
     const nl = '\n';
-    let html = '';
     let nextType;
-    song.forEach((songBlock, i) => {
+
+    return song.reduce((html, songBlock, i) => {
       const { type } = songBlock;
       switch (type) {
         /*
@@ -240,7 +240,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
           // problem: exacerbates WebKit browsers' first chord position bug.
           if (songBlock.lines[0].length < 1) {
             // prevent empty blocks (usually caused by comments mixed in header tags)
-            return;
+            return html;
           }
           let myClass = (type == blockTypeEnum.PlainText) ? classNames.PrePlain : classNames.PreChords;
           if (type == blockTypeEnum.ChordOnlyText) {
@@ -273,8 +273,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
           html += `</div><div class="${classNames.Column}">`;
           break;
       }
-    });
-    return html;
+
+      return html;
+    }, '');
   }
 
   /**
@@ -457,9 +458,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
           hasOnlyChords = chordFound && (line.replace(regEx.allChords, '').trim().length < 1);
 
           if (chordFound && firstChord === '') {
-            const m = line.match(regEx.chord);
-            if (m) {
-              firstChord = m[1];
+            const matches = line.match(regEx.chord);
+            if (matches) {
+              firstChord = matches[1];
             }
           }
 

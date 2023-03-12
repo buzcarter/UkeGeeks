@@ -14,8 +14,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
 
   /**
    * alias for external Settings dependencies (helps with complression, too)
-   * @property tab_settings
-   * @private
    * @type {JSON}
    */
   const myTabSettings = settings.tabs;
@@ -26,17 +24,11 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
    * (Constant) Number of Strings (dashed lines of tablature notation) expected. (For now
    * a constant -- ukueleles "always" have four). Making a variable to help support port
    * for other instruments.
-   * @property NUM_STRINGS
-   * @private
-   * @type int
    */
   const NUM_STRINGS = 4;
 
   /**
    * (Constant) Last String Name (Note), as above, on Ukulele is a "G". Here for other instruments.
-   * @property LAST_STRING_NAME
-   * @private
-   * @type string
    */
   const LAST_STRING_NAME = 'G';
 
@@ -44,16 +36,12 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
     ---------------------------------------------- */
   /**
    * Again this is a constructor replacement
-   * @method init
-   * @public
    * @return {void}
    */
   function init() {}
 
   /**
    * Races through all &lt;pre&gt; tags within h, any with the CSS class of "ugsTabs" will be replaced with the canvas element.
-   * @method replace
-   * @public
    * @param h {DOM-element}
    * @return {void}
    */
@@ -61,16 +49,14 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
     h.querySelectorAll('pre')
       .forEach((preBlock) => {
         if (preBlock.className == 'ugsTabs') {
-          const s = preBlock.innerHTML;
+          const html = preBlock.innerHTML;
           preBlock.innerHTML = '';
-          loadBlocks(s, preBlock);
+          loadBlocks(html, preBlock);
         }
       });
   }
 
   /**
-   *
-   * @method loadBlocks
    * @param text {string} Block of text that contains one or more tablature blocks
    * @param outElement {string or DOM} Either: (string) the Id to a DOM element, or DOM element handle where the canvas/converted text will be placed.
    * @return {void}
@@ -78,21 +64,19 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
   function loadBlocks(text, outElement) {
     const lines = text.split('\n');
     let tab = [];
-    for (const i in lines) {
-      const s = lines[i].trim();
-      if (s.length > 0) {
-        tab.push(s);
+    lines.forEach((line) => {
+      line = line.trim();
+      if (line) {
+        tab.push(line);
       }
       if (tab.length == NUM_STRINGS) {
         redraw(tab, outElement);
         tab = [];
       }
-    }
+    });
   }
 
   /**
-   *
-   * @method redraw
    * @param inTabs {string or array} Block of text or four element array containing tablbature to be parsed
    * @param outElement {string or DOM} Either: (string) the Id to a DOM element, or DOM element handle where the canvas/converted text will be placed.
    * @return {void}
@@ -132,8 +116,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
    * This is insanely long, insanely kludgy, but, insanely, it works. This will read break a block of text into
    * four lines (the ukulele strings), then find which frets are used by each. Then, the hard part, pack un-needed
    * dashes. Once it's done that a 2-dimentional array (strings X frets) is created and returned.
-   * @method readTabs
-   * @private
    * @param ukeStrings {array<string>} Block of tablbabure to be parsed
    * @return {2-dimentional array}
    */
@@ -154,8 +136,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
   }
 
   /**
-   * @method getWidth
-   * @private
    * @param tabs {2Darray}
    * @param labelOffset {int}
    * @param isTruncate {bool} If TRUE returns the length of the line, allowing for a terminating "|" character, othwrwise, it's for canvas width
@@ -179,8 +159,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
 
   /**
    * Processes ukeStrings stripping the first character from each line
-   * @method stripStringLabels
-   * @private
    * @param ukeStrings {array<string>}
    * @return {void}
    */
@@ -194,8 +172,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
    * Finds the frets in used for each line. In other words, ignoring
    * spacers ("-" or "|") this returns arrays of numbers, the frets
    * in use, for each line.
-   * @method getFretNumbers
-   * @private
    * @param ukeStrings {array<string>}
    * @return {void}
    */
@@ -212,8 +188,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
   /**
    * Returns array of the strings with placeholders instead of the numbers.
    * This helps us pack because "12" and "7" now occupy the same space horizontally.
-   * @method getSymbols
-   * @private
    * @param ukeStrings {array<string>}
    * @return {void}
    */
@@ -234,8 +208,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
    * Run through all of the strings (array) and return the length of the shortest one.
    * would prefer the max length, but then I'd need to pad the shorter ones and ... well, it's complicated.
    * this gets a TODO: get max!
-   * @method getMinLineLength
-   * @private
    * @param ukeStrings {array<string>}
    * @return {void}
    */
@@ -258,8 +230,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
    * here we go through and "merge" them into a single, master "guide" -- saying
    * "somewhere on this beat you'll pluck (or not) one note". This normalized
    * guide will be the master for the next step.
-   * @method getGuideLine
-   * @private
    * @param symbols {undefined}
    * @param minLength {int}
    * @return {void}
@@ -294,8 +264,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
    * with either a space, measure marker, or the note -- as an integer! Now the frets
    * are the same regardless of whether they are single or double digit numbers:
    * a "12" occupies no more horizontal space than a "5".
-   * @method getPackedLines
-   * @private
    * @param frets {undefined}
    * @param symbols {undefined}
    * @param guide {undefined}
@@ -336,8 +304,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
 
   /**
    * Create the staff -- really the four tablature strings
-   * @method drawStaff
-   * @private
    * @param ugsImg {ukeGeeksImage} image builder tool instance
    * @param pos {xyPos} JSON (x,y) position
    * @param length {int} Length in pixels
@@ -361,8 +327,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
 
   /**
    * Loop over the normalized tabs emitting the dots/fingers on the passed in canvase
-   * @method drawNotes
-   * @private
    * @param ugsImg {ukeGeeksImage} image builder tool instance
    * @param pos {xyPos} JSON (x,y) position
    * @param tabs {array} Array of normalized string data -- space (character) or int (fret number)
@@ -409,8 +373,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
 
   /**
    * Draws a vertical "measure" demarcation line
-   * @method drawMeasure
-   * @private
    * @param ugsImg {ukeGeeksImage} image builder tool instance
    * @param pos {xyPos} JSON (x,y) position
    * @param mySettings {settingsObj}
@@ -427,8 +389,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
 
   /**
    * Adds the string letters on the left-side of the canvas, before the tablature string lines
-   * @method drawLabels
-   * @private
    * @param ugsImg {ukeGeeksImage} image builder tool instance
    * @param pos {xyPos} JSON (x,y) position
    * @param mySettings {settingsObj}

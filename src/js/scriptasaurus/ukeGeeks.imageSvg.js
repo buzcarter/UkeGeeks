@@ -4,7 +4,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.imageSvg', (require, module) => {
       return null;
     }
 
-    let s = '';
+    let result = '';
     let property;
     let value;
 
@@ -46,37 +46,37 @@ fdRequire.define('scriptasaurus/ukeGeeks.imageSvg', (require, module) => {
         }
 
         if (property && value) {
-          s += `${property}:${value};`;
+          result += `${property}:${value};`;
         }
       });
 
     if (type === 'text' && !style.textAlign) {
-      s += 'text-anchor:middle;';
+      result += 'text-anchor:middle;';
     }
 
-    return s;
+    return result;
   }
 
   function render(layer) {
-    let s = '';
+    let result = '';
     let style = getStyle(layer.type, layer.style);
     style = style ? `style="${style}"` : '';
 
     switch (layer.type) {
       case 'line':
-        s = `<line x1="${layer.endPoints[0].x}" y1="${layer.endPoints[0].y}" x2="${layer.endPoints[1].x}" y2="${layer.endPoints[1].y}" ${style} />`;
+        result = `<line x1="${layer.endPoints[0].x}" y1="${layer.endPoints[0].y}" x2="${layer.endPoints[1].x}" y2="${layer.endPoints[1].y}" ${style} />`;
         break;
       case 'circle':
-        s = `<circle cx="${layer.center.x}" cy="${layer.center.y}" r="${layer.radius}" ${style} />`;
+        result = `<circle cx="${layer.center.x}" cy="${layer.center.y}" r="${layer.radius}" ${style} />`;
         break;
       case 'rectangle':
-        s = `<rect x="${layer.pos.x}" y="${layer.pos.y}" width="${layer.width}" height="${layer.height}" ${style} />`;
+        result = `<rect x="${layer.pos.x}" y="${layer.pos.y}" width="${layer.width}" height="${layer.height}" ${style} />`;
         break;
       case 'text':
-        s = `<text x="${layer.pos.x}" y="${layer.pos.y}" ${style}>${layer.text}</text>`;
+        result = `<text x="${layer.pos.x}" y="${layer.pos.y}" ${style}>${layer.text}</text>`;
         break;
     }
-    return s;
+    return result;
   }
 
   function renderLayers(layers) {

@@ -11,7 +11,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.overlapFixer', (require, module) => {
    * returns TRUE if Box A overlaps Box B. Detailed horizontal check, we "cheat" the
    * vertical check by assuming that tops must be equal to collide (a simplification
    * over a full height check.)
-   * @method checkOverlap
    * @param  {object} "a" box
    * @param  {object} "b" box
    * @return {boolean}
@@ -37,7 +36,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.overlapFixer', (require, module) => {
 
   /**
    * returns object with width and left & right offsets
-   * @method getBox
    * @param  {DOM_element} element to be measured
    * @return {object}
    */
@@ -63,7 +61,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.overlapFixer', (require, module) => {
 
   /**
    * source: http://www.cjboco.com/blog.cfm/post/determining-an-elements-width-and-height-using-javascript/
-   * @method getWidth
    * @param  {DOM_element} element to be measured
    * @return {int}
    */
@@ -79,7 +76,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.overlapFixer', (require, module) => {
    * Returns JSON with left, right, top, and width properties. ONLY left and top are calculate,
    * width & right need to be added later.
    * source: http://stackoverflow.com/questions/442404/dynamically-retrieve-the-position-x-y-of-an-html-element
-   * @method getOffsets
    * @param  {DOM_element} element to be measured
    * @return {JSON}
    */
@@ -102,7 +98,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.overlapFixer', (require, module) => {
 
   /**
    * checks (and fixes if problem is presetn) two code tags
-   * @method checkChords
    * @param  {[DOM_element]} codeA [description]
    * @param  {[DOM_element]} codeB [description]
    * @return {void}
@@ -127,7 +122,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.overlapFixer', (require, module) => {
   /**
    * Runs through the element looking for UkeGeek chords (based on HTML) and
    * adjust the horizontal spacing if any of the chords overlap.
-   * @method Fix
    * @param  {DOM_element} element containing the UGS HTML song
    */
   function Fix(ele) {

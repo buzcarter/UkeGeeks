@@ -26,9 +26,8 @@ fdRequire.define('scriptasaurus/ukeGeeks.transpose', (require, module) => {
 
   /**
    * Pass in a chord name returns new chord name for the original chord shifted by "steps" semitones.
-   * @method shift
-   * @param name (string) chord name, should be in chord dictionary
-   * @param steps (int) number of semitones to transpose
+   * @param name {string} chord name, should be in chord dictionary
+   * @param steps {int} number of semitones to transpose
    * @return string
    */
   function shift(name, steps) {
@@ -51,56 +50,53 @@ fdRequire.define('scriptasaurus/ukeGeeks.transpose', (require, module) => {
 
   /**
    * Returns object with name (A - G with flat/sharp), integer value (0 - 11), and its "suffix" (minor, 7th, etc)
-   * @method getTone
-   * @param name (string)
+   * @param name {string}
    * @return JSON
    */
   function getTone(name) {
-    const m = name.match(re);
-    if (!m?.length) {
+    const matches = name.match(re);
+    if (!matches?.length) {
       return null;
     }
     return {
-      tone: parseInt(tones[m[1]], 10),
-      prefix: m[1],
-      suffix: m[2],
+      tone: parseInt(tones[matches[1]], 10),
+      prefix: matches[1],
+      suffix: matches[2],
     };
   }
 
   /**
    * Returns a mapping -- an array of JSON with "original" chord name and "transposed" chord names.
-   * @method retune
-   * @param offset (int) optional
+   * @param offset {int} optional
    * @return {array}
    */
   function retune() {
     const offset = (arguments.length > 0) ? arguments[0] : 0;
     const chords = definitions.getChords();
-    const s = [];
+    const result = [];
     if (offset === 0) {
       for (const i in chords) {
-        s.push({
+        result.push({
           original: chords[i].name,
           transposed: chords[i].name,
         });
       }
     } else {
       for (const z in chords) {
-        s.push({
+        result.push({
           original: chords[z].name,
           transposed: shift(chords[z].name, offset),
         });
       }
     }
-    return s;
+    return result;
   }
 
   /**
    * returns copy of input string array shifted by number of steps
-   * @method shiftChords
-   * @param  array<strings> chords chord names to be shifted
-   * @param  int steps  number of semitone steps (up or down)
-   * @return array<strings>
+   * @param  {array<strings>} chords chord names to be shifted
+   * @param  {int} steps  number of semitone steps (up or down)
+   * @return {array<strings>}
    */
   function shiftChords(chords, steps) {
     const newChords = [];
@@ -111,11 +107,11 @@ fdRequire.define('scriptasaurus/ukeGeeks.transpose', (require, module) => {
   }
 
   /**
- * Can shift a single chord or list of chords up/down by a series of steps. Hangles
- * finding equivalent chord names (i.e. A# is same as Bb)
- *
- * @module
- */
+   * Can shift a single chord or list of chords up/down by a series of steps. Hangles
+   * finding equivalent chord names (i.e. A# is same as Bb)
+   *
+   * @module
+   */
   module.exports = {
     shift,
     getTone,

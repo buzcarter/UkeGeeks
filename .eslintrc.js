@@ -24,6 +24,8 @@ module.exports = {
     node: true,
   },
   globals: {
+    document: true,
+    fdRequire: true,
   },
   ignorePatterns: [
     '/js/**/*.js',

@@ -14,7 +14,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
 
   /**
    * Preps this class for running
-   * @method init
    * @param isIeFamily {bool} TRUE if UserAgent (Browser to you and me) is Internet Explorer
    * @return {void}
    */
@@ -31,7 +30,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
   /**
    * Runs all Scriptasaurus methods using the element Ids defined in the settings class.
    * This is your "Do All". See data.song for structure.
-   * @method run
    * @return {songObject}
    */
   function run() {
@@ -48,7 +46,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
 
   /**
    * Same as "run" except runs using class names, this allows you to have multiple songs on a single page.
-   * @method runByClasses
    * @return {Array of songObject}
    */
   function runByClasses() {
@@ -66,7 +63,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
 
   /**
    * Is this really nececessary?
-   * @method setTuningOffset
    * @param offset {int} (optional) default 0. Number of semitones to shift the tuning. See ukeGeeks.definitions.instrument.
    */
   function setTuningOffset(offset) {
@@ -76,9 +72,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
   // song
 
   /**
-   *
-   * @method _runSong
-   * @private
    * @param handles {ukeGeeks.data.htmlHandles}
    * @return {songObj}
    */
@@ -125,7 +118,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
 
   /**
    * Shows a JavaScript alert box containing list of unknown chords.
-   * @method showErrors
    * @return {void}
    */
   function showErrors(errs) {
@@ -134,18 +126,15 @@ fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
     }
 
     // console.log(typeof(errs[0]));
-    let s = '';
+    let errStr = '';
     for (let i = 0; i < errs.length; i++) {
-      s += (s.length > 0) ? ', ' : '';
-      s += errs[i];
+      errStr += (errStr.length > 0) ? ', ' : '';
+      errStr += errs[i];
     }
-    alert(`Forgive me, but I don't know the following chords: ${s}`);
+    alert(`Forgive me, but I don't know the following chords: ${errStr}`);
   }
 
   /**
-   *
-   * @method _getHandlesFromClass
-   * @private
    * @param wrap {domElement}
    * @return {ukeGeeks.data.htmlHandles}
    */
@@ -159,9 +148,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
   }
 
   /**
-   *
-   * @method _getHandlesFromId
-   * @private
    * @return {data.htmlHandles}
    */
   function getHandlesFromId() {
