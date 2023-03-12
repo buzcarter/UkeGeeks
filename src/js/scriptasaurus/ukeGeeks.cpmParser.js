@@ -1,7 +1,6 @@
 fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
   const ugsData = require('scriptasaurus/ukeGeeks.data');
   const chordImport = require('scriptasaurus/ukeGeeks.chordImport');
-  const toolsLite = require('scriptasaurus/ukeGeeks.toolsLite');
 
   /* eslint-disable key-spacing */
   const cpmInstructions = {
@@ -321,8 +320,8 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
             block.lines.push(line);
           }
         } else {
-          const s = toolsLite.trim(line);
-          if (s.length > 0) {
+          const s = line.trim();
+          if (s) {
             block.lines.push(s);
           }
         }
@@ -383,7 +382,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
         return {
           type: verbToBlockTypeHash[verb] || `Undefined-${verb}`,
-          lines: [toolsLite.trim(args)],
+          lines: [args.trim()],
         };
       });
     });
@@ -455,7 +454,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
           chordFound = regEx.chord.test(line);
           hasChords = hasChords || chordFound;
-          hasOnlyChords = chordFound && (toolsLite.trim(line.replace(regEx.allChords, '')).length < 1);
+          hasOnlyChords = chordFound && (line.replace(regEx.allChords, '').trim().length < 1);
 
           if (chordFound && firstChord === '') {
             const m = line.match(regEx.chord);

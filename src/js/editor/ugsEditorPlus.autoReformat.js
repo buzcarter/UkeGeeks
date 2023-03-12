@@ -53,7 +53,7 @@ fdRequire.define('ugsEditorPlus/autoReformat', (require, module) => {
   }
 
   function doClose() {
-    toolsLite.addClass(_ele.reformatDlg, 'isHidden');
+    _ele.reformatDlg.classList.add('isHidden');
   }
 
   function doDisable(isDisabled) {
@@ -68,7 +68,7 @@ fdRequire.define('ugsEditorPlus/autoReformat', (require, module) => {
       return;
     }
 
-    toolsLite.removeClass(_ele.reformatDlg, 'isHidden');
+    _ele.reformatDlg.classList.remove('isHidden');
   }
 
   module.exports = {

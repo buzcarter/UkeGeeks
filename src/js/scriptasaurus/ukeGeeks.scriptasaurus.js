@@ -99,7 +99,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
     chordPainter.show(song.chords);
     // Show chord diagrams inline with lyrics
     if (settings.inlineDiagrams) {
-      toolsLite.addClass(handles.wrap, 'ugsInlineDiagrams');
+      handles.wrap.classList.add('ugsInlineDiagrams');
       chordPainter.showInline(song.chords);
     }
 
@@ -112,7 +112,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.scriptasaurus', (require, module) => {
 
     const container = handles.wrap;
     if (container) {
-      toolsLite.setClass(container, 'ugsNoChords', !song.hasChords);
+      container.classList.toggle('ugsNoChords', !song.hasChords);
     }
 
     if (settings.opts.autoFixOverlaps) {

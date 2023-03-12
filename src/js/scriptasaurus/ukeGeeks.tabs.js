@@ -1,6 +1,5 @@
 fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
   const settings = require('scriptasaurus/ukeGeeks.settings');
-  const toolsLite = require('scriptasaurus/ukeGeeks.toolsLite');
   const imageSvg = require('scriptasaurus/ukeGeeks.imageSvg');
   const ugsImage = require('scriptasaurus/ukeGeeks.image');
 
@@ -80,7 +79,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.tabs', (require, module) => {
     const lines = text.split('\n');
     let tab = [];
     for (const i in lines) {
-      const s = toolsLite.trim(lines[i]);
+      const s = lines[i].trim();
       if (s.length > 0) {
         tab.push(s);
       }
