@@ -3,11 +3,8 @@ fdRequire.define('scriptasaurus/ukeGeeks.image', (require, module) => {
    * Stores, in an output-format agnostic manner, data for drawing images. Usage:
    * all methods are chainable except getData.
    * Limits: nested groups not supported; names are only available on groups, no unique checks.
-   * @class image
-   * @namespace ukeGeeks
-   * @return {object}
    */
-  class UGSImage {
+  class ImageClass {
     constructor() {
       this.__context = {
         root: {},
@@ -134,6 +131,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.image', (require, module) => {
   }
 
   module.exports = {
-    image: UGSImage,
+    image: ImageClass,
   };
 });

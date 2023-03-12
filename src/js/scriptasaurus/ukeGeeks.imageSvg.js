@@ -60,14 +60,11 @@ fdRequire.define('scriptasaurus/ukeGeeks.imageSvg', (require, module) => {
   function render(layer) {
     let s = '';
     let style = getStyle(layer.type, layer.style);
-
-    if (style) {
-      style = ` style="${style}"`;
-    }
+    style = style ? `style="${style}"` : '';
 
     switch (layer.type) {
       case 'line':
-        s = `<line  x1="${layer.endPoints[0].x}" y1="${layer.endPoints[0].y}"  x2="${layer.endPoints[1].x}" y2="${layer.endPoints[1].y}" ${style} />`;
+        s = `<line x1="${layer.endPoints[0].x}" y1="${layer.endPoints[0].y}" x2="${layer.endPoints[1].x}" y2="${layer.endPoints[1].y}" ${style} />`;
         break;
       case 'circle':
         s = `<circle cx="${layer.center.x}" cy="${layer.center.y}" r="${layer.radius}" ${style} />`;
@@ -83,31 +80,24 @@ fdRequire.define('scriptasaurus/ukeGeeks.imageSvg', (require, module) => {
   }
 
   function renderLayers(layers) {
-    let s = '';
-    let layer;
-    let style;
-    for (let i = 0; i < layers.length; i++) {
-      layer = layers[i];
+    return layers.reduce((s, layer) => {
       if (layer.type === 'group') {
-        style = getStyle('group', layer.style);
-        s += `<g ${
-          layer.name ? (`id="${layer.name}"`) : ''
-        } style="${style}" `
-          + `>${renderLayers(layer.layers, layer.style)}</g>`;
+        const { name } = layer;
+        const style = getStyle('group', layer.style);
+        s += `<g ${name ? (`id="${name}"`) : ''} style="${style}">${renderLayers(layer.layers, layer.style)}</g>`;
       } else {
         s += render(layer);
       }
-    }
-    return s;
+      return s;
+    }, '');
   }
 
   function process(image) {
-    return ('<?xml version="1.0" encoding="utf-8"?>'
-      + '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" '
-      + `viewBox="0 0 ${image.dimensions.width} ${image.dimensions.height}" `
-      + `width="${image.dimensions.width}px" height="${image.dimensions.height}px">${
-        renderLayers(image.layers)
-      }</svg>`
+    const { width, height } = image.dimensions;
+    return ('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" '
+      + `viewBox="0 0 ${width} ${height}" `
+      + `width="${width}px" height="${height}px">`
+      + `${renderLayers(image.layers)}</svg>`
     );
   }
 
@@ -118,7 +108,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.imageSvg', (require, module) => {
   function appendChild(element, image, className) {
     const wrapper = document.createElement('span');
     if (className) {
-      wrapper.setAttribute('class', className);
+      wrapper.classList.add(className);
     }
     wrapper.innerHTML = process(image.getData());
     element.appendChild(wrapper);
