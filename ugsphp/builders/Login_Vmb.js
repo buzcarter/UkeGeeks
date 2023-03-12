@@ -4,9 +4,9 @@
  */
 class Login_Vmb extends _base_Vmb {
   /**
-	 * Populates Login View Model
-	 * @return Login_Vm
-	 */
+   * Populates Login View Model
+   * @return Login_Vm
+   */
   Build($login = null) {
     $viewModel = new Login_Vm();
     $viewModel.PageTitle = 'Login Required';

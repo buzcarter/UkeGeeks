@@ -1,3 +1,4 @@
+const { join } = require('path');
 /**
  * configuring various application options
  */
@@ -115,7 +116,8 @@ module.exports = {
    * any dynamic setup happens here
    */
   Init() {
-    // this.SongDirectory = `${getcwd()}/cpm/`;
+    this.SongDirectory = `${join(__dirname, '../cpm/')}`;
+    console.log(`Config.init: SongDirectory "${this.SongDirectory}"`);
     // this.AppDirectory = `${dirname(__FILE__)}/`;
   },
 };

@@ -1,23 +1,23 @@
 @media print{
-	body,
-	.editableSongPage{
-		background-color: #fff;
-	}
-	body {
-		padding: 1px 0 0 0;
-	}
-	.scalablePrintArea {
-		background-color: transparent;
-		border: none;
-		box-shadow: none;
-		padding:0;
-		width:100%;
-		min-height:auto;
-	}
-	.ugsAppMenuBar,
-	.arrowBox,
-	.isHidden,
-	.overlay {
-		display: none !important;
-	}
+  body,
+  .editableSongPage{
+    background-color: #fff;
+  }
+  body {
+    padding: 1px 0 0 0;
+  }
+  .scalablePrintArea {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding:0;
+    width:100%;
+    min-height:auto;
+  }
+  .ugsAppMenuBar,
+  .arrowBox,
+  .isHidden,
+  .overlay {
+    display: none !important;
+  }
 }

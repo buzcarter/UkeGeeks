@@ -1,5 +1,6 @@
 {
-  "songbookSong":     { "path": "/songbook/:cpm",   "controller": "song" },
+  "songbookSong":     { "path": "/songbook/:cpm",   "controller": "songbookSong" },
+  "songbook":         { "path": "/songbook",        "controller": "songbook" },
   "song":             { "path": "/song/:cpm",       "controller": "song" },
   "songList":         { "path": "/song-list",       "controller": "songList" },
   "home":             { "path": "/",                "controller": "home" }

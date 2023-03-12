@@ -43,6 +43,6 @@ function getTitle(filename) {
 }
 
 /**
- * View Model Builder -- Creates a "Song" View Model
+ * View Model Builder -- Creates a basic "Song List" View Model
  */
 module.exports = Build;

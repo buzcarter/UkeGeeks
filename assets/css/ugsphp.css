@@ -3,16 +3,16 @@
 /* Basic HTML
  ------------------------------------------- */
 html, body {
-	height: 100%;
+  height: 100%;
 }
 html {
-	background: url("../img/editor/subpage-stripe-bg.png") repeat scroll;
-	font-family: Verdana,Geneva,sans-serif;
-	padding-bottom: 1px;
+  background: url("../img/editor/subpage-stripe-bg.png") repeat scroll;
+  font-family: Verdana,Geneva,sans-serif;
+  padding-bottom: 1px;
 }
 body{
-	border-top:solid 8px #70260C;
-	padding-top: 1em;
+  border-top:solid 8px #70260C;
+  padding-top: 1em;
 }
 h1 {
     color: #944615;
@@ -21,96 +21,96 @@ h1 {
     margin-bottom: 0.6em;
 }
 h2 {
-	color:#CE6A4C;
+  color:#CE6A4C;
     font-size: 1.3em;
 }
 a {
-	text-decoration: none;
+  text-decoration: none;
 }
 /* Containers
  ------------------------------------------- */
 .contentWrap {
-	min-height: 100%;
-	margin: 0 auto;
-	position: relative;
-	width: 960px;
+  min-height: 100%;
+  margin: 0 auto;
+  position: relative;
+  width: 960px;
 }
 .contentWrap a {
-	color: #FF6600;
+  color: #FF6600;
 }
 .contentWrap {
-	color: #3D3D3D;
+  color: #3D3D3D;
 }
 .contentWrap a {
-	color: #FF6600;
+  color: #FF6600;
 }
 .contentWrap a:hover {
-	background-color: #FAF6C1;
-	color: #FF7E00;
+  background-color: #FAF6C1;
+  color: #FF7E00;
 }
 
 /* Song List (songbook)
  ------------------------------------------- */
 .songList {
-	margin: 10px 0 20px;
+  margin: 10px 0 20px;
 }
 .songList li {
-	color: #A8A8A8;
-	font-size: 10px;
-	list-style: decimal outside none;
-	margin-bottom: 0.35em;
-	margin-left: 20px;
-	padding: 0.35em 0;
+  color: #A8A8A8;
+  font-size: 10px;
+  list-style: decimal outside none;
+  margin-bottom: 0.35em;
+  margin-left: 20px;
+  padding: 0.35em 0;
 }
 .songList li:hover {
-	background-color: #FFECC7;
+  background-color: #FFECC7;
 }
 .songList li a {
-	display:block;
+  display:block;
 }
 .songList li strong {
-	font-size: 1.4em;
+  font-size: 1.4em;
 }
 .songList li em {
-	color: #5D5639;
-	font-size: 1.1em;
+  color: #5D5639;
+  font-size: 1.1em;
 }
 
 /* login page's form
  ------------------------------------------- */
 .loginPage .overlay{
-	top:100px;
-	right:40%;
-	width: 17em;
+  top:100px;
+  right:40%;
+  width: 17em;
 }
 .loginPage input[type=text],
 .loginPage input[type=password]{
-	width: 97%;
+  width: 97%;
 }
 .loginPage .btnBar{
-	padding: .5em 0;
+  padding: .5em 0;
 }
 .loginPage .baseBtn{
-	font-size: 1.2em;
+  font-size: 1.2em;
 }
 .loginPage .hint{
-	font-size: .9em;
-	color: #6B4900;
-	text-align: center;
+  font-size: .9em;
+  color: #6B4900;
+  text-align: center;
 }
 .loginPage .help {
-	color: #6B4900;
-	font-size: 86%;
+  color: #6B4900;
+  font-size: 86%;
 }
 
 .errorMessage {
-	background-color: #F9C95A;
-	border: 3px solid #F7AD00;
-	border-radius: 4px 4px 4px 4px;
-	color: #4F3E14;
-	margin-bottom: 0.8em;
-	padding: 0.3em 0.5em;
+  background-color: #F9C95A;
+  border: 3px solid #F7AD00;
+  border-radius: 4px 4px 4px 4px;
+  color: #4F3E14;
+  margin-bottom: 0.8em;
+  padding: 0.3em 0.5em;
  }
 .errorMessage em{
-	font-size:.8em;
+  font-size:.8em;
 }

@@ -1,9 +1,11 @@
 const { join } = require('path');
+const Config = require('./Config');
 const express = require('express');
 const middleware = require('./middleware');
-const routes = require('./configs/routes.json');
-const router = require('./startUp/router');
 const nunjucks = require('nunjucks');
+const router = require('./startUp/router');
+const routes = require('./configs/routes.json');
+
 const DEFAULT_PORT = 3000;
 
 function configureViewEngine(app) {
@@ -16,6 +18,8 @@ function configureViewEngine(app) {
 }
 
 function main() {
+  Config.Init();
+
   const app = express();
 
   app.disable('x-powered-by');

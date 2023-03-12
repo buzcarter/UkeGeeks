@@ -1,83 +1,83 @@
 /* 
-	Document   : basic-page-layout
-	Created on : Jan, 2010
-	Author     : Buz
-	Description:
-			Page structure and elements not unique or required by UkeGeeks.
+  Document   : basic-page-layout
+  Created on : Jan, 2010
+  Author     : Buz
+  Description:
+      Page structure and elements not unique or required by UkeGeeks.
 */
 
 /* HTML5 love*/
 header,footer,section,article,aside,canvas{display:block;}
 /*bsic html */
 body {
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	font-size:12pt;
-	padding:1.5em;
+  font-family:Verdana, Arial, Helvetica, sans-serif;
+  font-size:12pt;
+  padding:1.5em;
 }
 h1{
-	font-family:Georgia, "Times New Roman", Times, serif;
-	font-size:2.3em;
-	margin-bottom:.1em;
+  font-family:Georgia, "Times New Roman", Times, serif;
+  font-size:2.3em;
+  margin-bottom:.1em;
 }
 h2{
-	font-size:1.4em;
-	margin-bottom:.4em;
+  font-size:1.4em;
+  margin-bottom:.4em;
 }
 h2 + h2 {
-	margin-top: -0.31em;
+  margin-top: -0.31em;
 }
 h4{
-	font-size:1.2em;
-	padding:.3em 0 .6em;
+  font-size:1.2em;
+  padding:.3em 0 .6em;
 }
 /* HEADER
   ------------------------------ */
 header hgroup aside{
-	float:right;
-	font-size:.8em;
-	width:auto;
+  float:right;
+  font-size:.8em;
+  width:auto;
 }
 /* Pseudo Blog Post 
   ------------------------------ */
 .blog-post{
-	border-bottom: solid 1px #ccc;
-	margin:0 0 20px;
-	padding:20px 0 40px;
+  border-bottom: solid 1px #ccc;
+  margin:0 0 20px;
+  padding:20px 0 40px;
 }
 /*
   ------------------------------ */
 .metaInfo{
-	font-size:.9em;
-	padding:.6em 0;
+  font-size:.9em;
+  padding:.6em 0;
 }
 /*
   ------------------------------ */
 footer{
-	clear:both;
-	color:#666666;
-	font-size:0.82em;
-	padding-top:1.6em;
+  clear:both;
+  color:#666666;
+  font-size:0.82em;
+  padding-top:1.6em;
 }
 footer small{
-	border-left:solid 1px #b2b2b2;
-	font-size:.9em;
-	padding-left:1em;
+  border-left:solid 1px #b2b2b2;
+  font-size:.9em;
+  padding-left:1em;
 }
 
 /*
   ------------------------------ */
 aside ul{
-	list-style:none;
-	margin:0;
-	padding:0;
+  list-style:none;
+  margin:0;
+  padding:0;
 }
 aside li{
-	float:left;
-	text-align:center;
-	margin:0 10px 10px;
-	padding:0;
+  float:left;
+  text-align:center;
+  margin:0 10px 10px;
+  padding:0;
 }
 aside li em{
-	display:block;
-	font-size:1.20em;
+  display:block;
+  font-size:1.20em;
 }

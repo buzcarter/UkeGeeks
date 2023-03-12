@@ -1,4 +1,5 @@
 const serverConfig = require('../configs/server.json');
+const Config = require('../Config');
 
 /* eslint-disable class-methods-use-this */
 /**
@@ -9,7 +10,7 @@ class BaseViewModel {
   #pageTitle = '';
 
   get PageTitle() {
-    return `${this.#pageTitle} ${serverConfig.meta.PageTitleSuffix || ''}`;
+    return `${this.#pageTitle} ${serverConfig.meta.PageTitleSuffix || Config.PageTitleSuffix || ''}`;
   }
 
   set PageTitle(value) {
@@ -19,13 +20,13 @@ class BaseViewModel {
   IsJson = false;
 
   get PoweredBy() {
-    return serverConfig.meta.PoweredBy || '';
+    return serverConfig.meta.PoweredBy || Config.PoweredBy || '';
   }
 
   SiteUser = null;
 
   get StaticsPrefix() {
-    return serverConfig.meta.StaticsPrefix || '';
+    return serverConfig.meta.StaticsPrefix || Config.StaticsPrefix || '';
   }
 
   get SupportEmail() {

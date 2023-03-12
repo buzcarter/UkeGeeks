@@ -4,9 +4,9 @@ const Config = require('../Config');
 /**
  * builds (relative) URL
  *
- * @param Actions(enum) $action [description]
- * @param string  $param  (optional) extra query param value (right now only "song")
- * @return  string
+ * @param {Actions} action [description]
+ * @param {string}  param  (optional) extra query param value (right now only "song")
+ * @return {string}
  */
 function MakeUri(action, param = '') {
   const directory = Config.Subdirectory || '/';

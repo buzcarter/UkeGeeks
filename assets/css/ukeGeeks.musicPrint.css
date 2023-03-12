@@ -1,15 +1,14 @@
 body {
-	padding:.1em;
+  padding:.1em;
 }
 /* HEADER
   ------------------------------ */
 header hgroup aside{
-	display:none;
+  display:none;
 }
 /* Pagebreaks
   ------------------------------ */
 .ugsNewPage{
-	border-width:0;
-	page-break-before:always;
+  border-width:0;
+  page-break-before:always;
 }
-

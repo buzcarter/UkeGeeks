@@ -1,23 +1,25 @@
-
+const Config = require('../Config');
+const FileHelper = require('../classes/FileHelper');
+const SourceViewModel = require('../viewmodels/Source_Vm');
 
 /**
  * View Model Builder -- Creates a "Source" View Model
  * @class Source_Vmb
  */
-class Source_Vmb extends _base_Vmb {
 
-	/**
-	 * Populates Source View Model
-	 * @return Source_Vm
-	 */
-	Build() {
-		$fname = FileHelper.getFilename();
-		$data = FileHelper.getFile(Config.$SongDirectory . $fname);
-		$viewModel = new Source_Vm();
-		$viewModel.PageTitle = 'Song Source for &quot;' . $fname . '&quot; ChordPro (CPM)/UkeGeeks File Format';
-		$viewModel.Body = htmlspecialchars($data);
+/**
+ * Populates Source View Model
+ * @return Source_Vm
+ */
+function Build() {
+  const fname = FileHelper.getFilename();
+  const data = FileHelper.getFile(Config.SongDirectory + fname);
+  const viewModel = Object.assign(new SourceViewModel(), {
+    PageTitle: `Song Source for &quot;${fname}&quot; ChordPro (CPM)/UkeGeeks File Format`,
+    Body: data, // htmlspecialchars(data),
+  });
 
-		return $viewModel;
-	}
-
+  return viewModel;
 }
+
+module.exports = Build;

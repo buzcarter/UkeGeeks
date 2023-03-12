@@ -1,3 +1,4 @@
+const Config = require('../Config');
 const fs = require('fs');
 const SongHelper = require('../classes/SongHelper');
 const SongViewModel = require('../viewmodels/Song_Vm');
@@ -7,8 +8,7 @@ const SongViewModel = require('../viewmodels/Song_Vm');
  * @return {Song_Vm}
  */
 function Build(req, res) {
-  // Config.SongDirectory;
-  const filename = `cpm/${req.params.cpm}.cpm.txt`;
+  const filename = `${Config.SongDirectory}/${req.params.cpm}.cpm.txt`;
   let fileContent;
   try {
     fileContent = fs.readFileSync(filename, { encoding: 'utf8', flag: 'r' });
@@ -49,7 +49,9 @@ function Build(req, res) {
     StaticsPrefix: viewModel.StaticsPrefix,
     SupportEmail: viewModel.SupportEmail,
   };
-  res.render('song', fixedViewModel);
+
+  const template = Config.UseEditableSong ? 'song-editable' : 'song';
+  res.render(template, fixedViewModel);
 }
 
 /**
