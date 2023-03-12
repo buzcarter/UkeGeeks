@@ -21,22 +21,24 @@ function Build(req, res) {
 
   // const title = htmlspecialchars(((song.isOK) ? (song.title + ((song.subtitle) ? (` | ${song.subtitle}`) : '')) : 'Not Found'));
 
+  /* eslint-disable key-spacing */
   const viewModel = Object.assign(new SongViewModel(), {
-    PageTitle: MakePageTitle(song, filename),
-    SongTitle: song.title, // htmlspecialchars(song.title)
-    Subtitle: song.subtitle, // htmlspecialchars(song.subtitle)
-    Artist: song.artist,
-    Album: song.album, // htmlspecialchars()
-    Body: song.body,
-    UgsMeta: song.meta,
-    SourceUri: '#SourceUri', // Ugs.MakeUri(Actions.Source, filename)
+    PageTitle:             MakePageTitle(song, filename),
+    SongTitle:             song.title, // htmlspecialchars(song.title)
+    Subtitle:              song.subtitle, // htmlspecialchars(song.subtitle)
+    Artist:                song.artist,
+    Album:                 song.album, // htmlspecialchars()
+    Body:                  song.body,
+    UgsMeta:               song.meta,
+    SourceUri:             '#SourceUri', // Ugs.MakeUri(Actions.Source, filename)
     // EditUri: Ugs.MakeUri(Actions.Edit, filename)
 
-    Id: filename,
-    IsUpdateAllowed: false, // $this.SiteUser.MayEdit && $this.SiteUser.IsAuthenticated
+    Id:                    filename,
+    IsUpdateAllowed:       false, // $this.SiteUser.MayEdit && $this.SiteUser.IsAuthenticated
 
-    EditorSettingsJson: null, // $this.getSettings()
+    EditorSettingsJson:    null, // $this.getSettings()
   });
+  /* eslint-enable key-spacing */
 
   // Temp SuperKludge: Nunjucks is unable to use class getters, and normal serialization misses function (getters) and
   // SO solutions seem to have issue with private variables. So... Life is Short!
