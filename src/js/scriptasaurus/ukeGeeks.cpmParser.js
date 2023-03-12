@@ -3,9 +3,46 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
   const chordImport = require('scriptasaurus/ukeGeeks.chordImport');
   const toolsLite = require('scriptasaurus/ukeGeeks.toolsLite');
 
+  /* eslint-disable key-spacing */
+  const cpmInstructions = {
+    title:               'title',
+    titleShort:          't',
+    subtitle:            'subtitle',
+    subtitleShort:       'st',
+
+    album:               'album',
+    artist:              'artist',
+
+    comment:             'comment',
+    commentShort:        'c',
+
+    key:                 'key',
+    keyShort:            'k',
+    define:              'define',
+
+    columnBreak:         'column_break',
+    columnBreakShort:    'colb',
+    newPage:             'new_page',
+    newPageShort:        'np',
+    ugsMeta:             'ukegeeks-meta',
+
+    /*
+    startOfTab:          'start_of_tab',
+    startOfTabShort:     'sot',
+    endOfTab:            'end_of_tab',
+    endOfTabShort:       'eot',
+
+    startOfChorus:       'start_of_chorus',
+    startOfChorusShort:  'soc',
+    endOfChorus:         'end_of_chorus',
+    endOfChorusShort:    'eoc',
+    */
+  };
+  /* eslint-enable key-spacing */
+
   /**
   * Number of columns defined
-  * @type int
+  * @type {int}
   */
   let columnCount = 1;
 
@@ -13,20 +50,18 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
   * Under development, bool indicating whether any chords were found within the lyrics.
   * Helpful for tablature-only arrangements.
   * TODO: do not rely on this!!!
-  * @type bool
+  * @type {boolean}
   */
   let hasChords = false; // TODO:
 
   /**
    * Song's key. May be set via command tag {key: C} otherwise use the first chord found (if available)
-   * @type string
+   * @type {string}
    */
   let firstChord = '';
 
   /**
    * Again this is a constructor replacement. Just here for consistency. Does nothing.
-   * @method init
-   * @return {void}
    */
   function init() {}
 
@@ -64,9 +99,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
     tmp = getInfo(songDom, blockTypeEnum.Subtitle);
     if (tmp.length) {
       song.st = tmp[0];
-    }
-    if (tmp.length > 1) {
-      song.st2 = tmp[1];
+      if (tmp.length > 1) {
+        song.st2 = tmp[1];
+      }
     }
     // Album
     tmp = getInfo(songDom, blockTypeEnum.Album);
@@ -95,39 +130,38 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
     return song;
   }
 
+  /* eslint-disable key-spacing */
   /*
     TODO: add ukeGeeks Meta support:
     $regEx = "/{(ukegeeks-meta|meta)\s*:\s*(.+?)}/i";
   */
   const regExes = {
-    blocks: /\s*{\s*(start_of_tab|sot|start_of_chorus|soc|end_of_tab|eot|end_of_chorus|eoc)\s*}\s*/im,
-    tabBlock: /\s*{\s*(start_of_tab|sot)\s*}\s*/im,
-    chorusBlock: /\s*{\s*(start_of_chorus|soc)\s*}\s*/im,
+    blocks:         /\s*{\s*(start_of_tab|sot|start_of_chorus|soc|end_of_tab|eot|end_of_chorus|eoc)\s*}\s*/im,
+    tabBlock:       /\s*{\s*(start_of_tab|sot)\s*}\s*/im,
+    chorusBlock:    /\s*{\s*(start_of_chorus|soc)\s*}\s*/im,
   };
 
   /**
    * All of the CSS classnames used by UkeGeeks JavaScript
    */
-  let classNames = {
-    Comment: 'ugsComment',
-    Tabs: 'ugsTabs',
-    Chorus: 'ugsChorus',
-    PreChords: 'ugsChords', // preformatted with chords
-    PrePlain: 'ugsPlain', // preformated, no chords
-    NoLyrics: 'ugsNoLyrics', // preformated, chords ONLY -- no lyrics (text) between 'em
-    ColumnWrap: 'ugsWrap',
-    ColumnCount: 'ugsColumnCount',
-    Column: 'ugsColumn',
-    NewPage: 'ugsNewPage',
+  const classNames = {
+    Comment:        'ugsComment',
+    Tabs:           'ugsTabs',
+    Chorus:         'ugsChorus',
+    PreChords:      'ugsChords', // preformatted with chords
+    PrePlain:       'ugsPlain', // preformated, no chords
+    NoLyrics:       'ugsNoLyrics', // preformated, chords ONLY -- no lyrics (text) between 'em
+    ColumnWrap:     'ugsWrap',
+    ColumnCount:    'ugsColumnCount',
+    Column:         'ugsColumn',
+    NewPage:        'ugsNewPage',
   };
 
   /**
    * Enumeration defining the types of nodes used within this class to parse CPM
-   * @type JSON-enum
    */
-  /* eslint-disable key-spacing */
   const blockTypeEnum = Object.freeze({
-  // Multiline Nodes
+    // Multiline Nodes
     TextBlock:            1, // temporary type, should be replaced with Chord Text or Plain Text
     ChorusBlock:          2,
     TabBlock:             3,
@@ -152,9 +186,9 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
   /* eslint-enable key-spacing */
 
   /**
-   * Retuns the block type (_blockTypeEnum) of passed in line.
+   * Retuns the block type (blockTypeEnum) of passed in line.
    * @param line {songNode}
-   * @return {_blockTypeEnum}
+   * @return {blockTypeEnum}
    */
   function getBlockType(line) {
     // TODO: verify line's type in documentation
@@ -178,22 +212,21 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
     let nextType;
     song.forEach((songBlock, i) => {
       const { type } = songBlock;
-      /*
-      if (type == _blockTypeEnum.Title){
-        html += '<h1>' + songBlock.lines[0] + '</h1>' + nl;
-      }
-      else if (type == _blockTypeEnum.Subtitle){
-        html += '<h2>' + songBlock.lines[0] + '</h2>' + nl;
-      }
-      else if (type == _blockTypeEnum.Album){
-        html += '<h3 class="ugsAlbum">' + songBlock.lines[0] + '</h3>' + nl;
-      }
-      else if (type == _blockTypeEnum.UkeGeeksMeta){
-        html += '<h3>' + songBlock.lines[0] + '</h3>' + nl;
-      }
-      else
-      */
       switch (type) {
+        /*
+        case blockTypeEnum.Title:
+          html += '<h1>' + songBlock.lines[0] + '</h1>' + nl;
+          break;
+        case blockTypeEnum.Subtitle:
+          html += '<h2>' + songBlock.lines[0] + '</h2>' + nl;
+          break;
+        case blockTypeEnum.Album:
+          html += '<h3 class="ugsAlbum">' + songBlock.lines[0] + '</h3>' + nl;
+          break;
+        case blockTypeEnum.UkeGeeksMeta:
+          html += '<h3>' + songBlock.lines[0] + '</h3>' + nl;
+          break;
+        */
         case blockTypeEnum.Comment:
           html += `<h6 class="${classNames.Comment}">${songBlock.lines[0]}</h6>${nl}`;
           break;
@@ -320,6 +353,23 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
       cmdVerb: /\{(.+?)\s*:.*\}/gi,
     };
 
+    /* eslint-disable key-spacing */
+    const verbToBlockTypeHash = {
+      [cpmInstructions.title]:            blockTypeEnum.Title,
+      [cpmInstructions.titleShort]:       blockTypeEnum.Title,
+      [cpmInstructions.artist]:           blockTypeEnum.Artist,
+      [cpmInstructions.subtitle]:         blockTypeEnum.Subtitle,
+      [cpmInstructions.subtitleShort]:    blockTypeEnum.Subtitle,
+      [cpmInstructions.album]:            blockTypeEnum.Album,
+      [cpmInstructions.comment]:          blockTypeEnum.Comment,
+      [cpmInstructions.commentShort]:     blockTypeEnum.Comment,
+      [cpmInstructions.key]:              blockTypeEnum.Key,
+      [cpmInstructions.keyShort]:         blockTypeEnum.Key,
+      [cpmInstructions.define]:           blockTypeEnum.ChordDefinition,
+      [cpmInstructions.ugsMeta]:          blockTypeEnum.UkeGeeksMeta,
+    };
+    /* eslint-enable key-spacing */
+
     song.forEach((songBlock) => {
       songBlock.lines = songBlock.lines.map((line) => {
         if (!regEx.instr.test(line)) {
@@ -327,46 +377,12 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
         }
 
         const args = line.replace(regEx.cmdArgs, '$1');
-        let verb = line.replace(regEx.cmdVerb, '$1').toLowerCase();
-        verb = verb.replace(/\r/, ''); // IE7 bug
-        let blockType;
-
-        switch (verb) {
-          case 'title':
-          case 't':
-            blockType = blockTypeEnum.Title;
-            break;
-          case 'artist':
-            blockType = blockTypeEnum.Artist;
-            break;
-          case 'subtitle':
-          case 'st':
-            blockType = blockTypeEnum.Subtitle;
-            break;
-          case 'album':
-            blockType = blockTypeEnum.Album;
-            break;
-          case 'comment':
-          case 'c':
-            blockType = blockTypeEnum.Comment;
-            break;
-          case 'key':
-          case 'k':
-            blockType = blockTypeEnum.Key;
-            break;
-          case 'define':
-            blockType = blockTypeEnum.ChordDefinition;
-            break;
-          case 'ukegeeks-meta':
-            blockType = blockTypeEnum.UkeGeeksMeta;
-            break;
-          default:
-            blockType = `Undefined-${verb}`;
-            break;
-        }
+        const verb = line.replace(regEx.cmdVerb, '$1')
+          .toLowerCase()
+          .replace(/\r/, ''); // IE7 bug
 
         return {
-          type: blockType,
+          type: verbToBlockTypeHash[verb] || `Undefined-${verb}`,
           lines: [toolsLite.trim(args)],
         };
       });
@@ -391,16 +407,16 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
 
         const verb = line.replace(regEx.columnBreak, '$1').toLowerCase();
         switch (verb) {
-          case 'column_break':
-          case 'colb':
+          case cpmInstructions.columnBreak:
+          case cpmInstructions.columnBreakShort:
             columnCount++;
             line = {
               type: blockTypeEnum.ColumnBreak,
               lines: [],
             };
             break;
-          case 'new_page':
-          case 'np':
+          case cpmInstructions.newPage:
+          case cpmInstructions.newPageShort:
             line = {
               type: blockTypeEnum.NewPage,
               lines: [],
@@ -462,7 +478,7 @@ fdRequire.define('scriptasaurus/ukeGeeks.cpmParser', (require, module) => {
   /**
    * Searches the songNodes for the specified block type, retunrs all matching node line (text) values.
    * @param song {songNodeArray}
-   * @param type {_blockTypeEnum}
+   * @param type {blockTypeEnum}
    * @return {array}
    */
   function getInfo(song, type) {

@@ -3,14 +3,8 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordParser', (require, module) => {
 
   let underscoreChords = [];
 
-  /// //////////////////////////////////////////////////////////////////////////
-  //
-  // PUBLIC methods
-  //
-  /// //////////////////////////////////////////////////////////////////////////
   /**
    * Again this is a constructor replacement. Just here for consistency. Does nothing.
-   * @method init
    * @return {void}
    */
   function init() {}
@@ -18,7 +12,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordParser', (require, module) => {
   /**
    * This does all of the work -- it's a Wrapper method that calls all of this classes other
    * (private) methods in correct order.
-   * @method parse
    * @param text {string} CPM Text Block to be parsed
    * @return {string}
    */
@@ -31,23 +24,15 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordParser', (require, module) => {
 
   /**
    * Getter method for _chords
-   * @method getChords
    * @return {Array-chords}
    */
   function getChords() {
     return underscoreChords;
   }
 
-  /// //////////////////////////////////////////////////////////////////////////
-  //
-  // PRIVATE methods
-  //
-  /// //////////////////////////////////////////////////////////////////////////
   /**
    * Returns an array of all of the unique bracket chord names. So even if [D7] appears a
    * dozen times you'll only see it once in this list.
-   * @method _findChords
-   * @private
    * @param text {string} CPM Text Block to be parsed
    * @return {StringArray}
    */
@@ -73,8 +58,12 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordParser', (require, module) => {
         chords.push(m[i]);
       }
     }
+
     // clean 'em
-    chords.forEach((c, j) => chords[j].replace('[', '').replace(']', ''));
+    chords.forEach((c, j) => {
+      chords[j] = c.replace('[', '').replace(']', '');
+    });
+
     // done
     return chords;
   }
@@ -82,8 +71,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordParser', (require, module) => {
   /**
    * Returns the input string having replaced all of the "bracketed chord names" (i.e. [D7]) with HTML
    * marked-up version (i.e. &lt;code&gt;&lt;strong&gt;[&lt;em&gt;D7&lt;/em&gt;]&lt;/strong&gt;&lt;/code&gt;)
-   * @method _encloseChords
-   * @private
    * @param text {string}
    * @param chords {StringArray}
    * @return {string}
@@ -112,8 +99,6 @@ fdRequire.define('scriptasaurus/ukeGeeks.chordParser', (require, module) => {
   /**
    * Looks for consecutive chords and strips the whitespace between them -- thus "packing" the
    * chords against each other with only a single space separating them.
-   * @method _packChords
-   * @private
    * @param text {string}
    * @return {string}
    */
