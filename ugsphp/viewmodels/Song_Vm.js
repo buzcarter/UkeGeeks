@@ -1,25 +1,25 @@
 const BaseViewModel = require('./_base_Vm');
 
 class SongViewModel extends BaseViewModel {
-  SongTitle = '';
-
-  Subtitle = '';
-
   Album = '';
 
   Artist = '';
 
   Body = '';
 
-  UgsMeta = null;
-
-  SourceUri = '';
+  EditorSettingsJson = '';
 
   EditUri = '';
 
-  EditorSettingsJson = '';
-
   Id = '';
+
+  SongTitle = '';
+
+  SourceUri = '';
+
+  Subtitle = '';
+
+  UgsMeta = null;
 
   /**
    * URL where "New Song" AJAX is sent.

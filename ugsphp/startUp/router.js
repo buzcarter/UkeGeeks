@@ -1,5 +1,12 @@
 const builders = require('../builders');
 
+function extendReq(routeName, handler, req, res, next) {
+  req.ukeGeeks = Object.assign(req.ukeGeeks || {}, {
+    routeName,
+  });
+  handler(req, res, next);
+}
+
 module.exports = {
   loadRoutes(app, routes) {
     Object.keys(routes)
@@ -14,7 +21,7 @@ module.exports = {
           throw new Error(`path for "${routeName}" not a valid string`);
         }
 
-        app.use(path, controllerFn);
+        app.use(path, extendReq.bind(this, routeName, controllerFn));
         // eslint-disable-next-line no-console
         console.log(`Added ${routeName} route ("${path}")`);
       });

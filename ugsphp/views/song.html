@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>{{ PageTitle }} </title>
+  <title>{{ PageTitle | safe }}</title>
   <meta name="generator" content="{{ PoweredBy }}" />
   <link type="text/css" href="{{ StaticsPrefix }}/css/yuiReset.css" />
   <link type="text/css" href="{{ StaticsPrefix }}/css/basic-page-layout.css" media="all" />
@@ -15,7 +15,7 @@
   </style>
 </head>
 <body>
-  <!-- salt=song -->
+  <!-- salt=song-lWmZq-9172 -->
   <main>
     <header>
       <hgroup>
@@ -23,7 +23,7 @@
           <a href="{{ EditUri }}" title="switch to Edit/Customize view (great for Print!)">Customize</a>
           <a href="{{ SourceUri }}" target="_blank" title="view original song text">Source</a>
         </aside>
-        <h1 class="ugsSongTitle">{{ SongTitle }}</h1>
+        <h1 class="ugsSongTitle">{{ SongTitle | safe }}</h1>
         {% if Artist %}
           <h2 class="ugsArtist">{{ Artist }}</h2>
         {% endif %}

@@ -10,7 +10,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>{{ PageTitle }}</title>
+<title>{{ PageTitle | safe }}</title>
 <script type="text/javascript">var isLegacyIe = false;</script>
 <link href='http://fonts.googleapis.com/css?family=Peralta|Smokum|Cherry+Cream+Soda|Ranchers|Creepster|Lobster|Permanent+Marker|Architects+Daughter|Bree+Serif' rel='stylesheet' type='text/css' />
 <link rel="stylesheet" href="{{ StaticsPrefix }}css/yuiReset.css" />
@@ -20,10 +20,11 @@
 <link rel="stylesheet" href="{{ StaticsPrefix }}css/ugsEditorPlus.print.css" media="print" />
 </head>
 <body class="editableSongPage pageWidth_screen">
+  <!-- salt=song-editable-pL4K5-091 -->
 <section id="scalablePrintArea" class="scalablePrintArea">
   <header>
     <hgroup class="ugs-songInfo">
-      <h1 id="songTitle" class="ugs-songTitle">{{ SongTitle }}</h1>
+      <h1 id="songTitle" class="ugs-songTitle">{{ SongTitle | safe }}</h1>
       <h2 id="songSubtitle" class="ugs-songSubtitle" style="display:{{ GetDisplayStyle(Subtitle) }};">{{ Subtitle }}</h2>
       <h2 id="songArtist" class="ugs-songArtist" style="display:{{ GetDisplayStyle(Artist) }};">{{ Artist }}</h2>
       <h2 id="songAlbum" class="ugs-songAlbum" style="display:{{ GetDisplayStyle(Album) }};">{{ Album }}</h2>

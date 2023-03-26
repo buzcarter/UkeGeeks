@@ -1,4 +1,4 @@
-/* 
+/*
   Document   : basic-page-layout
   Created on : Jan, 2010
   Author     : Buz
@@ -37,7 +37,7 @@ header hgroup aside{
   font-size:.8em;
   width:auto;
 }
-/* Pseudo Blog Post 
+/* Pseudo Blog Post
   ------------------------------ */
 .blog-post{
   border-bottom: solid 1px #ccc;

@@ -1,42 +1,37 @@
-const Config = require('../Config');
-const fs = require('fs');
+const FileHelper = require('../classes/FileHelper');
 const SongHelper = require('../classes/SongHelper');
 const SongViewModel = require('../viewmodels/Song_Vm');
+const strUtils = require('../lib/strUtils');
 
 /**
  * Parses file (using URL query param) and attempts to load View Model
  * @return {Song_Vm}
  */
 function Build(req, res) {
-  const filename = `${Config.SongDirectory}/${req.params.cpm}.cpm.txt`;
-  let fileContent;
-  try {
-    fileContent = fs.readFileSync(filename, { encoding: 'utf8', flag: 'r' });
-  } catch (error) {
-    res.send({ error, filename });
+  const { cpm: cpmName } = req.params;
+  const filename = FileHelper.getSongFilename(cpmName);
+  const content = FileHelper.readFile(filename);
+  if (content === null) {
+    res.send({ error: `Unable to find CPM "${cpmName}" source`, filename });
     return;
   }
 
-  const song = SongHelper.parseSong(fileContent);
-
-  // const title = htmlspecialchars(((song.isOK) ? (song.title + ((song.subtitle) ? (` | ${song.subtitle}`) : '')) : 'Not Found'));
+  const song = SongHelper.parseSong(content);
 
   /* eslint-disable key-spacing */
   const viewModel = Object.assign(new SongViewModel(), {
-    PageTitle:             MakePageTitle(song, filename),
-    SongTitle:             song.title, // htmlspecialchars(song.title)
-    Subtitle:              song.subtitle, // htmlspecialchars(song.subtitle)
+    Album:                 strUtils.htmlSpecialChars(song.album),
     Artist:                song.artist,
-    Album:                 song.album, // htmlspecialchars()
     Body:                  song.body,
-    UgsMeta:               song.meta,
-    SourceUri:             '#SourceUri', // Ugs.MakeUri(Actions.Source, filename)
+    EditorSettingsJson:    null, // $this.getSettings()
     // EditUri: Ugs.MakeUri(Actions.Edit, filename)
-
     Id:                    filename,
     IsUpdateAllowed:       false, // $this.SiteUser.MayEdit && $this.SiteUser.IsAuthenticated
-
-    EditorSettingsJson:    null, // $this.getSettings()
+    PageTitle:             MakePageTitle(song, filename),
+    SongTitle:             strUtils.htmlSpecialChars(song.title),
+    SourceUri:             '#SourceUri', // Ugs.MakeUri(Actions.Source, filename)
+    Subtitle:              strUtils.htmlSpecialChars(song.subtitle),
+    UgsMeta:               song.meta,
   });
   /* eslint-enable key-spacing */
 
@@ -50,7 +45,9 @@ function Build(req, res) {
     SupportEmail: viewModel.SupportEmail,
   };
 
-  const template = Config.UseEditableSong ? 'song-editable' : 'song';
+  // const template = Config.UseEditableSong ? 'song-editable' : 'song';
+  const template = req.ukeGeeks.routeName !== 'song' ? 'song-editable' : 'song';
+
   res.render(template, fixedViewModel);
 }
 
@@ -71,11 +68,9 @@ function MakePageTitle(song, filename) {
     } else if (song.subtitle) {
       title += ` - ${song.subtitle}`;
     }
-
-    // title = htmlspecialchars(title);
   }
 
-  return title || filename;
+  return strUtils.htmlSpecialChars(title || filename || '');
 }
 
 /**

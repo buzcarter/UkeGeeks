@@ -3,5 +3,6 @@
   "songbook":         { "path": "/songbook",        "controller": "songbook" },
   "song":             { "path": "/song/:cpm",       "controller": "song" },
   "songList":         { "path": "/song-list",       "controller": "songList" },
+  "source":           { "path": "/source/:cpm",     "controller": "source" },
   "home":             { "path": "/",                "controller": "home" }
 }

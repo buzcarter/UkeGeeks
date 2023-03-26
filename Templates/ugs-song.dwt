@@ -24,45 +24,45 @@ document.getElementsByTagName('html')[0].className = 'ie';
 </head>
 <body>
 <section>
- <header>
-  <hgroup> <!-- TemplateBeginEditable name="header" -->
-   <h1>UNTITLED</h1>
-   <h2>ARTIST</h2>
-   <!-- TemplateEndEditable -->
- </hgroup>
- </header>
- <div class="metaInfo"> <!-- TemplateBeginEditable name="metaInfo" -->
-  <p>Source: NA</p>
-  <p>Watch: NA</p>
-  <!-- TemplateEndEditable -->
- </div>
- <!--/.metaInfo-->
- <div id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
-  <aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped">
-   <canvas>
-    <p>Your browser doesn't support canvas please upgrade (FREE) to <a href="http://www.google.com/chrome">Google Chrome</a>, <a href="http://www.mozilla.com/en-US/firefox/">Firefox</a>, or <a href="http://www.apple.com/safari/">Apple Safari</a>.</p>
-   </canvas>
-  </aside>
-  <article id="ukeSongText" class="ugs-source-wrap">
-   <pre>
+  <header>
+    <hgroup> <!-- TemplateBeginEditable name="header" -->
+      <h1>UNTITLED</h1>
+      <h2>ARTIST</h2>
+      <!-- TemplateEndEditable -->
+  </hgroup>
+  </header>
+  <div class="metaInfo"> <!-- TemplateBeginEditable name="metaInfo" -->
+    <p>Source: NA</p>
+    <p>Watch: NA</p>
+    <!-- TemplateEndEditable -->
+  </div>
+  <!--/.metaInfo-->
+  <div id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
+    <aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped">
+      <canvas>
+        <p>Your browser doesn't support canvas please upgrade (FREE) to <a href="http://www.google.com/chrome">Google Chrome</a>, <a href="http://www.mozilla.com/en-US/firefox/">Firefox</a>, or <a href="http://www.apple.com/safari/">Apple Safari</a>.</p>
+      </canvas>
+    </aside>
+    <article id="ukeSongText" class="ugs-source-wrap">
+      <pre>
 <!-- TemplateBeginEditable name="ezChords" -->
 Paste [Am]your marked-up song[C]
 Here... [F]
 <!-- TemplateEndEditable -->
-  </pre>
-  </article>
- </div>
- <!-- /#ukeSongContainer -->
+    </pre>
+    </article>
+  </div>
+  <!-- /#ukeSongContainer -->
 </section>
 <footer>
- <p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by <a href="http://ukegeeks.com/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.com</small></p>
+  <p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by <a href="http://ukegeeks.com/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.com</small></p>
 </footer>
 <!-- TemplateBeginEditable name="postBody" --><!-- TemplateEndEditable -->
 <script type="text/javascript" src="../js/ukeGeeks.scriptasaurus.min.js"></script>
 <!-- TemplateBeginEditable name="ukeGeeksReady" -->
 <script type="text/javascript">
 /**
- * Put your code here to change any of UkeGeek's default settings.
+ *  Put your code here to change any of UkeGeek's default settings.
  */
 </script>
 <!-- TemplateEndEditable -->

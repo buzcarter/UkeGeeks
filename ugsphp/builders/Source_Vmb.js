@@ -1,25 +1,18 @@
-const Config = require('../Config');
 const FileHelper = require('../classes/FileHelper');
-const SourceViewModel = require('../viewmodels/Source_Vm');
 
-/**
- * View Model Builder -- Creates a "Source" View Model
- * @class Source_Vmb
- */
+function Build(req, res) {
+  const { cpm: cpmName } = req.params;
+  const filename = FileHelper.getSongFilename(cpmName);
+  const content = FileHelper.readFile(filename);
+  res.set({ 'Content-Type': 'text/plain' });
+  if (content === null) {
+    res.status(404)
+      .send(`Unable to find CPM "${cpmName}" source`);
+    return;
+  }
 
-/**
- * Populates Source View Model
- * @return Source_Vm
- */
-function Build() {
-  const fname = FileHelper.getFilename();
-  const data = FileHelper.getFile(Config.SongDirectory + fname);
-  const viewModel = Object.assign(new SourceViewModel(), {
-    PageTitle: `Song Source for &quot;${fname}&quot; ChordPro (CPM)/UkeGeeks File Format`,
-    Body: data, // htmlspecialchars(data),
-  });
-
-  return viewModel;
+  res.status(200)
+    .send(content);
 }
 
 module.exports = Build;

@@ -64,7 +64,7 @@ class SongListCacheManager {
 
     files.forEach((fname) => {
       const s = fname.replace(Config.FileNamePattern, '$1');
-      const content = FileHelper.getFile(`${Config.SongDirectory}/${fname}`);
+      const content = FileHelper.readFile(`${Config.SongDirectory}/${fname}`);
       const parsed = SongHelper.parseSong(content);
 
       const song = Object.assign(new SongListPlusViewModel.SongLinkPlus_Pvm(), {

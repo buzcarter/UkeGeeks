@@ -1,4 +1,5 @@
 const fs = require('fs');
+const Config = require('../Config');
 
 /**
  * Shared file access methods
@@ -27,12 +28,12 @@ function getFilename() {
  * @param {string} fname
  * @return {string}
  */
-function getFile(fname) {
-  const source = fs.readFileSync(fname, {
-    encoding: 'utf8',
-  });
-
-  return source;
+function readFile(fname) {
+  try {
+    return fs.readFileSync(fname, { encoding: 'utf8', flag: 'r' });
+  } catch (error) {
+    return null;
+  }
   // data = '';
   // if (!file_exists(fname)) {
   //   return null;
@@ -74,5 +75,8 @@ function getFilenames(dir) {
 }
 
 module.exports = {
-  getFile,
+  readFile,
+  getSongFilename(cpm) {
+    return `${Config.SongDirectory}/${cpm}.cpm.txt`;
+  },
 };
