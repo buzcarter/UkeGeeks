@@ -1,6 +1,6 @@
 # ------------------------------------------------------
 # these hidden comments may be placed anywhere!
-# more info here: http://ukegeeks.com/users-guide.htm#chordpro_markup_reference
+# more info here: http://ukegeeks.org/users-guide.htm#chordpro_markup_reference
 # ------------------------------------------------------
 # "title" or just "t" 
 {t: ChordPro Song Markup, Part 2: Shorthand}

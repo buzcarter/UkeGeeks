@@ -1,20 +1,22 @@
 # UkeGeeks Scriptasaurus
 
+**Website Info:** ukegeeks.com is no longer affiliated with this project. Please use [ukegeeks.org](https://ukegeeks.org) instead.
+
 When added to your webpage this JavaScript library creates ukulele chord fingering diagrams and nicely formated songsheets by reading songs from directly within HTML &lt;pre&gt; tags.
 
 The optional PHP mini-website let's you start publishing your own songbooks.
 
-Visit the [UkeGeeks website](http://ukegeeks.com) for more information.
+Visit the [UkeGeeks website](http://ukegeeks.org) for more information.
 
 Follow [@ukegeeks](https://twitter.com/ukegeeks)
 
-Ongoing discussions and "How To" videos posted at [blog.ukegeeks.com](http://blog.ukegeeks.com). Also read the [User Guide and Chord Pro mark-up reference](http://blog.ukegeeks.com/users-guide/) for more demos and examples.
+Ongoing discussions and "How To" videos posted at [blog.ukegeeks.org](http://blog.ukegeeks.org). Also read the [User Guide and Chord Pro mark-up reference](http://blog.ukegeeks.org/users-guide/) for more demos and examples.
 
-Lastly, the blog includes a [technical discussion and tips section](http://blog.ukegeeks.com/technical-reference/)
+Lastly, the blog includes a [technical discussion and tips section](http://blog.ukegeeks.org/technical-reference/)
 
 ## Authors
 
-* [Buz Carter](http://pizzabytheslice.com) (buz@ukegeeks.com)
+* [Buz Carter](http://pizzabytheslice.com) (buz@ukegeeks.org)
 
 ## What's New...
 
@@ -90,10 +92,10 @@ The UkeGeeks GitHub repostitory contains:
 * **PHP Powered Songbook Application** is a complete, plug-n-play application that dynamically reads ChordPro text files and generates a song listing page in addition to the individual song pages.
 
 ### Demos
-To illustrate the similarities of the static HTML and PHP-driven versions we have two presentations of "My Little Grass Shack in Kealakekua" (note: links point to UkeGeeks.com but will run on your web server):
+To illustrate the similarities of the static HTML and PHP-driven versions we have two presentations of "My Little Grass Shack in Kealakekua" (note: links point to ukegeeks.org but will run on your web server):
 
-* [Demo Static HTML](http://ukegeeks.com/songs/my-little-grass-shack-in-kealakekua.htm) _(see section Static Site Info below)_
-* [Demo Songbook App's Song View](http://ukegeeks.com/music.php?action=song&song=my-little-grass-shack-in-kealakekuahttp://ukegeeks.com/music.php?action=song&song=my-little-grass-shack-in-kealakekua) _(see section "Getting Started With PHP Songbook" below)_
+* [Demo Static HTML](http://ukegeeks.org/songs/my-little-grass-shack-in-kealakekua.htm) _(see section Static Site Info below)_
+* [Demo Songbook App's Song View](http://ukegeeks.org/music.php?action=song&song=my-little-grass-shack-in-kealakekuahttp://ukegeeks.org/music.php?action=song&song=my-little-grass-shack-in-kealakekua) _(see section "Getting Started With PHP Songbook" below)_
 
 ### Overview
 Scriptasaurus does two things:
@@ -102,7 +104,7 @@ Scriptasaurus does two things:
 
 It does these by reading a text block and rewriting it with additional HTML tags (&lt;code&gt;) wrapping any chords it detects (a chord is any text enclosed within square brackets, i.e. [Fmaj7])
 
-It recognizes several ChordPro tags (for the most detailed info on supported tags visit [Uke Geek's User's Guide: ChordPro Markup Reference](http://blog.ukegeeks.com/users-guide/chordpro-markup-reference/))
+It recognizes several ChordPro tags (for the most detailed info on supported tags visit [Uke Geek's User's Guide: ChordPro Markup Reference](http://blog.ukegeeks.org/users-guide/chordpro-markup-reference/))
 
 #### About Names and Scope
 Many files and CSS class names are prefaced with **"UGS"**: Uke Geeks Scriptasaurus. _"Uke Geeks"_ is the whole schmeer, the collection of projects. _"Scriptasuarus"_ (or "Core Library") refers to the single JavaScript library that does the heavy lifting.
