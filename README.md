@@ -8,8 +8,6 @@ The optional PHP mini-website let's you start publishing your own songbooks.
 
 Visit the [UkeGeeks website](http://ukegeeks.org) for more information.
 
-Follow [@ukegeeks](https://twitter.com/ukegeeks)
-
 Ongoing discussions and "How To" videos posted at [blog.ukegeeks.org](http://blog.ukegeeks.org). Also read the [User Guide and Chord Pro mark-up reference](http://blog.ukegeeks.org/users-guide/) for more demos and examples.
 
 Lastly, the blog includes a [technical discussion and tips section](http://blog.ukegeeks.org/technical-reference/)
