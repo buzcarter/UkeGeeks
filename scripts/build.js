@@ -5,11 +5,14 @@
  *   src/js/editor/*.js                 -> js/ugsEditorPlus.merged.js + .min.js
  *   src/less/ugsEditorPlus_merged.less -> css/ugsEditorPlus.merged.css + .min.css
  *
- * and copies in the song renderer, Song Formatter (the devDependency
- * @ukegeeks/song-formatter), so the Songbook needs nothing installed to run:
+ * and copies in two packages (devDependencies), so the Songbook needs nothing
+ * installed to run:
  *
- *   dist/song-formatter.bundle.js (+ .map, .LICENSE.txt) -> js/
- *   dist/css/ukeGeeks.music.css, ukeGeeks.musicPrint.css  -> css/
+ *   @ukegeeks/song-formatter, the song renderer:
+ *     dist/song-formatter.bundle.js (+ .map, .LICENSE.txt) -> js/
+ *     dist/css/ukeGeeks.music.css, ukeGeeks.musicPrint.css  -> css/
+ *   @ukegeeks/ace-chordpro-extension, the fullscreen editor (Ace + ChordPro mode):
+ *     dist/ace-chordpro.min.js                              -> js/ace/
  *
  * Usage: node scripts/build.js [js|css]   (no argument builds both)
  *
@@ -44,6 +47,7 @@ const BUNDLES = [
       'ugsEditorPlus.newSong.js',
       'ugsEditorPlus.updateSong.js',
       'ugsEditorPlus.typeahead.js',
+      'ugsEditorPlus.aceHelp.js',
       'ugsEditorPlus.resize.js',
       'ugsEditorPlus.chordBuilder.js',
       'ugsEditorPlus.songAmatic.js',
@@ -56,10 +60,27 @@ const BUNDLES = [
   },
 ];
 
-// Song Formatter's files, copied from node_modules/@ukegeeks/song-formatter/dist/ (see the header)
-const SONG_FORMATTER = {
-  js: ['song-formatter.bundle.js', 'song-formatter.bundle.js.map', 'song-formatter.bundle.js.LICENSE.txt'],
-  css: ['css/ukeGeeks.music.css', 'css/ukeGeeks.musicPrint.css'],
+// Files copied from node_modules (see the header), by build target
+const VENDORED = {
+  js: [
+    {
+      pkg: '@ukegeeks/song-formatter',
+      to: 'js',
+      files: ['dist/song-formatter.bundle.js', 'dist/song-formatter.bundle.js.map', 'dist/song-formatter.bundle.js.LICENSE.txt'],
+    },
+    {
+      pkg: '@ukegeeks/ace-chordpro-extension',
+      to: 'js/ace',
+      files: ['dist/ace-chordpro.min.js'],
+    },
+  ],
+  css: [
+    {
+      pkg: '@ukegeeks/song-formatter',
+      to: 'css',
+      files: ['dist/css/ukeGeeks.music.css', 'dist/css/ukeGeeks.musicPrint.css'],
+    },
+  ],
 };
 
 const LESS_ENTRY = 'src/less/ugsEditorPlus_merged.less';
@@ -94,12 +115,15 @@ async function buildJsBundle({ name, dir, files }) {
   console.log(`  ${rel(minPath)} (${result.code.length} bytes)`);
 }
 
-async function copySongFormatter(kind) {
-  const dist = path.join(path.dirname(require.resolve('@ukegeeks/song-formatter/package.json')), 'dist');
-  for (const file of SONG_FORMATTER[kind]) {
-    const out = path.join(ROOT, kind, path.basename(file));
-    await fs.copyFile(path.join(dist, file), out);
-    console.log(`  ${rel(out)} (from @ukegeeks/song-formatter)`);
+async function copyVendored(target) {
+  for (const { pkg, to, files } of VENDORED[target]) {
+    const pkgDir = path.dirname(require.resolve(`${pkg}/package.json`));
+    await fs.mkdir(path.join(ROOT, to), { recursive: true });
+    for (const file of files) {
+      const out = path.join(ROOT, to, path.basename(file));
+      await fs.copyFile(path.join(pkgDir, file), out);
+      console.log(`  ${rel(out)} (from ${pkg})`);
+    }
   }
 }
 
@@ -129,12 +153,12 @@ async function main() {
     for (const bundle of BUNDLES) {
       await buildJsBundle(bundle);
     }
-    await copySongFormatter('js');
+    await copyVendored('js');
   }
   if (!target || target === 'css') {
     console.log('Building CSS...');
     await buildCss();
-    await copySongFormatter('css');
+    await copyVendored('css');
   }
 }
 
