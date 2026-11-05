@@ -1,6 +1,6 @@
 {
   "name": "ukegeeks-scriptasaurus",
-  "version": "1.4.4",
+  "version": "1.5.1",
   "description": "UkeGeeks Scriptasaurus: ChordPro songbook with ukulele chord diagrams, served by a small Node.js server",
   "private": true,
   "license": "GPL-3.0",
@@ -10,10 +10,22 @@
     "url": "http://pizzabytheslice.com"
   },
   "contributors": [
-    { "name": "David Calam", "url": "https://github.com/djc-503" },
-    { "name": "louis-coding", "url": "https://github.com/louis-coding" },
-    { "name": "AceLan Kao", "url": "https://github.com/acelan" },
-    { "name": "hutzelknecht", "url": "https://github.com/hutzelknecht" }
+    {
+      "name": "David Calam",
+      "url": "https://github.com/djc-503"
+    },
+    {
+      "name": "louis-coding",
+      "url": "https://github.com/louis-coding"
+    },
+    {
+      "name": "AceLan Kao",
+      "url": "https://github.com/acelan"
+    },
+    {
+      "name": "hutzelknecht",
+      "url": "https://github.com/hutzelknecht"
+    }
   ],
   "homepage": "https://ukegeeks.org",
   "repository": {

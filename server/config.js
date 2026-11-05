@@ -25,7 +25,7 @@ const defaults = {
 
   // attribution & titles
   pageTitleSuffix: " | UkeGeek's Scriptasaurus",
-  poweredBy: 'UkeGeeks-Scriptasaurus-v1.4',
+  poweredBy: 'UkeGeeks-Scriptasaurus-v1.5',
   supportEmail: 'buz@your-domain-not-mine.com',
   songbookHeadline: 'The BIG UKE Book',
   songbookSubHeadline: 'Sample Styled Songbook »',
