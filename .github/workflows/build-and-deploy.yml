@@ -57,8 +57,9 @@ jobs:
       - name: Assemble static demo site
         if: github.event_name != 'pull_request'
         run: |
-          mkdir -p _site/img
-          cp -R css js img songs favicon.ico apple-touch-icon.png _site/
+          # static Songbook (songbook/) + css/ js/ img/ + icons
+          node scripts/build-static.js --out _site
+          cp -R songs _site/
           cp site/index.html _site/
           cp src/img/favicon/maestro-saurus-full.png _site/img/maestro-saurus.png
 
