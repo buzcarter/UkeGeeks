@@ -2970,6 +2970,47 @@ ugsEditorPlus.typeahead = function(){
 	return _public;
 };
 ;/**
+ * Help shown beside the fullscreen (Ace) editor: keyboard shortcuts and ChordPro snippets.
+ * It used to ship inside js/ace/ace.js as `ugsAce.helpHtml`; the Ace ChordPro extension
+ * no longer includes it, so it lives with the editor. Styled in ugsEditorPlus.aceEditor.less.
+ * @property aceHelpHtml
+ * @type {string}
+ */
+ugsEditorPlus.aceHelpHtml = [
+  '<div class="aceHelp">',
+  '<h3>Keyboard Shortcuts</h3>',
+  '<table>',
+  '<thead>',
+  '<tr><th>Shortcut</th><th>Action</th></tr>',
+  '</thead>',
+  '<tbody>',
+  '<tr><td class="shortKeys"><code class="key">CTRL</code> + <code class="key">F</code></td><td>Find</td></tr>',
+  '<tr><td class="shortKeys"><code class="key">CTRL</code> + <code class="key">H</code></td><td>Search &amp; Replace</td></tr>',
+  '<tr><td class="shortKeys"><code class="key">ESCAPE</code></td><td>Close Find or Chord window</td></tr>',
+  '<tr><td class="shortKeys"><code class="key">CTRL</code> + <code class="key">SPACEBAR</code></td><td>Lists your song\'s chords. Use <code class="key">DOWNARROW</code> &amp; <code class="key">UPARROW</code> to choose one, or type a few letters of the chord name to narrow suggestions. Press <code class="key">ENTER</code> to add it to your song.</td></tr>',
+  '</tbody>',
+  '</table>',
+  '<h3>Snippets</h3>',
+  '<p>Snippets are bits of ChordPro markup that you may add to your song by just typing a few letters and then pressing the <code class="key">TAB</code> key.</p>',
+  '<table>',
+  '<thead>',
+  '<tr><th>Snippet</th><th>ChordPro Markup</th></tr>',
+  '</thead>',
+  '<tbody>',
+  '<tr><td class="shortKeys"><strong>t</strong> or <strong>title</strong></td><td><code class="snip">{title: <em>TITLE</em>}</code></td></tr>',
+  '<tr><td class="shortKeys"><strong>st</strong> or <strong>subtitle</strong></td><td><code class="snip">{subtitle: <em>TITLE</em>}</code></td></tr>',
+  '<tr><td class="shortKeys"><strong>a</strong> or <strong>artist</strong></td><td><code class="snip">{artist: <em>NAME</em>}</code></td></tr>',
+  '<tr><td class="shortKeys"><strong>al</strong> or <strong>album</strong></td><td><code class="snip">{album: <em>TITLE</em>}</code></td></tr>',
+  '<tr><td class="shortKeys"><strong>c</strong> or <strong>comment</strong></td><td><code class="snip">{comment: <em>DESCRIPTION</em>}</code></td></tr>',
+  '<tr><td class="shortKeys"><strong>col</strong> or <strong>column</strong></td><td><code class="snip">{column_break}</code></td></tr>',
+  '<tr><td class="shortKeys"><strong>chorus</strong></td><td>Adds complete chorus block, beginning with <code class="snip">{start_of_chorus}</code></td></tr>',
+  '<tr><td class="shortKeys"><strong>tab</strong></td><td>Adds complete tablature block, beginning with <code class="snip">{start_of_tab}</code></td></tr>',
+  '</tbody>',
+  '</table>',
+  '<p>Others: <code>soc</code> &amp; <code>eoc</code> (mark <em>chorus</em> block) and <code>sot</code> &amp; <code>eot</code> (mark <em>tab</em> block). <code>d</code> adds <code>{define:...}</code> tag.</p>',
+  '<p>TIP: When a snippet\'s added some &ldquo;placeholder text&rdquo; may be highlighted -- just type whatever you wish to replace this. If more than one placeholder is available pressing <code class="key">TAB</code> again will cycle through them.</p></div>',
+].join('');
+;/**
  * Resizes an overlay to fill the window (this is a 1.0, so "fill" is relative -- it gets much bigger)
  * @class resize
  * @namespace ugsEditorPlus
@@ -3089,9 +3130,12 @@ ugsEditorPlus.resize = (function(){
 		}
 
 		// only execute this block once (thus the null check)
+		// the folder ugsEditorPlus.min.js was loaded from, with a trailing slash (e.g. "/js/")
 		var path = getPath('ugsEditorPlus');
 
-		LazyLoad.js(path + '/ace/ace.js', function() {
+		// Ace with the ChordPro mode, snippets, chord completer and theme built in
+		// (@ukegeeks/ace-chordpro-extension, copied here by scripts/build.js)
+		LazyLoad.js(path + 'ace/ace-chordpro.min.js', function() {
 				editor = ace.edit("aceEditor");
 				editor.setTheme("ace/theme/idle_fingers");
 				editor.getSession().setMode("ace/mode/chordpro");
@@ -3099,12 +3143,9 @@ ugsEditorPlus.resize = (function(){
 					enableBasicAutocompletion: true,
 					enableSnippets: true
 				});
-				editor.completers = [ugsAce.chordCompleter];
 				copySongToAce();
 
-				// ugsAce's own (static) help text
-				help.innerHTML = ugsAce.helpHtml;
-
+				help.innerHTML = ugsEditorPlus.aceHelpHtml;
 			});
 	};
 

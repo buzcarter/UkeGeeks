@@ -118,9 +118,12 @@ ugsEditorPlus.resize = (function(){
 		}
 
 		// only execute this block once (thus the null check)
+		// the folder ugsEditorPlus.min.js was loaded from, with a trailing slash (e.g. "/js/")
 		var path = getPath('ugsEditorPlus');
 
-		LazyLoad.js(path + '/ace/ace.js', function() {
+		// Ace with the ChordPro mode, snippets, chord completer and theme built in
+		// (@ukegeeks/ace-chordpro-extension, copied here by scripts/build.js)
+		LazyLoad.js(path + 'ace/ace-chordpro.min.js', function() {
 				editor = ace.edit("aceEditor");
 				editor.setTheme("ace/theme/idle_fingers");
 				editor.getSession().setMode("ace/mode/chordpro");
@@ -128,12 +131,9 @@ ugsEditorPlus.resize = (function(){
 					enableBasicAutocompletion: true,
 					enableSnippets: true
 				});
-				editor.completers = [ugsAce.chordCompleter];
 				copySongToAce();
 
-				// ugsAce's own (static) help text
-				help.innerHTML = ugsAce.helpHtml;
-
+				help.innerHTML = ugsEditorPlus.aceHelpHtml;
 			});
 	};
 
