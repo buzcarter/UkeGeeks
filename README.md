@@ -2,9 +2,11 @@
 
 **Website Info:** ukegeeks.com is no longer affiliated with this project. Please use [ukegeeks.org](https://ukegeeks.org) instead.
 
-When added to your webpage this JavaScript library creates ukulele chord fingering diagrams and nicely formated songsheets by reading songs from directly within HTML &lt;pre&gt; tags.
+**Live demo:** [buzcarter.github.io/UkeGeeks](https://buzcarter.github.io/UkeGeeks/)
 
-The optional PHP mini-website let's you start publishing your own songbooks.
+When added to your webpage this JavaScript library creates ukulele chord fingering diagrams and nicely formatted songsheets by reading songs from directly within HTML &lt;pre&gt; tags.
+
+The optional songbook web app (Node.js or PHP) lets you start publishing your own songbooks.
 
 Visit the [UkeGeeks website](http://ukegeeks.org) for more information.
 
