@@ -11,7 +11,6 @@ isLegacyIe = true;
 document.getElementsByTagName('html')[0].className = 'ie';
 </script>
 <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/excanvas.js"></script>
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="<?php echo($model->StaticsPrefix); ?>css/yuiReset.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo($model->StaticsPrefix); ?>css/basic-page-layout.css" media="all" />
@@ -58,7 +57,7 @@ header aside a{
 <footer>
 	<p>Note: <strong>GCEA</strong> Standard Ukulele Tuning. <small>Powered by UkeGeeks' Scriptasaurus &bull; ukegeeks.org</small></p>
 </footer>
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ukeGeeks.scriptasaurus.min.js"></script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/song-formatter.bundle.js"></script>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/startup.js"></script>
 </body>
 </html>

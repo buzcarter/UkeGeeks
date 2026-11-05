@@ -12,7 +12,6 @@ isLegacyIe = true;
 document.getElementsByTagName('html')[0].className = 'ie';
 </script>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<script type="text/javascript" src="../js/excanvas.js"></script>
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="../css/yuiReset.css" />
 <link rel="stylesheet" type="text/css" href="../css/basic-page-layout.css" media="all" />
@@ -58,7 +57,7 @@ Here... [F]
 	<p>Note: Standard <strong>GCEA</strong> Soprano Ukulele Tuning. <small>Powered by <a href="http://ukegeeks.org/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.org</small></p>
 </footer>
 <!-- TemplateBeginEditable name="postBody" --><!-- TemplateEndEditable -->
-<script type="text/javascript" src="../js/ukeGeeks.scriptasaurus.min.js"></script>
+<script type="text/javascript" src="../js/song-formatter.bundle.js"></script>
 <!-- TemplateBeginEditable name="ukeGeeksReady" -->
 <script type="text/javascript">
 /**

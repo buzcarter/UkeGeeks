@@ -25,7 +25,7 @@ test('sync-site replaces songbook entries and keeps site-only files', () => {
   fs.mkdirSync(path.join(site, 'js'), { recursive: true });
   fs.writeFileSync(path.join(site, 'songbook/snow'), '<html>old archived page</html>');
   fs.writeFileSync(path.join(site, 'songbook/keep-me/index.html'), 'site-only page');
-  fs.writeFileSync(path.join(site, 'js/ukeGeeks.scriptasaurus.min.js'), '/* old */');
+  fs.writeFileSync(path.join(site, 'js/song-formatter.bundle.js'), '/* old */');
   fs.writeFileSync(path.join(site, 'js/site-only.js'), '/* mine */');
 
   try {
@@ -40,8 +40,8 @@ test('sync-site replaces songbook entries and keeps site-only files', () => {
     assert.equal(fs.readFileSync(path.join(site, 'songbook/keep-me/index.html'), 'utf8'), 'site-only page');
     assert.equal(fs.readFileSync(path.join(site, 'js/site-only.js'), 'utf8'), '/* mine */');
     assert.equal(
-      fs.readFileSync(path.join(site, 'js/ukeGeeks.scriptasaurus.min.js'), 'utf8'),
-      fs.readFileSync(path.join(ROOT, 'js/ukeGeeks.scriptasaurus.min.js'), 'utf8'),
+      fs.readFileSync(path.join(site, 'js/song-formatter.bundle.js'), 'utf8'),
+      fs.readFileSync(path.join(ROOT, 'js/song-formatter.bundle.js'), 'utf8'),
       'library file updated'
     );
     assert.ok(fs.existsSync(path.join(site, 'favicon.ico')));

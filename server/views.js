@@ -149,7 +149,7 @@ header aside a{
 <footer>
   <p>Note: <strong>GCEA</strong> Standard Ukulele Tuning. <small>Powered by UkeGeeks' Scriptasaurus &bull; ukegeeks.org</small></p>
 </footer>
-<script src="${m.base}js/ukeGeeks.scriptasaurus.min.js"></script>
+<script src="${m.base}js/song-formatter.bundle.js"></script>
 <script src="${m.base}js/startup.js"></script>
 </body>
 </html>`;
@@ -429,7 +429,7 @@ function songEditable(m) {
 </section>
 
 <!-- SCRIPTS -->
-<script src="${m.base}js/ukeGeeks.scriptasaurus.min.js"></script>
+<script src="${m.base}js/song-formatter.bundle.js"></script>
 <script src="${m.base}js/ugsEditorPlus.min.js"></script>
 <script nonce="${m.nonce}">
 var ugs_settings = ${jsonForScript(m.editorSettings)};
