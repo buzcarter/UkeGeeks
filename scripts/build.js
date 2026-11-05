@@ -66,6 +66,8 @@ const BUNDLES = [
       'ugsChordBuilder.js',
       'ugsChordBuilder.chooserList.js',
       'ugsChordBuilder.editorUi.js',
+      // used by ugsEditorPlus.resize to load the ACE editor on demand ("Fullscreen" button)
+      '../libs/lazyload.js',
     ],
   },
 ];
