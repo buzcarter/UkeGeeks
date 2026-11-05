@@ -85,13 +85,23 @@ The full songbook (Node or PHP) needs a server, so it isn't part of the Pages si
 
 ## What's New...
 
-#### Unreleased
+#### V1.5.1
 * General
   * **No more jQuery.** The editor now uses plain DOM APIs (`querySelector`, `classList`, `fetch`, CSS transitions); jQuery 1.9.1, Bootstrap's typeahead and the jQuery draggable plugin are gone. Pages run under a strict Content-Security-Policy.
 * Scriptasaurus Core
   * `ukeGeeks.scriptasaurus.run(markup)` renders ChordPro text you pass in, instead of reading the `#ukeSongText` element (idea from [hutzelknecht](https://github.com/hutzelknecht), [PR #13](https://github.com/buzcarter/UkeGeeks/pull/13)). See "Rendering From Your Own Markup" below.
 * "Song-a-matic" editor
   * Quick search (song list) is a small built-in dropdown: arrow keys + Enter or click, matches titles in any script.
+
+#### V1.5.0
+* General
+  * **Node.js songbook server** (`npm start`, no runtime dependencies): same pages, URLs and editor as the PHP site, no PHP needed.
+  * Security fixes across the PHP site: path traversal, XSS, CSRF, session handling, password hashes.
+  * `npm run build` builds the JS/CSS bundles; GitHub Actions rebuilds them and deploys the [live demo](https://buzcarter.github.io/UkeGeeks/) on merge to `master`.
+  * Third-party song sheets removed; new Maestro Saurus favicon.
+* "Song-a-matic" editor
+  * Quick search finds non-Latin (e.g. Chinese) titles and ignores accents.
+  * Fullscreen (ACE) editor works again; ADF#B alternate tuning reaches the minified build.
 
 #### V1.4.4
 * "Song-a-matic" editor additions:
