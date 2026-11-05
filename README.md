@@ -78,6 +78,14 @@ npm run build:static
 
 It writes `dist/static/` (`songbook/` + `css/ js/ img/`) with relative links only, so it works on any static host, at the domain root or under a sub-path (use `--out dir` and `--songs dir` to change where it reads and writes).
 
+To refresh another static site (e.g. ukegeeks.org) with the current build:
+
+```bash
+npm run sync:site -- /path/to/site --dry-run
+```
+
+It replaces `songbook/` entries and overwrites library files in `js/`, `css/` and `img/`, but never deletes files that exist only on that site. Drop `--dry-run` to write.
+
 ## Authors
 
 * [Buz Carter](http://pizzabytheslice.com) (buz@ukegeeks.org)
