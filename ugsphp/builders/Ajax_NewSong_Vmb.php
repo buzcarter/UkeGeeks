@@ -6,15 +6,21 @@ class Ajax_NewSong_Vmb extends _base_Vmb{
 		$viewModel = new JsonResponse_Vm();
 
 		if (!$this->SiteUser->MayEdit || !$this->SiteUser->IsAuthenticated){
+			$viewModel->StatusCode = 403;
+			$viewModel->Message = 'You are not allowed to add songs.';
 			return $viewModel;
 		}
 
-		if ($_SERVER['REQUEST_METHOD'] != "POST") {
+		if (!Ugs::IsSafeJsonPost()) {
+			$viewModel->StatusCode = 403;
+			$viewModel->Message = 'Request refused.';
 			return $viewModel;
 		}
 
 		$json = Ugs::GetJsonObject();
-		if ($this->CreateSongFile($json->songTitle, $json->songArtist, $viewModel)){
+		$title = ($json && isset($json->songTitle) && is_string($json->songTitle)) ? trim($json->songTitle) : '';
+		$artist = ($json && isset($json->songArtist) && is_string($json->songArtist)) ? trim($json->songArtist) : '';
+		if ($this->CreateSongFile($title, $artist, $viewModel)){
 			$cache = new SongListCacheManager();
 			$cache->Rebuild();
 		}
@@ -37,11 +43,12 @@ class Ajax_NewSong_Vmb extends _base_Vmb{
 		}
 		}
 		catch ( Exception $e ) {
+			$viewModel->HasErrors = true;
 			$viewModel->Message = '(e:805) Something\'s gone wrong whilst saving.';
 			return false;
 		}
 
-		$viewModel->ContinueUri = Ugs::MakeUri( Actions::Edit, $viewModel->Id);
+		$viewModel->ContinueUri = Ugs::MakeUri( Actions::Edit, urlencode($viewModel->Id));
 		return true;
 	}
 

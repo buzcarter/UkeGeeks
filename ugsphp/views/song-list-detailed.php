@@ -9,10 +9,10 @@ function SayHello(){
  * Convert a Song object to custom HTML
  */
 function MakeRowHtml($song){
-	$html = '<strong class="songTitle">' . $song->Title . '</strong>';
+	$html = '<strong class="songTitle">' . h($song->Title) . '</strong>';
 
 	if (strlen($song->Artist) > 0){
-		$html .= ' <em class="songArtist">' . $song->Artist . '</em>';
+		$html .= ' <em class="songArtist">' . h($song->Artist) . '</em>';
 	}
 
 	if (!$song->HasInfo){
@@ -20,15 +20,15 @@ function MakeRowHtml($song){
 	}
 
 	if (strlen($song->Subtitle) > 0){
-		$html .= '<p><em class="songSubtitle">' . $song->Subtitle . '</em></p>';
+		$html .= '<p><em class="songSubtitle">' . h($song->Subtitle) . '</em></p>';
 	}
 
 	if (strlen($song->Album) > 0){
-		$html .= '<p><em class="songAlbum">' . $song->Album . '</em></p>';
+		$html .= '<p><em class="songAlbum">' . h($song->Album) . '</em></p>';
 	}
 
 
-	return '<a href="' . $song->Uri . '">' . $html  . '</a>';
+	return '<a href="' . h($song->Uri) . '">' . $html  . '</a>';
 }
 
 /* ------------------------------------------------
@@ -39,8 +39,8 @@ function MakeRowHtml($song){
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title><?php echo($model->PageTitle); ?></title>
-	<meta name="generator" content="<?php echo($model->PoweredBy) ?>" />
+	<title><?php echo(h($model->PageTitle)); ?></title>
+	<meta name="generator" content="<?php echo(h($model->PoweredBy)) ?>" />
 	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.min.css" title="ugsEditorCss" />
 	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsphp.css" />
 	<link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.typeahead.css" />
@@ -49,8 +49,8 @@ function MakeRowHtml($song){
 	<section class="contentWrap">
 		<?php if ($model->SiteUser->IsAuthenticated) { ?>
 			<aside style="float:right;">
-				<em style="font-size:.8em; padding-right:1.5em; color:#BCB59C;"><?php echo(SayHello() . ', '. $model->SiteUser->DisplayName); ?>!
-					(<a href="<?php echo($model->LogoutUri); ?>">Logout</a>)
+				<em style="font-size:.8em; padding-right:1.5em; color:#BCB59C;"><?php echo(h(SayHello() . ', '. $model->SiteUser->DisplayName)); ?>!
+					(<a href="<?php echo(h($model->LogoutUri)); ?>">Logout</a>)
 				</em>
 				<?php if ($model->IsNewAllowed) {
 					?>
@@ -91,7 +91,7 @@ function MakeRowHtml($song){
 			</div>
 		</section>
 		<script type="text/javascript">
-		ugsEditorPlus.newSong.init("<?php echo($model->EditAjaxUri); ?>");
+		ugsEditorPlus.newSong.init(<?php echo(js($model->EditAjaxUri)); ?>);
 		</script>
 		<?php
 	}

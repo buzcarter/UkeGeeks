@@ -43,20 +43,10 @@ class SongList_Vm extends _base_Vm {
 	 * @return (song array)
 	 */
 	public function Sort() {
-		$temp = array();
-		$sortedTitles = array();
-		foreach ($this->SongList as $song) {
-			$sortedTitles[] = $song->Title;
-			$temp[$song->Title] = $song;
-		}
-
-		sort($sortedTitles);
-
-		$this->SongList = array();
-		foreach ($sortedTitles as $title) {
-			$this->SongList[] = $temp[$title];
-		}
-
+		usort($this->SongList, function($a, $b) {
+			$cmp = strcmp($a->Title, $b->Title);
+			return ($cmp !== 0) ? $cmp : strcmp($a->Uri, $b->Uri);
+		});
 		return $this->SongList;
 	}
 

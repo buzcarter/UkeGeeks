@@ -1,6 +1,27 @@
 <?php
 
 /**
+ * HTML-encodes a value for safe output in element content or quoted attributes.
+ * Use for EVERY dynamic value echoed in a view.
+ *
+ * @param mixed $value
+ * @return string
+ */
+function h( $value ) {
+	return htmlspecialchars( (string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8' );
+}
+
+/**
+ * JSON-encodes a value for safe output inside an inline <script> block.
+ *
+ * @param mixed $value
+ * @return string
+ */
+function js( $value ) {
+	return json_encode( $value, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE );
+}
+
+/**
  * a "lite" MVC-ish Controller
  *
  * @class Ugs
@@ -43,6 +64,8 @@ class Ugs{
 	 */
 	private function RenderView( $model, $action ) {
 		header('X-Powered-By: ' . Config::PoweredBy);
+		header('X-Content-Type-Options: nosniff');
+		header('X-Frame-Options: SAMEORIGIN');
 		include_once Config::$AppDirectory . 'views/' . $this->GetViewName( $action );
 	}
 
@@ -53,10 +76,12 @@ class Ugs{
 	 * @param unknown $model
 	 */
 	private function RenderJson( $model ) {
-		header( 'Content-Type: application/json' );
+		header( 'Content-Type: application/json; charset=utf-8' );
+		header( 'X-Content-Type-Options: nosniff' );
 		if ( isset( $model->HasErrors ) && $model->HasErrors ) {
-			header( 'HTTP/1.1 500' );
+			http_response_code( isset( $model->StatusCode ) ? $model->StatusCode : 500 );
 		}
+		unset($model->StatusCode);
 		unset($model->IsJson);
 		echo json_encode( $model );
 	}
@@ -82,7 +107,7 @@ class Ugs{
 		if ($action == Actions::Logout){
 			$login->Logout();
 			header('Location: ' . self::MakeUri(Actions::Login));
-			return  $login->GetUser();
+			exit;
 		}
 
 		$user = $login->GetUser();
@@ -99,12 +124,12 @@ class Ugs{
 
 			// successful login we redirect:
 			header( 'Location: ' . self::MakeUri( Actions::Songbook ) );
-			return  $user;
+			exit;
 		}
 		elseif ($action == Actions::Login){
 			// if for some reason visitor is already logged in but attempting to view the Login page, redirect:
 			header( 'Location: ' . self::MakeUri( Actions::Songbook ) );
-			return $user;
+			exit;
 		}
 
 		// $user->IsAllowAccess = true;
@@ -211,9 +236,47 @@ class Ugs{
 	 * @return Object
 	 */
 	public static function GetJsonObject(){
-		$input = @file_get_contents('php://input');
+		$input = @file_get_contents('php://input', false, null, 0, Config::MaxFileSize * 4 + 4096);
 		$response = json_decode($input);
-		return $response;
+		return is_object($response) ? $response : null;
+	}
+
+	/**
+	 * CSRF guard for state-changing (AJAX) requests: must be a POST, sent as JSON,
+	 * from a page on this same site. Browsers always send Origin (or Sec-Fetch-Site)
+	 * on cross-site POSTs, and can't send application/json cross-site without CORS.
+	 *
+	 * @return boolean
+	 */
+	public static function IsSafeJsonPost(){
+		if ( !isset( $_SERVER['REQUEST_METHOD'] ) || $_SERVER['REQUEST_METHOD'] !== 'POST' ) {
+			return false;
+		}
+
+		$type = isset( $_SERVER['CONTENT_TYPE'] ) ? strtolower( trim( explode( ';', $_SERVER['CONTENT_TYPE'] )[0] ) ) : '';
+		if ( $type !== 'application/json' ) {
+			return false;
+		}
+
+		return self::IsSameOrigin();
+	}
+
+	/**
+	 * True unless the browser says this request came from another site.
+	 *
+	 * @return boolean
+	 */
+	public static function IsSameOrigin(){
+		if ( isset( $_SERVER['HTTP_SEC_FETCH_SITE'] ) && !in_array( $_SERVER['HTTP_SEC_FETCH_SITE'], array( 'same-origin', 'none' ), true ) ) {
+			return false;
+		}
+		if ( !empty( $_SERVER['HTTP_ORIGIN'] ) ) {
+			$originHost = parse_url( $_SERVER['HTTP_ORIGIN'], PHP_URL_HOST );
+			$originPort = parse_url( $_SERVER['HTTP_ORIGIN'], PHP_URL_PORT );
+			$origin = $originHost . ( $originPort ? ':' . $originPort : '' );
+			return isset( $_SERVER['HTTP_HOST'] ) && strcasecmp( $origin, $_SERVER['HTTP_HOST'] ) === 0;
+		}
+		return true;
 	}
 
 	/**

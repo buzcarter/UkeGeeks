@@ -21,7 +21,12 @@ class SimpleLogin{
 	public function AttemptLogin($username, $password) {
 		$username = strtolower(trim($username));
 		$password = trim($password);
-		$this->Set($this->ValidateUser($username, $password));
+		$user = $this->ValidateUser($username, $password);
+		if ($user->IsAllowAccess) {
+			// new session id on privilege change: defeats session fixation
+			session_regenerate_id(true);
+		}
+		$this->Set($user);
 		return $this->_user->IsAllowAccess ? 'Success!' : 'invalid username/password';
 	}
 
@@ -59,7 +64,7 @@ class SimpleLogin{
 	private function ValidateUser($username, $password){
 		$siteUser = new SiteUser();
 		foreach(Config::$Accounts as $account) {
-			if (($username == strtolower($account['user'])) && ($password == $account['pass'])) {
+			if (($username === strtolower($account['user'])) && self::IsPasswordValid($password, $account)) {
 				if ($account['isActive']) {
 					$siteUser->Username = $account['user'];
 					$siteUser->MayEdit  = $account['mayEdit'];
@@ -73,6 +78,20 @@ class SimpleLogin{
 		return $siteUser;
 	}
 
+	/**
+	 * Checks a password against an account. Prefers 'hash' (from password_hash(),
+	 * see Config.php.example); falls back to a plain-text 'pass' compared in constant time.
+	 * @param string $password
+	 * @param array $account
+	 * @return boolean
+	 */
+	private static function IsPasswordValid($password, $account){
+		if (!empty($account['hash'])) {
+			return password_verify($password, $account['hash']);
+		}
+		return isset($account['pass']) && (strlen($account['pass']) > 0) && hash_equals((string) $account['pass'], $password);
+	}
+
 	// ----------------------------------------------------------------------
 	// Session Management Methods
 	// ----------------------------------------------------------------------
@@ -83,6 +102,8 @@ class SimpleLogin{
 	private function UnsetSession(){
 		session_unset();
 		session_destroy();
+		$p = session_get_cookie_params();
+		setcookie(session_name(), '', time() - 3600, $p['path'], $p['domain'], $p['secure'], $p['httponly']);
 	}
 
 	/**
@@ -105,7 +126,16 @@ class SimpleLogin{
 	 * actually created until a value is set.
 	 */
 	private function StartSession(){
-		if(!isset($_SESSION)) {
+		if (session_status() !== PHP_SESSION_ACTIVE) {
+			$isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+			session_set_cookie_params(array(
+				'lifetime' => 0,
+				'path' => '/',
+				'secure' => $isHttps,
+				'httponly' => true,
+				'samesite' => 'Lax'
+			));
+			ini_set('session.use_strict_mode', '1');
 			session_start();
 		}
 	}

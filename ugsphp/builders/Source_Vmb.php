@@ -12,10 +12,12 @@ class Source_Vmb extends _base_Vmb {
 	 */
 	public function Build() {
 		$fname = FileHelper::getFilename();
-		$data = FileHelper::getFile(Config::$SongDirectory . $fname);
+		$data = FileHelper::getSongFile($fname);
 		$viewModel = new Source_Vm();
-		$viewModel->PageTitle = 'Song Source for &quot;' . $fname . '&quot; ChordPro (CPM)/UkeGeeks File Format';
-		$viewModel->Body = htmlspecialchars($data);
+		$viewModel->PageTitle = 'Song Source for "' . $fname . '" ChordPro (CPM)/UkeGeeks File Format';
+		$viewModel->IsFound = ($data !== null);
+		// served as text/plain + nosniff, so the raw text is safe (and shows "<" correctly)
+		$viewModel->Body = ($data === null) ? 'Song not found.' : $data;
 
 		return $viewModel;
 	}

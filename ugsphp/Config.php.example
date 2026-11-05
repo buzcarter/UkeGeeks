@@ -93,6 +93,10 @@ class Config {
 	// --------------------------------------
 	// Logins (only if "IsLoginRequired" enabled)
 	// --------------------------------------
+	// Prefer 'hash' over 'pass'. Make a hash on the command line with:
+	//   php -r "echo password_hash('your-password', PASSWORD_DEFAULT), PHP_EOL;"
+	// then use:  'hash' => '$2y$10$....',  (and delete the 'pass' line)
+	// CHANGE THESE SAMPLE PASSWORDS before putting your songbook online!
 	public static $Accounts = array(
 		array(
 			'user' => 'admin',

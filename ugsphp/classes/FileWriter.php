@@ -9,8 +9,6 @@ class NewSong_Vm {
 }
 
 class FileWriter {
-	// const FILE_DIRECTORY = 'cpm/';
-
 	const ID_PREFIX = '.ugs';
 
 	const MAX_TITLE_LENGTH = 40;
@@ -20,37 +18,28 @@ class FileWriter {
 	private static $dupeSpacersRegEx = '/(_|-)+/';
 
 	/**
-	 * using supplied info keeps testing for a unique file name by appending random-ish string to
-	 * filename created using base name
+	 * Returns a filename (base name + random id + extension) that doesn't yet exist in $directory.
 	 *
 	 * @param string  $directory    where the file should live
 	 * @param string  $baseFilename this does not need to be unique, but is ideally descriptive
 	 * @param string  $extenstion   (optional) file's extension, please include the dot!
-	 * @return string final file name
+	 * @return string final file name, empty string if none could be found
 	 */
 	private function UniqueFilename( $directory, $baseFilename, $extenstion = '.txt' ) {
-		try {
-		$filename = '';
-		while ( true ) {
-			$m = microtime();
-			$filename = $baseFilename . self::ID_PREFIX . ( ( $m - floor( $m ) ) * 1000000 ) . $extenstion;
-			if ( !file_exists( $directory . $baseFilename ) ) {
-				break;
+		for ( $i = 0; $i < 20; $i++ ) {
+			$filename = $baseFilename . self::ID_PREFIX . random_int( 100000, 999999 ) . $extenstion;
+			if ( !file_exists( $directory . $filename ) ) {
+				return $filename;
 			}
 		}
-
-		return $filename;
-	}
-		catch ( Exception $e ) {
-			return '';
-		}
+		return '';
 	}
 
 	/**
 	 * returns a OS-safe suitable filename from supplied value
 	 *
-	 * @param [string] $value     [description]
-	 * @param integer $maxLength (optional) maximum lenght (might be off by two characters as trimming leading _ happens last)
+	 * @param string  $value
+	 * @param integer $maxLength (optional) maximum length (might be off by two characters as trimming leading _ happens last)
 	 * @return string
 	 */
 	public function ScrubForFilename( $value, $maxLength = 35 ) {
@@ -66,12 +55,12 @@ class FileWriter {
 	}
 
 	/**
-	 * Generates a unique filename (within a given directory)
+	 * Creates a new song stub file with a unique name (within the song directory).
 	 * If name is omitted uses "untitled".
 	 *
-	 * @param [string] $title
-	 * @param [string] $artist
-	 * @return string
+	 * @param string $title
+	 * @param string $artist
+	 * @return string the new filename, or empty string on failure
 	 */
 	public function MakeFile( $title, $artist ) {
 		$f = $this->ScrubForFilename( $title, self::MAX_TITLE_LENGTH );
@@ -86,42 +75,42 @@ class FileWriter {
 
 		$content = $this->MakeChordProStub( $title, $artist );
 
-		try {
-			if (!is_writable(Config::$SongDirectory)){
-				return '';
-			}
-		$filename = $this->UniqueFilename( Config::$SongDirectory, $f, Config::FileExtension );
-			if (strlen($filename) < 1){
-				return '';
-			}
-
-		$filesize = file_put_contents( Config::$SongDirectory . $filename, $content );
-
-		return ( $filesize > 0 ) ? $filename : '';
-		}
-		catch ( Exception $e ) {
+		if ( !is_writable( Config::$SongDirectory ) ) {
 			return '';
 		}
+
+		$filename = $this->UniqueFilename( Config::$SongDirectory, $f, Config::FileExtension );
+		if ( strlen( $filename ) < 1 ) {
+			return '';
+		}
+
+		// "x" mode fails if the file already exists: never overwrites another song
+		$fh = @fopen( Config::$SongDirectory . $filename, 'x' );
+		if ( $fh === false ) {
+			return '';
+		}
+		$filesize = fwrite( $fh, $content );
+		fclose( $fh );
+
+		return ( $filesize > 0 ) ? $filename : '';
 	}
 
 	/**
 	 * returns skeleton ChordPro (text) file using supplied Title, Artist, etc
 	 *
-	 * @param [string] $title  song title
-	 * @param [string] $artist song's artist (optional)
+	 * @param string $title  song title
+	 * @param string $artist song's artist (optional)
 	 * @return string
 	 */
 	private function MakeChordProStub( $title = '', $artist = '' ) {
-		$title = trim( $title );
-		$artist = trim( $artist );
+		// braces or newlines would break the ChordPro tags
+		$title = trim( preg_replace( '/[{}\r\n]+/', ' ', $title ) );
+		$artist = trim( preg_replace( '/[{}\r\n]+/', ' ', $artist ) );
 
 		$content = '{title: ' . ( strlen( $title ) > 0 ? $title : 'untitled' ) . "}\n";
 		$content .= '{artist: ' . ( strlen( $artist ) > 0 ? $artist : 'traditional' ) . "}\n";
 
-		return $content .
-'
-TYPE_YOUR_SONG_HERE
-';
+		return $content . "\nTYPE_YOUR_SONG_HERE\n";
 	}
 
 }

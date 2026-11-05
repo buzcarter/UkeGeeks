@@ -19,7 +19,7 @@ class SongList_Vmb extends _base_Vmb {
 			$s = preg_replace(Config::FileNamePattern, '$1', $filename);
 			$viewModel->Add(
 				$this->getTitle($s),
-				Ugs::MakeUri(Actions::Song, $s)
+				Ugs::MakeUri(Actions::Song, urlencode($s))
 			);
 		}
 

@@ -10,44 +10,31 @@ class SongLinkPlus_Pvm {
 }
 
 /**
- * 
+ *
  */
 class SongListPlus_Pvm {
 	public $SongList = array();
 
 	/**
-	 * Sorts the Song List based on title
+	 * Sorts the Song List based on title (ties broken by URI so no song is ever dropped)
 	 * @method Sort
 	 * @return (SongLinkPlus_Pvm array)
 	 */
 	public function Sort() {
-
-		function scrub($val){
-			return trim(preg_replace('/\s+/', ' ', preg_replace('/\W/', ' ', strtolower($val))));
-		}
-
-		$tieBreaker = 0;
-		$songsListRekeyed = array();
-		$titlesList = array();
-		$titleKey = '';
-
-		foreach ($this->SongList as $song) {
-			$titleKey = scrub($song->Title);
-			if (!isset($temp[$titleKey])){
-				$titleKey .= ' _' . $tieBreaker . '_ugs87!';
-				$tieBreaker++;
-			}
-			$titlesList[] = $titleKey;
-			$songsListRekeyed[$titleKey] = $song;
-		}
-
-		sort($titlesList);
-
-		$this->SongList = array();
-		foreach ($titlesList as $key) {
-			$this->SongList[] = $songsListRekeyed[$key];
-		}
+		usort($this->SongList, function($a, $b) {
+			$cmp = strcmp(SongListPlus_Pvm::Scrub($a->Title), SongListPlus_Pvm::Scrub($b->Title));
+			return ($cmp !== 0) ? $cmp : strcmp($a->Uri, $b->Uri);
+		});
 		return $this->SongList;
+	}
+
+	/**
+	 * Lowercase, punctuation collapsed to single spaces (Unicode-aware) for sorting
+	 * @param string $val
+	 * @return string
+	 */
+	public static function Scrub($val){
+		return trim(preg_replace('/\s+/u', ' ', preg_replace('/[^\p{L}\p{N}]+/u', ' ', mb_strtolower($val, 'UTF-8'))));
 	}
 
 }

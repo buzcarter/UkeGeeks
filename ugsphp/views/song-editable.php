@@ -11,7 +11,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title><?php echo($model->PageTitle); ?></title>
+<title><?php echo(h($model->PageTitle)); ?></title>
 <script type="text/javascript">var isLegacyIe = false;</script>
 <!--[if lt IE 9]>
 <script type="text/javascript">isLegacyIe = true;document.getElementsByTagName('html')[0].className='legacyIe';</script>
@@ -30,17 +30,17 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <section id="scalablePrintArea" class="scalablePrintArea">
 	<header>
 		<hgroup class="ugs-songInfo">
-			<h1 id="songTitle" class="ugs-songTitle"><?php echo($model->SongTitle); ?></h1>
-			<h2 id="songSubtitle" class="ugs-songSubtitle" style="display:<?php echo(GetDisplayStyle($model->Subtitle)); ?>;"><?php echo($model->Subtitle); ?></h2>
-			<h2 id="songArtist" class="ugs-songArtist" style="display:<?php echo(GetDisplayStyle($model->Artist)); ?>;"><?php echo($model->Artist); ?></h2>
-			<h2 id="songAlbum" class="ugs-songAlbum" style="display:<?php echo(GetDisplayStyle($model->Album)); ?>;"><?php echo($model->Album); ?></h2>
+			<h1 id="songTitle" class="ugs-songTitle"><?php echo(h($model->SongTitle)); ?></h1>
+			<h2 id="songSubtitle" class="ugs-songSubtitle" style="display:<?php echo(GetDisplayStyle($model->Subtitle)); ?>;"><?php echo(h($model->Subtitle)); ?></h2>
+			<h2 id="songArtist" class="ugs-songArtist" style="display:<?php echo(GetDisplayStyle($model->Artist)); ?>;"><?php echo(h($model->Artist)); ?></h2>
+			<h2 id="songAlbum" class="ugs-songAlbum" style="display:<?php echo(GetDisplayStyle($model->Album)); ?>;"><?php echo(h($model->Album)); ?></h2>
 		</hgroup>
 	</header>
 	<div class="metaInfo" id="songMeta"> </div>
 	<article id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
 		<aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped"></aside>
 		<article id="ukeSongText" class="ugs-source-wrap">
-			<pre><?php echo($model->Body); ?></pre>
+			<pre><?php echo(h($model->Body)); ?></pre>
 		</article>
 	</article>
 	<footer>
@@ -68,7 +68,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			<?php } ?>
 			<a href="#chordBuilder" id="cdBldOpenBtn" data-dialog="cdBldDlg" class="alternateBtn" title="Add custom &amp; alternate chord diagrams">Chord Builder</a>
 		</p>
-		<textarea id="chordProSource" wrap="off"><?php echo($model->Body); ?></textarea>
+		<textarea id="chordProSource" wrap="off"><?php echo(h($model->Body)); ?></textarea>
 	</div>
 </section>
 <!-- APP TOOLBAR -->
@@ -305,7 +305,7 @@ $(function() {
 
 <?php if ($model->IsUpdateAllowed) {
 	?>
-	ugsEditorPlus.updateSong.init("<?php echo($model->UpdateAjaxUri); ?>", "<?php echo($model->Id); ?>");
+	ugsEditorPlus.updateSong.init(<?php echo(js($model->UpdateAjaxUri)); ?>, <?php echo(js($model->Id)); ?>);
 	<?php
 	}
 ?>

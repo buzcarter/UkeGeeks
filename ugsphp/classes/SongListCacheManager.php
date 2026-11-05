@@ -11,7 +11,7 @@ class SongListCacheManager {
 	// -----------------------------------------
 	// PUBLIC METHODS
 	// -----------------------------------------
-	function SongListCacheManager(){
+	function __construct(){
 		$this->cache = new SimpleCache();
 		$this->cache->setCacheDir(Config::$AppDirectory . 'cache/');
 	}
@@ -26,7 +26,7 @@ class SongListCacheManager {
 		$files = FileHelper::getFilenames(Config::$SongDirectory);
 		$songList = $this->buildFileList($files);
 
-		$this->cache->put(Config::SongCacheKey_FileName, serialize($songList));
+		$this->cache->put(Config::SongCacheKey_FileName, json_encode($songList));
 
 		return $songList;
 	}
@@ -39,8 +39,9 @@ class SongListCacheManager {
 			return $this->Rebuild();
 		}
 
-		$cachedSongList = $this->cache->get(Config::SongCacheKey_FileName);
-		return unserialize($cachedSongList);
+		// JSON, not unserialize(): never deserialize PHP objects from a file
+		$cachedSongList = json_decode((string) $this->cache->get(Config::SongCacheKey_FileName));
+		return is_array($cachedSongList) ? $cachedSongList : $this->Rebuild();
 	}
 
 	// -----------------------------------------
