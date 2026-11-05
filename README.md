@@ -72,6 +72,14 @@ npm test
 
 ## What's New...
 
+#### Unreleased
+* General
+  * **No more jQuery.** The editor now uses plain DOM APIs (`querySelector`, `classList`, `fetch`, CSS transitions); jQuery 1.9.1, Bootstrap's typeahead and the jQuery draggable plugin are gone. Pages run under a strict Content-Security-Policy.
+* Scriptasaurus Core
+  * `ukeGeeks.scriptasaurus.run(markup)` renders ChordPro text you pass in, instead of reading the `#ukeSongText` element (idea from [hutzelknecht](https://github.com/hutzelknecht), [PR #13](https://github.com/buzcarter/UkeGeeks/pull/13)). See "Rendering From Your Own Markup" below.
+* "Song-a-matic" editor
+  * Quick search (song list) is a small built-in dropdown: arrow keys + Enter or click, matches titles in any script.
+
 #### V1.4.4
 * "Song-a-matic" editor additions:
   * Settings. Override Song Editor's default settings by creating a single JSON file.
@@ -167,7 +175,18 @@ So the Editor uses Scritasaurus PLUS an additional class library ("ugsEditorPlus
 
 This raises an important point:
 
-> **Scriptasuaus does NOT use any jQuery**. The editor, however, is completely dependent upon jQuery.
+> **Neither Scriptasaurus nor the editor use jQuery** (or any other library; the editor only lazy-loads the ACE editor for its "Fullscreen" mode).
+
+#### Rendering From Your Own Markup
+Normally `ukeGeeks.scriptasaurus.run()` reads the song from the `#ukeSongText` element's HTML. Pass ChordPro text to render that instead -- handy for editors, previews, or songs fetched via AJAX:
+
+```js
+ukeGeeks.scriptasaurus.init(false);
+var song = ukeGeeks.scriptasaurus.run(document.getElementById('myTextarea').value);
+// song.title, song.chords, ...
+```
+
+The page still needs the usual song container, diagrams and text elements (`#ukeSongContainer`, `#ukeChordsCanvas`, `#ukeSongText`); the song is drawn into them. The markup is treated as plain text: `<`, `>` and stray `&` are HTML-escaped before rendering (existing entities such as `&amp;` or `&copy;` are kept), so it's safe to pass what a user typed.
 
 -----------------------------------
 ## More Files Than You Need
