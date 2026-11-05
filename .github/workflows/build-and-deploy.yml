@@ -1,0 +1,85 @@
+# Build the JS/CSS bundles from src/, run the tests, and publish the static
+# demo to GitHub Pages.
+#
+# - Pull requests: build + test only (shows whether the change is good).
+# - Push to master (i.e. a merge): build + test, commit any bundles that changed
+#   back to master, then deploy the demo site from that same build.
+#
+# Rebuild-and-deploy happen in ONE workflow on purpose: commits pushed with the
+# built-in GITHUB_TOKEN don't trigger other workflows, so a separate "deploy on
+# push" workflow would never see the bot's bundle commit.
+
+name: Build & deploy
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # commit rebuilt bundles back to master
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+
+      - name: Commit rebuilt bundles
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          if [ -z "$(git status --porcelain -- js css)" ]; then
+            echo "Bundles already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add js css
+          git commit -m "Rebuild bundles from src [skip ci]"
+          git push origin HEAD:master
+
+      - name: Assemble static demo site
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p _site/img
+          cp -R css js img songs favicon.ico apple-touch-icon.png _site/
+          cp site/index.html _site/
+          cp src/img/favicon/maestro-saurus-full.png _site/img/maestro-saurus.png
+
+      - uses: actions/configure-pages@v6
+        if: github.event_name != 'pull_request'
+
+      - uses: actions/upload-pages-artifact@v5
+        if: github.event_name != 'pull_request'
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

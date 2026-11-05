@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UkeGeeks Scriptasaurus</title>
+  <meta name="description" content="A JavaScript library that turns ChordPro-marked lyrics into ukulele song sheets with chord diagrams." />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <style>
+    :root {
+      --bg: #f6f0e0;
+      --card: #fffdf7;
+      --ink: #2b2a26;
+      --muted: #6b665a;
+      --accent: #3f8a1f;
+      --accent-ink: #ffffff;
+      --rule: #e4dac2;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1d1f1a;
+        --card: #272a23;
+        --ink: #ece7da;
+        --muted: #a9a393;
+        --accent: #7cc451;
+        --accent-ink: #14210c;
+        --rule: #3a3d33;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 40px 16px 64px; }
+    header { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+    header img { width: 140px; height: 140px; }
+    h1 { font-size: 2.1rem; line-height: 1.15; margin: 0 0 6px; }
+    .tagline { margin: 0; color: var(--muted); font-size: 1.1rem; }
+    h2 { font-size: 1.15rem; margin: 40px 0 12px; }
+    .demos { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .demo {
+      display: block;
+      padding: 16px 18px;
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      color: inherit;
+      text-decoration: none;
+    }
+    .demo:hover, .demo:focus-visible { border-color: var(--accent); }
+    .demo strong { display: block; color: var(--accent); }
+    .demo span { color: var(--muted); font-size: 0.95rem; }
+    pre {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 12px 14px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+    a { color: var(--accent); }
+    .button {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <img src="img/maestro-saurus.png" alt="Maestro Saurus, a green dinosaur in glasses playing a ukulele" />
+      <div>
+        <h1>UkeGeeks Scriptasaurus</h1>
+        <p class="tagline">Turn ChordPro-marked lyrics into printable ukulele song sheets, with chord diagrams drawn for you.</p>
+      </div>
+    </header>
+
+    <h2>See it in action</h2>
+    <div class="demos">
+      <a class="demo" href="songs/my-little-grass-shack-in-kealakekua.htm">
+        <strong>One song</strong>
+        <span>Chord diagrams and lyrics from a single &lt;pre&gt; block</span>
+      </a>
+      <a class="demo" href="songs/multiple-songs-per-page.htm">
+        <strong>Several songs on a page</strong>
+        <span>Each song gets its own diagrams</span>
+      </a>
+    </div>
+
+    <h2>Use it on your own page</h2>
+    <p>Write your song in ChordPro markup (chords in brackets, like <code>[C]Some [G7]lyrics</code>), drop it into this markup, and run the script:</p>
+    <pre>&lt;link rel="stylesheet" href="css/ukeGeeks.music.css" /&gt;
+
+&lt;div id="ukeSongContainer"&gt;
+  &lt;aside id="ukeChordsCanvas"&gt;&lt;/aside&gt;
+  &lt;article id="ukeSongText"&gt;
+    &lt;pre&gt;{title: My Song}
+[C]Some [G7]lyrics&lt;/pre&gt;
+  &lt;/article&gt;
+&lt;/div&gt;
+
+&lt;script src="js/ukeGeeks.scriptasaurus.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  ukeGeeks.scriptasaurus.init(false);
+  ukeGeeks.scriptasaurus.run();
+&lt;/script&gt;</pre>
+
+    <h2>Run the full songbook</h2>
+    <p>The songbook (song list, quick search, the Song-a-matic editor, transposing and saving) runs on a small Node.js server, or on PHP:</p>
+    <pre>git clone https://github.com/buzcarter/UkeGeeks.git
+cd UkeGeeks
+npm start</pre>
+    <a class="button" href="https://github.com/buzcarter/UkeGeeks">View on GitHub</a>
+
+    <footer>
+      By <a href="http://pizzabytheslice.com">Buz Carter</a> and contributors. GPL-3.0.
+      More at <a href="https://ukegeeks.org">ukegeeks.org</a>.
+    </footer>
+  </main>
+</body>
+</html>
