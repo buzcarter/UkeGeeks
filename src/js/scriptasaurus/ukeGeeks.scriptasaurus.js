@@ -36,17 +36,24 @@ ukeGeeks.scriptasaurus = (function() {
 	/**
 	 * Runs all Scriptasaurus methods using the element Ids defined in the settings class.
 	 * This is your "Do All". See data.song for structure.
+	 *
+	 * By default the song is read from the song text element's (`#ukeSongText`) HTML.
+	 * Pass `markup` to (re)render from ChordPro text instead -- handy for editors or
+	 * songs loaded via AJAX, e.g. `ukeGeeks.scriptasaurus.run(textarea.value)`.
+	 * The markup is treated as plain text: it's HTML-escaped before rendering
+	 * (existing entities such as `&amp;` are left as is), so it's safe to pass user input.
 	 * @method run
+	 * @param markup {string} (optional) ChordPro song text to render in place of the song text element's content
 	 * @return {songObject}
 	 */
-	_public.run = function() {
+	_public.run = function(markup) {
 		//console.log('run (Classic Mode)');
 		var handles = _getHandlesFromId();
 		if (!handles || !handles.diagrams || !handles.text || !handles.wrap) {
 			return null;
 		}
 		_errList = [];
-		var song = _runSong(handles);
+		var song = _runSong(handles, (typeof markup === 'string') ? ukeGeeks.toolsLite.escapeHtml(markup) : null);
 		showErrors(_errList[0]);
 		return song;
 	};
@@ -64,7 +71,7 @@ ukeGeeks.scriptasaurus = (function() {
 			if (handles === null) {
 				continue;
 			}
-			songs.push(_runSong(handles));
+			songs.push(_runSong(handles, null));
 		}
 		return songs;
 	};
@@ -86,15 +93,16 @@ ukeGeeks.scriptasaurus = (function() {
 	 * @method _runSong
 	 * @private
 	 * @param handles {ukeGeeks.data.htmlHandles}
+	 * @param html {string} (optional) already HTML-escaped song text; when null the text element's innerHTML is used
 	 * @return {songObj}
 	 */
-	var _runSong = function(handles){
+	var _runSong = function(handles, html){
 		// console.log('run Song');
 
 		// read Music, find chords, generate HTML version of song:
 		var cpm = new ukeGeeks.cpmParser();
 		cpm.init();
-		var song = cpm.parse(handles.text.innerHTML);
+		var song = cpm.parse((typeof html === 'string') ? html : handles.text.innerHTML);
 		ukeGeeks.definitions.replace(song.defs);
 
 		var chrdPrsr = new ukeGeeks.chordParser();
