@@ -168,8 +168,9 @@ ugsEditorPlus.actions = (function() {
 	_public.run = function(isDoBackup){
 		isDoBackup = (arguments.length > 0) && isDoBackup;
 		// escape the raw ChordPro text: it's untrusted and must not be parsed as HTML
+		// (leave existing entities such as &amp; &copy; alone, same as the server does)
 		var safeSource = _ele.cpmSource.value
-			.replace(/&/g, '&amp;')
+			.replace(/&(?!#\d+;|#x[0-9a-f]+;|[a-z][a-z0-9]*;)/gi, '&amp;')
 			.replace(/</g, '&lt;')
 			.replace(/>/g, '&gt;');
 		_ele.songText.innerHTML = '<pre>' + safeSource + '</pre>';

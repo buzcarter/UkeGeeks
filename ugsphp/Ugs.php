@@ -3,12 +3,14 @@
 /**
  * HTML-encodes a value for safe output in element content or quoted attributes.
  * Use for EVERY dynamic value echoed in a view.
+ * Existing entities are left alone (double_encode = false): song files legitimately
+ * contain things like "&amp;" and "&copy;", and an entity can't open a tag.
  *
  * @param mixed $value
  * @return string
  */
 function h( $value ) {
-	return htmlspecialchars( (string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8' );
+	return htmlspecialchars( (string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false );
 }
 
 /**

@@ -46,6 +46,7 @@ before(async () => {
   fs.writeFileSync(path.join(songDir, 'the rose - Bette.cpm.txt'), SONG);
   fs.writeFileSync(path.join(songDir, '南山南 - 馬頔.cpm.txt'), '{title: 南山南}\n{artist: 馬頔}\n[Am]你在南方\n');
   fs.writeFileSync(path.join(tmp, 'secret.txt'), 'TOP SECRET');
+  fs.writeFileSync(path.join(songDir, 'grass-shack.cpm.txt'), '{title: Grass &quot;Shack&quot;}\n{artist: Lyrics &amp; Music &copy; 1933}\n[C]Tom & Jerry\n');
 
   const cfgFile = path.join(tmp, 'config.json');
   fs.writeFileSync(
@@ -81,7 +82,7 @@ after(() => {
 test('songbook lists songs, escaped, with security headers', async () => {
   const r = await req('/');
   assert.equal(r.status, 200);
-  assert.match(r.text, /2 Songs\./);
+  assert.match(r.text, /3 Songs\./);
   assert.match(r.text, /Rose, The/);
   assert.match(r.text, /南山南/);
   assert.match(r.text, /href="\/songbook\/%E5%8D%97/);
@@ -134,6 +135,17 @@ test('reflected XSS via song name is escaped', async () => {
   assert.equal(r.status, 404);
   assert.match(r.text, /Sorry... Song Not Found/);
   assert.ok(!r.text.includes('<script>alert(1)'));
+});
+
+test('existing HTML entities in song files are not double-escaped', async () => {
+  const list = await req('/');
+  assert.ok(list.text.includes('Grass &quot;Shack&quot;'), 'title entities kept');
+  assert.ok(list.text.includes('Lyrics &amp; Music &copy; 1933'), 'artist entities kept');
+  assert.ok(!list.text.includes('&amp;amp;') && !list.text.includes('&amp;copy;'));
+
+  const song = await req('/songbook/grass-shack');
+  assert.ok(song.text.includes('[C]Tom &amp; Jerry'), 'bare & still escaped');
+  assert.ok(!song.text.includes('&amp;quot;'));
 });
 
 test('static files are served', async () => {
@@ -216,7 +228,7 @@ test('editor can create and update songs; update cannot escape the song dir', as
   assert.match(edit.text, /id="saveBtn"/);
 
   const list = await req('/', { headers: { Cookie: cookie } });
-  assert.match(list.text, /4 Songs\./);
+  assert.match(list.text, /5 Songs\./);
 });
 
 test('logout ends the session', async () => {

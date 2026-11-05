@@ -19,8 +19,17 @@ class SafeHtml {
 
 const ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 
+// "&" that does NOT already start an entity like &amp; &copy; &#39; &#x2665;
+const BARE_AMP_OR_SPECIAL = /&(?!#\d+;|#x[0-9a-f]+;|[a-z][a-z0-9]*;)|[<>"']/gi;
+
+/**
+ * Escapes <, >, quotes and bare &, but leaves existing entities alone (like PHP's
+ * htmlspecialchars with double_encode=false). ChordPro files in this project
+ * legitimately contain entities ("Lyrics &amp; Music &copy; 1933"); an entity
+ * can't open a tag or leave a quoted attribute, so this is still XSS-safe.
+ */
 function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, (c) => ESCAPES[c]);
+  return String(value).replace(BARE_AMP_OR_SPECIAL, (c) => ESCAPES[c]);
 }
 
 function render(value) {
