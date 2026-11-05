@@ -1,6 +1,7 @@
 /**
  * Updates an exising song via AJAX.
- * Dependencies: jQuery
+ * Dependencies: ugsEditorPlus.dom
+
  * @class updateSong
  * @namespace ugsEditorPlus
  */
@@ -16,7 +17,7 @@ ugsEditorPlus.updateSong = (function() {
 	var _filename = '';
 
 	/**
-	 * Name / Value pairs for jQuery selectors of HTML elements to be manipulated
+	 * Name / Value pairs for CSS selectors of HTML elements to be manipulated
 	 * @property _selectors
 	 * @type {JSON}
 	 */
@@ -39,36 +40,51 @@ ugsEditorPlus.updateSong = (function() {
 		_ajaxUri = ajaxUri;
 		_filename = filename;
 
-		$(_selectors.button).click(function(event) {
+		ugsEditorPlus.dom.on(_selectors.button, 'click', function(e) {
+			e.preventDefault();
 			doUpdate();
-			return false;
 		});
 
-		$(_selectors.messageBox).hide();
-		$(document)
-			.ajaxStart(function() {
-				showBusy();
-				_isUpdating = true;
-			})
-			.ajaxStop(function() {
-				hideMessage();
-				_isUpdating = false;
-			});
+		ugsEditorPlus.dom.hide(ele('messageBox'));
+	};
+
+	/**
+	 * pending "fade out the message" timer
+	 * @property _hideTimer
+	 * @type {Number}
+	 */
+	var _hideTimer = null;
+
+	var ele = function(name) {
+		return ugsEditorPlus.dom.one(_selectors[name]);
 	};
 
 	var showBusy = function(){
-		$(_selectors.message).hide().html();
-		$(_selectors.messageBox).slideDown('fast');
-		$(_selectors.spinner).show();
+		var dom = ugsEditorPlus.dom;
+		clearTimeout(_hideTimer);
+		dom.hide(ele('message'));
+		if (dom.isVisible(ele('messageBox'))) {
+			// still showing (or fading out) the last message
+			dom.show(ele('messageBox'));
+		}
+		else {
+			dom.slideDown(ele('messageBox'), 'fast');
+		}
+		dom.show(ele('spinner'));
 	};
 
 	var showMessage = function(message){
-		$(_selectors.spinner).hide();
-		$(_selectors.message).show().html(message);
+		var msg = ele('message');
+		ugsEditorPlus.dom.hide(ele('spinner'));
+		msg.textContent = message;
+		ugsEditorPlus.dom.show(msg);
 	};
 
 	var hideMessage = function(){
-		$(_selectors.messageBox).delay(3000).fadeOut('slow');
+		clearTimeout(_hideTimer);
+		_hideTimer = setTimeout(function() {
+			ugsEditorPlus.dom.fadeOut(ele('messageBox'), 'slow');
+		}, 3000);
 	};
 
 	var doUpdate = function() {
@@ -76,27 +92,24 @@ ugsEditorPlus.updateSong = (function() {
 			return;
 		}
 
-		$(_selectors.message).show();
-
 		var data = {
 			'handler': 'ugs_update_81jr',
 			'filename': _filename,
-			'song': $(_selectors.song).val()
+			'song': ele('song').value
 		};
 
-		$.ajax({
-			url: _ajaxUri,
-			type: 'POST',
-			dataType: 'json',
-			contentType:"application/json; charset=utf-8",
-			data: JSON.stringify(data),
-			success: function(data) {
+		_isUpdating = true;
+		showBusy();
+		ugsEditorPlus.dom.postJson(_ajaxUri, data)
+			.then(function(data) {
 				doAjaxOk(data);
-			},
-			error: function(data) {
+			}, function() {
 				alert('Encountered a problem saving your Song. Please copy your song to another program until this issue is resolved.');
-			}
-		});
+			})
+			.then(function() {
+				hideMessage();
+				_isUpdating = false;
+			});
 	};
 
 	var doAjaxOk = function(data) {

@@ -61,18 +61,17 @@ ugsEditorPlus.optionsDlg = (function() {
 		};
 
 		// ugh! Event bubbling!
-		$('.checkboxBlock label, input[type=checkbox]').click(function(e) {
+		ugsEditorPlus.dom.on('.checkboxBlock label, input[type=checkbox]', 'click', function(e) {
 			e.stopPropagation();
 		});
 
-		$('.overlay').draggable({
-			handle: 'hgroup'
-			//containParent: true
-    });
+		ugsEditorPlus.dom.all('.overlay').forEach(function(dlg) {
+			ugsEditorPlus.dom.draggable(dlg, 'hgroup');
+		});
 	};
 
 	var triggerNotify = function(action, value) {
-		$.event.trigger('option:click', {
+		ugsEditorPlus.dom.trigger('ugs:option', {
 			action: action,
 			value: value
 		});

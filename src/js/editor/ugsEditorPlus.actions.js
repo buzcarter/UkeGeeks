@@ -57,8 +57,8 @@ ugsEditorPlus.actions = (function() {
 			scalableArea : document.getElementById('scalablePrintArea')
 		};
 
-		$(document).on('option:click', function(e, data) {
-			doAction(data.action, data.value);
+		document.addEventListener('ugs:option', function(e) {
+			doAction(e.detail.action, e.detail.value);
 		});
 
 		syncOptions(ugsEditorPlus.options);
@@ -167,16 +167,10 @@ ugsEditorPlus.actions = (function() {
 	 */
 	_public.run = function(isDoBackup){
 		isDoBackup = (arguments.length > 0) && isDoBackup;
-		// escape the raw ChordPro text: it's untrusted and must not be parsed as HTML
-		// (leave existing entities such as &amp; &copy; alone, same as the server does)
-		var safeSource = _ele.cpmSource.value
-			.replace(/&(?!#\d+;|#x[0-9a-f]+;|[a-z][a-z0-9]*;)/gi, '&amp;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;');
-		_ele.songText.innerHTML = '<pre>' + safeSource + '</pre>';
-		_song = ukeGeeks.scriptasaurus.run();
+		// run(markup) HTML-escapes the raw (untrusted) ChordPro text for us
+		_song = ukeGeeks.scriptasaurus.run(_ele.cpmSource.value);
 
-		if (_song.chords.length < 1){
+		if (_song && _song.chords.length < 1){
 			ugsEditorPlus.autoReformat.run(_ele);
 		}
 
@@ -242,10 +236,10 @@ ugsEditorPlus.actions = (function() {
 	 * @param value {string} value of the clicked value item
 	 */
 	var doLayout = function(value){
-		$('body')
-			.toggleClass('diagramsOnTop', value == 'top')
-			.toggleClass('diagramsOnSide', value == 'left')
-			.toggleClass('ugsHideDiagrams', value == 'none');
+		var classes = document.body.classList;
+		classes.toggle('diagramsOnTop', value == 'top');
+		classes.toggle('diagramsOnSide', value == 'left');
+		classes.toggle('ugsHideDiagrams', value == 'none');
 	};
 
 	/* ----------------------------------------------------------------------------------- *|
@@ -311,11 +305,11 @@ ugsEditorPlus.actions = (function() {
 	 */
 	var doSetPageWidth = function(value){
 		var opts = ['letter', 'a4', 'screen'];
-		var $body = $('body');
+		var classes = document.body.classList;
 		for(var i = 0; i < opts.length; i++){
-			$body.removeClass('pageWidth_' + opts[i]);
+			classes.remove('pageWidth_' + opts[i]);
 		}
-		$body.addClass('pageWidth_' + value);
+		classes.add('pageWidth_' + value);
 	};
 
 	/* ----------------------------------------------------------------------------------- *|
@@ -342,7 +336,7 @@ ugsEditorPlus.actions = (function() {
 			msg = '<strong>ADF#B</strong> alternate tuning';
 		}
 
-		$('#footTuningInfo').html(msg);
+		document.getElementById('footTuningInfo').innerHTML = msg;
 		ukeGeeks.scriptasaurus.setTuningOffset(tuning);
 	};
 

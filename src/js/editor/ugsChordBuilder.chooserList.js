@@ -141,7 +141,7 @@ ugsChordBuilder.chooserList = (function() {
 	_public.show = function(isChooserPanel) {
 		document.getElementById(_ids.chooserPanel).style.display = isChooserPanel ? 'block' : 'none';
 		document.getElementById(_ids.builderPanel).style.display = !isChooserPanel ? 'block' : 'none';
-		$('#' + _ids.chooserPanel).closest('.overlay').toggleClass('chordBuilderNarrow', isChooserPanel);
+		document.getElementById(_ids.chooserPanel).closest('.overlay').classList.toggle('chordBuilderNarrow', isChooserPanel);
 	};
 
 	/**

@@ -72,7 +72,7 @@ function MakeRowHtml($song){
 		?>
 	</ol>
 	</section>
-	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery-1.9.1.min.js"></script>
+
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.min.js"></script>
 	<?php if ($model->IsNewAllowed) {
 		?>
@@ -96,7 +96,7 @@ function MakeRowHtml($song){
 		<?php
 	}
 	?>
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/bootstrap-typeahead.min.js"></script>
+
 <script type="text/javascript">
 var qkSrch = ugsEditorPlus.typeahead();
 qkSrch.initialize();

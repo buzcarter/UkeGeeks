@@ -1,6 +1,7 @@
 /**
  * Creates a new song via AJAX.
- * Dependencies: jQuery
+ * Dependencies: ugsEditorPlus.dom
+
  * @class newSong
  * @namespace ugsEditorPlus
  */
@@ -24,34 +25,41 @@ ugsEditorPlus.newSong = (function() {
 	_public.init = function(ajaxUri) {
 		_ajaxUri = ajaxUri;
 
-		$('#newSongBtn').click(function(e) {
+		var dom = ugsEditorPlus.dom;
+
+		dom.on('#newSongBtn', 'click', function(e) {
 			if(doValidate(this)) {
 				doPost();
 			}
 		});
 
-		$('#openNewDlgBtn').click(function(e) {
+		dom.on('#openNewDlgBtn', 'click', function(e) {
 			resetFields();
-			$('#newSongForm').fadeIn();
-			$('#songTitle').focus();
+			dom.fadeIn(document.getElementById('newSongForm'));
+			document.getElementById('songTitle').focus();
 		});
 
-		$('#hideNewSongBtn').click(closeDlg);
+		dom.on('#hideNewSongBtn', 'click', closeDlg);
 
 		// handle escape key
-		$('#newSongForm').bind('keydown', onEscape);
+		dom.on('#newSongForm', 'keydown', onEscape);
 
-		var $spinner = $("#loadingSpinner");
-		$spinner.hide();
-		$(document)
-			.ajaxStart(function() {
-				$spinner.show();
-				_isUpdating = true;
-			})
-			.ajaxStop(function() {
-				$spinner.hide();
-				_isUpdating = false;
-			});
+		dom.hide(document.getElementById('loadingSpinner'));
+
+		var dlg = document.getElementById('newSongForm');
+		if (dlg) {
+			dom.draggable(dlg, 'hgroup');
+		}
+	};
+
+	/**
+	 * shows/hides the "Saving..." spinner, (un)locks the form
+	 * @method setBusy
+	 * @param isBusy {bool}
+	 */
+	var setBusy = function(isBusy) {
+		_isUpdating = isBusy;
+		ugsEditorPlus.dom.toggle(document.getElementById('loadingSpinner'), isBusy);
 	};
 
 	var doAjaxOk = function(data) {
@@ -69,29 +77,25 @@ ugsEditorPlus.newSong = (function() {
 
 			var data = {
 				'handler': 'ugs_new',
-				'songTitle': $('#songTitle').val(),
-				'songArtist': $('#songArtist').val()
+				'songTitle': document.getElementById('songTitle').value,
+				'songArtist': document.getElementById('songArtist').value
 			};
 
-			$.ajax({
-				url: _ajaxUri,
-				type: "POST",
-				dataType: 'json',
-				contentType: 'application/json; charset=utf-8',
-				data: JSON.stringify(data),
-				success: function(data) {
+			setBusy(true);
+			ugsEditorPlus.dom.postJson(_ajaxUri, data)
+				.then(function(data) {
+					setBusy(false);
 					doAjaxOk(data);
-			},
-			error: function(data) {
-				showErrors(true, 'Failed to create the song file.<br/>Please have your admin check the CPM directory permissions.');
-				}
-			});
+				}, function() {
+					setBusy(false);
+					showErrors(true, 'Failed to create the song file.\nPlease have your admin check the CPM directory permissions.');
+				});
 		};
 
 	var doValidate = function() {
-		var $title = $('#songTitle');
-		var title = $title.val().trim();
-		$title.val(title);
+		var titleInput = document.getElementById('songTitle');
+		var title = titleInput.value.trim();
+		titleInput.value = title;
 		/*
 		var ok = title.length > 2;
 		showErrors(!ok, 'Song\'s title is required<br/><em>(you may change it later, must be at least 2 characters)</em>');
@@ -101,26 +105,38 @@ ugsEditorPlus.newSong = (function() {
 	};
 
 	var showErrors = function(hasErrors, message) {
-			var $err = $('#newSongForm .errorMessage');
-			if(hasErrors) {
-				$err.show().html(message);
-				$('#songTitle').focus();
+		var err = ugsEditorPlus.dom.one('#newSongForm .errorMessage');
+		if(hasErrors) {
+			// plain text (the message may echo back what the user typed); newlines become line breaks
+			err.textContent = '';
+			String(message).split('\n').forEach(function(line, i) {
+				if (i > 0) {
+					err.appendChild(document.createElement('br'));
+				}
+				err.appendChild(document.createTextNode(line));
+			});
+			ugsEditorPlus.dom.show(err);
+			document.getElementById('songTitle').focus();
 		}
 		else {
-				$err.hide();
-			}
+			ugsEditorPlus.dom.hide(err);
+		}
 		};
 
 	var closeDlg = function(e) {
-		$('#newSongForm').fadeOut();
+		if (e && e.type == 'click') {
+			e.preventDefault();
+		}
+		ugsEditorPlus.dom.fadeOut(document.getElementById('newSongForm'));
 	};
 
 	var resetFields = function(){
-		$('#songTitle, #songArtist').val('');
+		document.getElementById('songTitle').value = '';
+		document.getElementById('songArtist').value = '';
 	};
 
 	var onEscape = function(e){
-		if (e.which == 27) {
+		if (e.key == 'Escape' || e.keyCode == 27) {
 			closeDlg();
 		}
 	};

@@ -24,7 +24,7 @@ ugsEditorPlus.songAmatic = (function() {
 		var opts = mergeOptions(options);
 
 		ukeGeeks.settings.opts.retainBrackets = !opts.hideChordEnclosures;
-		$('#songSourceDlg').toggle(opts.showEditOnLoad);
+		ugsEditorPlus.dom.toggle(document.getElementById('songSourceDlg'), opts.showEditOnLoad);
 
 		ukeGeeks.scriptasaurus.init(opts.useLegacyIe);
 
@@ -44,7 +44,7 @@ ugsEditorPlus.songAmatic = (function() {
 			commonChords: ukeGeeks.settings.commonChords
 		};
 
-		return $.extend(ugsEditorPlus.options, opts, (typeof options === "object") ? options : {});
+		return Object.assign(ugsEditorPlus.options, opts, (options && typeof options === "object") ? options : {});
 	};
 
 	// ---------------------------------------

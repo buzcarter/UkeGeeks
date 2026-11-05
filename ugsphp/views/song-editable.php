@@ -286,8 +286,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 </section>
 
 <!-- SCRIPTS -->
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/jquery.draggable.js"></script>
+
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ukeGeeks.scriptasaurus.min.js"></script>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.min.js"></script>
 <script type="text/javascript">
@@ -298,7 +297,8 @@ if (ugs_settings && ugs_settings.invalidJson){
 }
 </script>
 <script type="text/javascript">
-$(function() {
+(function() {
+	// scripts are at the end of <body>, so the page is ready
 	var ugs_settings = window.ugs_settings || {};
 	ugs_settings.useLegacyIe = isLegacyIe;
 	ugsEditorPlus.songAmatic.init(ugs_settings);
@@ -309,7 +309,7 @@ $(function() {
 	<?php
 	}
 ?>
-});
+}());
 </script>
 </body>
 </html>
