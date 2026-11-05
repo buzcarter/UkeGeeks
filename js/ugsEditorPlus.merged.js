@@ -2149,11 +2149,33 @@ ugsEditorPlus.typeahead = function(){
 
 	var _re = {
 		space: /\s{2,}/g,
-		// everything except for alphanumeric gets nuked
-		common: /([^a-z0-9]+)/gi,
+		// everything except letters & numbers (in ANY script: Latin, Chinese, Cyrillic...) gets nuked
+		common: makeUnicodeRegEx('([^\\p{L}\\p{N}]+)', 'gu', /([^a-z0-9]+)/gi),
+		// accents left over after NFD normalization ("é" -> "e" + "´"), so "beyonce" finds "Beyoncé"
+		diacritics: makeUnicodeRegEx('\\p{M}+', 'gu', null),
 		//treat quotes as invisible
 		noise: /['`’-]/g
 	};
+
+	/**
+	 * Unicode property escapes (\p{L}) are a SyntaxError in pre-2018 browsers (IE etc),
+	 * even inside a regex literal that never runs -- that would break this whole file.
+	 * So build them at runtime and fall back to the old ASCII-only behavior.
+	 * @method makeUnicodeRegEx
+	 * @private
+	 * @param pattern {string}
+	 * @param flags {string}
+	 * @param fallback {RegExp|null}
+	 * @return {RegExp|null}
+	 */
+	function makeUnicodeRegEx(pattern, flags, fallback) {
+		try {
+			return new RegExp(pattern, flags);
+		}
+		catch (e) {
+			return fallback;
+		}
+	}
 
 	/**
 	 * Scrapes HTML to build our list of
@@ -2187,12 +2209,15 @@ ugsEditorPlus.typeahead = function(){
 	};
 
 	var crushText = function(value){
+		value = value.toLowerCase();
+		if (_re.diacritics && value.normalize) {
+			value = value.normalize('NFD').replace(_re.diacritics, '');
+		}
 		return value
-			.toLowerCase()
-    	.replace(_re.noise, '')
-    	.replace(_re.common, ' ')
-    	.replace(_re.space, ' ')
-    	.trim();
+			.replace(_re.noise, '')
+			.replace(_re.common, ' ')
+			.replace(_re.space, ' ')
+			.trim();
 	};
 
 	var _ta_source = function (query, process) {
