@@ -63,6 +63,13 @@ npm test
 
 * [Buz Carter](http://pizzabytheslice.com) (buz@ukegeeks.org)
 
+## Contributors
+
+* David Calam ([djc-503](https://github.com/djc-503))
+* [louis-coding](https://github.com/louis-coding)
+* AceLan Kao ([acelan](https://github.com/acelan))
+* [hutzelknecht](https://github.com/hutzelknecht)
+
 ## What's New...
 
 #### V1.4.4
