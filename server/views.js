@@ -5,7 +5,8 @@
  */
 const { html, jsonForScript } = require('./lib/html');
 
-const S = '/'; // statics prefix (css/js/img live at the site root)
+// Asset/link prefix comes from the model: m.base is '/' for the server, or a relative
+// path like '../../' for the static build (scripts/build-static.js).
 
 const GREETINGS = ['Aloha', 'Bonjour', 'Ciao', "Greetin's", 'Guten Tag', 'Hallo', '¡Hola', 'Howdy', 'Hej', 'Konnichiwa', 'Mabuhay', 'Nǐ hǎo', 'Whassup', 'Yo'];
 const sayHello = () => GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
@@ -31,9 +32,9 @@ function songListDetailed(m) {
   <meta charset="utf-8" />
   <title>${m.pageTitle}</title>
   <meta name="generator" content="${m.poweredBy}" />
-  <link rel="stylesheet" href="${S}css/ugsEditorPlus.min.css" title="ugsEditorCss" />
-  <link rel="stylesheet" href="${S}css/ugsphp.css" />
-  <link rel="stylesheet" href="${S}css/ugsEditorPlus.typeahead.css" />
+  <link rel="stylesheet" href="${m.base}css/ugsEditorPlus.min.css" title="ugsEditorCss" />
+  <link rel="stylesheet" href="${m.base}css/ugsphp.css" />
+  <link rel="stylesheet" href="${m.base}css/ugsEditorPlus.typeahead.css" />
 </head>
 <body class="songListPage">
   <section class="contentWrap">
@@ -55,14 +56,14 @@ function songListDetailed(m) {
     ${m.songList.map((song) => html`<li>${songRow(song)}</li>`)}
   </ol>
   </section>
-  <script src="${S}js/ugsEditorPlus.min.js"></script>
+  <script src="${m.base}js/ugsEditorPlus.min.js"></script>
   ${m.isNewAllowed
     ? html`<section class="overlay" style="top:100px; right:40%; display:none;" id="newSongForm">
       <hgroup>
         <h3>Add Song</h3>
       </hgroup>
       <div><a title="close this" href="#close" id="hideNewSongBtn" class="closeBtn">Close</a>
-        <p id="loadingSpinner"><img src="${S}img/editor/busy.gif" alt="" /> Saving&hellip;</p>
+        <p id="loadingSpinner"><img src="${m.base}img/editor/busy.gif" alt="" /> Saving&hellip;</p>
         <p class="errorMessage" style="display:none;"></p>
         <label for="songTitle">Title</label>
         <input type="text" name="songTitle" id="songTitle" value="" />
@@ -115,10 +116,10 @@ function song(m) {
 <title>${m.pageTitle}</title>
 <meta name="generator" content="${m.poweredBy}" />
 <script nonce="${m.nonce}">var isLegacyIe = false;</script>
-<link rel="stylesheet" type="text/css" href="${S}css/yuiReset.css" />
-<link rel="stylesheet" type="text/css" href="${S}css/basic-page-layout.css" media="all" />
-<link rel="stylesheet" type="text/css" href="${S}css/ukeGeeks.music.css" media="all" />
-<link rel="stylesheet" href="${S}css/ukeGeeks.musicPrint.css" media="print" />
+<link rel="stylesheet" type="text/css" href="${m.base}css/yuiReset.css" />
+<link rel="stylesheet" type="text/css" href="${m.base}css/basic-page-layout.css" media="all" />
+<link rel="stylesheet" type="text/css" href="${m.base}css/ukeGeeks.music.css" media="all" />
+<link rel="stylesheet" href="${m.base}css/ukeGeeks.musicPrint.css" media="print" />
 <style>
 header aside a{
   padding-left: 1em;
@@ -148,8 +149,8 @@ header aside a{
 <footer>
   <p>Note: <strong>GCEA</strong> Standard Ukulele Tuning. <small>Powered by UkeGeeks' Scriptasaurus &bull; ukegeeks.org</small></p>
 </footer>
-<script src="${S}js/ukeGeeks.scriptasaurus.min.js"></script>
-<script src="${S}js/startup.js"></script>
+<script src="${m.base}js/ukeGeeks.scriptasaurus.min.js"></script>
+<script src="${m.base}js/startup.js"></script>
 </body>
 </html>`;
 }
@@ -165,11 +166,11 @@ function songEditable(m) {
 <title>${m.pageTitle}</title>
 <script nonce="${m.nonce}">var isLegacyIe = false;</script>
 <link href='https://fonts.googleapis.com/css?family=Peralta|Smokum|Cherry+Cream+Soda|Ranchers|Creepster|Lobster|Permanent+Marker|Architects+Daughter|Bree+Serif' rel='stylesheet' type='text/css' />
-<link rel="stylesheet" href="${S}css/yuiReset.css" />
-<link rel="stylesheet" href="${S}css/basic-page-layout.css" />
-<link rel="stylesheet" href="${S}css/ukeGeeks.music.css" />
-<link rel="stylesheet" href="${S}css/ugsEditorPlus.min.css" title="ugsEditorCss" />
-<link rel="stylesheet" href="${S}css/ugsEditorPlus.print.css" media="print" />
+<link rel="stylesheet" href="${m.base}css/yuiReset.css" />
+<link rel="stylesheet" href="${m.base}css/basic-page-layout.css" />
+<link rel="stylesheet" href="${m.base}css/ukeGeeks.music.css" />
+<link rel="stylesheet" href="${m.base}css/ugsEditorPlus.min.css" title="ugsEditorCss" />
+<link rel="stylesheet" href="${m.base}css/ugsEditorPlus.print.css" media="print" />
 </head>
 <body class="editableSongPage pageWidth_screen">
 <section id="scalablePrintArea" class="scalablePrintArea">
@@ -203,7 +204,7 @@ function songEditable(m) {
     <p class="btnBar">
       <span id="messageBox" class="updateMessage">
         <em>
-          <img src="${S}img/editor/busy.gif" id="loadingSpinner" style="display:none;" alt="" />
+          <img src="${m.base}img/editor/busy.gif" id="loadingSpinner" style="display:none;" alt="" />
           <span id="sourceFeedback"></span>
         </em>
       </span>
@@ -428,8 +429,8 @@ function songEditable(m) {
 </section>
 
 <!-- SCRIPTS -->
-<script src="${S}js/ukeGeeks.scriptasaurus.min.js"></script>
-<script src="${S}js/ugsEditorPlus.min.js"></script>
+<script src="${m.base}js/ukeGeeks.scriptasaurus.min.js"></script>
+<script src="${m.base}js/ugsEditorPlus.min.js"></script>
 <script nonce="${m.nonce}">
 var ugs_settings = ${jsonForScript(m.editorSettings)};
 if (ugs_settings && ugs_settings.invalidJson){
@@ -458,8 +459,8 @@ function login(m) {
   <meta charset="utf-8" />
   <title>${m.pageTitle}</title>
   <meta name="generator" content="${m.poweredBy}" />
-  <link rel="stylesheet" href="${S}css/ugsEditorPlus.min.css" title="ugsEditorCss" />
-  <link rel="stylesheet" href="${S}css/ugsphp.css" />
+  <link rel="stylesheet" href="${m.base}css/ugsEditorPlus.min.css" title="ugsEditorCss" />
+  <link rel="stylesheet" href="${m.base}css/ugsphp.css" />
 </head>
 <body class="loginPage">
 <section class="contentWrap">

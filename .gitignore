@@ -5,3 +5,4 @@ ugsphp/cache/SongList.info
 node_modules/
 ugs.config.json
 .claude/launch.json
+dist/

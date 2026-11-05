@@ -70,7 +70,13 @@ npm test
 * **Pull requests:** build the bundles and run the tests.
 * **Merge to `master`:** build, test, commit any rebuilt `js/` and `css/` files back to `master` (as "Rebuild bundles from src [skip ci]"), then publish the static demo to GitHub Pages: the library, the `songs/*.htm` demos and the landing page in `site/index.html`.
 
-The full songbook (Node or PHP) needs a server, so it isn't part of the Pages site.
+The demo also includes a static **Songbook** (`songbook/`): the song list with quick search, and every song in the Song-a-matic editor. Everything that runs in the browser works (appearance, transpose, tunings, Chord Builder, Fullscreen); saving, new songs and login need the server, so they're left out. Build it yourself with:
+
+```bash
+npm run build:static
+```
+
+It writes `dist/static/` (`songbook/` + `css/ js/ img/`) with relative links only, so it works on any static host, at the domain root or under a sub-path (use `--out dir` and `--songs dir` to change where it reads and writes).
 
 ## Authors
 

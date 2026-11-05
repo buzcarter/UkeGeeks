@@ -44,6 +44,7 @@ const songs = new SongRepository(cfg);
 const auth = new Auth(cfg);
 
 const baseModel = (nonce, siteUser) => ({
+  base: '/',
   nonce,
   siteUser,
   poweredBy: cfg.poweredBy,
