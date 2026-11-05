@@ -167,7 +167,12 @@ ugsEditorPlus.actions = (function() {
 	 */
 	_public.run = function(isDoBackup){
 		isDoBackup = (arguments.length > 0) && isDoBackup;
-		_ele.songText.innerHTML = '<pre>' + _ele.cpmSource.value + '</pre>';
+		// escape the raw ChordPro text: it's untrusted and must not be parsed as HTML
+		var safeSource = _ele.cpmSource.value
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;');
+		_ele.songText.innerHTML = '<pre>' + safeSource + '</pre>';
 		_song = ukeGeeks.scriptasaurus.run();
 
 		if (_song.chords.length < 1){
@@ -333,7 +338,7 @@ ugsEditorPlus.actions = (function() {
 
 		if (value == 'alternate') {
 			tuning = ukeGeeks.definitions.instrument.alternateUke;
-			msg = '<strong>ADF#B</strong> alternate';
+			msg = '<strong>ADF#B</strong> alternate tuning';
 		}
 
 		$('#footTuningInfo').html(msg);

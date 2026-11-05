@@ -2,3 +2,5 @@ ugsphp/Config.php
 ugsphp/cache/SongList.cache
 ugsphp/cache/SongList.info
 .htaccess
+node_modules/
+ugs.config.json

@@ -1,0 +1,24 @@
+{
+  "name": "ukegeeks-scriptasaurus",
+  "version": "1.4.4",
+  "description": "UkeGeeks Scriptasaurus: ChordPro songbook with ukulele chord diagrams, served by a small Node.js server",
+  "private": true,
+  "license": "GPL-3.0",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "build": "node scripts/build.js",
+    "build:js": "node scripts/build.js js",
+    "build:css": "node scripts/build.js css",
+    "hash-password": "node scripts/hash-password.js",
+    "test": "node --test test/"
+  },
+  "devDependencies": {
+    "less": "^4.9.1",
+    "terser": "^5.51.2"
+  }
+}

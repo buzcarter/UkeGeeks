@@ -1,22 +1,22 @@
 /**
   * <ul>
   * <li>Project: UkeGeeks' Scriptasaurus</li>
-  * <li>Version: 1.4.3</li>
+ * <li>Version: 1.4.3</li>
   * <li>Homepage: http://ukegeeks.org</li>
   * <li>Project Repository: https://github.com/buzcarter/UkeGeeks</li>
   * <li>Author: Buz Carter</li>
   * <li>Contact: buz@ukegeeks.org</li>
   * <li>Copyright: Copyright 2010-2014 Buz Carter.</li>
   * <li>License GNU General Public License (http://www.gnu.org/licenses/gpl.html)</li>
-  * </ul>
+ * </ul>
   *
-  * <h3>Overview</h3>
+ * <h3>Overview</h3>
   * <p>Reads marked-up music (lyrics + chords) extracting all of the chords used;
   * Generates a chord diagrams using HTML5 &lt;canvas&gt; and rewrites the music with
-  * standard HTML wrapping the chords.</p>
+ * standard HTML wrapping the chords.</p>
   *
-  * @module ukeGeeks
-  * @main ukeGeeks
+ * @module ukeGeeks
+ * @main ukeGeeks
   */
 var ukeGeeks = window.ukeGeeks || {};
 ;/**
@@ -55,9 +55,9 @@ ukeGeeks.definitions = (function() {
 	 * @type JSON
 	 */
 	_public.instrument = {
-		alternateUke: -2, // ADF#B -- 2 steps higher than standard tuning: A4 (or A3)-D4-F#4-B4
 		sopranoUke: 0, // GCEA -- standard tuning G4 (or G3)-C4-E4-A4
-		baritoneUke: 5 // DGBE -- 5 steps lower than standard Soprano tuning: D3-G3-B3-E4
+		baritoneUke: 5, // DGBE -- 5 steps lower than standard Soprano tuning: D3-G3-B3-E4
+		alternateUke: -2 // ADF#B -- 2 steps higher than standard tuning A4 (or A3)-D4-F#4-B4
 	};
 	
 	/* PUBLIC METHODS
@@ -112,8 +112,8 @@ ukeGeeks.definitions = (function() {
 			return _get(chordName);
 		}
 
-	    // user has retuned the chords, need to find chord name "as-is",
-		// but get the fingering from the mapping
+			// user has retuned the chords, need to find chord name "as-is",
+			// but get the fingering from the mapping
 		name = _getAlias(chordName);
 		for (i in _map) {
 			if (name == _map[i].original) {
@@ -122,10 +122,10 @@ ukeGeeks.definitions = (function() {
 					chrd = new ukeGeeks.data.expandedChord(chordName);
 					chrd.dots = c.dots;
 					chrd.muted = c.muted;
-					return chrd;
+						return chrd;
+					}
 				}
 			}
-		}
 
 		return null;
 	};
@@ -215,7 +215,6 @@ ukeGeeks.definitions = (function() {
 	
 	return _public;
 }());
-
 ;/**
  * Customize your installation. This JSON object controls appearance and
  * HTML element names. It's divided into four sections: graphics, ids, layout,
@@ -1628,7 +1627,6 @@ ukeGeeks.definitions.sopranoUkuleleGcea = [
 	'{define: G/F frets 0 2 1 2}',
 	'{define: G7/B frets 0 2 1 2}'
 ];
-
 ;/**
  * Wraps three common canvas actions: adding canvas element to DOM, drawing a dot, adding text.
  * @class canvasTools
@@ -3247,7 +3245,6 @@ ukeGeeks.tabs = function() {
 		replace: replace
 	};
 };
-
 ;/**
  * Singleton to correct overlapping chord names/diagrams in songs rendered by UGS
  * @class overlapFixer
@@ -3586,4 +3583,4 @@ ukeGeeks.scriptasaurus = (function() {
 	};
 
 	return _public;
-}());
+}());

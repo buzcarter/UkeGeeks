@@ -15,7 +15,8 @@
  * @module ugsEditorPlus
  * @main ugsEditorPlus
  **/
-var ugsEditorPlus = window.ugsEditorPlus || {};/**
+var ugsEditorPlus = window.ugsEditorPlus || {};
+;/**
  * Options (Features) you can turn on or off. Where available defaults to values defined in UkeGeeks.settings
  *
  * @class options
@@ -154,7 +155,8 @@ ugsEditorPlus.options = {
 	 * @default see UkeGeeks.settings
 	 */
 	commonChords: []
-};/**
+};
+;/**
  * Does the work by providing "doAction" method to respond to events (does not
  * attach event handlers); Modifes some page elements -- adjust CSS classes on page,
  * runs Scriptasaurus, etc.
@@ -323,7 +325,12 @@ ugsEditorPlus.actions = (function() {
 	 */
 	_public.run = function(isDoBackup){
 		isDoBackup = (arguments.length > 0) && isDoBackup;
-		_ele.songText.innerHTML = '<pre>' + _ele.cpmSource.value + '</pre>';
+		// escape the raw ChordPro text: it's untrusted and must not be parsed as HTML
+		var safeSource = _ele.cpmSource.value
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;');
+		_ele.songText.innerHTML = '<pre>' + safeSource + '</pre>';
 		_song = ukeGeeks.scriptasaurus.run();
 
 		if (_song.chords.length < 1){
@@ -659,7 +666,7 @@ ugsEditorPlus.actions = (function() {
 	return _public;
 
 }());
-/**
+;/**
  * Handles transfering the easy text bits of a Song -- title, artist, etc -- to the page.
  * @class songUi
  * @namespace ugsEditorPlus
@@ -724,7 +731,7 @@ ugsEditorPlus.songUi = (function() {
 
 }()
 );
-/**
+;/**
  * from: http://www.javascriptkit.com/dhtmltutors/externalcss.shtml
  * @class styles
  * @namespace ugsEditorPlus
@@ -782,7 +789,8 @@ ugsEditorPlus.styles = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+;/**
  * Changes the song's color scheme ("theme") by changing both the applied body class
  * and the UkeGeek settings used to draw the diagrams.
  * @class themes
@@ -1045,7 +1053,8 @@ ugsEditorPlus.themes = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+;/**
  * UI mechanics of the Other Options "dialog"'s checkboxes and input
  * fields (does NOT manage "pageWidth" since its standard submenu behavior
  * is already handled in that class)
@@ -1130,7 +1139,8 @@ ugsEditorPlus.optionsDlg = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());var ugsEditorPlus = window.ugsEditorPlus || {};
+}());
+;var ugsEditorPlus = window.ugsEditorPlus || {};
 
 /**
  * TK
@@ -1401,7 +1411,8 @@ ugsEditorPlus.reformat = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+;/**
  *
  * @class autoReformat
  * @namespace ugsEditorPlus
@@ -1481,7 +1492,8 @@ ugsEditorPlus.autoReformat = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+;/**
  * Handles Top Menu UI -- includes the show/hide dialogs (why? cuz they're attached to top menu buttons)
  * Shows (a) dialongs (such as Edit) and (b) those tool-tippy options thingies.
  * @class topMenus
@@ -1616,6 +1628,7 @@ ugsEditorPlus.topMenus = (function() {
 	};
 
 }());
+;
 /**
  * Wires up all the "pseudo-selects" (aka "dropdownlists") on a Tooltip-Dialog boxes on
  * the page; assumes consistent HTML (hello, jQuery)
@@ -1865,7 +1878,7 @@ ugsEditorPlus.submenuUi = (function(){
 	return _public;
 
 }());
-/**
+;/**
  * Creates a new song via AJAX.
  * Dependencies: jQuery
  * @class newSong
@@ -1944,6 +1957,7 @@ ugsEditorPlus.newSong = (function() {
 				url: _ajaxUri,
 				type: "POST",
 				dataType: 'json',
+				contentType: 'application/json; charset=utf-8',
 				data: JSON.stringify(data),
 				success: function(data) {
 					doAjaxOk(data);
@@ -1995,7 +2009,8 @@ ugsEditorPlus.newSong = (function() {
 	// return public interface "JSON handle"
 	// ---------------------------------------
 	return _public;
-})();/**
+})();
+;/**
  * Updates an exising song via AJAX.
  * Dependencies: jQuery
  * @class updateSong
@@ -2105,7 +2120,8 @@ ugsEditorPlus.updateSong = (function() {
 	// return public interface "JSON handle"
 	// ---------------------------------------
 	return _public;
-})();/**
+})();
+;/**
  * Search on the song list page for songs.
  * Dependencies: jQuery and Twitter Bootstrap's typeahead plugin
  * Based on tutorial:
@@ -2246,7 +2262,8 @@ ugsEditorPlus.typeahead = function(){
 	// return public interface "JSON handle"
 	// ---------------------------------------
 	return _public;
-};/**
+};
+;/**
  * Resizes an overlay to fill the window (this is a 1.0, so "fill" is relative -- it gets much bigger)
  * @class resize
  * @namespace ugsEditorPlus
@@ -2442,7 +2459,8 @@ ugsEditorPlus.resize = (function(){
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+;/**
  *
  * Dependencies: jQuery & ugsChordBuilder classes
  * @class chordBuilder
@@ -2489,7 +2507,8 @@ ugsEditorPlus.chordBuilder = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+;/**
  * Exposes the only method required to attach UkeGeeks Scriptasaurus Song-a-matic editor functionality.
  *
  * @class songAmatic
@@ -2543,7 +2562,8 @@ ugsEditorPlus.songAmatic = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+;/**
  * Library for an HTML5 WYSIWYG editor to build ChordPro chord define tags.
  * @module  ugsChordBuilder
  * @namespace ugsChordBuilder
@@ -3420,7 +3440,8 @@ ugsChordBuilder.export = (function() {
 	// ---------------------------------------
 	return _public;
 
-}());/**
+}());
+;/**
  *
  * @class chooserList
  * @namespace ugsChordBuilder
@@ -3898,6 +3919,7 @@ ugsChordBuilder.chooserList = (function() {
 	return _public;
 
 }());
+;
 /**
  * Doing
  * @class editorUi
@@ -4358,4 +4380,4 @@ ugsChordBuilder.editorUi = function() {
 		ugsChordBuilder.chooserList.show(true);
 	};
 
-};
+};
