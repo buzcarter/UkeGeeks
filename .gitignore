@@ -6,3 +6,4 @@ node_modules/
 ugs.config.json
 .claude/launch.json
 dist/
+.DS_Store
