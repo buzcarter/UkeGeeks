@@ -299,10 +299,13 @@ html .arrowDown {
 	li:hover .deleteChord {
 		opacity: 1;
 	}
-	// mini-diagram
-	canvas {
+	// mini-diagram: chordBrush draws <span class="ugs-diagrams--chord-img"><svg>
+	.ugs-diagrams--chord-img {
 		float: right;
 		margin-right: 10px;
+		svg {
+			display: block;
+		}
 	}
 }
 
