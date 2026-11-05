@@ -53,11 +53,22 @@ npm run build
 
 `npm run build:js` or `npm run build:css` builds just one. The concatenation order lives in `scripts/build.js`; add new source files there.
 
+You don't have to run the build before pushing: on every merge to `master`, GitHub Actions rebuilds the bundles and commits any that changed (see below).
+
 ## Tests
 
 ```bash
 npm test
 ```
+
+## Continuous build & demo site
+
+`.github/workflows/build-and-deploy.yml` runs on GitHub:
+
+* **Pull requests:** build the bundles and run the tests.
+* **Merge to `master`:** build, test, commit any rebuilt `js/` and `css/` files back to `master` (as "Rebuild bundles from src [skip ci]"), then publish the static demo to GitHub Pages: the library, the `songs/*.htm` demos and the landing page in `site/index.html`.
+
+The full songbook (Node or PHP) needs a server, so it isn't part of the Pages site.
 
 ## Authors
 
