@@ -155,6 +155,18 @@ test('static files are served', async () => {
   assert.match(r.text, /alternateUke/);
 });
 
+test('favicon and touch icon are served; other root files are not', async () => {
+  const ico = await fetch(base + '/favicon.ico');
+  assert.equal(ico.status, 200);
+  assert.equal(ico.headers.get('content-type'), 'image/x-icon');
+  const touch = await fetch(base + '/apple-touch-icon.png');
+  assert.equal(touch.status, 200);
+  for (const p of ['/package.json', '/README.md', '/favicon.ico/../package.json', '/%2e%2e/package.json']) {
+    const r = await req(p);
+    assert.ok(r.status >= 400, `${p} -> ${r.status}`);
+  }
+});
+
 test('legacy music.php links redirect', async () => {
   const r = await req('/music.php?action=song&song=foo');
   assert.equal(r.status, 301);

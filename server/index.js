@@ -12,7 +12,7 @@
  *   GET  /login, POST /login, GET /logout
  *   POST /ajaxnewsong, /ajaxupdatesong   (JSON; editors only)
  *   GET  /music.php?action=…&song=…      legacy PHP-style links (redirected)
- *   GET  /css/*, /js/*, /img/*, /songs/* static files
+ *   GET  /css/*, /js/*, /img/*, /songs/* static files (+ /favicon.ico, /apple-touch-icon.png)
  */
 const http = require('node:http');
 
@@ -35,6 +35,8 @@ const {
 } = require('./lib/http');
 
 const STATIC_DIRS = ['css', 'js', 'img', 'songs'];
+// browsers & iOS request these from the site root by default
+const STATIC_ROOT_FILES = ['favicon.ico', 'apple-touch-icon.png'];
 const JSON_LIMIT = cfg.maxFileSize * 4 + 4096; // headroom for JSON string escaping
 const FORM_LIMIT = 8 * 1024;
 
@@ -221,7 +223,7 @@ async function route(req, res) {
   const url = new URL(req.url, 'http://localhost');
   let pathname = url.pathname;
 
-  if ((req.method === 'GET' || req.method === 'HEAD') && serveStatic(req, res, cfg.root, STATIC_DIRS, pathname)) {
+  if ((req.method === 'GET' || req.method === 'HEAD') && serveStatic(req, res, cfg.root, STATIC_DIRS, pathname, STATIC_ROOT_FILES)) {
     return;
   }
 

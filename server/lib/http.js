@@ -139,10 +139,11 @@ function isSameOrigin(req) {
 }
 
 /**
- * Serves a file from one of the allowed top-level directories under `root`.
+ * Serves a file from one of the allowed top-level directories under `root`,
+ * or one of the explicitly allowed files in `root` itself (e.g. favicon.ico).
  * @returns {boolean} true if handled
  */
-function serveStatic(req, res, root, allowedDirs, pathname) {
+function serveStatic(req, res, root, allowedDirs, pathname, allowedRootFiles = []) {
   let decoded;
   try {
     decoded = decodeURIComponent(pathname);
@@ -152,14 +153,17 @@ function serveStatic(req, res, root, allowedDirs, pathname) {
   if (decoded.includes('\0')) return false;
 
   const rel = path.posix.normalize(decoded).replace(/^\/+/, '');
-  const top = rel.split('/')[0];
-  if (!allowedDirs.includes(top) || rel.split('/').some((seg) => seg.startsWith('.'))) {
-    return false;
+  let full;
+  if (allowedRootFiles.includes(rel)) {
+    full = path.join(root, rel);
+  } else {
+    const top = rel.split('/')[0];
+    if (!allowedDirs.includes(top) || rel.split('/').some((seg) => seg.startsWith('.'))) {
+      return false;
+    }
+    full = path.join(root, rel);
+    if (!full.startsWith(path.join(root, top) + path.sep)) return false;
   }
-
-  const full = path.join(root, rel);
-  const base = path.join(root, top) + path.sep;
-  if (!full.startsWith(base)) return false;
 
   let stat;
   try {
