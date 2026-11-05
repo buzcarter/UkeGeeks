@@ -764,7 +764,7 @@ ugsEditorPlus.actions = (function() {
 		var columnWidth = Math.round(prct * 225);
 
 		var s = ugsEditorPlus.styles.getSheet('ugsEditorCss');
-		var m = s.find('.scalablePrintArea .ugs-diagrams-wrap canvas');
+		var m = s.find('.scalablePrintArea .ugs-diagrams-wrap svg');
 		m.style.width = Math.round(prct * ukeGeeks.settings.fretBox.width) +'px';
 		m.style.height = Math.round(prct * ukeGeeks.settings.fretBox.height) +'px';
 

@@ -663,9 +663,12 @@ html .arrowDown {
 .ugsChordChooser li:hover .deleteChord {
   opacity: 1;
 }
-.ugsChordChooser canvas {
+.ugsChordChooser .ugs-diagrams--chord-img {
   float: right;
   margin-right: 10px;
+}
+.ugsChordChooser .ugs-diagrams--chord-img svg {
+  display: block;
 }
 /* / */
 /*
@@ -1483,7 +1486,7 @@ html .diagramsOnTop .ugs-source-wrap {
 /* redundant rule to allow JS hook
 -------------------------------- */
 /* NOTE: this should be last set of rules in this file! */
-.scalablePrintArea .ugs-diagrams-wrap canvas {
+.scalablePrintArea .ugs-diagrams-wrap svg {
   zoom: 1;
 }
 .scalablePrintArea .ugs-diagrams-wrap {

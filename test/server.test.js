@@ -149,7 +149,7 @@ test('existing HTML entities in song files are not double-escaped', async () => 
 });
 
 test('static files are served', async () => {
-  const r = await req('/js/ukeGeeks.scriptasaurus.min.js');
+  const r = await req('/js/song-formatter.bundle.js');
   assert.equal(r.status, 200);
   assert.match(r.headers.get('content-type'), /javascript/);
   assert.match(r.text, /alternateUke/);

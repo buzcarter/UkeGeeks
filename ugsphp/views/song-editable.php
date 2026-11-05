@@ -16,7 +16,6 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 <!--[if lt IE 9]>
 <script type="text/javascript">isLegacyIe = true;document.getElementsByTagName('html')[0].className='legacyIe';</script>
 <script type="text/javascript" src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<script type="text/javascript" src="//explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>
 <link rel="stylesheet" href="<?php echo($model->StaticsPrefix); ?>css/ugsEditorPlus.legacyIe.css" />
 <![endif]-->
 <link href='//fonts.googleapis.com/css?family=Peralta|Smokum|Cherry+Cream+Soda|Ranchers|Creepster|Lobster|Permanent+Marker|Architects+Daughter|Bree+Serif' rel='stylesheet' type='text/css' />
@@ -287,7 +286,7 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 
 <!-- SCRIPTS -->
 
-<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ukeGeeks.scriptasaurus.min.js"></script>
+<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/song-formatter.bundle.js"></script>
 <script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.min.js"></script>
 <script type="text/javascript">
 var ugs_settings = <?php echo($model->EditorSettingsJson); ?>;

@@ -45,6 +45,8 @@ New songs are saved as `Title - Artist.cpm.txt`.
 
 Edit the files under `src/`, never `js/*.merged.js` / `js/*.min.js` / `css/ugsEditorPlus.*.css` directly: those are generated, and the pages load the `.min` files.
 
+Songs are rendered by [Song Formatter](https://github.com/buzcarter/song-formatter) (`@ukegeeks/song-formatter`, a devDependency). The build copies its browser bundle to `js/song-formatter.bundle.js` and its song styles to `css/ukeGeeks.music.css` and `css/ukeGeeks.musicPrint.css`, so don't edit those here either: change Song Formatter, release it, then bump its version in `package.json` and rebuild.
+
 ```bash
 npm install
 ```
@@ -53,7 +55,7 @@ npm install
 npm run build
 ```
 
-`npm run build:js` or `npm run build:css` builds just one. The concatenation order lives in `scripts/build.js`; add new source files there.
+`npm run build:js` or `npm run build:css` builds just one (each also copies its Song Formatter files). The concatenation order lives in `scripts/build.js`; add new source files there.
 
 You don't have to run the build before pushing: on every merge to `master`, GitHub Actions rebuilds the bundles and commits any that changed (see below).
 
@@ -98,6 +100,11 @@ It replaces `songbook/` entries and overwrites library files in `js/`, `css/` an
 * [hutzelknecht](https://github.com/hutzelknecht)
 
 ## What's New...
+
+#### Next release (unreleased)
+* General
+  * **Songs are rendered by [Song Formatter](https://github.com/buzcarter/song-formatter)** 1.0.0-beta, the TypeScript successor to the Scriptasaurus library, with the same `ukeGeeks.*` API. Pages load `js/song-formatter.bundle.js` instead of `js/ukeGeeks.scriptasaurus.min.js`, and chord diagrams and tablature are SVG instead of `<canvas>`. The old library (`src/js/scriptasaurus/`) and `excanvas.js` are gone.
+  * Same output as before: all 16 sample songs render with the same text, chords, diagrams and tabs, in standard, baritone and ADF#B tunings and with mini-diagrams.
 
 #### V1.5.1
 * General
@@ -165,10 +172,10 @@ It replaces `songbook/` entries and overwrites library files in `js/`, `css/` an
 
 ### What's Old
 
-* HTML5 markup. Chord diagrams are drawn using &lt;canvas /&gt; tag
+* HTML5 markup. Chord diagrams and tablature are drawn as SVG
 * Includes sample songs (HTML) & Dreamweaver Templates
 * Includes working PHP songbook generating app
-* The main JavaScript library (Scriptasaurus) as individual class files, a merged version, and a merged & minified version
+* The song renderer ([Song Formatter](https://github.com/buzcarter/song-formatter)) as a single minified file; the editor as individual class files, a merged version, and a merged & minified version
 * All JavaScript class methods are document using JavaDoc format
 * Most common ukulele chords - a library of 300+
 
@@ -208,7 +215,7 @@ Many files and CSS class names are prefaced with **"UGS"**: Uke Geeks Scriptasau
 
 Thus Scriptasuarus forms the heart of all Uke Geeks projects.
 
-So the Editor uses Scritasaurus PLUS an additional class library ("ugsEditorPlus.merged.js"), but to merely render a song one only needs Scriptasaurus (ukeGeeks.Scriptasaurus.merged.js). (see note on "Merged versus Min" below)
+So the Editor uses Scriptasaurus PLUS an additional class library ("ugsEditorPlus.min.js"), but to merely render a song one only needs Scriptasaurus ("song-formatter.bundle.js"). Since the next release, Scriptasaurus is [Song Formatter](https://github.com/buzcarter/song-formatter), which keeps the same `ukeGeeks.scriptasaurus` API. (see note on "Merged versus Min" below)
 
 This raises an important point:
 
@@ -366,7 +373,7 @@ const StaticsPrefix = '/uke-static/';
 The Editor, for example, will now link to:
 
 ````
-http://mysite.com/uke-static/js/ukeGeeks.scriptasaurus.merged.js'
+http://mysite.com/uke-static/js/song-formatter.bundle.js'
 ````
 
 ### Actions
