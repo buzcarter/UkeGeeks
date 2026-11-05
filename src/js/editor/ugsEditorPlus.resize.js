@@ -11,9 +11,11 @@ ugsEditorPlus.resize = (function(){
 	 */
 	var _public = {};
 
-	var $dlg = null;
-	var $aceLayer = null;
-	var $help = null;
+	var dom = ugsEditorPlus.dom;
+
+	var dlg = null;
+	var aceLayer = null;
+	var help = null;
 	var editor = null;
 
 	/**
@@ -47,19 +49,20 @@ ugsEditorPlus.resize = (function(){
 	 * @return {void}
 	 */
 	var setup = function(dlgElement){
-		$dlg = $(dlgElement);
-		$("body").append('<div id="aceHeader"><button class="aceSideBtn" title="Show options &amp; help"><span></span><span></span><span></span></button><strong>Edit Song</strong><a href="#exit-fullscreen">Exit fullscreen</a></div><div id="aceEditor"></div><div id="aceHelp"></div>');
+		dlg = dlgElement;
+		// static markup only
+		document.body.insertAdjacentHTML('beforeend', '<div id="aceHeader"><button class="aceSideBtn" title="Show options &amp; help"><span></span><span></span><span></span></button><strong>Edit Song</strong><a href="#exit-fullscreen">Exit fullscreen</a></div><div id="aceEditor"></div><div id="aceHelp"></div>');
 
-		$aceLayer = $('#aceEditor');
-		$aceLayer.fadeOut(1);
+		aceLayer = document.getElementById('aceEditor');
+		dom.hide(aceLayer);
 
-		$help = $('#aceHelp');
+		help = document.getElementById('aceHelp');
 
-		$('#aceHeader a').click(function(e) {
+		dom.one('#aceHeader a').addEventListener('click', function(e) {
 			e.preventDefault();
 			hideAce();
 		});
-		$('#aceHeader button').click(onShowHelpClicked);
+		dom.one('#aceHeader button').addEventListener('click', onShowHelpClicked);
 	};
 
 	var onShowHelpClicked = function(e) {
@@ -70,22 +73,12 @@ ugsEditorPlus.resize = (function(){
 	var showHelp = function(isShow) {
 		isHelpOpen = isShow;
 
-		if (isShow) {
-			$help.animate({
-				left: 0
-			}, SLIDE_SPEED);
-			$aceLayer.animate({
-				left: '350px'
-			}, SLIDE_SPEED);
-		}
-		else {
-			$help.animate({
-				left: '-350px'
-			}, SLIDE_SPEED);
-			$aceLayer.animate({
-				left: 0
-			}, SLIDE_SPEED);
-		}
+		dom.animate(help, {
+			left: isShow ? '0px' : '-350px'
+		}, SLIDE_SPEED);
+		dom.animate(aceLayer, {
+			left: isShow ? '350px' : '0px'
+		}, SLIDE_SPEED);
 	};
 
 	/**
@@ -100,7 +93,7 @@ ugsEditorPlus.resize = (function(){
 
 		fileName = fileName.toLowerCase();
 
-		$('script').each(function(index, item) {
+		Array.prototype.forEach.call(document.scripts, function(item) {
 			lower = item.src.toLowerCase();
 			pos = lower.indexOf(fileName);
 			if (pos > 0) {
@@ -113,8 +106,10 @@ ugsEditorPlus.resize = (function(){
 	var showAce = function() {
 		isBig = true;
 
-		$('html').addClass('aceEditorActive');
-		$('.overlay').fadeOut(300);
+		document.documentElement.classList.add('aceEditorActive');
+		dom.all('.overlay').forEach(function(overlay) {
+			dom.fadeOut(overlay, 300);
+		});
 
 		if (editor !== null) {
 			// editor has already been initialized, safe to continue
@@ -136,16 +131,17 @@ ugsEditorPlus.resize = (function(){
 				editor.completers = [ugsAce.chordCompleter];
 				copySongToAce();
 
-				$help.html(ugsAce.helpHtml);
+				// ugsAce's own (static) help text
+				help.innerHTML = ugsAce.helpHtml;
 
 			});
 	};
 
 	var copySongToAce = function() {
-		$aceLayer.fadeIn(FADE_SPEED);
-		editor.setValue($('#chordProSource').val());
+		dom.fadeIn(aceLayer, FADE_SPEED);
+		editor.setValue(document.getElementById('chordProSource').value);
 		editor.gotoLine(1);
-		$help.fadeIn(1);
+		dom.show(help);
 	};
 
 	/**
@@ -157,14 +153,14 @@ ugsEditorPlus.resize = (function(){
 	var hideAce = function() {
 		isBig = false;
 
-		$dlg.show();
-		$aceLayer.fadeOut(FADE_SPEED);
-		$help.fadeOut(FADE_SPEED);
+		dom.show(dlg);
+		dom.fadeOut(aceLayer, FADE_SPEED);
+		dom.fadeOut(help, FADE_SPEED);
 		if (editor !== null) {
-			$('#chordProSource').val(editor.getValue());
+			document.getElementById('chordProSource').value = editor.getValue();
 		}
 
-		$('html').removeClass('aceEditorActive');
+		document.documentElement.classList.remove('aceEditorActive');
 		showHelp(false);
 	};
 
@@ -175,7 +171,7 @@ ugsEditorPlus.resize = (function(){
 	 * @return {void}
 	 */
 	_public.toggle = function(dlgElement){
-		if ($dlg === null) {
+		if (dlg === null) {
 		setup(dlgElement);
 		}
 

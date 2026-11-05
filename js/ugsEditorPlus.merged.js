@@ -17,6 +17,398 @@
  **/
 var ugsEditorPlus = window.ugsEditorPlus || {};
 ;/**
+ * Tiny DOM helpers for the editor (replaces what the editor used to get from jQuery):
+ * element lookup, show/hide, CSS-transition fades & slides, draggable dialogs, and
+ * a JSON POST via fetch. No inline handlers or innerHTML here, so it's CSP friendly.
+ * @class dom
+ * @namespace ugsEditorPlus
+ * @static
+ */
+ugsEditorPlus.dom = (function() {
+  'use strict';
+
+  /**
+   * attach public members to this object
+   * @property _public
+   * @type JsonObject
+   */
+  var _public = {};
+
+  /**
+   * named speeds, in milliseconds (same as jQuery's)
+   * @property SPEEDS
+   * @private
+   */
+  var SPEEDS = {
+    fast: 200,
+    normal: 400,
+    slow: 600
+  };
+
+  // running animations, per element: [{ props: [names], css: 'opacity 400ms ease', id: timer, fade: 'in'|'out' }]
+  // (animations of different properties -- say a fade and a slide -- run side by side)
+  var _running = new WeakMap();
+
+  var toMs = function(speed) {
+    if (typeof speed === 'number') {
+      return speed;
+    }
+    return SPEEDS[speed] || SPEEDS.normal;
+  };
+
+  /**
+   * First element matching the CSS selector (within optional context element)
+   * @method one
+   * @param selector {string}
+   * @param context {DOM-element} (optional) defaults to document
+   * @return {DOM-element|null}
+   */
+  _public.one = function(selector, context) {
+    return (context || document).querySelector(selector);
+  };
+
+  /**
+   * All elements matching the CSS selector, as an Array
+   * @method all
+   * @param selector {string}
+   * @param context {DOM-element} (optional) defaults to document
+   * @return {Array}
+   */
+  _public.all = function(selector, context) {
+    return Array.prototype.slice.call((context || document).querySelectorAll(selector));
+  };
+
+  /**
+   * Attaches handler to the event on every element matching the selector (or to the element(s) passed in)
+   * @method on
+   * @param target {string|DOM-element|Array} CSS selector, element, or array of elements
+   * @param eventName {string}
+   * @param handler {function}
+   */
+  _public.on = function(target, eventName, handler) {
+    var list = (typeof target === 'string') ? _public.all(target) : (Array.isArray(target) ? target : [target]);
+    list.forEach(function(ele) {
+      if (ele) {
+        ele.addEventListener(eventName, handler);
+      }
+    });
+  };
+
+  /**
+   * Is the element rendered (displayed)? Same rule as jQuery's ":visible"
+   * @method isVisible
+   * @param ele {DOM-element}
+   * @return {bool}
+   */
+  _public.isVisible = function(ele) {
+    return !!(ele && ele.getClientRects().length);
+  };
+
+  var running = function(ele) {
+    return _running.get(ele) || [];
+  };
+
+  var setTransition = function(ele) {
+    ele.style.transition = running(ele).map(function(anim) {
+      return anim.css;
+    }).join(', ');
+  };
+
+  // cancel running animations on ele (all of them, or just those touching propNames);
+  // leaves the current inline values in place
+  var stop = function(ele, propNames) {
+    var keep = running(ele).filter(function(anim) {
+      var isHit = !propNames || anim.props.some(function(name) {
+        return propNames.indexOf(name) >= 0;
+      });
+      if (isHit) {
+        clearTimeout(anim.id);
+      }
+      return !isHit;
+    });
+    _running.set(ele, keep);
+    setTransition(ele);
+  };
+
+  var fadeDirection = function(ele) {
+    var fades = running(ele).filter(function(anim) {
+      return !!anim.fade;
+    });
+    return fades.length ? fades[0].fade : null;
+  };
+
+  var isHidden = function(ele) {
+    return window.getComputedStyle(ele).display === 'none';
+  };
+
+  // display the element; when a stylesheet (or class) hides it fall back to "block"
+  var display = function(ele) {
+    ele.style.display = '';
+    if (isHidden(ele)) {
+      ele.style.display = 'block';
+    }
+  };
+
+  /**
+   * Transitions CSS properties from their start to end values.
+   * @method animate
+   * @param ele {DOM-element}
+   * @param props {JSON} property name => [from, to] (or just "to", which starts from the current computed value)
+   * @param speed {number|string} milliseconds or "fast", "slow"
+   * @param onDone {function} (optional) called when complete (not when interrupted)
+   * @return {JSON} the running animation
+   */
+  _public.animate = function(ele, props, speed, onDone) {
+    var ms = toMs(speed);
+    var computed = window.getComputedStyle(ele);
+    var names = Object.keys(props);
+    var ends = {};
+
+    // snapshot the starting values BEFORE dropping any running transition
+    names.forEach(function(name) {
+      var value = props[name];
+      ends[name] = Array.isArray(value) ? value : [computed[name], value];
+    });
+    // drop running transitions of these properties, jump to the start values
+    stop(ele, names);
+    names.forEach(function(name) {
+      ele.style[name] = ends[name][0];
+    });
+    // force a reflow so the browser "sees" the start values before transitioning
+    void ele.offsetWidth;
+
+    var anim = {
+      props: names,
+      css: names.map(function(name) {
+        return name.replace(/[A-Z]/g, '-$&').toLowerCase() + ' ' + ms + 'ms ease';
+      }).join(', ')
+    };
+    _running.set(ele, running(ele).concat(anim));
+    setTransition(ele);
+    names.forEach(function(name) {
+      ele.style[name] = ends[name][1];
+    });
+
+    anim.id = setTimeout(function() {
+      _running.set(ele, running(ele).filter(function(other) {
+        return other !== anim;
+      }));
+      setTransition(ele);
+      if (onDone) {
+        onDone();
+      }
+    }, ms);
+    return anim;
+  };
+
+  /**
+   * Display element immediately (cancels any fade)
+   * @method show
+   * @param ele {DOM-element}
+   */
+  _public.show = function(ele) {
+    if (!ele) {
+      return;
+    }
+    stop(ele);
+    ele.style.opacity = '';
+    display(ele);
+  };
+
+  /**
+   * Hide element immediately (cancels any fade)
+   * @method hide
+   * @param ele {DOM-element}
+   */
+  _public.hide = function(ele) {
+    if (!ele) {
+      return;
+    }
+    stop(ele);
+    ele.style.opacity = '';
+    ele.style.display = 'none';
+  };
+
+  /**
+   * show() or hide() element
+   * @method toggle
+   * @param ele {DOM-element}
+   * @param isShow {bool}
+   */
+  _public.toggle = function(ele, isShow) {
+    if (isShow) {
+      _public.show(ele);
+    }
+    else {
+      _public.hide(ele);
+    }
+  };
+
+  /**
+   * @method fadeIn
+   * @param ele {DOM-element}
+   * @param speed {number|string} (optional)
+   */
+  _public.fadeIn = function(ele, speed) {
+    if (!ele || (!isHidden(ele) && fadeDirection(ele) !== 'out')) {
+      return;
+    }
+    var from = isHidden(ele) ? 0 : parseFloat(window.getComputedStyle(ele).opacity);
+    display(ele);
+    _public.animate(ele, { opacity: [String(from), '1'] }, speed, function() {
+      ele.style.opacity = '';
+    }).fade = 'in';
+  };
+
+  /**
+   * @method fadeOut
+   * @param ele {DOM-element}
+   * @param speed {number|string} (optional)
+   */
+  _public.fadeOut = function(ele, speed) {
+    if (!ele || isHidden(ele) || fadeDirection(ele) === 'out') {
+      return;
+    }
+    _public.animate(ele, { opacity: '0' }, speed, function() {
+      ele.style.display = 'none';
+      ele.style.opacity = '';
+    }).fade = 'out';
+  };
+
+  /**
+   * fadeIn if hidden (or fading out), fadeOut otherwise
+   * @method fadeToggle
+   * @param ele {DOM-element}
+   * @param speed {number|string} (optional)
+   */
+  _public.fadeToggle = function(ele, speed) {
+    if (isHidden(ele) || fadeDirection(ele) === 'out') {
+      _public.fadeIn(ele, speed);
+    }
+    else {
+      _public.fadeOut(ele, speed);
+    }
+  };
+
+  /**
+   * Reveals element by growing its height
+   * @method slideDown
+   * @param ele {DOM-element}
+   * @param speed {number|string} (optional)
+   */
+  _public.slideDown = function(ele, speed) {
+    if (!ele || !isHidden(ele)) {
+      return;
+    }
+    display(ele);
+    var height = ele.offsetHeight;
+    ele.style.overflow = 'hidden';
+    _public.animate(ele, { height: ['0px', height + 'px'] }, speed, function() {
+      ele.style.height = '';
+      ele.style.overflow = '';
+    });
+  };
+
+  /**
+   * Makes the element (a fixed or absolutely positioned dialog) draggable by its handle.
+   * Uses pointer events, so mouse, pen & touch all work.
+   * @method draggable
+   * @param ele {DOM-element} the element that moves
+   * @param handleSelector {string} (optional) CSS selector of the "grab" area inside ele; default: ele itself
+   */
+  _public.draggable = function(ele, handleSelector) {
+    var handle = handleSelector ? ele.querySelector(handleSelector) : ele;
+    if (!handle) {
+      return;
+    }
+    var drag = null;
+
+    handle.style.cursor = 'move';
+    handle.style.touchAction = 'none';
+
+    handle.addEventListener('pointerdown', function(e) {
+      if (e.button !== 0 || e.target.closest('a, button, input, select, textarea')) {
+        return;
+      }
+      var rect = ele.getBoundingClientRect();
+      drag = {
+        id: e.pointerId,
+        dx: e.clientX - rect.left,
+        dy: e.clientY - rect.top
+      };
+      // pin position to top/left so moving doesn't stretch/shrink the box
+      ele.style.width = window.getComputedStyle(ele).width;
+      ele.style.right = 'auto';
+      ele.style.bottom = 'auto';
+      ele.style.zIndex = 1000;
+      ele.classList.add('draggable');
+      handle.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+
+    handle.addEventListener('pointermove', function(e) {
+      if (!drag || e.pointerId !== drag.id) {
+        return;
+      }
+      // keep the handle on screen
+      var left = Math.min(Math.max(e.clientX - drag.dx, 40 - ele.offsetWidth), window.innerWidth - 40);
+      var top = Math.min(Math.max(e.clientY - drag.dy, 0), window.innerHeight - 30);
+      ele.style.left = left + 'px';
+      ele.style.top = top + 'px';
+    });
+
+    var endDrag = function(e) {
+      if (!drag || e.pointerId !== drag.id) {
+        return;
+      }
+      drag = null;
+      ele.style.zIndex = '';
+      ele.classList.remove('draggable');
+    };
+    handle.addEventListener('pointerup', endDrag);
+    handle.addEventListener('pointercancel', endDrag);
+  };
+
+  /**
+   * POSTs data as JSON, expects JSON back.
+   * @method postJson
+   * @param uri {string}
+   * @param data {JSON}
+   * @return {Promise} resolves with the parsed response; rejects on network error, non-2xx status, or bad JSON
+   */
+  _public.postJson = function(uri, data) {
+    return fetch(uri, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }).then(function(response) {
+      if (!response.ok) {
+        throw new Error('HTTP ' + response.status);
+      }
+      return response.json();
+    });
+  };
+
+  /**
+   * Fires a custom event on document
+   * @method trigger
+   * @param eventName {string}
+   * @param detail {JSON} available to listeners as event.detail
+   */
+  _public.trigger = function(eventName, detail) {
+    document.dispatchEvent(new CustomEvent(eventName, { detail: detail }));
+  };
+
+  // ---------------------------------------
+  // return public interface "JSON handle"
+  // ---------------------------------------
+  return _public;
+}());
+;/**
  * Options (Features) you can turn on or off. Where available defaults to values defined in UkeGeeks.settings
  *
  * @class options
@@ -215,8 +607,8 @@ ugsEditorPlus.actions = (function() {
 			scalableArea : document.getElementById('scalablePrintArea')
 		};
 
-		$(document).on('option:click', function(e, data) {
-			doAction(data.action, data.value);
+		document.addEventListener('ugs:option', function(e) {
+			doAction(e.detail.action, e.detail.value);
 		});
 
 		syncOptions(ugsEditorPlus.options);
@@ -325,16 +717,10 @@ ugsEditorPlus.actions = (function() {
 	 */
 	_public.run = function(isDoBackup){
 		isDoBackup = (arguments.length > 0) && isDoBackup;
-		// escape the raw ChordPro text: it's untrusted and must not be parsed as HTML
-		// (leave existing entities such as &amp; &copy; alone, same as the server does)
-		var safeSource = _ele.cpmSource.value
-			.replace(/&(?!#\d+;|#x[0-9a-f]+;|[a-z][a-z0-9]*;)/gi, '&amp;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;');
-		_ele.songText.innerHTML = '<pre>' + safeSource + '</pre>';
-		_song = ukeGeeks.scriptasaurus.run();
+		// run(markup) HTML-escapes the raw (untrusted) ChordPro text for us
+		_song = ukeGeeks.scriptasaurus.run(_ele.cpmSource.value);
 
-		if (_song.chords.length < 1){
+		if (_song && _song.chords.length < 1){
 			ugsEditorPlus.autoReformat.run(_ele);
 		}
 
@@ -400,10 +786,10 @@ ugsEditorPlus.actions = (function() {
 	 * @param value {string} value of the clicked value item
 	 */
 	var doLayout = function(value){
-		$('body')
-			.toggleClass('diagramsOnTop', value == 'top')
-			.toggleClass('diagramsOnSide', value == 'left')
-			.toggleClass('ugsHideDiagrams', value == 'none');
+		var classes = document.body.classList;
+		classes.toggle('diagramsOnTop', value == 'top');
+		classes.toggle('diagramsOnSide', value == 'left');
+		classes.toggle('ugsHideDiagrams', value == 'none');
 	};
 
 	/* ----------------------------------------------------------------------------------- *|
@@ -469,11 +855,11 @@ ugsEditorPlus.actions = (function() {
 	 */
 	var doSetPageWidth = function(value){
 		var opts = ['letter', 'a4', 'screen'];
-		var $body = $('body');
+		var classes = document.body.classList;
 		for(var i = 0; i < opts.length; i++){
-			$body.removeClass('pageWidth_' + opts[i]);
+			classes.remove('pageWidth_' + opts[i]);
 		}
-		$body.addClass('pageWidth_' + value);
+		classes.add('pageWidth_' + value);
 	};
 
 	/* ----------------------------------------------------------------------------------- *|
@@ -500,7 +886,7 @@ ugsEditorPlus.actions = (function() {
 			msg = '<strong>ADF#B</strong> alternate tuning';
 		}
 
-		$('#footTuningInfo').html(msg);
+		document.getElementById('footTuningInfo').innerHTML = msg;
 		ukeGeeks.scriptasaurus.setTuningOffset(tuning);
 	};
 
@@ -996,14 +1382,14 @@ ugsEditorPlus.themes = (function() {
 	};
 
 	var setBody = function(themeName) {
-		var $body = $('body');
+		var classes = document.body.classList;
 		// see: http://stackoverflow.com/questions/921789/how-to-loop-through-javascript-object-literal-with-objects-as-members
 		for (var key in _colorSchemes) {
 			if (_colorSchemes.hasOwnProperty(key)) {
-				$body.removeClass('theme-' + key);
+				classes.remove('theme-' + key);
 			}
 		}
-		$body.addClass('theme-' + themeName);
+		classes.add('theme-' + themeName);
 	};
 
 	/**
@@ -1018,20 +1404,28 @@ ugsEditorPlus.themes = (function() {
 
 
 	/**
-	 * Populates the UL (identified via CSS/jQuery selector) with the color scheme List Items (LIs)
+	 * Populates the UL(identified via CSS selector) with the color scheme List Items (LIs)
 	 * @method loadList
 	 * @param  {string} selector
 	 * @param {string} selectedValue value that should be "checked"
 	 */
 	_public.loadList = function(selector, selectedValue) {
-		var s = '';
+		var ul = document.querySelector(selector);
+		ul.textContent = '';
 		for (var key in _colorSchemes) {
 			if (_colorSchemes.hasOwnProperty(key)) {
-				var cssClass = (key == selectedValue) ? 'checked' : '';
-				s += '<li class="' + cssClass + '"><a href="#' + key + '" title="' + _colorSchemes[key].description + '">' + _colorSchemes[key].name + '</a></li>';
+				var li = document.createElement('li');
+				var a = document.createElement('a');
+				if (key == selectedValue) {
+					li.className = 'checked';
+				}
+				a.href = '#' + key;
+				a.title = _colorSchemes[key].description;
+				a.textContent = _colorSchemes[key].name;
+				li.appendChild(a);
+				ul.appendChild(li);
 			}
 		}
-		$(selector).html(s);
 	};
 
 	/**
@@ -1118,18 +1512,17 @@ ugsEditorPlus.optionsDlg = (function() {
 		};
 
 		// ugh! Event bubbling!
-		$('.checkboxBlock label, input[type=checkbox]').click(function(e) {
+		ugsEditorPlus.dom.on('.checkboxBlock label, input[type=checkbox]', 'click', function(e) {
 			e.stopPropagation();
 		});
 
-		$('.overlay').draggable({
-			handle: 'hgroup'
-			//containParent: true
-    });
+		ugsEditorPlus.dom.all('.overlay').forEach(function(dlg) {
+			ugsEditorPlus.dom.draggable(dlg, 'hgroup');
+		});
 	};
 
 	var triggerNotify = function(action, value) {
-		$.event.trigger('option:click', {
+		ugsEditorPlus.dom.trigger('ugs:option', {
 			action: action,
 			value: value
 		});
@@ -1479,7 +1872,7 @@ ugsEditorPlus.autoReformat = (function() {
 
 	var runNow = function(){
 		_formatted = ugsEditorPlus.reformat.run(_ele.cpmSource.value);
-		_ele.reformatTextBox.innerHTML = _formatted;
+		_ele.reformatTextBox.value = _formatted;
 
 		if (!ugsEditorPlus.reformat.hasChords()){
 			return;
@@ -1509,13 +1902,13 @@ ugsEditorPlus.topMenus = (function() {
 	 * @return {void}
 	 */
 	var _init = function() {
-		// $('#ugsAppToolbar > ul a')
-		$('#ugsAppToolbar > ul li').not('[data-dialog]').children('a').click(_onMenuItemClick);
-		$('.showOptionsBox a').click(_onShowOptionsClick);
+		var dom = ugsEditorPlus.dom;
+		dom.on('#ugsAppToolbar > ul li:not([data-dialog]) > a', 'click', _onMenuItemClick);
+		dom.on('.showOptionsBox a', 'click', _onShowOptionsClick);
 
-		$('#ugsAppToolbar > ul li[data-dialog]').click(_onShowDlgBtnClick);
-		$('.closeBtn').click(_onCloseBtnClick);
-		$('.resizeBtn').click(_onResizeBtnClick);
+		dom.on('#ugsAppToolbar > ul li[data-dialog]', 'click', _onShowDlgBtnClick);
+		dom.on('.closeBtn', 'click', _onCloseBtnClick);
+		dom.on('.resizeBtn', 'click', _onResizeBtnClick);
 	};
 
 	/**
@@ -1526,13 +1919,13 @@ ugsEditorPlus.topMenus = (function() {
 	 */
 	var _onMenuItemClick = function() {
 		// the clicked anchor tag
-		var $parent = $(this).parent();
-		var isOpen = $parent.hasClass('active');
+		var parent = this.parentNode;
+		var isOpen = parent.classList.contains('active');
 		_makeAllInactive();
 		if (isOpen) {
 			return;
 		}
-		$parent.addClass('active');
+		parent.classList.add('active');
 	};
 
 	/**
@@ -1542,7 +1935,9 @@ ugsEditorPlus.topMenus = (function() {
 	 * @return {void}
 	 */
 	var _makeAllInactive = function() {
-		$('#ugsAppToolbar > ul > li').removeClass('active');
+		ugsEditorPlus.dom.all('#ugsAppToolbar > ul > li').forEach(function(li) {
+			li.classList.remove('active');
+		});
 	};
 
 	/**
@@ -1554,7 +1949,7 @@ ugsEditorPlus.topMenus = (function() {
 	var _closeAll = function() {
 		// hide any drop-down/arrow boxes currently open
 		_makeAllInactive();
-		$('.arrowBox').hide();
+		ugsEditorPlus.dom.all('.arrowBox').forEach(ugsEditorPlus.dom.hide);
 	};
 
 	/**
@@ -1570,11 +1965,12 @@ ugsEditorPlus.topMenus = (function() {
 		_closeAll();
 
 		// now show dialog associated with the clicked button
-		var id = $(this).data('dialog');
-		$('#' + id).fadeIn();
+		var id = this.getAttribute('data-dialog');
+		ugsEditorPlus.dom.fadeIn(document.getElementById(id));
 
 		// prevent event bubbling
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	/**
@@ -1586,16 +1982,17 @@ ugsEditorPlus.topMenus = (function() {
 	 * @return {bool} false to kill event bubbling
 	 */
 	var _onCloseBtnClick = function(e) {
-		$(this).parents('.overlay').fadeOut();
+		ugsEditorPlus.dom.fadeOut(this.closest('.overlay'));
 		// prevent event bubbling
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	var _onResizeBtnClick = function(e) {
 		_closeAll();
-		var dlg = $(this).parents('.overlay');
-		ugsEditorPlus.resize.toggle(dlg);
-		return false;
+		ugsEditorPlus.resize.toggle(this.closest('.overlay'));
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	/**
@@ -1606,18 +2003,23 @@ ugsEditorPlus.topMenus = (function() {
 	 * @return {bool} false to kill event bubbling
 	 */
 	var _onShowOptionsClick = function(e) {
-		var id = $(this).attr('href');
+		var dom = ugsEditorPlus.dom;
+		var dlg = document.getElementById(this.getAttribute('href').replace(/^#/, ''));
 
-		$('.arrowBox').not(id).hide();
+		dom.all('.arrowBox').forEach(function(box) {
+			if (box !== dlg) {
+				dom.hide(box);
+			}
+		});
 
-		var $dlg = $(id);
-		$dlg.find('dd').hide();
-		$dlg.fadeToggle();
+		dom.all('dd', dlg).forEach(dom.hide);
+		dom.fadeToggle(dlg);
 
-		ugsEditorPlus.submenuUi.reset($dlg);
+		ugsEditorPlus.submenuUi.reset(dlg);
 
 		// prevent event bubbling
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	// ---------------------------------------
@@ -1632,7 +2034,7 @@ ugsEditorPlus.topMenus = (function() {
 ;
 /**
  * Wires up all the "pseudo-selects" (aka "dropdownlists") on a Tooltip-Dialog boxes on
- * the page; assumes consistent HTML (hello, jQuery)
+ * the page; assumes consistent HTML
  * TODO: Refactor -- quite brittle!
  * @class submenuUi
  * @namespace ugsEditorPlus
@@ -1655,10 +2057,11 @@ ugsEditorPlus.submenuUi = (function(){
 	 */
 	_public.init = function() {
 		ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect', ugsEditorPlus.options.theme);
-		$('.enablePseudoSelects label').click(onLabelClick);
-		$('.pseudoSelect li').click(onOptionClick);
-		$('body').bind('click', closeAll);
-		$('.arrowBox').click(doCollapseAllLists);
+		var dom = ugsEditorPlus.dom;
+		dom.on('.enablePseudoSelects label', 'click', onLabelClick);
+		dom.on('.pseudoSelect li', 'click', onOptionClick);
+		dom.on(document.body, 'click', closeAll);
+		dom.on('.arrowBox', 'click', doCollapseAllLists);
 
 		syncOptions(ugsEditorPlus.options);
 	};
@@ -1670,47 +2073,71 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @return {bool} false to kill event bubbling
 	 */
 	var onOptionClick = function(e){
-		var $optionItem = $(this);
-		var value = stripHash($optionItem.children().attr('href'));
+		var optionItem = this;
+		var value = stripHash(optionItem.querySelector('a').getAttribute('href'));
 
 		// the element holding the "pseudo-select"
-		var $select = $optionItem.parents('dd');
-		var id = $select.attr('id');
-		var actionName = $select.data('action');
+		var select = optionItem.closest('dd');
+		var id = select.id;
+		var actionName = select.getAttribute('data-action');
 
 		// a selection's been made so we hide the (sub) select list
-		$('#' + id).hide();
+		ugsEditorPlus.dom.hide(select);
 		// ...and reset ("uncheck") all items and check ("highlight") this selected item
-		setChecked($optionItem);
+		setChecked(optionItem);
 
 		onListActive(this, false);
 		_open = null;
 
 		// now bubble out the info -- update display to show selected value ...
-		$('label[for=' + id + '] span').text(getLabelText(actionName, value, $optionItem));
-		$('label[for=' + id + ']').parents('dt').removeClass('active');
+		var label = getLabel(id);
+		label.querySelector('span').textContent = getLabelText(actionName, value, optionItem);
+		label.closest('dt').classList.remove('active');
 
 		// lastly, execute the action
-		$.event.trigger('option:click', {
+		ugsEditorPlus.dom.trigger('ugs:option', {
 			action: actionName,
 			value: value
 		});
 
 		// prevent event bubbling
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
-	var setChecked = function($item) {
-		if (!$item) {
+	var setChecked = function(item) {
+		if (!item) {
 			//console.log('item for option not found');
 			return;
 		}
-		$item.siblings().removeClass('checked');
-		$item.addClass('checked');
+		Array.prototype.forEach.call(item.parentNode.children, function(sibling) {
+			sibling.classList.remove('checked');
+		});
+		item.classList.add('checked');
+	};
+
+	/**
+	 * the label (in the dt) for the pseudo-select with this id
+	 * @method getLabel
+	 * @param  {string} id
+	 * @return {DOM-element}
+	 */
+	var getLabel = function(id) {
+		return document.querySelector('label[for="' + id + '"]');
+	};
+
+	/**
+	 * a value safe to use inside a quoted CSS attribute selector
+	 * @method cssString
+	 * @param  {string} value
+	 * @return {string}
+	 */
+	var cssString = function(value) {
+		return String(value).replace(/["\\]/g, '\\$&');
 	};
 
 	var syncOptions = function(options) {
-		var $item, id,
+		var item, id,
 			map = [{
 				action: 'zoomFonts',
 				value: options.fontSize
@@ -1735,10 +2162,14 @@ ugsEditorPlus.submenuUi = (function(){
 			}];
 
 		for (var i = map.length - 1; i >= 0; i--) {
-			$item = $('[data-action=' + map[i].action + '] a[href=#' + map[i].value + ']').closest('li');
-			id = $item.closest('dd').attr('id');
-			setChecked($item);
-			$('label[for=' + id + '] span').text(getLabelText(map[i].action, map[i].value, $item));
+			item = document.querySelector('[data-action="' + map[i].action + '"] a[href="#' + cssString(map[i].value) + '"]');
+			if (!item) {
+				continue;
+			}
+			item = item.closest('li');
+			id = item.closest('dd').id;
+			setChecked(item);
+			getLabel(id).querySelector('span').textContent = getLabelText(map[i].action, map[i].value, item);
 		}
 	};
 
@@ -1750,13 +2181,12 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @return {bool} false to kill event bubbling
 	 */
 	var onLabelClick = function(e){
-		var $thisLabel = $(this);
-		var id = $thisLabel.attr('for');
-		setActiveLabel($thisLabel);
-		$('#'+id).show();
+		var id = this.getAttribute('for');
+		setActiveLabel(this);
+		ugsEditorPlus.dom.show(document.getElementById(id));
 		onListActive(this, true);
 		if (_open !== null) {
-			$('#' + _open.id).hide();
+			ugsEditorPlus.dom.hide(document.getElementById(_open.id));
 		}
 		if (_open !== null && _open.id == id) {
 			_open = null;
@@ -1768,17 +2198,31 @@ ugsEditorPlus.submenuUi = (function(){
 		}
 
 		// prevent event bubbling
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
-	_public.reset = function($dlg){
-		$dlg.find('dt').removeClass('active');
-		$dlg.find('.event-userSelecting').removeClass('event-userSelecting');
+	/**
+	 * clears "active" & "in use" states within the (tooltip) dialog
+	 * @method reset
+	 * @param  {DOM-element} dlg
+	 */
+	_public.reset = function(dlg){
+		ugsEditorPlus.dom.all('dt', dlg).forEach(function(dt) {
+			dt.classList.remove('active');
+		});
+		ugsEditorPlus.dom.all('.event-userSelecting', dlg).forEach(function(ele) {
+			ele.classList.remove('event-userSelecting');
+		});
 	};
 
-	var setActiveLabel = function($label){
-		$label.closest('dl').children('dt').removeClass('active');
-		$label.closest('dt').addClass('active');
+	var setActiveLabel = function(label){
+		Array.prototype.forEach.call(label.closest('dl').children, function(child) {
+			if (child.tagName == 'DT') {
+				child.classList.remove('active');
+			}
+		});
+		label.closest('dt').classList.add('active');
 	};
 
 	/**
@@ -1790,7 +2234,10 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @return void
 	 */
 	var onListActive = function(ele, isInUse){
-		$(ele).parents('.enablePseudoSelects').toggleClass('event-userSelecting', isInUse);
+		var wrap = ele.closest('.enablePseudoSelects');
+		if (wrap) {
+			wrap.classList.toggle('event-userSelecting', isInUse);
+		}
 	};
 
 	/**
@@ -1799,12 +2246,13 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @return bool
 	 */
 	var doCollapseAllLists = function(e){
-		if ($(e.target).is('a')){
+		if (e.target.matches('a')){
 			return;
 		}
-		$(this).find('dd').hide();
+		ugsEditorPlus.dom.all('dd', this).forEach(ugsEditorPlus.dom.hide);
 		_open = null;
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	/**
@@ -1813,7 +2261,9 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @param  {event} e
 	 */
 	var closeAll = function(e){
-		$('.arrowBox').fadeOut(270);
+		ugsEditorPlus.dom.all('.arrowBox').forEach(function(box) {
+			ugsEditorPlus.dom.fadeOut(box, 270);
+		});
 		ugsEditorPlus.topMenus.makeAllInactive();
 	};
 
@@ -1843,15 +2293,15 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @method getLabelText
 	 * @param  {string} action
 	 * @param  {string} value
-	 * @param  {jQueryElement} $ele jQuery element that ...
+	 * @param  {DOM-element} ele the selected list item (LI)
 	 * @return {string}
 	 */
-	var getLabelText = function(action, value, $ele){
-		var index = $ele.index();
+	var getLabelText = function(action, value, ele){
+		var index = Array.prototype.indexOf.call(ele.parentNode.children, ele);
 
 		switch (action){
 			case 'paper':
-				return 'Width ' + $ele.text();
+				return 'Width ' + ele.textContent;
 			case 'zoomFonts':
 				return 'Font size ' + value + 'pt';
 			case 'zoomDiagrams':
@@ -1862,7 +2312,7 @@ ugsEditorPlus.submenuUi = (function(){
 				if (value == 'up_0'){
 					return 'Original key';
 				}
-				var txt = $ele.text();
+				var txt = ele.textContent;
 				return txt.replace(' ', ' steps - "') + '"';
 			default:
 			 return _desriptions[action][index];
@@ -1870,7 +2320,7 @@ ugsEditorPlus.submenuUi = (function(){
 	};
 
 	_public.resetTransposeLabel = function(){
-		$('label[for=transposePicker] span').text('Original key');
+		getLabel('transposePicker').querySelector('span').textContent = 'Original key';
 	};
 
 	// ---------------------------------------
@@ -1881,7 +2331,8 @@ ugsEditorPlus.submenuUi = (function(){
 }());
 ;/**
  * Creates a new song via AJAX.
- * Dependencies: jQuery
+ * Dependencies: ugsEditorPlus.dom
+
  * @class newSong
  * @namespace ugsEditorPlus
  */
@@ -1905,34 +2356,41 @@ ugsEditorPlus.newSong = (function() {
 	_public.init = function(ajaxUri) {
 		_ajaxUri = ajaxUri;
 
-		$('#newSongBtn').click(function(e) {
+		var dom = ugsEditorPlus.dom;
+
+		dom.on('#newSongBtn', 'click', function(e) {
 			if(doValidate(this)) {
 				doPost();
 			}
 		});
 
-		$('#openNewDlgBtn').click(function(e) {
+		dom.on('#openNewDlgBtn', 'click', function(e) {
 			resetFields();
-			$('#newSongForm').fadeIn();
-			$('#songTitle').focus();
+			dom.fadeIn(document.getElementById('newSongForm'));
+			document.getElementById('songTitle').focus();
 		});
 
-		$('#hideNewSongBtn').click(closeDlg);
+		dom.on('#hideNewSongBtn', 'click', closeDlg);
 
 		// handle escape key
-		$('#newSongForm').bind('keydown', onEscape);
+		dom.on('#newSongForm', 'keydown', onEscape);
 
-		var $spinner = $("#loadingSpinner");
-		$spinner.hide();
-		$(document)
-			.ajaxStart(function() {
-				$spinner.show();
-				_isUpdating = true;
-			})
-			.ajaxStop(function() {
-				$spinner.hide();
-				_isUpdating = false;
-			});
+		dom.hide(document.getElementById('loadingSpinner'));
+
+		var dlg = document.getElementById('newSongForm');
+		if (dlg) {
+			dom.draggable(dlg, 'hgroup');
+		}
+	};
+
+	/**
+	 * shows/hides the "Saving..." spinner, (un)locks the form
+	 * @method setBusy
+	 * @param isBusy {bool}
+	 */
+	var setBusy = function(isBusy) {
+		_isUpdating = isBusy;
+		ugsEditorPlus.dom.toggle(document.getElementById('loadingSpinner'), isBusy);
 	};
 
 	var doAjaxOk = function(data) {
@@ -1950,29 +2408,25 @@ ugsEditorPlus.newSong = (function() {
 
 			var data = {
 				'handler': 'ugs_new',
-				'songTitle': $('#songTitle').val(),
-				'songArtist': $('#songArtist').val()
+				'songTitle': document.getElementById('songTitle').value,
+				'songArtist': document.getElementById('songArtist').value
 			};
 
-			$.ajax({
-				url: _ajaxUri,
-				type: "POST",
-				dataType: 'json',
-				contentType: 'application/json; charset=utf-8',
-				data: JSON.stringify(data),
-				success: function(data) {
+			setBusy(true);
+			ugsEditorPlus.dom.postJson(_ajaxUri, data)
+				.then(function(data) {
+					setBusy(false);
 					doAjaxOk(data);
-			},
-			error: function(data) {
-				showErrors(true, 'Failed to create the song file.<br/>Please have your admin check the CPM directory permissions.');
-				}
-			});
+				}, function() {
+					setBusy(false);
+					showErrors(true, 'Failed to create the song file.\nPlease have your admin check the CPM directory permissions.');
+				});
 		};
 
 	var doValidate = function() {
-		var $title = $('#songTitle');
-		var title = $title.val().trim();
-		$title.val(title);
+		var titleInput = document.getElementById('songTitle');
+		var title = titleInput.value.trim();
+		titleInput.value = title;
 		/*
 		var ok = title.length > 2;
 		showErrors(!ok, 'Song\'s title is required<br/><em>(you may change it later, must be at least 2 characters)</em>');
@@ -1982,26 +2436,38 @@ ugsEditorPlus.newSong = (function() {
 	};
 
 	var showErrors = function(hasErrors, message) {
-			var $err = $('#newSongForm .errorMessage');
-			if(hasErrors) {
-				$err.show().html(message);
-				$('#songTitle').focus();
+		var err = ugsEditorPlus.dom.one('#newSongForm .errorMessage');
+		if(hasErrors) {
+			// plain text (the message may echo back what the user typed); newlines become line breaks
+			err.textContent = '';
+			String(message).split('\n').forEach(function(line, i) {
+				if (i > 0) {
+					err.appendChild(document.createElement('br'));
+				}
+				err.appendChild(document.createTextNode(line));
+			});
+			ugsEditorPlus.dom.show(err);
+			document.getElementById('songTitle').focus();
 		}
 		else {
-				$err.hide();
-			}
+			ugsEditorPlus.dom.hide(err);
+		}
 		};
 
 	var closeDlg = function(e) {
-		$('#newSongForm').fadeOut();
+		if (e && e.type == 'click') {
+			e.preventDefault();
+		}
+		ugsEditorPlus.dom.fadeOut(document.getElementById('newSongForm'));
 	};
 
 	var resetFields = function(){
-		$('#songTitle, #songArtist').val('');
+		document.getElementById('songTitle').value = '';
+		document.getElementById('songArtist').value = '';
 	};
 
 	var onEscape = function(e){
-		if (e.which == 27) {
+		if (e.key == 'Escape' || e.keyCode == 27) {
 			closeDlg();
 		}
 	};
@@ -2013,7 +2479,8 @@ ugsEditorPlus.newSong = (function() {
 })();
 ;/**
  * Updates an exising song via AJAX.
- * Dependencies: jQuery
+ * Dependencies: ugsEditorPlus.dom
+
  * @class updateSong
  * @namespace ugsEditorPlus
  */
@@ -2029,7 +2496,7 @@ ugsEditorPlus.updateSong = (function() {
 	var _filename = '';
 
 	/**
-	 * Name / Value pairs for jQuery selectors of HTML elements to be manipulated
+	 * Name / Value pairs for CSS selectors of HTML elements to be manipulated
 	 * @property _selectors
 	 * @type {JSON}
 	 */
@@ -2052,36 +2519,51 @@ ugsEditorPlus.updateSong = (function() {
 		_ajaxUri = ajaxUri;
 		_filename = filename;
 
-		$(_selectors.button).click(function(event) {
+		ugsEditorPlus.dom.on(_selectors.button, 'click', function(e) {
+			e.preventDefault();
 			doUpdate();
-			return false;
 		});
 
-		$(_selectors.messageBox).hide();
-		$(document)
-			.ajaxStart(function() {
-				showBusy();
-				_isUpdating = true;
-			})
-			.ajaxStop(function() {
-				hideMessage();
-				_isUpdating = false;
-			});
+		ugsEditorPlus.dom.hide(ele('messageBox'));
+	};
+
+	/**
+	 * pending "fade out the message" timer
+	 * @property _hideTimer
+	 * @type {Number}
+	 */
+	var _hideTimer = null;
+
+	var ele = function(name) {
+		return ugsEditorPlus.dom.one(_selectors[name]);
 	};
 
 	var showBusy = function(){
-		$(_selectors.message).hide().html();
-		$(_selectors.messageBox).slideDown('fast');
-		$(_selectors.spinner).show();
+		var dom = ugsEditorPlus.dom;
+		clearTimeout(_hideTimer);
+		dom.hide(ele('message'));
+		if (dom.isVisible(ele('messageBox'))) {
+			// still showing (or fading out) the last message
+			dom.show(ele('messageBox'));
+		}
+		else {
+			dom.slideDown(ele('messageBox'), 'fast');
+		}
+		dom.show(ele('spinner'));
 	};
 
 	var showMessage = function(message){
-		$(_selectors.spinner).hide();
-		$(_selectors.message).show().html(message);
+		var msg = ele('message');
+		ugsEditorPlus.dom.hide(ele('spinner'));
+		msg.textContent = message;
+		ugsEditorPlus.dom.show(msg);
 	};
 
 	var hideMessage = function(){
-		$(_selectors.messageBox).delay(3000).fadeOut('slow');
+		clearTimeout(_hideTimer);
+		_hideTimer = setTimeout(function() {
+			ugsEditorPlus.dom.fadeOut(ele('messageBox'), 'slow');
+		}, 3000);
 	};
 
 	var doUpdate = function() {
@@ -2089,27 +2571,24 @@ ugsEditorPlus.updateSong = (function() {
 			return;
 		}
 
-		$(_selectors.message).show();
-
 		var data = {
 			'handler': 'ugs_update_81jr',
 			'filename': _filename,
-			'song': $(_selectors.song).val()
+			'song': ele('song').value
 		};
 
-		$.ajax({
-			url: _ajaxUri,
-			type: 'POST',
-			dataType: 'json',
-			contentType:"application/json; charset=utf-8",
-			data: JSON.stringify(data),
-			success: function(data) {
+		_isUpdating = true;
+		showBusy();
+		ugsEditorPlus.dom.postJson(_ajaxUri, data)
+			.then(function(data) {
 				doAjaxOk(data);
-			},
-			error: function(data) {
+			}, function() {
 				alert('Encountered a problem saving your Song. Please copy your song to another program until this issue is resolved.');
-			}
-		});
+			})
+			.then(function() {
+				hideMessage();
+				_isUpdating = false;
+			});
 	};
 
 	var doAjaxOk = function(data) {
@@ -2123,10 +2602,10 @@ ugsEditorPlus.updateSong = (function() {
 	return _public;
 })();
 ;/**
- * Search on the song list page for songs.
- * Dependencies: jQuery and Twitter Bootstrap's typeahead plugin
- * Based on tutorial:
- * http://tatiyants.com/how-to-use-json-objects-with-twitter-bootstrap-typeahead/
+ * Search on the song list page for songs ("Quick search"): as you type a drop down list
+ * of matching songs appears; arrow keys + Enter, or a click, open the song.
+ * (Originally used Twitter Bootstrap's typeahead plugin; this is a small, dependency-free
+ * version that keeps its markup -- ul.typeahead.dropdown-menu -- so the existing CSS still applies.)
  * @class typeahead
  * @constructor
  * @namespace ugsEditorPlus
@@ -2139,14 +2618,33 @@ ugsEditorPlus.typeahead = function(){
 	 */
 	var _public = {};
 
+	/**
+	 * min number of characters typed before searching
+	 * @property MIN_LENGTH
+	 * @final
+	 * @type {Number}
+	 */
+	var MIN_LENGTH = 2;
+
+	/**
+	 * max number of matches shown
+	 * @property MAX_ITEMS
+	 * @final
+	 * @type {Number}
+	 */
+	var MAX_ITEMS = 50;
+
 	// private
 	// ---------------------------
-	var _keysList = [];
-	var _keysToDetailsDict = {};
+	var _songs = [];
 
-	var _scrubbedQuery = '';
-	var _regex;
+	var _regex = null;
 	var _words = [];
+
+	var _input = null;
+	var _menu = null;
+	var _activeIndex = -1;
+	var _blurTimer = null;
 
 	var _re = {
 		space: /\s{2,}/g,
@@ -2155,7 +2653,8 @@ ugsEditorPlus.typeahead = function(){
 		// accents left over after NFD normalization ("é" -> "e" + "´"), so "beyonce" finds "Beyoncé"
 		diacritics: makeUnicodeRegEx('\\p{M}+', 'gu', null),
 		//treat quotes as invisible
-		noise: /['`’-]/g
+		noise: /['`’-]/g,
+		regExChars: /[.*+?^${}()|[\]\\]/g
 	};
 
 	/**
@@ -2179,34 +2678,25 @@ ugsEditorPlus.typeahead = function(){
 	}
 
 	/**
-	 * Scrapes HTML to build our list of
-	 * keys, searchable text, and display text
+	 * Scrapes the song list's HTML to build our list of
+	 * searchable text, display content, and links
 	 * @method listFromHtml
 	 */
 	var listFromHtml = function(){
-
-		$( 'li' ).each(function( index ) {
-			var $this = $(this);
-			var plainText = crushText($this.text());
-			var href = $this.children('a').attr('href');
-			var key = href.toLowerCase();
-
-			var html = $this.children('a').html();
-			html = html.replace('<strong class="', '<span class="bigger ').replace('</strong>', '</span>');
-
-			_keysToDetailsDict[key] = {
-				// content displayed in drop down list
-				html : html,
+		ugsEditorPlus.dom.all('.songList > li').forEach(function(li) {
+			var link = li.querySelector('a');
+			if (!link) {
+				return;
+			}
+			_songs.push({
+				// content displayed in drop down list (the song's link)
+				link : link,
 				// what we'll match against
-				searchText : plainText,
-				// unique key/id
-				code : key,
+				searchText : crushText(li.textContent),
 				// when a selection is made this is the location we'll launch
-				href : href
-			};
-			_keysList.push(key);
+				href : link.getAttribute('href')
+			});
 		});
-
 	};
 
 	var crushText = function(value){
@@ -2221,67 +2711,257 @@ ugsEditorPlus.typeahead = function(){
 			.trim();
 	};
 
-	var _ta_source = function (query, process) {
-		_scrubbedQuery = crushText(query);
-		_words = _scrubbedQuery.split(' ');
-		var regGroup = '';
-		for (var i = 0; i < _words.length; i++) {
-			_words[i] = _words[i].trim();
-			if (_words[i].length > 0){
-				regGroup += (regGroup.length > 0 ? '|' : '') + _words[i];
-			}
-		}
-		_regex = new RegExp( '(' + regGroup + ')', 'gi');
-		process(_keysList);
+	/**
+	 * Splits the query into words and builds the highlighter's RegEx
+	 * @method setQuery
+	 * @param query {string}
+	 */
+	var setQuery = function(query) {
+		_words = crushText(query).split(' ').filter(function(word) {
+			return word.length > 0;
+		});
+		var regGroup = _words.map(function(word) {
+			return word.replace(_re.regExChars, '\\$&');
+		}).join('|');
+		_regex = regGroup.length > 0 ? new RegExp('(' + regGroup + ')', 'gi') : null;
 	};
 
-	var _ta_updater = function (item) {
-		window.location = _keysToDetailsDict[item].href;
-		return _keysToDetailsDict[item].searchText;
-	};
-
-	var _ta_matcher = function (item) {
-		var detailed = _keysToDetailsDict[item];
+	/**
+	 * true when every query word appears in the song's text
+	 * @method isMatch
+	 * @param song {JSON}
+	 * @return {bool}
+	 */
+	var isMatch = function(song) {
 		for (var i = 0; i < _words.length; i++) {
-			if (detailed.searchText.indexOf(_words[i]) == -1) {
+			if (song.searchText.indexOf(_words[i]) == -1) {
 				return false;
 			}
 		}
 		return true;
 	};
 
-	var _ta_sorter = function (items) {
-		return items.sort(function(a, b) {
-			return (_keysToDetailsDict[a].searchText > _keysToDetailsDict[b].searchText);
+	var bySearchText = function(a, b) {
+		return (a.searchText > b.searchText) ? 1 : ((a.searchText < b.searchText) ? -1 : 0);
+	};
+
+	/**
+	 * Wraps the query words found in the text nodes of ele in STRONG tags. Pure DOM: no innerHTML.
+	 * @method highlight
+	 * @param ele {DOM-element}
+	 */
+	var highlight = function(ele) {
+		if (!_regex) {
+			return;
+		}
+		var walker = document.createTreeWalker(ele, NodeFilter.SHOW_TEXT, null);
+		var textNodes = [];
+		while (walker.nextNode()) {
+			textNodes.push(walker.currentNode);
+		}
+		textNodes.forEach(function(node) {
+			var parts = node.nodeValue.split(_regex);
+			if (parts.length < 2) {
+				return;
+			}
+			var frag = document.createDocumentFragment();
+			// split with a capture group: odd indexes are the matches
+			parts.forEach(function(part, i) {
+				if (part.length < 1) {
+					return;
+				}
+				if (i % 2) {
+					var strong = document.createElement('strong');
+					strong.textContent = part;
+					frag.appendChild(strong);
+				}
+				else {
+					frag.appendChild(document.createTextNode(part));
+				}
+			});
+			node.parentNode.replaceChild(frag, node);
 		});
 	};
 
-	var _ta_highligher = function (item) {
-		var $temp = $('<div/>').html(_keysToDetailsDict[item].html);
-
-		$('em, .bigger', $temp).each(function( index ){
-			var $ele = $(this);
-			var text = $ele.html();
-			$ele.html(text.replace(_regex, "<strong>$1</strong>"));
+	/**
+	 * Builds the drop down's list item for the song: a copy of the song list's link
+	 * (title made "bigger"), with the matched words highlighted
+	 * @method makeItem
+	 * @param song {JSON}
+	 * @param index {int}
+	 * @return {DOM-element}
+	 */
+	var makeItem = function(song, index) {
+		var li = document.createElement('li');
+		var a = document.createElement('a');
+		li.id = 'quickSearchItem' + index;
+		li.setAttribute('role', 'option');
+		a.href = song.href;
+		a.tabIndex = -1;
+		Array.prototype.forEach.call(song.link.childNodes, function(child) {
+			a.appendChild(child.cloneNode(true));
 		});
-		return $temp.html();
+		var title = a.querySelector('strong');
+		if (title) {
+			var bigger = document.createElement('span');
+			bigger.className = 'bigger ' + title.className;
+			while (title.firstChild) {
+				bigger.appendChild(title.firstChild);
+			}
+			title.parentNode.replaceChild(bigger, title);
+		}
+		ugsEditorPlus.dom.all('em, .bigger', a).forEach(highlight);
+		li.appendChild(a);
+		return li;
+	};
+
+	/**
+	 * (re)builds the list for what's currently typed in the search box
+	 * @method lookup
+	 */
+	var lookup = function() {
+		var query = _input.value;
+		if (query.length < MIN_LENGTH) {
+			hide();
+			return;
+		}
+		setQuery(query);
+		var matches = _songs.filter(isMatch).sort(bySearchText).slice(0, MAX_ITEMS);
+		if (matches.length < 1) {
+			hide();
+			return;
+		}
+		_menu.textContent = '';
+		matches.forEach(function(song, i) {
+			_menu.appendChild(makeItem(song, i));
+		});
+		setActive(0);
+		show();
+	};
+
+	var items = function() {
+		return _menu.children;
+	};
+
+	var setActive = function(index) {
+		var list = items();
+		if (list.length < 1) {
+			return;
+		}
+		// wrap around, same as Bootstrap's typeahead
+		index = (index + list.length) % list.length;
+		if (list[_activeIndex]) {
+			list[_activeIndex].classList.remove('active');
+			list[_activeIndex].removeAttribute('aria-selected');
+		}
+		_activeIndex = index;
+		list[index].classList.add('active');
+		list[index].setAttribute('aria-selected', 'true');
+		_input.setAttribute('aria-activedescendant', list[index].id);
+		if (list[index].scrollIntoView && isShown()) {
+			list[index].scrollIntoView({ block: 'nearest' });
+		}
+	};
+
+	var isShown = function() {
+		return _menu.style.display == 'block';
+	};
+
+	var show = function() {
+		_menu.style.top = (_input.offsetTop + _input.offsetHeight) + 'px';
+		_menu.style.left = _input.offsetLeft + 'px';
+		_menu.style.display = 'block';
+		_input.setAttribute('aria-expanded', 'true');
+	};
+
+	var hide = function() {
+		_menu.style.display = 'none';
+		_activeIndex = -1;
+		_input.setAttribute('aria-expanded', 'false');
+		_input.removeAttribute('aria-activedescendant');
+	};
+
+	/**
+	 * opens the song
+	 * @method select
+	 * @param index {int}
+	 */
+	var select = function(index) {
+		var li = items()[index];
+		if (li) {
+			window.location.href = li.querySelector('a').href;
+		}
+	};
+
+	var onKeyDown = function(e) {
+		// IME (e.g. Chinese pinyin) is still composing: Enter/arrows belong to it
+		if (e.isComposing || e.keyCode == 229 || !isShown()) {
+			return;
+		}
+		switch (e.key) {
+			case 'ArrowDown':
+			case 'Down':
+				setActive(_activeIndex + 1);
+				break;
+			case 'ArrowUp':
+			case 'Up':
+				setActive(_activeIndex - 1);
+				break;
+			case 'Enter':
+				select(_activeIndex);
+				break;
+			case 'Escape':
+			case 'Esc':
+				hide();
+				break;
+			default:
+				return;
+		}
+		e.preventDefault();
 	};
 
 	_public.initialize = function(){
 		listFromHtml();
 
-		$('#quickSearch')
-			.typeahead({
-				source: _ta_source,
-				updater: _ta_updater,
-				matcher: _ta_matcher,
-				sorter: _ta_sorter,
-				highlighter: _ta_highligher,
-				minLength: 2,
-				items: 50
-			})
-			.val('')
-			.focus();
+		_input = document.getElementById('quickSearch');
+		if (!_input) {
+			return;
+		}
+
+		_menu = document.createElement('ul');
+		_menu.className = 'typeahead dropdown-menu';
+		_menu.id = 'quickSearchResults';
+		_menu.setAttribute('role', 'listbox');
+		_input.parentNode.insertBefore(_menu, _input.nextSibling);
+
+		_input.setAttribute('role', 'combobox');
+		_input.setAttribute('aria-autocomplete', 'list');
+		_input.setAttribute('aria-controls', _menu.id);
+		_input.setAttribute('aria-expanded', 'false');
+
+		_input.addEventListener('input', lookup);
+		_input.addEventListener('keydown', onKeyDown);
+		_input.addEventListener('focus', function() {
+			clearTimeout(_blurTimer);
+		});
+		_input.addEventListener('blur', function() {
+			// give a click on the list time to land
+			_blurTimer = setTimeout(hide, 150);
+		});
+
+		_menu.addEventListener('mouseover', function(e) {
+			var li = e.target.closest('li');
+			if (li && li.parentNode === _menu) {
+				setActive(Array.prototype.indexOf.call(items(), li));
+			}
+		});
+		// keep focus in the search box when the list is clicked (the link itself does the navigating)
+		_menu.addEventListener('mousedown', function(e) {
+			e.preventDefault();
+		});
+
+		_input.value = '';
+		_input.focus();
 	};
 
 	// ---------------------------------------
@@ -2302,9 +2982,11 @@ ugsEditorPlus.resize = (function(){
 	 */
 	var _public = {};
 
-	var $dlg = null;
-	var $aceLayer = null;
-	var $help = null;
+	var dom = ugsEditorPlus.dom;
+
+	var dlg = null;
+	var aceLayer = null;
+	var help = null;
 	var editor = null;
 
 	/**
@@ -2338,19 +3020,20 @@ ugsEditorPlus.resize = (function(){
 	 * @return {void}
 	 */
 	var setup = function(dlgElement){
-		$dlg = $(dlgElement);
-		$("body").append('<div id="aceHeader"><button class="aceSideBtn" title="Show options &amp; help"><span></span><span></span><span></span></button><strong>Edit Song</strong><a href="#exit-fullscreen">Exit fullscreen</a></div><div id="aceEditor"></div><div id="aceHelp"></div>');
+		dlg = dlgElement;
+		// static markup only
+		document.body.insertAdjacentHTML('beforeend', '<div id="aceHeader"><button class="aceSideBtn" title="Show options &amp; help"><span></span><span></span><span></span></button><strong>Edit Song</strong><a href="#exit-fullscreen">Exit fullscreen</a></div><div id="aceEditor"></div><div id="aceHelp"></div>');
 
-		$aceLayer = $('#aceEditor');
-		$aceLayer.fadeOut(1);
+		aceLayer = document.getElementById('aceEditor');
+		dom.hide(aceLayer);
 
-		$help = $('#aceHelp');
+		help = document.getElementById('aceHelp');
 
-		$('#aceHeader a').click(function(e) {
+		dom.one('#aceHeader a').addEventListener('click', function(e) {
 			e.preventDefault();
 			hideAce();
 		});
-		$('#aceHeader button').click(onShowHelpClicked);
+		dom.one('#aceHeader button').addEventListener('click', onShowHelpClicked);
 	};
 
 	var onShowHelpClicked = function(e) {
@@ -2361,22 +3044,12 @@ ugsEditorPlus.resize = (function(){
 	var showHelp = function(isShow) {
 		isHelpOpen = isShow;
 
-		if (isShow) {
-			$help.animate({
-				left: 0
-			}, SLIDE_SPEED);
-			$aceLayer.animate({
-				left: '350px'
-			}, SLIDE_SPEED);
-		}
-		else {
-			$help.animate({
-				left: '-350px'
-			}, SLIDE_SPEED);
-			$aceLayer.animate({
-				left: 0
-			}, SLIDE_SPEED);
-		}
+		dom.animate(help, {
+			left: isShow ? '0px' : '-350px'
+		}, SLIDE_SPEED);
+		dom.animate(aceLayer, {
+			left: isShow ? '350px' : '0px'
+		}, SLIDE_SPEED);
 	};
 
 	/**
@@ -2391,7 +3064,7 @@ ugsEditorPlus.resize = (function(){
 
 		fileName = fileName.toLowerCase();
 
-		$('script').each(function(index, item) {
+		Array.prototype.forEach.call(document.scripts, function(item) {
 			lower = item.src.toLowerCase();
 			pos = lower.indexOf(fileName);
 			if (pos > 0) {
@@ -2404,8 +3077,10 @@ ugsEditorPlus.resize = (function(){
 	var showAce = function() {
 		isBig = true;
 
-		$('html').addClass('aceEditorActive');
-		$('.overlay').fadeOut(300);
+		document.documentElement.classList.add('aceEditorActive');
+		dom.all('.overlay').forEach(function(overlay) {
+			dom.fadeOut(overlay, 300);
+		});
 
 		if (editor !== null) {
 			// editor has already been initialized, safe to continue
@@ -2427,16 +3102,17 @@ ugsEditorPlus.resize = (function(){
 				editor.completers = [ugsAce.chordCompleter];
 				copySongToAce();
 
-				$help.html(ugsAce.helpHtml);
+				// ugsAce's own (static) help text
+				help.innerHTML = ugsAce.helpHtml;
 
 			});
 	};
 
 	var copySongToAce = function() {
-		$aceLayer.fadeIn(FADE_SPEED);
-		editor.setValue($('#chordProSource').val());
+		dom.fadeIn(aceLayer, FADE_SPEED);
+		editor.setValue(document.getElementById('chordProSource').value);
 		editor.gotoLine(1);
-		$help.fadeIn(1);
+		dom.show(help);
 	};
 
 	/**
@@ -2448,14 +3124,14 @@ ugsEditorPlus.resize = (function(){
 	var hideAce = function() {
 		isBig = false;
 
-		$dlg.show();
-		$aceLayer.fadeOut(FADE_SPEED);
-		$help.fadeOut(FADE_SPEED);
+		dom.show(dlg);
+		dom.fadeOut(aceLayer, FADE_SPEED);
+		dom.fadeOut(help, FADE_SPEED);
 		if (editor !== null) {
-			$('#chordProSource').val(editor.getValue());
+			document.getElementById('chordProSource').value = editor.getValue();
 		}
 
-		$('html').removeClass('aceEditorActive');
+		document.documentElement.classList.remove('aceEditorActive');
 		showHelp(false);
 	};
 
@@ -2466,7 +3142,7 @@ ugsEditorPlus.resize = (function(){
 	 * @return {void}
 	 */
 	_public.toggle = function(dlgElement){
-		if ($dlg === null) {
+		if (dlg === null) {
 		setup(dlgElement);
 		}
 
@@ -2488,7 +3164,7 @@ ugsEditorPlus.resize = (function(){
 }());
 ;/**
  *
- * Dependencies: jQuery & ugsChordBuilder classes
+ * Dependencies: ugsChordBuilder classes
  * @class chordBuilder
  * @namespace ugsEditorPlus
  */
@@ -2508,12 +3184,12 @@ ugsEditorPlus.chordBuilder = (function() {
 	 * @method  init
 	 */
 	_public.init = function() {
-		var fingerToolImage = $('.fingerToolImage').css('background-image');
+		var fingerToolImage = window.getComputedStyle(document.querySelector('.fingerToolImage')).backgroundImage;
 		ugsChordBuilder.settings.cursor.imageUri = fingerToolImage.replace(/url\("(.*)hand.png"\)/i, '$1hand-cursor.png');
 		_builder = new ugsChordBuilder.editorUi();
 		_builder.init();
 
-		$('#cdBldOpenBtn').click(onShowDlgBtnClick);
+		document.getElementById('cdBldOpenBtn').addEventListener('click', onShowDlgBtnClick);
 	};
 
 	/**
@@ -2524,8 +3200,8 @@ ugsEditorPlus.chordBuilder = (function() {
 	var onShowDlgBtnClick = function(evt){
 		evt.preventDefault();
 		_builder.reload();
-		var id = $(this).data('dialog');
-		$('#' + id).fadeIn();
+		var id = this.getAttribute('data-dialog');
+		ugsEditorPlus.dom.fadeIn(document.getElementById(id));
 	};
 
 	// ---------------------------------------
@@ -2560,7 +3236,7 @@ ugsEditorPlus.songAmatic = (function() {
 		var opts = mergeOptions(options);
 
 		ukeGeeks.settings.opts.retainBrackets = !opts.hideChordEnclosures;
-		$('#songSourceDlg').toggle(opts.showEditOnLoad);
+		ugsEditorPlus.dom.toggle(document.getElementById('songSourceDlg'), opts.showEditOnLoad);
 
 		ukeGeeks.scriptasaurus.init(opts.useLegacyIe);
 
@@ -2580,7 +3256,7 @@ ugsEditorPlus.songAmatic = (function() {
 			commonChords: ukeGeeks.settings.commonChords
 		};
 
-		return $.extend(ugsEditorPlus.options, opts, (typeof options === "object") ? options : {});
+		return Object.assign(ugsEditorPlus.options, opts, (options && typeof options === "object") ? options : {});
 	};
 
 	// ---------------------------------------
@@ -3610,7 +4286,7 @@ ugsChordBuilder.chooserList = (function() {
 	_public.show = function(isChooserPanel) {
 		document.getElementById(_ids.chooserPanel).style.display = isChooserPanel ? 'block' : 'none';
 		document.getElementById(_ids.builderPanel).style.display = !isChooserPanel ? 'block' : 'none';
-		$('#' + _ids.chooserPanel).closest('.overlay').toggleClass('chordBuilderNarrow', isChooserPanel);
+		document.getElementById(_ids.chooserPanel).closest('.overlay').classList.toggle('chordBuilderNarrow', isChooserPanel);
 	};
 
 	/**
@@ -4255,7 +4931,7 @@ ugsChordBuilder.editorUi = function() {
 	};
 
 	/**
-	 * Yet another poor man's jQuery envying add/remove CSS class method.
+	 * Yet another add/remove CSS class method.
 	 * @method
 	 * @private
 	 * @return {void}

@@ -308,7 +308,7 @@ ugsChordBuilder.editorUi = function() {
 	};
 
 	/**
-	 * Yet another poor man's jQuery envying add/remove CSS class method.
+	 * Yet another add/remove CSS class method.
 	 * @method
 	 * @private
 	 * @return {void}

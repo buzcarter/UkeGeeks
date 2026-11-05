@@ -47,6 +47,8 @@ const BUNDLES = [
     dir: 'src/js/editor',
     files: [
       'ugsEditorPlus.namespace.js',
+      'ugsEditorPlus.dom.js',
+
       'ugsEditorPlus.options.js',
       'ugsEditorPlus.actions.js',
       'ugsEditorPlus.songUi.js',

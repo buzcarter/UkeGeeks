@@ -232,7 +232,7 @@ class Ugs{
 	}
 
 	/**
-	 * The rather quirky way to interface with jQuery.ajax with serialize,
+	 * Reads the JSON body the editor POSTs (Content-Type: application/json),
 	 * returns a PHP Object version of the posted JSON.
 	 *
 	 * @return Object

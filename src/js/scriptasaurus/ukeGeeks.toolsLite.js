@@ -1,6 +1,6 @@
 /**
- * some jQuery-like tools (very, very crappy. wish we could count on jQuery being on the page.)
- * if you do want to use jQuery (and why wouldn't you) I'm not offended if you yank this out.
+ * A few small DOM & string helpers (CSS classes, trimming, HTML escaping) so Scriptasaurus
+ * needs no other library.
  * @class toolsLite
  * @namespace ukeGeeks
  * @singleton
@@ -15,7 +15,9 @@ ukeGeeks.toolsLite = (function() {
 
 	var regEx = {
 		dbleSpace: /\s{2,}/g,
-		trim: /^\s+|\s+$/g
+		trim: /^\s+|\s+$/g,
+		// an "&" that is NOT the start of an entity (&#123; &#x1F; &name;)
+		looseAmp: /&(?!#\d+;|#x[0-9a-f]+;|[a-z][a-z0-9]*;)/gi
 	};
 	
 	/**
@@ -65,6 +67,20 @@ ukeGeeks.toolsLite = (function() {
 		return str.replace(regEx.trim, '');
 	};
 	
+	/**
+	 * Escapes plain text for use as HTML: "<" and ">" become entities, as does
+	 * any "&" that doesn't already start an entity (so "&amp;" or "&copy;" are left alone).
+	 * @method escapeHtml
+	 * @param text {String} raw (untrusted) text
+	 * @return {String}
+	 */
+	_public.escapeHtml = function(text) {
+		return String(text)
+			.replace(regEx.looseAmp, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;');
+	};
+
 	_public.pack = function(value) {
 		return value.replace(regEx.dbleSpace, ' ').replace(regEx.trim, '');
 	};

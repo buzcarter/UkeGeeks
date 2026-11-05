@@ -11,7 +11,7 @@
 	margin: 0;
 	padding: 0;
 }
-/* using jQuery instead: .aceEditorActive #aceEditor */
+/* #aceEditor is shown/hidden by script (ugsEditorPlus.resize), not here */
 .aceEditorActive {
 	#aceHeader{
 		display: block;
@@ -43,7 +43,7 @@
 	}
 }
 #aceEditor {
-	/* using jQuery instead: display: none;*/
+	/* shown/hidden by script (ugsEditorPlus.resize) */
 	position: absolute;
 	top: 40px;
 	right: 0;

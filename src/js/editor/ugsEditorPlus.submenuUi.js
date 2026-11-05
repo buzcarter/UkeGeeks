@@ -1,7 +1,7 @@
 
 /**
  * Wires up all the "pseudo-selects" (aka "dropdownlists") on a Tooltip-Dialog boxes on
- * the page; assumes consistent HTML (hello, jQuery)
+ * the page; assumes consistent HTML
  * TODO: Refactor -- quite brittle!
  * @class submenuUi
  * @namespace ugsEditorPlus
@@ -24,10 +24,11 @@ ugsEditorPlus.submenuUi = (function(){
 	 */
 	_public.init = function() {
 		ugsEditorPlus.themes.loadList('#colorPicker .pseudoSelect', ugsEditorPlus.options.theme);
-		$('.enablePseudoSelects label').click(onLabelClick);
-		$('.pseudoSelect li').click(onOptionClick);
-		$('body').bind('click', closeAll);
-		$('.arrowBox').click(doCollapseAllLists);
+		var dom = ugsEditorPlus.dom;
+		dom.on('.enablePseudoSelects label', 'click', onLabelClick);
+		dom.on('.pseudoSelect li', 'click', onOptionClick);
+		dom.on(document.body, 'click', closeAll);
+		dom.on('.arrowBox', 'click', doCollapseAllLists);
 
 		syncOptions(ugsEditorPlus.options);
 	};
@@ -39,47 +40,71 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @return {bool} false to kill event bubbling
 	 */
 	var onOptionClick = function(e){
-		var $optionItem = $(this);
-		var value = stripHash($optionItem.children().attr('href'));
+		var optionItem = this;
+		var value = stripHash(optionItem.querySelector('a').getAttribute('href'));
 
 		// the element holding the "pseudo-select"
-		var $select = $optionItem.parents('dd');
-		var id = $select.attr('id');
-		var actionName = $select.data('action');
+		var select = optionItem.closest('dd');
+		var id = select.id;
+		var actionName = select.getAttribute('data-action');
 
 		// a selection's been made so we hide the (sub) select list
-		$('#' + id).hide();
+		ugsEditorPlus.dom.hide(select);
 		// ...and reset ("uncheck") all items and check ("highlight") this selected item
-		setChecked($optionItem);
+		setChecked(optionItem);
 
 		onListActive(this, false);
 		_open = null;
 
 		// now bubble out the info -- update display to show selected value ...
-		$('label[for=' + id + '] span').text(getLabelText(actionName, value, $optionItem));
-		$('label[for=' + id + ']').parents('dt').removeClass('active');
+		var label = getLabel(id);
+		label.querySelector('span').textContent = getLabelText(actionName, value, optionItem);
+		label.closest('dt').classList.remove('active');
 
 		// lastly, execute the action
-		$.event.trigger('option:click', {
+		ugsEditorPlus.dom.trigger('ugs:option', {
 			action: actionName,
 			value: value
 		});
 
 		// prevent event bubbling
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
-	var setChecked = function($item) {
-		if (!$item) {
+	var setChecked = function(item) {
+		if (!item) {
 			//console.log('item for option not found');
 			return;
 		}
-		$item.siblings().removeClass('checked');
-		$item.addClass('checked');
+		Array.prototype.forEach.call(item.parentNode.children, function(sibling) {
+			sibling.classList.remove('checked');
+		});
+		item.classList.add('checked');
+	};
+
+	/**
+	 * the label (in the dt) for the pseudo-select with this id
+	 * @method getLabel
+	 * @param  {string} id
+	 * @return {DOM-element}
+	 */
+	var getLabel = function(id) {
+		return document.querySelector('label[for="' + id + '"]');
+	};
+
+	/**
+	 * a value safe to use inside a quoted CSS attribute selector
+	 * @method cssString
+	 * @param  {string} value
+	 * @return {string}
+	 */
+	var cssString = function(value) {
+		return String(value).replace(/["\\]/g, '\\$&');
 	};
 
 	var syncOptions = function(options) {
-		var $item, id,
+		var item, id,
 			map = [{
 				action: 'zoomFonts',
 				value: options.fontSize
@@ -104,10 +129,14 @@ ugsEditorPlus.submenuUi = (function(){
 			}];
 
 		for (var i = map.length - 1; i >= 0; i--) {
-			$item = $('[data-action=' + map[i].action + '] a[href=#' + map[i].value + ']').closest('li');
-			id = $item.closest('dd').attr('id');
-			setChecked($item);
-			$('label[for=' + id + '] span').text(getLabelText(map[i].action, map[i].value, $item));
+			item = document.querySelector('[data-action="' + map[i].action + '"] a[href="#' + cssString(map[i].value) + '"]');
+			if (!item) {
+				continue;
+			}
+			item = item.closest('li');
+			id = item.closest('dd').id;
+			setChecked(item);
+			getLabel(id).querySelector('span').textContent = getLabelText(map[i].action, map[i].value, item);
 		}
 	};
 
@@ -119,13 +148,12 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @return {bool} false to kill event bubbling
 	 */
 	var onLabelClick = function(e){
-		var $thisLabel = $(this);
-		var id = $thisLabel.attr('for');
-		setActiveLabel($thisLabel);
-		$('#'+id).show();
+		var id = this.getAttribute('for');
+		setActiveLabel(this);
+		ugsEditorPlus.dom.show(document.getElementById(id));
 		onListActive(this, true);
 		if (_open !== null) {
-			$('#' + _open.id).hide();
+			ugsEditorPlus.dom.hide(document.getElementById(_open.id));
 		}
 		if (_open !== null && _open.id == id) {
 			_open = null;
@@ -137,17 +165,31 @@ ugsEditorPlus.submenuUi = (function(){
 		}
 
 		// prevent event bubbling
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
-	_public.reset = function($dlg){
-		$dlg.find('dt').removeClass('active');
-		$dlg.find('.event-userSelecting').removeClass('event-userSelecting');
+	/**
+	 * clears "active" & "in use" states within the (tooltip) dialog
+	 * @method reset
+	 * @param  {DOM-element} dlg
+	 */
+	_public.reset = function(dlg){
+		ugsEditorPlus.dom.all('dt', dlg).forEach(function(dt) {
+			dt.classList.remove('active');
+		});
+		ugsEditorPlus.dom.all('.event-userSelecting', dlg).forEach(function(ele) {
+			ele.classList.remove('event-userSelecting');
+		});
 	};
 
-	var setActiveLabel = function($label){
-		$label.closest('dl').children('dt').removeClass('active');
-		$label.closest('dt').addClass('active');
+	var setActiveLabel = function(label){
+		Array.prototype.forEach.call(label.closest('dl').children, function(child) {
+			if (child.tagName == 'DT') {
+				child.classList.remove('active');
+			}
+		});
+		label.closest('dt').classList.add('active');
 	};
 
 	/**
@@ -159,7 +201,10 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @return void
 	 */
 	var onListActive = function(ele, isInUse){
-		$(ele).parents('.enablePseudoSelects').toggleClass('event-userSelecting', isInUse);
+		var wrap = ele.closest('.enablePseudoSelects');
+		if (wrap) {
+			wrap.classList.toggle('event-userSelecting', isInUse);
+		}
 	};
 
 	/**
@@ -168,12 +213,13 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @return bool
 	 */
 	var doCollapseAllLists = function(e){
-		if ($(e.target).is('a')){
+		if (e.target.matches('a')){
 			return;
 		}
-		$(this).find('dd').hide();
+		ugsEditorPlus.dom.all('dd', this).forEach(ugsEditorPlus.dom.hide);
 		_open = null;
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	/**
@@ -182,7 +228,9 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @param  {event} e
 	 */
 	var closeAll = function(e){
-		$('.arrowBox').fadeOut(270);
+		ugsEditorPlus.dom.all('.arrowBox').forEach(function(box) {
+			ugsEditorPlus.dom.fadeOut(box, 270);
+		});
 		ugsEditorPlus.topMenus.makeAllInactive();
 	};
 
@@ -212,15 +260,15 @@ ugsEditorPlus.submenuUi = (function(){
 	 * @method getLabelText
 	 * @param  {string} action
 	 * @param  {string} value
-	 * @param  {jQueryElement} $ele jQuery element that ...
+	 * @param  {DOM-element} ele the selected list item (LI)
 	 * @return {string}
 	 */
-	var getLabelText = function(action, value, $ele){
-		var index = $ele.index();
+	var getLabelText = function(action, value, ele){
+		var index = Array.prototype.indexOf.call(ele.parentNode.children, ele);
 
 		switch (action){
 			case 'paper':
-				return 'Width ' + $ele.text();
+				return 'Width ' + ele.textContent;
 			case 'zoomFonts':
 				return 'Font size ' + value + 'pt';
 			case 'zoomDiagrams':
@@ -231,7 +279,7 @@ ugsEditorPlus.submenuUi = (function(){
 				if (value == 'up_0'){
 					return 'Original key';
 				}
-				var txt = $ele.text();
+				var txt = ele.textContent;
 				return txt.replace(' ', ' steps - "') + '"';
 			default:
 			 return _desriptions[action][index];
@@ -239,7 +287,7 @@ ugsEditorPlus.submenuUi = (function(){
 	};
 
 	_public.resetTransposeLabel = function(){
-		$('label[for=transposePicker] span').text('Original key');
+		getLabel('transposePicker').querySelector('span').textContent = 'Original key';
 	};
 
 	// ---------------------------------------

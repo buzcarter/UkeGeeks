@@ -64,7 +64,7 @@ ugsEditorPlus.autoReformat = (function() {
 
 	var runNow = function(){
 		_formatted = ugsEditorPlus.reformat.run(_ele.cpmSource.value);
-		_ele.reformatTextBox.innerHTML = _formatted;
+		_ele.reformatTextBox.value = _formatted;
 
 		if (!ugsEditorPlus.reformat.hasChords()){
 			return;

@@ -13,13 +13,13 @@ ugsEditorPlus.topMenus = (function() {
 	 * @return {void}
 	 */
 	var _init = function() {
-		// $('#ugsAppToolbar > ul a')
-		$('#ugsAppToolbar > ul li').not('[data-dialog]').children('a').click(_onMenuItemClick);
-		$('.showOptionsBox a').click(_onShowOptionsClick);
+		var dom = ugsEditorPlus.dom;
+		dom.on('#ugsAppToolbar > ul li:not([data-dialog]) > a', 'click', _onMenuItemClick);
+		dom.on('.showOptionsBox a', 'click', _onShowOptionsClick);
 
-		$('#ugsAppToolbar > ul li[data-dialog]').click(_onShowDlgBtnClick);
-		$('.closeBtn').click(_onCloseBtnClick);
-		$('.resizeBtn').click(_onResizeBtnClick);
+		dom.on('#ugsAppToolbar > ul li[data-dialog]', 'click', _onShowDlgBtnClick);
+		dom.on('.closeBtn', 'click', _onCloseBtnClick);
+		dom.on('.resizeBtn', 'click', _onResizeBtnClick);
 	};
 
 	/**
@@ -30,13 +30,13 @@ ugsEditorPlus.topMenus = (function() {
 	 */
 	var _onMenuItemClick = function() {
 		// the clicked anchor tag
-		var $parent = $(this).parent();
-		var isOpen = $parent.hasClass('active');
+		var parent = this.parentNode;
+		var isOpen = parent.classList.contains('active');
 		_makeAllInactive();
 		if (isOpen) {
 			return;
 		}
-		$parent.addClass('active');
+		parent.classList.add('active');
 	};
 
 	/**
@@ -46,7 +46,9 @@ ugsEditorPlus.topMenus = (function() {
 	 * @return {void}
 	 */
 	var _makeAllInactive = function() {
-		$('#ugsAppToolbar > ul > li').removeClass('active');
+		ugsEditorPlus.dom.all('#ugsAppToolbar > ul > li').forEach(function(li) {
+			li.classList.remove('active');
+		});
 	};
 
 	/**
@@ -58,7 +60,7 @@ ugsEditorPlus.topMenus = (function() {
 	var _closeAll = function() {
 		// hide any drop-down/arrow boxes currently open
 		_makeAllInactive();
-		$('.arrowBox').hide();
+		ugsEditorPlus.dom.all('.arrowBox').forEach(ugsEditorPlus.dom.hide);
 	};
 
 	/**
@@ -74,11 +76,12 @@ ugsEditorPlus.topMenus = (function() {
 		_closeAll();
 
 		// now show dialog associated with the clicked button
-		var id = $(this).data('dialog');
-		$('#' + id).fadeIn();
+		var id = this.getAttribute('data-dialog');
+		ugsEditorPlus.dom.fadeIn(document.getElementById(id));
 
 		// prevent event bubbling
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	/**
@@ -90,16 +93,17 @@ ugsEditorPlus.topMenus = (function() {
 	 * @return {bool} false to kill event bubbling
 	 */
 	var _onCloseBtnClick = function(e) {
-		$(this).parents('.overlay').fadeOut();
+		ugsEditorPlus.dom.fadeOut(this.closest('.overlay'));
 		// prevent event bubbling
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	var _onResizeBtnClick = function(e) {
 		_closeAll();
-		var dlg = $(this).parents('.overlay');
-		ugsEditorPlus.resize.toggle(dlg);
-		return false;
+		ugsEditorPlus.resize.toggle(this.closest('.overlay'));
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	/**
@@ -110,18 +114,23 @@ ugsEditorPlus.topMenus = (function() {
 	 * @return {bool} false to kill event bubbling
 	 */
 	var _onShowOptionsClick = function(e) {
-		var id = $(this).attr('href');
+		var dom = ugsEditorPlus.dom;
+		var dlg = document.getElementById(this.getAttribute('href').replace(/^#/, ''));
 
-		$('.arrowBox').not(id).hide();
+		dom.all('.arrowBox').forEach(function(box) {
+			if (box !== dlg) {
+				dom.hide(box);
+			}
+		});
 
-		var $dlg = $(id);
-		$dlg.find('dd').hide();
-		$dlg.fadeToggle();
+		dom.all('dd', dlg).forEach(dom.hide);
+		dom.fadeToggle(dlg);
 
-		ugsEditorPlus.submenuUi.reset($dlg);
+		ugsEditorPlus.submenuUi.reset(dlg);
 
 		// prevent event bubbling
-		return false;
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	// ---------------------------------------

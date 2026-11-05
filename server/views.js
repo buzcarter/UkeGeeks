@@ -55,7 +55,6 @@ function songListDetailed(m) {
     ${m.songList.map((song) => html`<li>${songRow(song)}</li>`)}
   </ol>
   </section>
-  <script src="${S}js/jquery-1.9.1.min.js"></script>
   <script src="${S}js/ugsEditorPlus.min.js"></script>
   ${m.isNewAllowed
     ? html`<section class="overlay" style="top:100px; right:40%; display:none;" id="newSongForm">
@@ -76,7 +75,6 @@ function songListDetailed(m) {
     ugsEditorPlus.newSong.init(${jsonForScript('/ajaxnewsong')});
     </script>`
     : ''}
-<script src="${S}js/bootstrap-typeahead.min.js"></script>
 <script nonce="${m.nonce}">
 var qkSrch = ugsEditorPlus.typeahead();
 qkSrch.initialize();
@@ -430,8 +428,6 @@ function songEditable(m) {
 </section>
 
 <!-- SCRIPTS -->
-<script src="${S}js/jquery-1.9.1.min.js"></script>
-<script src="${S}js/jquery.draggable.js"></script>
 <script src="${S}js/ukeGeeks.scriptasaurus.min.js"></script>
 <script src="${S}js/ugsEditorPlus.min.js"></script>
 <script nonce="${m.nonce}">
@@ -440,12 +436,13 @@ if (ugs_settings && ugs_settings.invalidJson){
   alert(ugs_settings.invalidJson);
   ugs_settings = {};
 }
-$(function() {
+(function() {
+  // scripts are at the end of <body>, so the page is ready
   var settings = window.ugs_settings || {};
   settings.useLegacyIe = isLegacyIe;
   ugsEditorPlus.songAmatic.init(settings);
   ${m.isUpdateAllowed ? html`ugsEditorPlus.updateSong.init(${jsonForScript('/ajaxupdatesong')}, ${jsonForScript(m.id)});` : ''}
-});
+}());
 </script>
 </body>
 </html>`;

@@ -203,14 +203,14 @@ ugsEditorPlus.themes = (function() {
 	};
 
 	var setBody = function(themeName) {
-		var $body = $('body');
+		var classes = document.body.classList;
 		// see: http://stackoverflow.com/questions/921789/how-to-loop-through-javascript-object-literal-with-objects-as-members
 		for (var key in _colorSchemes) {
 			if (_colorSchemes.hasOwnProperty(key)) {
-				$body.removeClass('theme-' + key);
+				classes.remove('theme-' + key);
 			}
 		}
-		$body.addClass('theme-' + themeName);
+		classes.add('theme-' + themeName);
 	};
 
 	/**
@@ -225,20 +225,28 @@ ugsEditorPlus.themes = (function() {
 
 
 	/**
-	 * Populates the UL (identified via CSS/jQuery selector) with the color scheme List Items (LIs)
+	 * Populates the UL(identified via CSS selector) with the color scheme List Items (LIs)
 	 * @method loadList
 	 * @param  {string} selector
 	 * @param {string} selectedValue value that should be "checked"
 	 */
 	_public.loadList = function(selector, selectedValue) {
-		var s = '';
+		var ul = document.querySelector(selector);
+		ul.textContent = '';
 		for (var key in _colorSchemes) {
 			if (_colorSchemes.hasOwnProperty(key)) {
-				var cssClass = (key == selectedValue) ? 'checked' : '';
-				s += '<li class="' + cssClass + '"><a href="#' + key + '" title="' + _colorSchemes[key].description + '">' + _colorSchemes[key].name + '</a></li>';
+				var li = document.createElement('li');
+				var a = document.createElement('a');
+				if (key == selectedValue) {
+					li.className = 'checked';
+				}
+				a.href = '#' + key;
+				a.title = _colorSchemes[key].description;
+				a.textContent = _colorSchemes[key].name;
+				li.appendChild(a);
+				ul.appendChild(li);
 			}
 		}
-		$(selector).html(s);
 	};
 
 	/**
