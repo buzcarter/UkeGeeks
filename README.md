@@ -47,6 +47,8 @@ Edit the files under `src/`, never `js/*.merged.js` / `js/*.min.js` / `css/ugsEd
 
 Songs are rendered by [Song Formatter](https://github.com/buzcarter/song-formatter) (`@ukegeeks/song-formatter`, a devDependency). The build copies its browser bundle to `js/song-formatter.bundle.js` and its song styles to `css/ukeGeeks.music.css` and `css/ukeGeeks.musicPrint.css`, so don't edit those here either: change Song Formatter, release it, then bump its version in `package.json` and rebuild.
 
+The same goes for the Fullscreen editor: the build copies the [Ace ChordPro extension](https://github.com/buzcarter/ace-chordpro-extension)'s bundle (`@ukegeeks/ace-chordpro-extension`) to `js/ace/ace-chordpro.min.js`. Its help panel text is the Songbook's own, in `src/js/editor/ugsEditorPlus.aceHelp.js`.
+
 ```bash
 npm install
 ```
@@ -105,6 +107,8 @@ It replaces `songbook/` entries and overwrites library files in `js/`, `css/` an
 * General
   * **Songs are rendered by [Song Formatter](https://github.com/buzcarter/song-formatter)** 1.0.0-beta, the TypeScript successor to the Scriptasaurus library, with the same `ukeGeeks.*` API. Pages load `js/song-formatter.bundle.js` instead of `js/ukeGeeks.scriptasaurus.min.js`, and chord diagrams and tablature are SVG instead of `<canvas>`. The old library (`src/js/scriptasaurus/`) and `excanvas.js` are gone.
   * Same output as before: all 16 sample songs render with the same text, chords, diagrams and tabs, in standard, baritone and ADF#B tunings and with mini-diagrams.
+* "Song-a-matic" editor
+  * The Fullscreen editor uses the [Ace ChordPro extension](https://github.com/buzcarter/ace-chordpro-extension) 1.0.0: Ace 1.26 (up from a 2014 build) with the ChordPro mode, snippets, chord completer and theme in one file, `js/ace/ace-chordpro.min.js`.
 
 #### V1.5.1
 * General
