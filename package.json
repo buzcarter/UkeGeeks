@@ -15,7 +15,7 @@
     "build:js": "node scripts/build.js js",
     "build:css": "node scripts/build.js css",
     "hash-password": "node scripts/hash-password.js",
-    "test": "node --test test/"
+    "test": "node --test test/*.test.js"
   },
   "devDependencies": {
     "less": "^4.9.1",

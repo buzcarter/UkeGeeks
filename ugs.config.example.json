@@ -1,0 +1,27 @@
+{
+  "host": "127.0.0.1",
+  "port": 8080,
+
+  "songDirectory": "cpm",
+  "editorSettingsFile": "ugsphp/settings.json",
+
+  "songbookHeadline": "The BIG UKE Book",
+  "songbookSubHeadline": "Sample Styled Songbook »",
+  "supportEmail": "you@example.com",
+  "sortLocale": "zh-Hant-u-co-stroke",
+
+  "useDetailedLists": true,
+  "useEditableSong": true,
+  "isLoginRequired": false,
+  "secureCookies": false,
+
+  "accounts": [
+    {
+      "user": "admin",
+      "passwordHash": "PASTE OUTPUT OF: npm run hash-password",
+      "name": "Almighty Admin",
+      "isActive": true,
+      "mayEdit": true
+    }
+  ]
+}

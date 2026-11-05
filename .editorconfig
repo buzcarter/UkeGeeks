@@ -1,0 +1,11 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+
+# Node server, build scripts, tests, config: 2 spaces, no tabs
+[{server/**,scripts/**,test/**,*.json}]
+indent_style = space
+indent_size = 2

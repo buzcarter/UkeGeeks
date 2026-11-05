@@ -12,6 +12,53 @@ Ongoing discussions and "How To" videos posted at [blog.ukegeeks.org](http://blo
 
 Lastly, the blog includes a [technical discussion and tips section](http://blog.ukegeeks.org/technical-reference/)
 
+## Running the songbook with Node.js
+
+No PHP needed. Node 18+ and no runtime dependencies.
+
+```bash
+npm start
+```
+
+Then open http://127.0.0.1:8080/. Songs are read from `cpm/*.cpm.txt`. The pages are the same as the PHP site (songbook, song, Song-a-matic editor, source, login).
+
+URLs follow the old `htaccess.txt` rewrites: `/songbook/<song>`, `/edit/<song>`, `/source/<song>`, `/reindex`, `/login`, `/logout`. Old `music.php?action=…&song=…` links redirect to them.
+
+### Configuration
+
+Copy `ugs.config.example.json` to `ugs.config.json` (it's git-ignored) and edit. Any key you leave out keeps its default (see `server/config.js`).
+
+* `host`: defaults to `127.0.0.1` (this machine only). Use `0.0.0.0` to share on your network.
+* `sortLocale`: how the song list is sorted, e.g. `zh-Hant-u-co-stroke` (stroke count) or `zh-u-co-pinyin`.
+* `isLoginRequired`: lock the whole songbook behind a login.
+* `accounts`: needed to add or save songs, even when login isn't required (sign in at `/login`). Passwords are stored as hashes. Make one with:
+
+```bash
+npm run hash-password
+```
+
+New songs are saved as `Title - Artist.cpm.txt`.
+
+## Building the JavaScript & CSS
+
+Edit the files under `src/`, never `js/*.merged.js` / `js/*.min.js` / `css/ugsEditorPlus.*.css` directly: those are generated, and the pages load the `.min` files.
+
+```bash
+npm install
+```
+
+```bash
+npm run build
+```
+
+`npm run build:js` or `npm run build:css` builds just one. The concatenation order lives in `scripts/build.js`; add new source files there.
+
+## Tests
+
+```bash
+npm test
+```
+
 ## Authors
 
 * [Buz Carter](http://pizzabytheslice.com) (buz@ukegeeks.org)

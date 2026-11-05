@@ -4,3 +4,4 @@ ugsphp/cache/SongList.info
 .htaccess
 node_modules/
 ugs.config.json
+.claude/launch.json
