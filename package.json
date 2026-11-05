@@ -4,6 +4,22 @@
   "description": "UkeGeeks Scriptasaurus: ChordPro songbook with ukulele chord diagrams, served by a small Node.js server",
   "private": true,
   "license": "GPL-3.0",
+  "author": {
+    "name": "Buz Carter",
+    "email": "buz@ukegeeks.org",
+    "url": "http://pizzabytheslice.com"
+  },
+  "contributors": [
+    { "name": "David Calam", "url": "https://github.com/djc-503" },
+    { "name": "louis-coding", "url": "https://github.com/louis-coding" },
+    { "name": "AceLan Kao", "url": "https://github.com/acelan" },
+    { "name": "hutzelknecht", "url": "https://github.com/hutzelknecht" }
+  ],
+  "homepage": "https://ukegeeks.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/buzcarter/UkeGeeks.git"
+  },
   "type": "commonjs",
   "engines": {
     "node": ">=18"
