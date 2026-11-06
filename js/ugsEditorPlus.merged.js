@@ -428,6 +428,17 @@ ugsEditorPlus.options = {
 	useLegacyIe: false,
 
 	/**
+	 * Folder (with a trailing slash) holding ace-chordpro.min.js, loaded when the Fullscreen editor opens.
+	 * Empty means "ace/" next to the folder ugsEditorPlus.min.js was loaded from.
+	 * @example
+	 *  "/js/ace/"
+	 * @property aceUrl
+	 * @type Text
+	 * @default ""
+	 */
+	aceUrl: "",
+
+	/**
 	 * If true the Edit Song box is shown when the page loads; false hides it.
 	 * @example
 	 *  Allowed values: true, false
@@ -2330,155 +2341,7 @@ ugsEditorPlus.submenuUi = (function(){
 
 }());
 ;/**
- * Creates a new song via AJAX.
- * Dependencies: ugsEditorPlus.dom
-
- * @class newSong
- * @namespace ugsEditorPlus
- */
-ugsEditorPlus.newSong = (function() {
-	/**
-	 * attach public members to this object
-	 * @property _public
-	 * @type JsonObject
-	 */
-	var _public = {};
-
-	/**
-	 * lock-down the Submit (Update) button to avoid double posts;
-	 *  @attribute _isUpdating
-	 * @type {Boolean}
-	 */
-	var _isUpdating = false;
-
-	var _ajaxUri = '';
-
-	_public.init = function(ajaxUri) {
-		_ajaxUri = ajaxUri;
-
-		var dom = ugsEditorPlus.dom;
-
-		dom.on('#newSongBtn', 'click', function(e) {
-			if(doValidate(this)) {
-				doPost();
-			}
-		});
-
-		dom.on('#openNewDlgBtn', 'click', function(e) {
-			resetFields();
-			dom.fadeIn(document.getElementById('newSongForm'));
-			document.getElementById('songTitle').focus();
-		});
-
-		dom.on('#hideNewSongBtn', 'click', closeDlg);
-
-		// handle escape key
-		dom.on('#newSongForm', 'keydown', onEscape);
-
-		dom.hide(document.getElementById('loadingSpinner'));
-
-		var dlg = document.getElementById('newSongForm');
-		if (dlg) {
-			dom.draggable(dlg, 'hgroup');
-		}
-	};
-
-	/**
-	 * shows/hides the "Saving..." spinner, (un)locks the form
-	 * @method setBusy
-	 * @param isBusy {bool}
-	 */
-	var setBusy = function(isBusy) {
-		_isUpdating = isBusy;
-		ugsEditorPlus.dom.toggle(document.getElementById('loadingSpinner'), isBusy);
-	};
-
-	var doAjaxOk = function(data) {
-			showErrors(data.HasErrors, data.Message);
-			if(data.HasErrors) {
-				return;
-			}
-			document.location.href = data.ContinueUri;
-		};
-
-	var doPost = function() {
-			if (_isUpdating){
-				return;
-			}
-
-			var data = {
-				'handler': 'ugs_new',
-				'songTitle': document.getElementById('songTitle').value,
-				'songArtist': document.getElementById('songArtist').value
-			};
-
-			setBusy(true);
-			ugsEditorPlus.dom.postJson(_ajaxUri, data)
-				.then(function(data) {
-					setBusy(false);
-					doAjaxOk(data);
-				}, function() {
-					setBusy(false);
-					showErrors(true, 'Failed to create the song file.\nPlease have your admin check the CPM directory permissions.');
-				});
-		};
-
-	var doValidate = function() {
-		var titleInput = document.getElementById('songTitle');
-		var title = titleInput.value.trim();
-		titleInput.value = title;
-		/*
-		var ok = title.length > 2;
-		showErrors(!ok, 'Song\'s title is required<br/><em>(you may change it later, must be at least 2 characters)</em>');
-		return ok;
-		*/
-		return true;
-	};
-
-	var showErrors = function(hasErrors, message) {
-		var err = ugsEditorPlus.dom.one('#newSongForm .errorMessage');
-		if(hasErrors) {
-			// plain text (the message may echo back what the user typed); newlines become line breaks
-			err.textContent = '';
-			String(message).split('\n').forEach(function(line, i) {
-				if (i > 0) {
-					err.appendChild(document.createElement('br'));
-				}
-				err.appendChild(document.createTextNode(line));
-			});
-			ugsEditorPlus.dom.show(err);
-			document.getElementById('songTitle').focus();
-		}
-		else {
-			ugsEditorPlus.dom.hide(err);
-		}
-		};
-
-	var closeDlg = function(e) {
-		if (e && e.type == 'click') {
-			e.preventDefault();
-		}
-		ugsEditorPlus.dom.fadeOut(document.getElementById('newSongForm'));
-	};
-
-	var resetFields = function(){
-		document.getElementById('songTitle').value = '';
-		document.getElementById('songArtist').value = '';
-	};
-
-	var onEscape = function(e){
-		if (e.key == 'Escape' || e.keyCode == 27) {
-			closeDlg();
-		}
-	};
-
-	// ---------------------------------------
-	// return public interface "JSON handle"
-	// ---------------------------------------
-	return _public;
-})();
-;/**
- * Updates an exising song via AJAX.
+ * Saves the song: runs the host page's save callback when the Save button is clicked.
  * Dependencies: ugsEditorPlus.dom
 
  * @class updateSong
@@ -2492,8 +2355,12 @@ ugsEditorPlus.updateSong = (function() {
 	 */
 	var _public = {};
 
-	var _ajaxUri = '';
-	var _filename = '';
+	/**
+	 * The host's save callback: takes the ChordPro text, returns (a promise of) the message to show.
+	 * @property _save
+	 * @type {Function}
+	 */
+	var _save = null;
 
 	/**
 	 * Name / Value pairs for CSS selectors of HTML elements to be manipulated
@@ -2515,9 +2382,34 @@ ugsEditorPlus.updateSong = (function() {
 	 */
 	var _isUpdating = false;
 
+	/**
+	 * Saves by posting to the UkeGeeks Songbook server (the original behavior).
+	 * Kept so pages that call updateSong.init() keep working; new pages pass `save` to songAmatic.mount().
+	 * @method init
+	 * @param ajaxUri {string}
+	 * @param filename {string}
+	 */
 	_public.init = function(ajaxUri, filename) {
-		_ajaxUri = ajaxUri;
-		_filename = filename;
+		_public.setSaveHandler(function(song) {
+			var data = {
+				'handler': 'ugs_update_81jr',
+				'filename': filename,
+				'song': song
+			};
+			return ugsEditorPlus.dom.postJson(ajaxUri, data).then(function(data) {
+				//if (data.HasErrors)
+				return data.Message;
+			});
+		});
+	};
+
+	/**
+	 * Wires the Save button to a save callback.
+	 * @method setSaveHandler
+	 * @param save {Function} takes the ChordPro text; returns a message, or a promise of one. A rejection shows the "problem saving" alert.
+	 */
+	_public.setSaveHandler = function(save) {
+		_save = save;
 
 		ugsEditorPlus.dom.on(_selectors.button, 'click', function(e) {
 			e.preventDefault();
@@ -2571,17 +2463,14 @@ ugsEditorPlus.updateSong = (function() {
 			return;
 		}
 
-		var data = {
-			'handler': 'ugs_update_81jr',
-			'filename': _filename,
-			'song': ele('song').value
-		};
-
 		_isUpdating = true;
 		showBusy();
-		ugsEditorPlus.dom.postJson(_ajaxUri, data)
-			.then(function(data) {
-				doAjaxOk(data);
+		Promise.resolve()
+			.then(function() {
+				return _save(ele('song').value);
+			})
+			.then(function(message) {
+				showMessage(message === undefined || message === null ? 'Saved.' : message);
 			}, function() {
 				alert('Encountered a problem saving your Song. Please copy your song to another program until this issue is resolved.');
 			})
@@ -2591,384 +2480,11 @@ ugsEditorPlus.updateSong = (function() {
 			});
 	};
 
-	var doAjaxOk = function(data) {
-		//if (data.HasErrors)
-		showMessage(data.Message);
-	};
-
 	// ---------------------------------------
 	// return public interface "JSON handle"
 	// ---------------------------------------
 	return _public;
 })();
-;/**
- * Search on the song list page for songs ("Quick search"): as you type a drop down list
- * of matching songs appears; arrow keys + Enter, or a click, open the song.
- * (Originally used Twitter Bootstrap's typeahead plugin; this is a small, dependency-free
- * version that keeps its markup -- ul.typeahead.dropdown-menu -- so the existing CSS still applies.)
- * @class typeahead
- * @constructor
- * @namespace ugsEditorPlus
- */
-ugsEditorPlus.typeahead = function(){
-	/**
-	 * attach public members to this object
-	 * @property _public
-	 * @type JsonObject
-	 */
-	var _public = {};
-
-	/**
-	 * min number of characters typed before searching
-	 * @property MIN_LENGTH
-	 * @final
-	 * @type {Number}
-	 */
-	var MIN_LENGTH = 2;
-
-	/**
-	 * max number of matches shown
-	 * @property MAX_ITEMS
-	 * @final
-	 * @type {Number}
-	 */
-	var MAX_ITEMS = 50;
-
-	// private
-	// ---------------------------
-	var _songs = [];
-
-	var _regex = null;
-	var _words = [];
-
-	var _input = null;
-	var _menu = null;
-	var _activeIndex = -1;
-	var _blurTimer = null;
-
-	var _re = {
-		space: /\s{2,}/g,
-		// everything except letters & numbers (in ANY script: Latin, Chinese, Cyrillic...) gets nuked
-		common: makeUnicodeRegEx('([^\\p{L}\\p{N}]+)', 'gu', /([^a-z0-9]+)/gi),
-		// accents left over after NFD normalization ("é" -> "e" + "´"), so "beyonce" finds "Beyoncé"
-		diacritics: makeUnicodeRegEx('\\p{M}+', 'gu', null),
-		//treat quotes as invisible
-		noise: /['`’-]/g,
-		regExChars: /[.*+?^${}()|[\]\\]/g
-	};
-
-	/**
-	 * Unicode property escapes (\p{L}) are a SyntaxError in pre-2018 browsers (IE etc),
-	 * even inside a regex literal that never runs -- that would break this whole file.
-	 * So build them at runtime and fall back to the old ASCII-only behavior.
-	 * @method makeUnicodeRegEx
-	 * @private
-	 * @param pattern {string}
-	 * @param flags {string}
-	 * @param fallback {RegExp|null}
-	 * @return {RegExp|null}
-	 */
-	function makeUnicodeRegEx(pattern, flags, fallback) {
-		try {
-			return new RegExp(pattern, flags);
-		}
-		catch (e) {
-			return fallback;
-		}
-	}
-
-	/**
-	 * Scrapes the song list's HTML to build our list of
-	 * searchable text, display content, and links
-	 * @method listFromHtml
-	 */
-	var listFromHtml = function(){
-		ugsEditorPlus.dom.all('.songList > li').forEach(function(li) {
-			var link = li.querySelector('a');
-			if (!link) {
-				return;
-			}
-			_songs.push({
-				// content displayed in drop down list (the song's link)
-				link : link,
-				// what we'll match against
-				searchText : crushText(li.textContent),
-				// when a selection is made this is the location we'll launch
-				href : link.getAttribute('href')
-			});
-		});
-	};
-
-	var crushText = function(value){
-		value = value.toLowerCase();
-		if (_re.diacritics && value.normalize) {
-			value = value.normalize('NFD').replace(_re.diacritics, '');
-		}
-		return value
-			.replace(_re.noise, '')
-			.replace(_re.common, ' ')
-			.replace(_re.space, ' ')
-			.trim();
-	};
-
-	/**
-	 * Splits the query into words and builds the highlighter's RegEx
-	 * @method setQuery
-	 * @param query {string}
-	 */
-	var setQuery = function(query) {
-		_words = crushText(query).split(' ').filter(function(word) {
-			return word.length > 0;
-		});
-		var regGroup = _words.map(function(word) {
-			return word.replace(_re.regExChars, '\\$&');
-		}).join('|');
-		_regex = regGroup.length > 0 ? new RegExp('(' + regGroup + ')', 'gi') : null;
-	};
-
-	/**
-	 * true when every query word appears in the song's text
-	 * @method isMatch
-	 * @param song {JSON}
-	 * @return {bool}
-	 */
-	var isMatch = function(song) {
-		for (var i = 0; i < _words.length; i++) {
-			if (song.searchText.indexOf(_words[i]) == -1) {
-				return false;
-			}
-		}
-		return true;
-	};
-
-	var bySearchText = function(a, b) {
-		return (a.searchText > b.searchText) ? 1 : ((a.searchText < b.searchText) ? -1 : 0);
-	};
-
-	/**
-	 * Wraps the query words found in the text nodes of ele in STRONG tags. Pure DOM: no innerHTML.
-	 * @method highlight
-	 * @param ele {DOM-element}
-	 */
-	var highlight = function(ele) {
-		if (!_regex) {
-			return;
-		}
-		var walker = document.createTreeWalker(ele, NodeFilter.SHOW_TEXT, null);
-		var textNodes = [];
-		while (walker.nextNode()) {
-			textNodes.push(walker.currentNode);
-		}
-		textNodes.forEach(function(node) {
-			var parts = node.nodeValue.split(_regex);
-			if (parts.length < 2) {
-				return;
-			}
-			var frag = document.createDocumentFragment();
-			// split with a capture group: odd indexes are the matches
-			parts.forEach(function(part, i) {
-				if (part.length < 1) {
-					return;
-				}
-				if (i % 2) {
-					var strong = document.createElement('strong');
-					strong.textContent = part;
-					frag.appendChild(strong);
-				}
-				else {
-					frag.appendChild(document.createTextNode(part));
-				}
-			});
-			node.parentNode.replaceChild(frag, node);
-		});
-	};
-
-	/**
-	 * Builds the drop down's list item for the song: a copy of the song list's link
-	 * (title made "bigger"), with the matched words highlighted
-	 * @method makeItem
-	 * @param song {JSON}
-	 * @param index {int}
-	 * @return {DOM-element}
-	 */
-	var makeItem = function(song, index) {
-		var li = document.createElement('li');
-		var a = document.createElement('a');
-		li.id = 'quickSearchItem' + index;
-		li.setAttribute('role', 'option');
-		a.href = song.href;
-		a.tabIndex = -1;
-		Array.prototype.forEach.call(song.link.childNodes, function(child) {
-			a.appendChild(child.cloneNode(true));
-		});
-		var title = a.querySelector('strong');
-		if (title) {
-			var bigger = document.createElement('span');
-			bigger.className = 'bigger ' + title.className;
-			while (title.firstChild) {
-				bigger.appendChild(title.firstChild);
-			}
-			title.parentNode.replaceChild(bigger, title);
-		}
-		ugsEditorPlus.dom.all('em, .bigger', a).forEach(highlight);
-		li.appendChild(a);
-		return li;
-	};
-
-	/**
-	 * (re)builds the list for what's currently typed in the search box
-	 * @method lookup
-	 */
-	var lookup = function() {
-		var query = _input.value;
-		if (query.length < MIN_LENGTH) {
-			hide();
-			return;
-		}
-		setQuery(query);
-		var matches = _songs.filter(isMatch).sort(bySearchText).slice(0, MAX_ITEMS);
-		if (matches.length < 1) {
-			hide();
-			return;
-		}
-		_menu.textContent = '';
-		matches.forEach(function(song, i) {
-			_menu.appendChild(makeItem(song, i));
-		});
-		setActive(0);
-		show();
-	};
-
-	var items = function() {
-		return _menu.children;
-	};
-
-	var setActive = function(index) {
-		var list = items();
-		if (list.length < 1) {
-			return;
-		}
-		// wrap around, same as Bootstrap's typeahead
-		index = (index + list.length) % list.length;
-		if (list[_activeIndex]) {
-			list[_activeIndex].classList.remove('active');
-			list[_activeIndex].removeAttribute('aria-selected');
-		}
-		_activeIndex = index;
-		list[index].classList.add('active');
-		list[index].setAttribute('aria-selected', 'true');
-		_input.setAttribute('aria-activedescendant', list[index].id);
-		if (list[index].scrollIntoView && isShown()) {
-			list[index].scrollIntoView({ block: 'nearest' });
-		}
-	};
-
-	var isShown = function() {
-		return _menu.style.display == 'block';
-	};
-
-	var show = function() {
-		_menu.style.top = (_input.offsetTop + _input.offsetHeight) + 'px';
-		_menu.style.left = _input.offsetLeft + 'px';
-		_menu.style.display = 'block';
-		_input.setAttribute('aria-expanded', 'true');
-	};
-
-	var hide = function() {
-		_menu.style.display = 'none';
-		_activeIndex = -1;
-		_input.setAttribute('aria-expanded', 'false');
-		_input.removeAttribute('aria-activedescendant');
-	};
-
-	/**
-	 * opens the song
-	 * @method select
-	 * @param index {int}
-	 */
-	var select = function(index) {
-		var li = items()[index];
-		if (li) {
-			window.location.href = li.querySelector('a').href;
-		}
-	};
-
-	var onKeyDown = function(e) {
-		// IME (e.g. Chinese pinyin) is still composing: Enter/arrows belong to it
-		if (e.isComposing || e.keyCode == 229 || !isShown()) {
-			return;
-		}
-		switch (e.key) {
-			case 'ArrowDown':
-			case 'Down':
-				setActive(_activeIndex + 1);
-				break;
-			case 'ArrowUp':
-			case 'Up':
-				setActive(_activeIndex - 1);
-				break;
-			case 'Enter':
-				select(_activeIndex);
-				break;
-			case 'Escape':
-			case 'Esc':
-				hide();
-				break;
-			default:
-				return;
-		}
-		e.preventDefault();
-	};
-
-	_public.initialize = function(){
-		listFromHtml();
-
-		_input = document.getElementById('quickSearch');
-		if (!_input) {
-			return;
-		}
-
-		_menu = document.createElement('ul');
-		_menu.className = 'typeahead dropdown-menu';
-		_menu.id = 'quickSearchResults';
-		_menu.setAttribute('role', 'listbox');
-		_input.parentNode.insertBefore(_menu, _input.nextSibling);
-
-		_input.setAttribute('role', 'combobox');
-		_input.setAttribute('aria-autocomplete', 'list');
-		_input.setAttribute('aria-controls', _menu.id);
-		_input.setAttribute('aria-expanded', 'false');
-
-		_input.addEventListener('input', lookup);
-		_input.addEventListener('keydown', onKeyDown);
-		_input.addEventListener('focus', function() {
-			clearTimeout(_blurTimer);
-		});
-		_input.addEventListener('blur', function() {
-			// give a click on the list time to land
-			_blurTimer = setTimeout(hide, 150);
-		});
-
-		_menu.addEventListener('mouseover', function(e) {
-			var li = e.target.closest('li');
-			if (li && li.parentNode === _menu) {
-				setActive(Array.prototype.indexOf.call(items(), li));
-			}
-		});
-		// keep focus in the search box when the list is clicked (the link itself does the navigating)
-		_menu.addEventListener('mousedown', function(e) {
-			e.preventDefault();
-		});
-
-		_input.value = '';
-		_input.focus();
-	};
-
-	// ---------------------------------------
-	// return public interface "JSON handle"
-	// ---------------------------------------
-	return _public;
-};
 ;/**
  * Help shown beside the fullscreen (Ace) editor: keyboard shortcuts and ChordPro snippets.
  * It used to ship inside js/ace/ace.js as `ugsAce.helpHtml`; the Ace ChordPro extension
@@ -3130,12 +2646,13 @@ ugsEditorPlus.resize = (function(){
 		}
 
 		// only execute this block once (thus the null check)
-		// the folder ugsEditorPlus.min.js was loaded from, with a trailing slash (e.g. "/js/")
-		var path = getPath('ugsEditorPlus');
+		// the folder holding ace-chordpro.min.js: options.aceUrl, or by default "ace/" next to
+		// the folder ugsEditorPlus.min.js was loaded from (e.g. "/js/ace/")
+		var aceUrl = ugsEditorPlus.options.aceUrl || (getPath('ugsEditorPlus') + 'ace/');
 
 		// Ace with the ChordPro mode, snippets, chord completer and theme built in
-		// (@ukegeeks/ace-chordpro-extension, copied here by scripts/build.js)
-		LazyLoad.js(path + 'ace/ace-chordpro.min.js', function() {
+		// (@ukegeeks/ace-chordpro-extension, which the host page copies there)
+		LazyLoad.js(aceUrl + 'ace-chordpro.min.js', function() {
 				editor = ace.edit("aceEditor");
 				editor.setTheme("ace/theme/idle_fingers");
 				editor.getSession().setMode("ace/mode/chordpro");
@@ -3252,6 +2769,312 @@ ugsEditorPlus.chordBuilder = (function() {
 
 }());
 ;/**
+ * The Song-a-Matic editor's page markup: the songsheet, the Edit Song dialog,
+ * the toolbar and its menus, Help, the Reformat dialog and the Chord Builder.
+ *
+ * Works in two places:
+ *   - Node: `require('@ukegeeks/song-editor/markup').editorHtml(...)`, for
+ *     server-rendered pages (the Songbook's server and static build).
+ *   - The browser bundle: `ugsEditorPlus.markup.editorHtml(...)`, used by
+ *     `ugsEditorPlus.songAmatic.mount()`.
+ *
+ * Every value is HTML-escaped. Existing entities are left alone (like PHP's
+ * htmlspecialchars with double_encode=false), because ChordPro files can
+ * contain them ("Lyrics &amp; Music &copy; 1933").
+ */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) {
+    module.exports = api;
+  } else {
+    root.ugsEditorPlus = root.ugsEditorPlus || {};
+    root.ugsEditorPlus.markup = api;
+  }
+}(typeof self !== 'undefined' ? self : this, () => {
+  const ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+
+  // "&" that does NOT already start an entity like &amp; &copy; &#39; &#x2665;
+  const BARE_AMP_OR_SPECIAL = /&(?!#\d+;|#x[0-9a-f]+;|[a-z][a-z0-9]*;)|[<>"']/gi;
+
+  const esc = (value) => (value === null || value === undefined || value === false
+    ? ''
+    : String(value).replace(BARE_AMP_OR_SPECIAL, (c) => ESCAPES[c]));
+
+  const displayStyle = (value) => (value && value.length > 0 ? 'block' : 'none');
+
+  /**
+   * @param {object} [options]
+   * @param {boolean} [options.canSave=false] show the Save button (and the Edit Song dialog on load)
+   * @param {string} [options.imgUrl='img/editor/'] folder holding the editor images, with a trailing slash
+   * @param {string} [options.title] song title, pre-rendered into the songsheet
+   * @param {string} [options.subtitle]
+   * @param {string} [options.artist]
+   * @param {string} [options.album]
+   * @param {string} [options.body] the ChordPro text
+   * @return {string} HTML
+   */
+  const editorHtml = (options) => {
+    const o = Object.assign({ canSave: false, imgUrl: 'img/editor/' }, options);
+    return `
+<section id="scalablePrintArea" class="scalablePrintArea">
+  <header>
+    <hgroup class="ugs-songInfo">
+      <h1 id="songTitle" class="ugs-songTitle">${esc(o.title)}</h1>
+      <h2 id="songSubtitle" class="ugs-songSubtitle" style="display:${displayStyle(o.subtitle)};">${esc(o.subtitle)}</h2>
+      <h2 id="songArtist" class="ugs-songArtist" style="display:${displayStyle(o.artist)};">${esc(o.artist)}</h2>
+      <h2 id="songAlbum" class="ugs-songAlbum" style="display:${displayStyle(o.album)};">${esc(o.album)}</h2>
+    </hgroup>
+  </header>
+  <div class="metaInfo" id="songMeta"> </div>
+  <article id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
+    <aside id="ukeChordsCanvas" class="ugs-diagrams-wrap ugs-grouped"></aside>
+    <article id="ukeSongText" class="ugs-source-wrap">
+      <pre>${esc(o.body)}</pre>
+    </article>
+  </article>
+  <footer>
+    <p>Note: <span id="footTuningInfo"><strong>GCEA</strong> Standard Ukulele</span> Tuning. <small>Powered by <a href="http://ukegeeks.org/" title="Uke Geeks for free ukulele JavaScript tools">UkeGeeks' Scriptasaurus</a> &bull; ukegeeks.org</small></p>
+  </footer>
+</section>
+<!-- EDIT SONG (DIALOG) -->
+<section id="songSourceDlg" class="overlay ${o.canSave ? '' : 'isHidden'}">
+  <hgroup>
+    <h3>Edit Song</h3>
+  </hgroup>
+  <div>
+    <a title="close this" href="#close" class="closeBtn">Close</a>
+    <a title="switch to fullscreen editor" href="#resize" class="resizeBtn">Fullscreen</a>
+    <p class="btnBar">
+      <span id="messageBox" class="updateMessage">
+        <em>
+          <img src="${esc(o.imgUrl)}busy.gif" id="loadingSpinner" style="display:none;" alt="" />
+          <span id="sourceFeedback"></span>
+        </em>
+      </span>
+      <input type="button" id="updateBtn" class="baseBtn blueBtn" value="Update" title="Rebuild digarams and music" />
+      ${o.canSave ? `<input type="button" id="saveBtn" class="baseBtn orange" value="Save" title="Save" style="margin-right:1.6em;" />` : ''}
+      <a href="#chordBuilder" id="cdBldOpenBtn" data-dialog="cdBldDlg" class="alternateBtn" title="Add custom &amp; alternate chord diagrams">Chord Builder</a>
+    </p>
+    <textarea id="chordProSource" wrap="off">${esc(o.body)}</textarea>
+  </div>
+</section>
+<!-- APP TOOLBAR -->
+<section id="ugsAppToolbar" class="ugsAppMenuBar">
+  <ul>
+    <li class="navEdit" data-dialog="songSourceDlg"> <a href="#songSourceDlg" title="View &amp; edit the song source"><span></span>Edit</a> </li>
+    <li class="navLayout showOptionsBox"> <a href="#layoutOptions" title="Resize fonts &amp; chord diagrams. Customize layout &amp; colors."><span></span>Appearance</a></li>
+    <li class="navInstruments showOptionsBox"> <a href="#tuningOptions" title="Transpose song's key &amp; choose your prefered ukulele tuning"><span></span>Transpose</a></li>
+    <li class="navOptions showOptionsBox"> <a href="#optionsDlg" title="Advanced options &amp; settings"><span></span>Options</a> </li>
+    <li class="showDlgBtn showOptionsBox"> <a href="#helpDlg" title="Help &amp; Quick tips on formatting your song">?</a> </li>
+  </ul>
+  <h2 class="ugsLogo">Uke Geeks Song-a-Matic</h2>
+</section>
+<!-- LAYOUT OPTIONS -->
+<aside class="arrowBox layoutOptions" id="layoutOptions">
+  <fieldset class="arrowBoxContent enablePseudoSelects">
+    <dl>
+      <dt><label for="fontSizePicker"><span>Font size 12pt</span> <em>&#9658;</em></label></dt>
+      <dd id="fontSizePicker" data-action="zoomFonts">
+        <ul class="pseudoSelect">
+          <li><a href="#6">6 pt </a></li>
+          <li><a href="#6.5">6.5 pt </a></li>
+          <li><a href="#7">7 pt </a></li>
+          <li><a href="#7.5">7.5 pt </a></li>
+          <li><a href="#8">8 pt </a></li>
+          <li><a href="#8.5">8.5 pt </a></li>
+          <li><a href="#9">9 pt </a></li>
+          <li><a href="#9.5">9.5 pt </a></li>
+          <li><a href="#10">10 pt </a></li>
+          <li><a href="#11">11 pt </a></li>
+          <li class="checked"><a href="#12">12 pt </a></li>
+          <li><a href="#13">13 pt </a></li>
+          <li><a href="#14">14 pt </a></li>
+        </ul>
+      </dd>
+      <dt><label for="diagramSizePicker"><span>Stupid Large diagrams</span> <em>&#9658;</em></label></dt>
+      <dd id="diagramSizePicker" data-action="zoomDiagrams">
+        <ul class="pseudoSelect">
+          <li><a href="#40">Tiny </a></li>
+          <li><a href="#65">Small </a></li>
+          <li><a href="#80">Medium </a></li>
+          <li><a href="#90">Large </a></li>
+          <li class="checked"><a href="#100">Stupid Large </a></li>
+        </ul>
+      </dd>
+      <dt><label for="diagramPositionPicker"><span>Reference diagrams on left</span> <em>&#9658;</em></label></dt>
+      <dd id="diagramPositionPicker" data-action="layout">
+        <ul class="pseudoSelect">
+          <li class="checked"><a href="#left">On left side</a></li>
+          <li><a href="#top">At the top</a></li>
+          <li><a href="#none">Don't show</a></li>
+        </ul>
+      </dd>
+      <dt><label for="lyricChordsPicker"><span>Chord names above lyrics</span> <em>&#9658;</em></label></dt>
+      <dd id="lyricChordsPicker" data-action="placement">
+        <ul class="pseudoSelect">
+          <li><a href="#inline">Chord names inline </a></li>
+          <li class="checked"><a href="#above">Chord names above </a></li>
+          <li><a href="#miniDiagrams">Names &amp; diagrams above </a></li>
+        </ul>
+      </dd>
+      <dt><label for="colorPicker"><span>Normal colors (white paper) </span><em>&#9658;</em></label></dt>
+      <dd id="colorPicker" data-action="colors">
+        <ul class="pseudoSelect"></ul>
+      </dd>
+    </dl>
+  </fieldset>
+</aside>
+<!-- TUNING OPTIONS -->
+<aside class="arrowBox tuningOptions" id="tuningOptions">
+  <fieldset class="arrowBoxContent enablePseudoSelects">
+    <dl>
+      <dt><label for="transposePicker"><span>Original key</span> <em>&#9658;</em></label></dt>
+      <dd id="transposePicker" data-action="transpose">
+        <ul class="pseudoSelect" id="transposeOptions">
+          <li><a href="#down_6">-6 <em>F#</em></a></li>
+          <li><a href="#down_5">-5 <em>G</em></a></li>
+          <li><a href="#down_4">-4 <em>G#</em></a></li>
+          <li><a href="#down_3">-3 <em>A</em></a></li>
+          <li><a href="#down_2">-2 <em>A#</em></a></li>
+          <li><a href="#down_1">-1 <em>B</em></a></li>
+          <li class="checked"><a href="#up_0">Original <em>C</em></a></li>
+          <li><a href="#up_1">+1 <em>C#</em></a></li>
+          <li><a href="#up_2">+2 <em>D</em></a></li>
+          <li><a href="#up_3">+3 <em>D#</em></a></li>
+          <li><a href="#up_4">+4 <em>E</em></a></li>
+          <li><a href="#up_5">+5 <em>F</em></a></li>
+          <li><a href="#up_6">+6 <em>F#</em></a></li>
+        </ul>
+      </dd>
+      <dt><label for="tuningPicker"><span>Standard ukulele tuning</span> <em>&#9658;</em></label></dt>
+      <dd id="tuningPicker" data-action="tuning">
+        <ul class="pseudoSelect">
+          <li class="checked"><a href="#soprano">GCEA Standard</a></li>
+          <li><a href="#baritone">DGBE Baritone</a></li>
+          <li><a href="#alternate">ADF#B Alternate</a></li>
+        </ul>
+      </dd>
+    </dl>
+  </fieldset>
+</aside>
+<!-- OTHER OPTIONS -->
+<aside class="arrowBox otherOptions" id="optionsDlg">
+  <fieldset class="arrowBoxContent">
+    <dl class="enablePseudoSelects">
+      <dt><label for="pagePicker"><span>Paper</span> <em>&#9658;</em></label></dt>
+      <dd id="pagePicker" data-action="paper">
+        <ul class="pseudoSelect" id="pageWidth">
+          <li class="checked"><a href="#letter">US Letter (8.5 x 11 in)</a></li>
+          <li><a href="#a4">A4 (21 x 29.7 cm)</a></li>
+          <li><a href="#screen">full screen</a></li>
+        </ul>
+      </dd>
+    </dl>
+  </fieldset>
+  <fieldset class="arrowBoxContent">
+    <p class="checkboxBlock">
+      <input type="checkbox" value="true" id="chkEnclosures" checked="checked" />
+      <label for="chkEnclosures">Hide chord enclosures
+        <span class="checkBoxFinePrint">don't put [brackets] around chord names</span>
+      </label>
+    </p>
+    <p class="checkboxBlock">
+      <input type="checkbox" value="true" id="chkSortAlpha" checked="checked" />
+      <label for="chkSortAlpha">Sort reference diagrams alphabetically
+        <span class="checkBoxFinePrint">otherwise &ldquo;song order&rdquo; is used</span>
+      </label>
+    </p>
+    <p class="checkboxBlock">
+      <input type="checkbox" value="true" id="chkIgnoreCommon" checked="checked" />
+      <label for="chkIgnoreCommon">Ignore common chords
+        <span class="checkBoxFinePrint">don't create master chord diagrams for these chords:</span>
+      </label>
+      <input type="text" id="commonChordList" value="" />
+    </p>
+  </fieldset>
+</aside>
+<!-- HELP (DIALOG) -->
+<aside class="arrowBox helpOptions" id="helpDlg">
+  <fieldset class="arrowBoxContent linksList">
+    <ul>
+      <li><a href="http://blog.ukegeeks.org/users-guide/" target="_blank" rel="noopener" title="View the complete documentation including ChordPro tips">User Guide</a></li>
+      <li><a href="http://ukegeeks.org/tools/chord-finder.htm" target="_blank" rel="noopener" title="Access the UkeGeeks library of common chords">Chord Finder</a></li>
+      <li><a href="http://ukegeeks.org/tools/reverse-chord-finder.htm" target="_blank" rel="noopener" title="Find chord names by drawing the diagram">Reverse Chord Lookup</a></li>
+    </ul>
+  </fieldset>
+</aside>
+
+<!-- REFORMAT (DIALOG) -->
+<section id="reformatDlg" class="reformatDlg overlay isHidden">
+  <hgroup>
+    <h3>Use Auto-Formated Version?</h3>
+  </hgroup>
+  <div>
+    <p class="instructions">Whoa! I didn't find any chords in your song -- it's probably not in ChordPro format. Here's the converted version&hellip;</p>
+    <p class="btnBar">
+      <input type="button" id="reformatYesBtn" class="baseBtn blueBtn" value="OK, Use This!" />
+      <a id="reformatNoBtn" href="#noThanks" class="noThanks">No, Thanks!</a>
+    </p>
+    <textarea id="reformatSource" wrap="off"></textarea>
+    <p class="instructions small">Want to make more adjustments? Click &ldquo;No Thanks&rdquo; and try the <a href="http://ukegeeks.org/tools" target="_blank" rel="noopener" title="open the reformat tool in a new window">Reformater Tool</a> instead.</p>
+    <p class="instructions small"><input type="checkbox" value="true" id="reformatDisable" /> <label for="reformatDisable">Don't perform this check again.</label></p>
+  </div>
+</section>
+
+<!-- CHORD BUILDER (DIALOG) -->
+<section id="cdBldDlg" class="overlay chordBuilderDlg isHidden chordBuilderNarrow">
+  <hgroup>
+    <h3>Chord Builder</h3>
+  </hgroup>
+  <div>
+    <a title="close this" href="#close" class="closeBtn">Close</a>
+    <div id="cdBldChooserPanel">
+      <ul id="cdBldPick" class="ugsChordChooser"></ul>
+    </div>
+    <div id="cdBldBuilderPanel" style="display:none">
+      <p class="">
+        <label for="cdBldChordName">Chord Name: <input class="chordName" type="text" id="cdBldChordName" value="CHORDNAME" /></label>
+      </p>
+      <div class="editorSurface" id="cdBldEditorSurface">
+        <div class="toolboxEdgeShadow leftEdge"></div>
+        <div id="cdBldToolbox" class="chordToolbox leftEdge">
+          <div class="chordToolboxInner">
+            <a href="#dots" id="cdBldDotsBtn" class="toolChip selected">Add Dots <span class="bigDot"></span></a>
+            <a href="#fingers" id="cdBldFingersBtn" class="toolChip">Set Fingers <span id="cdBldBtnDiagram" class="fingerToolImage finger1"><span class="fingerDot"></span></span><span id="cdBldBtnFingerName"></span></a>
+          </div>
+        </div>
+        <div class="toolboxEdgeShadow rightEdge"></div>
+        <div class="chordToolbox rightEdge">
+          <div class="chordToolboxInner">
+            <label for="cdBldStartingFret" class="toolChip">Starting Fret
+              <select id="cdBldStartingFret"></select>
+            </label>
+            <a href="#slide-up" id="toolboxSlideUpBtn" class="toolChip arrowUp" data-direction="up" title="move all dots -1 fret">Slide Up</a>
+            <a href="#slide-down" id="toolboxSlideDownBtn" class="toolChip arrowDown" data-direction="down" title="move all dots +1 fret">Slide Down</a>
+          </div>
+        </div>
+        <canvas id="cdBldCursorCanvas" width="462" height="300"></canvas>
+        <canvas id="cdBldDiagramCanvas" width="462" height="300"></canvas>
+      </div>
+
+      <p class="">
+        <label for="cdBldShowOutputBtn"><input id="cdBldShowOutputBtn" type="checkbox" value="0" /> Show ChordPro output</label>
+      </p>
+      <p class="btnBar">
+        <input type="button" value="Add" class="baseBtn blueBtn" id="cdBldSaveBtn">
+        <a href="#closeBuilder" id="cdBldCancelBtn" class="noThanks">Cancel</a>
+      </p>
+      <div id="cdBldOutputBox" class="outputBox collapseOutput" style="clear:right;">
+        <pre id="cdBldOutput" class="chordPro-statement" title="Your ChordPro define tag"></pre>
+      </div>
+    </div>
+  </div>
+</section>`.slice(1);
+  };
+
+  return { editorHtml, escapeHtml: esc };
+}));
+;/**
  * Exposes the only method required to attach UkeGeeks Scriptasaurus Song-a-matic editor functionality.
  *
  * @class songAmatic
@@ -3306,6 +3129,73 @@ ugsEditorPlus.songAmatic = (function() {
 	return _public;
 
 }());
+;/**
+ * Mounts the Song-a-Matic editor into an empty element: writes the editor's
+ * markup (ugsEditorPlus.markup), then runs songAmatic.init().
+ *
+ *   const editor = ugsEditorPlus.songAmatic.mount(document.getElementById('editor'), {
+ *     song: chordProText,
+ *     save: async (text) => 'Saved.', // optional; without it there's no Save button
+ *     aceUrl: '/js/ace/',              // optional
+ *     imgUrl: '/img/editor/',          // optional
+ *     fontSize: 14,                    // ...and any other ugsEditorPlus.options
+ *   });
+ *   editor.getSong();
+ *
+ * The editor finds its elements by id, so a page holds one editor.
+ *
+ * @class songAmatic
+ * @namespace ugsEditorPlus
+ */
+(() => {
+  /**
+   * The folder this bundle was loaded from, like ".../dist/" or "/js/" (with a trailing slash),
+   * or "" when it can't be found.
+   */
+  const scriptFolder = () => {
+    let folder = '';
+    Array.prototype.forEach.call(document.scripts, (script) => {
+      const pos = script.src.toLowerCase().indexOf('ugseditorplus');
+      if (pos > 0) {
+        folder = script.src.substr(0, pos);
+      }
+    });
+    return folder;
+  };
+
+  /**
+   * @method mount
+   * @param container {HTMLElement} an empty element; the editor's markup is written into it
+   * @param [options] {Object}
+   * @param [options.song=''] {string} the ChordPro text to open
+   * @param [options.save] {Function} takes the ChordPro text and returns (a promise of) a message to show;
+   *   a rejection shows the "problem saving" alert. Without it there's no Save button.
+   * @param [options.imgUrl] {string} folder holding the editor images; default "../img/editor/" from the bundle's folder
+   * @param [options.aceUrl] {string} folder holding ace-chordpro.min.js; default "ace/" in the bundle's folder
+   * @return {Object} `{ getSong() }`
+   */
+  ugsEditorPlus.songAmatic.mount = (container, options) => {
+    const { song = '', save, imgUrl, ...editorOptions } = options || {};
+    const canSave = typeof save === 'function';
+
+    container.innerHTML = ugsEditorPlus.markup.editorHtml({
+      canSave,
+      imgUrl: imgUrl || (scriptFolder() + '../img/editor/'),
+      body: song,
+    });
+    document.body.classList.add('editableSongPage', 'pageWidth_screen');
+
+    ugsEditorPlus.songAmatic.init(editorOptions);
+    if (canSave) {
+      ugsEditorPlus.updateSong.setSaveHandler(save);
+    }
+
+    return {
+      /** @return {string} the ChordPro text in the Edit Song box */
+      getSong: () => document.getElementById('chordProSource').value,
+    };
+  };
+})();
 ;/**
  * Library for an HTML5 WYSIWYG editor to build ChordPro chord define tags.
  * @module  ugsChordBuilder

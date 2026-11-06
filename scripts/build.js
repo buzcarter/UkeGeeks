@@ -2,22 +2,28 @@
 /**
  * Builds the UkeGeeks client libraries:
  *
- *   src/js/editor/*.js                 -> js/ugsEditorPlus.merged.js + .min.js
- *   src/less/ugsEditorPlus_merged.less -> css/ugsEditorPlus.merged.css + .min.css
+ *   src/js/songList/*.js -> js/ugsSongList.merged.js + .min.js (song list page: quick search, New Song)
  *
- * and copies in two packages (devDependencies), so the Songbook needs nothing
+ * and copies in three packages (devDependencies), so the Songbook needs nothing
  * installed to run:
  *
+ *   @ukegeeks/song-editor, the Song-a-Matic editor:
+ *     dist/js/ugsEditorPlus.merged.js, .min.js               -> js/
+ *     dist/css/ugsEditorPlus.merged.css, .min.css, .print.css -> css/
+ *     dist/img/editor/*                                      -> img/editor/
  *   @ukegeeks/song-formatter, the song renderer:
  *     dist/song-formatter.bundle.js (+ .map, .LICENSE.txt) -> js/
  *     dist/css/ukeGeeks.music.css, ukeGeeks.musicPrint.css  -> css/
  *   @ukegeeks/ace-chordpro-extension, the fullscreen editor (Ace + ChordPro mode):
  *     dist/ace-chordpro.min.js                              -> js/ace/
  *
+ *     dist/markup.js                                         -> server/vendor/song-editor/
+ *       (the editor's page markup, used by server/views.js)
+ *
  * Usage: node scripts/build.js [js|css]   (no argument builds both)
  *
- * File ORDER matters: each module assumes the ones before it already exist
- * (namespace first). Keep the list in sync when adding source files.
+ * File ORDER matters: each module assumes the ones before it already exist.
+ * ugsSongList needs ugsEditorPlus (for ugsEditorPlus.dom) loaded first.
  */
 'use strict';
 
@@ -28,34 +34,11 @@ const ROOT = path.resolve(__dirname, '..');
 
 const BUNDLES = [
   {
-    name: 'ugsEditorPlus',
-    dir: 'src/js/editor',
+    name: 'ugsSongList',
+    dir: 'src/js/songList',
     files: [
-      'ugsEditorPlus.namespace.js',
-      'ugsEditorPlus.dom.js',
-
-      'ugsEditorPlus.options.js',
-      'ugsEditorPlus.actions.js',
-      'ugsEditorPlus.songUi.js',
-      'ugsEditorPlus.styles.js',
-      'ugsEditorPlus.themes.js',
-      'ugsEditorPlus.optionsDlg.js',
-      'ugsEditorPlus.reformat.js',
-      'ugsEditorPlus.autoReformat.js',
-      'ugsEditorPlus.topMenus.js',
-      'ugsEditorPlus.submenuUi.js',
-      'ugsEditorPlus.newSong.js',
-      'ugsEditorPlus.updateSong.js',
       'ugsEditorPlus.typeahead.js',
-      'ugsEditorPlus.aceHelp.js',
-      'ugsEditorPlus.resize.js',
-      'ugsEditorPlus.chordBuilder.js',
-      'ugsEditorPlus.songAmatic.js',
-      'ugsChordBuilder.js',
-      'ugsChordBuilder.chooserList.js',
-      'ugsChordBuilder.editorUi.js',
-      // used by ugsEditorPlus.resize to load the ACE editor on demand ("Fullscreen" button)
-      '../libs/lazyload.js',
+      'ugsEditorPlus.newSong.js',
     ],
   },
 ];
@@ -63,6 +46,16 @@ const BUNDLES = [
 // Files copied from node_modules (see the header), by build target
 const VENDORED = {
   js: [
+    {
+      pkg: '@ukegeeks/song-editor',
+      to: 'js',
+      files: ['dist/js/ugsEditorPlus.merged.js', 'dist/js/ugsEditorPlus.min.js'],
+    },
+    {
+      pkg: '@ukegeeks/song-editor',
+      to: 'server/vendor/song-editor',
+      files: ['dist/markup.js'],
+    },
     {
       pkg: '@ukegeeks/song-formatter',
       to: 'js',
@@ -76,15 +69,22 @@ const VENDORED = {
   ],
   css: [
     {
+      pkg: '@ukegeeks/song-editor',
+      to: 'css',
+      files: ['dist/css/ugsEditorPlus.merged.css', 'dist/css/ugsEditorPlus.min.css', 'dist/css/ugsEditorPlus.print.css'],
+    },
+    {
+      pkg: '@ukegeeks/song-editor',
+      to: 'img/editor',
+      dir: 'dist/img/editor',
+    },
+    {
       pkg: '@ukegeeks/song-formatter',
       to: 'css',
       files: ['dist/css/ukeGeeks.music.css', 'dist/css/ukeGeeks.musicPrint.css'],
     },
   ],
 };
-
-const LESS_ENTRY = 'src/less/ugsEditorPlus_merged.less';
-const CSS_OUT = 'css/ugsEditorPlus';
 
 const rel = (p) => path.relative(ROOT, p);
 
@@ -116,30 +116,17 @@ async function buildJsBundle({ name, dir, files }) {
 }
 
 async function copyVendored(target) {
-  for (const { pkg, to, files } of VENDORED[target]) {
+  for (const { pkg, to, files, dir } of VENDORED[target]) {
     const pkgDir = path.dirname(require.resolve(`${pkg}/package.json`));
     await fs.mkdir(path.join(ROOT, to), { recursive: true });
-    for (const file of files) {
+    // `dir`: every file in that folder of the package
+    const list = files || (await fs.readdir(path.join(pkgDir, dir))).filter((f) => !f.startsWith('.')).sort().map((f) => `${dir}/${f}`);
+    for (const file of list) {
       const out = path.join(ROOT, to, path.basename(file));
       await fs.copyFile(path.join(pkgDir, file), out);
       console.log(`  ${rel(out)} (from ${pkg})`);
     }
   }
-}
-
-async function buildCss() {
-  const less = require('less');
-  const entry = path.join(ROOT, LESS_ENTRY);
-  const input = await fs.readFile(entry, 'utf8');
-  const opts = { filename: entry, paths: [path.dirname(entry)] };
-
-  const full = await less.render(input, opts);
-  const min = await less.render(input, { ...opts, compress: true });
-
-  await fs.writeFile(path.join(ROOT, `${CSS_OUT}.merged.css`), full.css);
-  await fs.writeFile(path.join(ROOT, `${CSS_OUT}.min.css`), min.css + '\n');
-  console.log(`  ${CSS_OUT}.merged.css (${full.css.length} bytes)`);
-  console.log(`  ${CSS_OUT}.min.css (${min.css.length} bytes)`);
 }
 
 async function main() {
@@ -156,8 +143,7 @@ async function main() {
     await copyVendored('js');
   }
   if (!target || target === 'css') {
-    console.log('Building CSS...');
-    await buildCss();
+    console.log('Copying CSS and images...');
     await copyVendored('css');
   }
 }

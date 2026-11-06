@@ -10,6 +10,8 @@ Changes on `master` since 1.5.1.
 
 ### Changed
 
+- **The Song-a-matic editor is its own package now**, [`@ukegeeks/song-editor`](https://github.com/buzcarter/song-editor) 1.0.0-beta. The build copies its bundle, CSS, images and page markup in, like Song Formatter's; the editor's sources, LESS and `lazyload.js` left `src/`, and `less` is no longer a devDependency. Pages are unchanged: the editable song page's HTML is the same byte for byte.
+- The song list page loads its quick search and New Song dialog from a new `js/ugsSongList.min.js` (built from `src/js/songList/`), after `js/ugsEditorPlus.min.js`.
 - **Songs are rendered by [Song Formatter](https://github.com/buzcarter/song-formatter)** 1.0.0-beta, the TypeScript successor to the Scriptasaurus library, with the same `ukeGeeks.*` API. Pages load `js/song-formatter.bundle.js` instead of `js/ukeGeeks.scriptasaurus.min.js`.
 - Chord diagrams and tablature are drawn as SVG instead of `<canvas>`.
 - Output is unchanged: all 16 sample songs render with the same text, chords, diagrams and tabs, in standard, baritone and ADF#B tunings, and with mini-diagrams.
