@@ -8,7 +8,7 @@
  * installed to run:
  *
  *   @ukegeeks/song-editor, the Song-a-Matic editor:
- *     dist/ugsEditorPlus.merged.js, .min.js                  -> js/
+ *     dist/js/ugsEditorPlus.merged.js, .min.js               -> js/
  *     dist/css/ugsEditorPlus.merged.css, .min.css, .print.css -> css/
  *     dist/img/editor/*                                      -> img/editor/
  *   @ukegeeks/song-formatter, the song renderer:
@@ -49,7 +49,7 @@ const VENDORED = {
     {
       pkg: '@ukegeeks/song-editor',
       to: 'js',
-      files: ['dist/ugsEditorPlus.merged.js', 'dist/ugsEditorPlus.min.js'],
+      files: ['dist/js/ugsEditorPlus.merged.js', 'dist/js/ugsEditorPlus.min.js'],
     },
     {
       pkg: '@ukegeeks/song-editor',
