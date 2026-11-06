@@ -74,6 +74,7 @@ function MakeRowHtml($song){
 	</section>
 
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsEditorPlus.min.js"></script>
+	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsSongList.min.js"></script>
 	<?php if ($model->IsNewAllowed) {
 		?>
 		<section class="overlay" style="top:100px; right:40%; display:none;" id="newSongForm">

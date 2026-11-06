@@ -49,8 +49,8 @@
   },
   "devDependencies": {
     "@ukegeeks/ace-chordpro-extension": "^1.0.0",
+    "@ukegeeks/song-editor": "^1.0.0-beta.1",
     "@ukegeeks/song-formatter": "^1.0.0-beta.1",
-    "less": "^4.9.1",
     "terser": "^5.51.2"
   }
 }

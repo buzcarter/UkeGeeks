@@ -43,7 +43,7 @@ test('build-static writes a self-contained, relative-linked songbook', () => {
     }
     assert.ok(page.includes('href="../../css/ukeGeeks.music.css"'));
 
-    for (const asset of ['js/song-formatter.bundle.js', 'js/ugsEditorPlus.min.js', 'css/ugsEditorPlus.min.css', 'favicon.ico']) {
+    for (const asset of ['js/song-formatter.bundle.js', 'js/ugsEditorPlus.min.js', 'js/ugsSongList.min.js', 'css/ugsEditorPlus.min.css', 'favicon.ico']) {
       assert.ok(fs.existsSync(path.join(out, asset)), `${asset} copied`);
     }
     assert.ok(fs.existsSync(path.join(out, 'songbook/南山南-馬頔/index.html')));
