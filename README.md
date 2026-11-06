@@ -14,6 +14,15 @@ Ongoing discussions and "How To" videos posted at [blog.ukegeeks.org](http://blo
 
 Lastly, the blog includes a [technical discussion and tips section](http://blog.ukegeeks.org/technical-reference/)
 
+## Part of the UkeGeeks family
+
+- **[ukegeeks.org](https://ukegeeks.org)**: edit a song online, the User's Guide, and the blog.
+- **[UkeGeeks Songbook](https://github.com/buzcarter/UkeGeeks)** (this repo): your own songbook app, run with Node.js or PHP.
+- **[Song Formatter](https://github.com/buzcarter/song-formatter)**: chord diagrams and songsheets on your own website.
+- **[ACE ChordPro Extension](https://github.com/buzcarter/ace-chordpro-extension)**: ChordPro editing for the Ace code editor.
+
+Not sure which one you need? See [which UkeGeeks tool is right for you](https://ukegeeks.org/projects/).
+
 ## Running the songbook with Node.js
 
 No PHP needed. Node 18+ and no runtime dependencies.
