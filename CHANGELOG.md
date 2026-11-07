@@ -6,10 +6,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Ver
 
 ## [Unreleased]
 
-Changes on `master` since 1.5.1.
+Changes on `main` since 1.5.1.
 
 ### Changed
 
+- The default branch is now `main` (it was `master`). CI builds and deploys the demo on merges to `main`.
 - **The Song-a-matic editor is its own package now**, [`@ukegeeks/song-editor`](https://github.com/buzcarter/song-editor) 1.0.0-beta. The build copies its bundle, CSS, images and page markup in, like Song Formatter's; the editor's sources, LESS and `lazyload.js` left `src/`, and `less` is no longer a devDependency. Pages are unchanged: the editable song page's HTML is the same byte for byte.
 - The song list page loads its quick search and New Song dialog from a new `js/ugsSongList.min.js` (built from `src/js/songList/`), after `js/ugsEditorPlus.min.js`.
 - **Songs are rendered by [Song Formatter](https://github.com/buzcarter/song-formatter)** 1.0.0-beta, the TypeScript successor to the Scriptasaurus library, with the same `ukeGeeks.*` API. Pages load `js/song-formatter.bundle.js` instead of `js/ukeGeeks.scriptasaurus.min.js`.
