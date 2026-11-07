@@ -16,7 +16,7 @@ npm run build
 
 `npm run build:js` or `npm run build:css` builds just one (each also copies its files from the packages below). The concatenation order lives in `scripts/build.js`; add new source files there.
 
-You don't have to run the build before pushing: on every merge to `master`, GitHub Actions rebuilds the bundles and commits any that changed (see below).
+You don't have to run the build before pushing: on every merge to `main`, GitHub Actions rebuilds the bundles and commits any that changed (see below).
 
 ### Files copied from other packages
 
@@ -37,7 +37,7 @@ Use the `.min` files in production. To see how things work, read the merged file
 `.github/workflows/build-and-deploy.yml` runs on GitHub:
 
 - **Pull requests:** build the bundles and run the tests.
-- **Merge to `master`:** build, test, commit any rebuilt `js/`, `css/`, `img/editor/` and `server/vendor/` files back to `master` (as "Rebuild bundles from src [skip ci]"), then publish the static demo to GitHub Pages: the library, the `songs/*.htm` demos and the landing page in `site/index.html`.
+- **Merge to `main`:** build, test, commit any rebuilt `js/`, `css/`, `img/editor/` and `server/vendor/` files back to `main` (as "Rebuild bundles from src [skip ci]"), then publish the static demo to GitHub Pages: the library, the `songs/*.htm` demos and the landing page in `site/index.html`.
 
 The demo also includes a static **Songbook** (`songbook/`): the song list with quick search, and every song in the Song-a-matic editor. Everything that runs in the browser works (appearance, transpose, tunings, Chord Builder, Fullscreen); saving, new songs and login need the server, so they're left out. Build it yourself with:
 

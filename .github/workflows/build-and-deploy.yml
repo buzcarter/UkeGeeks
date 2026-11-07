@@ -2,8 +2,8 @@
 # demo to GitHub Pages.
 #
 # - Pull requests: build + test only (shows whether the change is good).
-# - Push to master (i.e. a merge): build + test, commit any bundles that changed
-#   back to master, then deploy the demo site from that same build.
+# - Push to main (i.e. a merge): build + test, commit any bundles that changed
+#   back to main, then deploy the demo site from that same build.
 #
 # Rebuild-and-deploy happen in ONE workflow on purpose: commits pushed with the
 # built-in GITHUB_TOKEN don't trigger other workflows, so a separate "deploy on
@@ -13,7 +13,7 @@ name: Build & deploy
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -28,7 +28,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # commit rebuilt bundles back to master
+      contents: write # commit rebuilt bundles back to main
     steps:
       - uses: actions/checkout@v7
 
@@ -42,7 +42,7 @@ jobs:
       - run: npm test
 
       - name: Commit rebuilt bundles
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           if [ -z "$(git status --porcelain -- js css img/editor server/vendor)" ]; then
             echo "Bundles already up to date."
@@ -52,7 +52,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add js css img/editor server/vendor
           git commit -m "Rebuild bundles from src [skip ci]"
-          git push origin HEAD:master
+          git push origin HEAD:main
 
       - name: Assemble static demo site
         if: github.event_name != 'pull_request'
