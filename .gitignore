@@ -1,9 +1,18 @@
+# Ignore system files and build artifacts
+.DS_Store
+thumbs.db
+
+# ignore installation-specific files
 ugsphp/Config.php
 ugsphp/cache/SongList.cache
 ugsphp/cache/SongList.info
-.htaccess
-node_modules/
 ugs.config.json
+
+# ignore development-specific files
+node_modules/
 .claude/launch.json
+.wrangler/
 dist/
-.DS_Store
+
+# ignore server-specific files
+.htaccess
