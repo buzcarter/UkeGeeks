@@ -15,9 +15,9 @@
 		min-height:auto;
 	}
 	.ugsAppMenuBar,
-	.arrowBox,
-	.isHidden,
-	.overlay {
+	.ugsEditor-arrowBox,
+	.ugsEditor-isHidden,
+	.ugsEditor-overlay {
 		display: none !important;
 	}
 }
