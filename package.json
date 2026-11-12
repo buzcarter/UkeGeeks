@@ -2,7 +2,7 @@
   "name": "ukegeeks-scriptasaurus",
   "version": "1.6.0",
   "description": "UkeGeeks Scriptasaurus: ChordPro songbook with ukulele chord diagrams, served by a small Node.js server",
-  "private": true,
+  "private": false,
   "license": "GPL-3.0",
   "author": {
     "name": "Buz Carter",
