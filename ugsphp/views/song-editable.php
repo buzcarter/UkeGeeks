@@ -4,7 +4,7 @@ function GetDisplayStyle($value){
 	return (strlen($value) > 0) ? 'block' : 'none';
 }
 
-$editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
+$editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'ugsEditor-isHidden';
 
 ?>
 <!DOCTYPE HTML>
@@ -27,13 +27,11 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 </head>
 <body class="editableSongPage pageWidth_screen">
 <section id="scalablePrintArea" class="scalablePrintArea">
-	<header>
-		<hgroup class="ugs-songInfo">
-			<h1 id="songTitle" class="ugs-songTitle"><?php echo(h($model->SongTitle)); ?></h1>
-			<h2 id="songSubtitle" class="ugs-songSubtitle" style="display:<?php echo(GetDisplayStyle($model->Subtitle)); ?>;"><?php echo(h($model->Subtitle)); ?></h2>
-			<h2 id="songArtist" class="ugs-songArtist" style="display:<?php echo(GetDisplayStyle($model->Artist)); ?>;"><?php echo(h($model->Artist)); ?></h2>
-			<h2 id="songAlbum" class="ugs-songAlbum" style="display:<?php echo(GetDisplayStyle($model->Album)); ?>;"><?php echo(h($model->Album)); ?></h2>
-		</hgroup>
+	<header class="ugs-songInfo">
+		<h1 id="songTitle" class="ugs-songTitle"><?php echo(h($model->SongTitle)); ?></h1>
+		<h2 id="songSubtitle" class="ugs-songSubtitle" style="display:<?php echo(GetDisplayStyle($model->Subtitle)); ?>;"><?php echo(h($model->Subtitle)); ?></h2>
+		<h2 id="songArtist" class="ugs-songArtist" style="display:<?php echo(GetDisplayStyle($model->Artist)); ?>;"><?php echo(h($model->Artist)); ?></h2>
+		<h2 id="songAlbum" class="ugs-songAlbum" style="display:<?php echo(GetDisplayStyle($model->Album)); ?>;"><?php echo(h($model->Album)); ?></h2>
 	</header>
 	<div class="metaInfo" id="songMeta"> </div>
 	<article id="ukeSongContainer" class="ugsLayoutTwoColumn ugs-song-wrap">
@@ -47,47 +45,45 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 	</footer>
 </section>
 <!-- EDIT SONG (DIALOG) -->
-<section id="songSourceDlg" class="overlay <?php echo($editDlgCssClassName); ?>">
-	<hgroup>
+<section id="songSourceDlg" class="ugsEditor-overlay <?php echo($editDlgCssClassName); ?>">
+	<header class="ugsEditor-overlayHeader">
 		<h3>Edit Song</h3>
-	</hgroup>
+	</header>
 	<div>
-		<a title="close this" href="#close" class="closeBtn">Close</a>
-		<a title="switch to fullscreen editor" href="#resize" class="resizeBtn">Fullscreen</a>
-		<p class="btnBar">
-			<span id="messageBox" class="updateMessage">
+		<button type="button" title="close this" class="ugsEditor-closeBtn">Close</button>
+		<button type="button" title="switch to fullscreen editor" class="ugsEditor-resizeBtn">Fullscreen</button>
+		<p class="ugsEditor-btnBar">
+			<span id="messageBox" class="ugsEditor-updateMessage">
 				<em>
-					<img src="<?php echo($model->StaticsPrefix); ?>img/editor/busy.gif" id="loadingSpinner" style="display:none;" />
+					<img src="<?php echo($model->StaticsPrefix); ?>img/editor/busy.gif" id="loadingSpinner" style="display:none;" alt="" />
 					<span id="sourceFeedback"></span>
 				</em>
 			</span>
-			<input type="button" id="updateBtn" class="baseBtn blueBtn" value="Update" title="Rebuild digarams and music" />
-			<?php if ($model->IsUpdateAllowed) { ?>
-				<input type="button" id="saveBtn" class="baseBtn orange" value="Save" title="Save" style="margin-right:1.6em;" />
-			<?php } ?>
-			<a href="#chordBuilder" id="cdBldOpenBtn" data-dialog="cdBldDlg" class="alternateBtn" title="Add custom &amp; alternate chord diagrams">Chord Builder</a>
+			<input type="button" id="updateBtn" class="ugsEditor-baseBtn ugsEditor-blueBtn" value="Update" title="Rebuild digarams and music" />
+			<?php if ($model->IsUpdateAllowed) { ?><input type="button" id="saveBtn" class="ugsEditor-baseBtn ugsEditor-orange" value="Save" title="Save" style="margin-right:1.6em;" /><?php } ?>
+			<button type="button" id="cdBldOpenBtn" data-dialog="cdBldDlg" class="ugsEditor-alternateBtn" title="Add custom &amp; alternate chord diagrams">Chord Builder</button>
 		</p>
-		<textarea id="chordProSource" wrap="off"><?php echo(h($model->Body)); ?></textarea>
+		<textarea id="chordProSource" wrap="off"><?php echo(hText($model->Body)); ?></textarea>
 	</div>
 </section>
 <!-- APP TOOLBAR -->
 <section id="ugsAppToolbar" class="ugsAppMenuBar">
 	<ul>
-		<li class="navEdit" data-dialog="songSourceDlg"> <a href="#songSourceDlg" title="View &amp; edit the song source"><span></span>Edit</a> </li>
-		<li class="navLayout showOptionsBox"> <a href="#layoutOptions" title="Resize fonts &amp; chord diagrams. Customize layout &amp; colors."><span></span>Appearance</a></li>
-		<li class="navInstruments showOptionsBox"> <a href="#tuningOptions" title="Transpose song's key &amp; choose your prefered ukulele tuning"><span></span>Transpose</a></li>
-		<li class="navOptions showOptionsBox"> <a href="#optionsDlg" title="Advanced options &amp; settings"><span></span>Options</a> </li>
-		<li class="showDlgBtn showOptionsBox"> <a href="#helpDlg" title="Help &amp; Quick tips on formatting your song">?</a> </li>
+		<li class="ugsEditor-navEdit" data-dialog="songSourceDlg"> <button type="button" title="View &amp; edit the song source"><span></span>Edit</button> </li>
+		<li class="ugsEditor-navLayout ugsEditor-showOptionsBox"> <button type="button" data-target="layoutOptions" title="Resize fonts &amp; chord diagrams. Customize layout &amp; colors."><span></span>Appearance</button> </li>
+		<li class="ugsEditor-navInstruments ugsEditor-showOptionsBox"> <button type="button" data-target="tuningOptions" title="Transpose song's key &amp; choose your prefered ukulele tuning"><span></span>Transpose</button> </li>
+		<li class="ugsEditor-navOptions ugsEditor-showOptionsBox"> <button type="button" data-target="optionsDlg" title="Advanced options &amp; settings"><span></span>Options</button> </li>
+		<li class="ugsEditor-showDlgBtn ugsEditor-showOptionsBox"> <button type="button" data-target="helpDlg" title="Help &amp; Quick tips on formatting your song">?</button> </li>
 	</ul>
 	<h2 class="ugsLogo">Uke Geeks Song-a-Matic</h2>
 </section>
 <!-- LAYOUT OPTIONS -->
-<aside class="arrowBox layoutOptions" id="layoutOptions">
-	<fieldset class="arrowBoxContent enablePseudoSelects">
+<aside class="ugsEditor-arrowBox ugsEditor-layoutOptions" id="layoutOptions">
+	<fieldset class="ugsEditor-arrowBoxContent ugsEditor-enablePseudoSelects">
 		<dl>
 			<dt><label for="fontSizePicker"><span>Font size 12pt</span> <em>&#9658;</em></label></dt>
 			<dd id="fontSizePicker" data-action="zoomFonts">
-				<ul class="pseudoSelect">
+				<ul class="ugsEditor-pseudoSelect">
 					<li><a href="#6">6 pt </a></li>
 					<li><a href="#6.5">6.5 pt </a></li>
 					<li><a href="#7">7 pt </a></li>
@@ -98,58 +94,58 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 					<li><a href="#9.5">9.5 pt </a></li>
 					<li><a href="#10">10 pt </a></li>
 					<li><a href="#11">11 pt </a></li>
-					<li class="checked"><a href="#12">12 pt </a></li>
+					<li class="ugsEditor-checked"><a href="#12">12 pt </a></li>
 					<li><a href="#13">13 pt </a></li>
 					<li><a href="#14">14 pt </a></li>
 				</ul>
 			</dd>
 			<dt><label for="diagramSizePicker"><span>Stupid Large diagrams</span> <em>&#9658;</em></label></dt>
 			<dd id="diagramSizePicker" data-action="zoomDiagrams">
-				<ul class="pseudoSelect">
+				<ul class="ugsEditor-pseudoSelect">
 					<li><a href="#40">Tiny </a></li>
 					<li><a href="#65">Small </a></li>
 					<li><a href="#80">Medium </a></li>
 					<li><a href="#90">Large </a></li>
-					<li class="checked"><a href="#100">Stupid Large </a></li>
+					<li class="ugsEditor-checked"><a href="#100">Stupid Large </a></li>
 				</ul>
 			</dd>
 			<dt><label for="diagramPositionPicker"><span>Reference diagrams on left</span> <em>&#9658;</em></label></dt>
 			<dd id="diagramPositionPicker" data-action="layout">
-				<ul class="pseudoSelect">
-					<li class="checked"><a href="#left">On left side</a></li>
+				<ul class="ugsEditor-pseudoSelect">
+					<li class="ugsEditor-checked"><a href="#left">On left side</a></li>
 					<li><a href="#top">At the top</a></li>
 					<li><a href="#none">Don't show</a></li>
 				</ul>
 			</dd>
 			<dt><label for="lyricChordsPicker"><span>Chord names above lyrics</span> <em>&#9658;</em></label></dt>
 			<dd id="lyricChordsPicker" data-action="placement">
-				<ul class="pseudoSelect">
+				<ul class="ugsEditor-pseudoSelect">
 					<li><a href="#inline">Chord names inline </a></li>
-					<li class="checked"><a href="#above">Chord names above </a></li>
+					<li class="ugsEditor-checked"><a href="#above">Chord names above </a></li>
 					<li><a href="#miniDiagrams">Names &amp; diagrams above </a></li>
 				</ul>
 			</dd>
 			<dt><label for="colorPicker"><span>Normal colors (white paper) </span><em>&#9658;</em></label></dt>
 			<dd id="colorPicker" data-action="colors">
-				<ul class="pseudoSelect"></ul>
+				<ul class="ugsEditor-pseudoSelect"></ul>
 			</dd>
 		</dl>
 	</fieldset>
 </aside>
 <!-- TUNING OPTIONS -->
-<aside class="arrowBox tuningOptions" id="tuningOptions">
-	<fieldset class="arrowBoxContent enablePseudoSelects">
+<aside class="ugsEditor-arrowBox ugsEditor-tuningOptions" id="tuningOptions">
+	<fieldset class="ugsEditor-arrowBoxContent ugsEditor-enablePseudoSelects">
 		<dl>
 			<dt><label for="transposePicker"><span>Original key</span> <em>&#9658;</em></label></dt>
 			<dd id="transposePicker" data-action="transpose">
-				<ul class="pseudoSelect" id="transposeOptions">
+				<ul class="ugsEditor-pseudoSelect" id="transposeOptions">
 					<li><a href="#down_6">-6 <em>F#</em></a></li>
 					<li><a href="#down_5">-5 <em>G</em></a></li>
 					<li><a href="#down_4">-4 <em>G#</em></a></li>
 					<li><a href="#down_3">-3 <em>A</em></a></li>
 					<li><a href="#down_2">-2 <em>A#</em></a></li>
 					<li><a href="#down_1">-1 <em>B</em></a></li>
-					<li class="checked"><a href="#up_0">Original <em>C</em></a></li>
+					<li class="ugsEditor-checked"><a href="#up_0">Original <em>C</em></a></li>
 					<li><a href="#up_1">+1 <em>C#</em></a></li>
 					<li><a href="#up_2">+2 <em>D</em></a></li>
 					<li><a href="#up_3">+3 <em>D#</em></a></li>
@@ -160,8 +156,8 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			</dd>
 			<dt><label for="tuningPicker"><span>Standard ukulele tuning</span> <em>&#9658;</em></label></dt>
 			<dd id="tuningPicker" data-action="tuning">
-				<ul class="pseudoSelect">
-					<li class="checked"><a href="#soprano">GCEA Standard</a></li>
+				<ul class="ugsEditor-pseudoSelect">
+					<li class="ugsEditor-checked"><a href="#soprano">GCEA Standard</a></li>
 					<li><a href="#baritone">DGBE Baritone</a></li>
 					<li><a href="#alternate">ADF#B Alternate</a></li>
 				</ul>
@@ -170,100 +166,99 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 	</fieldset>
 </aside>
 <!-- OTHER OPTIONS -->
-<aside class="arrowBox otherOptions" id="optionsDlg">
-	<fieldset class="arrowBoxContent">
-		<dl class="enablePseudoSelects">
+<aside class="ugsEditor-arrowBox ugsEditor-otherOptions" id="optionsDlg">
+	<fieldset class="ugsEditor-arrowBoxContent">
+		<dl class="ugsEditor-enablePseudoSelects">
 			<dt><label for="pagePicker"><span>Paper</span> <em>&#9658;</em></label></dt>
 			<dd id="pagePicker" data-action="paper">
-				<ul class="pseudoSelect" id="pageWidth">
-					<li class="checked"><a href="#letter">US Letter (8.5 x 11 in)</a></li>
+				<ul class="ugsEditor-pseudoSelect" id="pageWidth">
+					<li class="ugsEditor-checked"><a href="#letter">US Letter (8.5 x 11 in)</a></li>
 					<li><a href="#a4">A4 (21 x 29.7 cm)</a></li>
 					<li><a href="#screen">full screen</a></li>
 				</ul>
 			</dd>
 		</dl>
 	</fieldset>
-	<fieldset class="arrowBoxContent">
-		<p class="checkboxBlock">
+	<fieldset class="ugsEditor-arrowBoxContent">
+		<p class="ugsEditor-checkboxBlock">
 			<input type="checkbox" value="true" id="chkEnclosures" checked="checked" />
 			<label for="chkEnclosures">Hide chord enclosures
-				<span class="checkBoxFinePrint">don't put [brackets] around chord names</span>
+				<span class="ugsEditor-checkBoxFinePrint">don't put [brackets] around chord names</span>
 			</label>
 		</p>
-		<p class="checkboxBlock">
+		<p class="ugsEditor-checkboxBlock">
 			<input type="checkbox" value="true" id="chkSortAlpha" checked="checked" />
 			<label for="chkSortAlpha">Sort reference diagrams alphabetically
-				<span class="checkBoxFinePrint">otherwise &ldquo;song order&rdquo; is used</span>
+				<span class="ugsEditor-checkBoxFinePrint">otherwise &ldquo;song order&rdquo; is used</span>
 			</label>
 		</p>
-		<p class="checkboxBlock">
+		<p class="ugsEditor-checkboxBlock">
 			<input type="checkbox" value="true" id="chkIgnoreCommon" checked="checked" />
 			<label for="chkIgnoreCommon">Ignore common chords
-				<span class="checkBoxFinePrint">don't create master chord diagrams for these chords:</span>
+				<span class="ugsEditor-checkBoxFinePrint">don't create master chord diagrams for these chords:</span>
 			</label>
 			<input type="text" id="commonChordList" value="" />
 		</p>
 	</fieldset>
 </aside>
 <!-- HELP (DIALOG) -->
-<aside class="arrowBox helpOptions" id="helpDlg">
-	<fieldset class="arrowBoxContent linksList">
+<aside class="ugsEditor-arrowBox ugsEditor-helpOptions" id="helpDlg">
+	<fieldset class="ugsEditor-arrowBoxContent ugsEditor-linksList">
 		<ul>
-			<li><a href="http://blog.ukegeeks.org/users-guide/" target="_blank" title="View the complete documentation including ChordPro tips">User Guide</a></li>
-			<li><a href="http://ukegeeks.org/tools/chord-finder.htm" target="_blank" title="Access the UkeGeeks library of common chords">Chord Finder</a></li>
-			<li><a href="http://ukegeeks.org/tools/reverse-chord-finder.htm" target="_blank" title="Find chord names by drawing the diagram">Reverse Chord Lookup</a></li>
+			<li><a href="http://blog.ukegeeks.org/users-guide/" target="_blank" rel="noopener" title="View the complete documentation including ChordPro tips">User Guide</a></li>
+			<li><a href="http://ukegeeks.org/tools/chord-finder.htm" target="_blank" rel="noopener" title="Access the UkeGeeks library of common chords">Chord Finder</a></li>
+			<li><a href="http://ukegeeks.org/tools/reverse-chord-finder.htm" target="_blank" rel="noopener" title="Find chord names by drawing the diagram">Reverse Chord Lookup</a></li>
 		</ul>
 	</fieldset>
 </aside>
 
 <!-- REFORMAT (DIALOG) -->
-<section id="reformatDlg" class="reformatDlg overlay isHidden">
-	<hgroup>
+<section id="reformatDlg" class="ugsEditor-reformatDlg ugsEditor-overlay ugsEditor-isHidden">
+	<header class="ugsEditor-overlayHeader">
 		<h3>Use Auto-Formated Version?</h3>
-	</hgroup>
+	</header>
 	<div>
-		<!-- <a title="resize this" href="#resize" class="resizeBtn">Resize</a> -->
-		<p class="instructions">Whoa! I didn't find any chords in your song -- it's probably not in ChordPro format. Here's the converted version&hellip;</p>
-		<p class="btnBar">
-			<input type="button" id="reformatYesBtn" class="baseBtn blueBtn" value="OK, Use This!" />
-			<a id="reformatNoBtn" href="#noThanks" class="noThanks">No, Thanks!</a>
+		<p class="ugsEditor-instructions">Whoa! I didn't find any chords in your song -- it's probably not in ChordPro format. Here's the converted version&hellip;</p>
+		<p class="ugsEditor-btnBar">
+			<input type="button" id="reformatYesBtn" class="ugsEditor-baseBtn ugsEditor-blueBtn" value="OK, Use This!" />
+			<button type="button" id="reformatNoBtn" class="ugsEditor-noThanks">No, Thanks!</button>
 		</p>
 		<textarea id="reformatSource" wrap="off"></textarea>
-		<p class="instructions small">Want to make more adjustments? Click &ldquo;No Thanks&rdquo; and try the <a href="http://ukegeeks.org/tools" target="_blank" title="open the reformat tool in a new window">Reformater Tool</a> instead.</p>
-		<p class="instructions small"><input type="checkbox" value="true" id="reformatDisable" /> <label for="reformatDisable">Don't perform this check again.</label></p>
+		<p class="ugsEditor-instructions ugsEditor-small">Want to make more adjustments? Click &ldquo;No Thanks&rdquo; and try the <a href="http://ukegeeks.org/tools" target="_blank" rel="noopener" title="open the reformat tool in a new window">Reformater Tool</a> instead.</p>
+		<p class="ugsEditor-instructions ugsEditor-small"><input type="checkbox" value="true" id="reformatDisable" /> <label for="reformatDisable">Don't perform this check again.</label></p>
 	</div>
 </section>
 
 <!-- CHORD BUILDER (DIALOG) -->
-<section id="cdBldDlg" class="overlay chordBuilderDlg isHidden chordBuilderNarrow">
-	<hgroup>
+<section id="cdBldDlg" class="ugsEditor-overlay ugsEditor-chordBuilderDlg ugsEditor-isHidden ugsEditor-chordBuilderNarrow">
+	<header class="ugsEditor-overlayHeader">
 		<h3>Chord Builder</h3>
-	</hgroup>
+	</header>
 	<div>
-		<a title="close this" href="#close" class="closeBtn">Close</a>
+		<button type="button" title="close this" class="ugsEditor-closeBtn">Close</button>
 		<div id="cdBldChooserPanel">
 			<ul id="cdBldPick" class="ugsChordChooser"></ul>
 		</div>
 		<div id="cdBldBuilderPanel" style="display:none">
 			<p class="">
-				<label for="cdBldChordName">Chord Name: <input class="chordName" type="text" id="cdBldChordName" value="CHORDNAME" /></label>
+				<label for="cdBldChordName">Chord Name: <input class="ugsEditor-chordName" type="text" id="cdBldChordName" value="CHORDNAME" /></label>
 			</p>
-			<div class="editorSurface" id="cdBldEditorSurface">
-				<div class="toolboxEdgeShadow leftEdge"></div>
-				<div id="cdBldToolbox" class="chordToolbox leftEdge">
-					<div class="chordToolboxInner">
-						<a href="#dots" id="cdBldDotsBtn" class="toolChip selected">Add Dots <span class="bigDot"></span></a>
-						<a href="#fingers" id="cdBldFingersBtn" class="toolChip">Set Fingers <span id="cdBldBtnDiagram" class="fingerToolImage finger1"><span class="fingerDot"></span></span><span id="cdBldBtnFingerName"></span></a>
+			<div class="ugsEditor-editorSurface" id="cdBldEditorSurface">
+				<div class="ugsEditor-toolboxEdgeShadow ugsEditor-leftEdge"></div>
+				<div id="cdBldToolbox" class="ugsEditor-chordToolbox ugsEditor-leftEdge">
+					<div class="ugsEditor-chordToolboxInner">
+						<button type="button" id="cdBldDotsBtn" class="ugsEditor-toolChip ugsEditor-selected" data-tool="dots">Add Dots <span class="ugsEditor-bigDot"></span></button>
+						<button type="button" id="cdBldFingersBtn" class="ugsEditor-toolChip" data-tool="fingers">Set Fingers <span id="cdBldBtnDiagram" class="ugsEditor-fingerToolImage ugsEditor-finger1"><span class="ugsEditor-fingerDot"></span></span><span id="cdBldBtnFingerName"></span></button>
 					</div>
 				</div>
-				<div class="toolboxEdgeShadow rightEdge"></div>
-				<div class="chordToolbox rightEdge">
-					<div class="chordToolboxInner">
-						<label for="cdBldStartingFret" class="toolChip">Starting Fret
+				<div class="ugsEditor-toolboxEdgeShadow ugsEditor-rightEdge"></div>
+				<div class="ugsEditor-chordToolbox ugsEditor-rightEdge">
+					<div class="ugsEditor-chordToolboxInner">
+						<label for="cdBldStartingFret" class="ugsEditor-toolChip">Starting Fret
 							<select id="cdBldStartingFret"></select>
 						</label>
-						<a href="#slide-up" id="toolboxSlideUpBtn" class="toolChip arrowUp" data-direction="up" title="move all dots -1 fret">Slide Up</a>
-						<a href="#slide-down" id="toolboxSlideDownBtn" class="toolChip arrowDown" data-direction="down" title="move all dots +1 fret">Slide Down</a>
+						<button type="button" id="toolboxSlideUpBtn" class="ugsEditor-toolChip ugsEditor-arrowUp" data-direction="up" title="move all dots -1 fret">Slide Up</button>
+						<button type="button" id="toolboxSlideDownBtn" class="ugsEditor-toolChip ugsEditor-arrowDown" data-direction="down" title="move all dots +1 fret">Slide Down</button>
 					</div>
 				</div>
 				<canvas id="cdBldCursorCanvas" width="462" height="300"></canvas>
@@ -273,11 +268,11 @@ $editDlgCssClassName = $model->IsUpdateAllowed ? '' : 'isHidden';
 			<p class="">
 				<label for="cdBldShowOutputBtn"><input id="cdBldShowOutputBtn" type="checkbox" value="0" /> Show ChordPro output</label>
 			</p>
-			<p class="btnBar">
-				<input type="button" value="Add" class="baseBtn blueBtn" id="cdBldSaveBtn">
-				<a href="#closeBuilder" id="cdBldCancelBtn" class="noThanks">Cancel</a>
+			<p class="ugsEditor-btnBar">
+				<input type="button" value="Add" class="ugsEditor-baseBtn ugsEditor-blueBtn" id="cdBldSaveBtn">
+				<button type="button" id="cdBldCancelBtn" class="ugsEditor-noThanks">Cancel</button>
 			</p>
-			<div id="cdBldOutputBox" class="outputBox collapseOutput" style="clear:right;">
+			<div id="cdBldOutputBox" class="ugsEditor-outputBox ugsEditor-collapseOutput" style="clear:right;">
 				<pre id="cdBldOutput" class="chordPro-statement" title="Your ChordPro define tag"></pre>
 			</div>
 		</div>

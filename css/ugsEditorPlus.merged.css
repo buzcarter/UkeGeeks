@@ -18,7 +18,7 @@
  */
 /* Thanks to: cssarrowplease.com
  -------------------------------- */
-.arrowBox {
+.ugsEditor-arrowBox {
   background-color: rgba(0, 0, 0, 0.81);
   border: 2px solid #fff;
   border-radius: 10px;
@@ -32,8 +32,8 @@
   box-shadow: 3px 13px 9px rgba(0, 0, 0, 0.5);
   z-index: 5;
 }
-.arrowBox:after,
-.arrowBox:before {
+.ugsEditor-arrowBox:after,
+.ugsEditor-arrowBox:before {
   bottom: 100%;
   border: solid transparent;
   content: " ";
@@ -42,43 +42,43 @@
   position: absolute;
   pointer-events: none;
 }
-.arrowBox:after {
+.ugsEditor-arrowBox:after {
   border-color: rgba(0, 0, 0, 0);
   border-bottom-color: #000;
   border-width: 20px;
   left: 50%;
   margin-left: -20px;
 }
-.arrowBox:before {
+.ugsEditor-arrowBox:before {
   border-color: rgba(255, 255, 255, 0);
   border-bottom-color: #ffffff;
   border-width: 23px;
   left: 50%;
   margin-left: -23px;
 }
-.arrowBoxContent {
+.ugsEditor-arrowBoxContent {
   padding: 1em 0.6em 0.4em;
 }
-.arrowBoxContent + .arrowBoxContent {
+.ugsEditor-arrowBoxContent + .ugsEditor-arrowBoxContent {
   padding-top: 0;
 }
 /*
 -------------------------------------- */
-.enablePseudoSelects dt,
-.enablePseudoSelects dd {
+.ugsEditor-enablePseudoSelects dt,
+.ugsEditor-enablePseudoSelects dd {
   height: 3em;
   line-height: 1;
   margin: 0;
   padding: 0;
 }
-.enablePseudoSelects dd {
+.ugsEditor-enablePseudoSelects dd {
   display: none;
   left: 16.1em;
   position: relative;
   top: -3.1em;
   height: 0px;
 }
-.enablePseudoSelects label {
+.ugsEditor-enablePseudoSelects label {
   color: #E4E4E4;
   display: block;
   cursor: pointer;
@@ -86,7 +86,7 @@
   border-radius: 7px;
   padding: 0.5em;
 }
-.enablePseudoSelects label:hover {
+.ugsEditor-enablePseudoSelects label:hover {
   color: #fff;
   background-color: #2A2A2A;
   border-color: #555;
@@ -94,27 +94,27 @@
   -webkit-box-shadow: 2px 2px 2px #000;
   box-shadow: 2px 2px 2px #000;
 }
-.enablePseudoSelects label:hover em {
+.ugsEditor-enablePseudoSelects label:hover em {
   color: #E4E4E4;
 }
-.enablePseudoSelects label em {
+.ugsEditor-enablePseudoSelects label em {
   color: #898989;
   float: right;
   font-family: Arial;
 }
-.event-userSelecting label {
+.ugsEditor-event-userSelecting label {
   color: #B9B9B9;
 }
-.event-userSelecting label em {
+.ugsEditor-event-userSelecting label em {
   color: #3a3a3a;
 }
-html .active label {
+html .ugsEditor-active label {
   background-color: #000;
   color: #fff;
 }
 /*
 -------------------------------------- */
-.pseudoSelect {
+.ugsEditor-pseudoSelect {
   position: absolute;
   background-color: #3C3C3C;
   border: solid 1px #555;
@@ -126,7 +126,7 @@ html .active label {
   cursor: pointer;
   width: 17em;
 }
-.pseudoSelect a {
+.ugsEditor-pseudoSelect a {
   border: 2px solid transparent;
   border-radius: 10px;
   color: inherit;
@@ -134,21 +134,21 @@ html .active label {
   padding: 0.5em 0.5em 0.5em 30px;
   text-decoration: none;
 }
-.pseudoSelect li {
+.ugsEditor-pseudoSelect li {
   display: block;
   float: none;
   margin: 0;
   padding: 0.1em;
   text-align: inherit;
 }
-.pseudoSelect li:hover {
+.ugsEditor-pseudoSelect li:hover {
   color: #fff;
 }
-.pseudoSelect li:hover a {
+.ugsEditor-pseudoSelect li:hover a {
   background-color: #000;
   border-color: #676767;
 }
-.pseudoSelect .checked a {
+.ugsEditor-pseudoSelect .ugsEditor-checked a {
   background: url("../img/editor/checked.png") no-repeat scroll 10px center #2A2A2A;
   border-color: #C5C5C5;
   color: #FFFFFF;
@@ -156,7 +156,7 @@ html .active label {
 }
 /* our Checkboxes are a problem...
 -------------------------------- */
-.checkboxBlock {
+.ugsEditor-checkboxBlock {
   border-top: 1px solid #575757;
   -moz-box-shadow: 0 -1px 0 #000;
   -webkit-box-shadow: 0 -1px 0 #000;
@@ -164,10 +164,10 @@ html .active label {
   font-size: 0.81em;
   padding: 0.75em 0;
 }
-.checkboxBlock label {
+.ugsEditor-checkboxBlock label {
   padding-left: 0.5em;
 }
-.checkBoxFinePrint {
+.ugsEditor-checkBoxFinePrint {
   display: block;
   font-size: 0.85em;
   padding: 0.3em 0 0.5em 3.1em;
@@ -181,29 +181,29 @@ html .active label {
 /* list of links (duh)
  * ...undoing some spill-over styles, when will I learn
  -------------------------------- */
-.linksList {
+.ugsEditor-linksList {
   font-size: 0.85em;
 }
-.linksList li {
+.ugsEditor-linksList li {
   margin: 0;
   padding: 0.1em;
   text-align: left;
   float: none;
 }
-.linksList a {
+.ugsEditor-linksList a {
   border-radius: 8px;
   color: #B9B9B9;
   display: block;
   padding: 0.6em;
   text-decoration: none;
 }
-.linksList a:hover {
+.ugsEditor-linksList a:hover {
   background-color: #000;
   color: #fff;
 }
 /* Feedback message -- on UPDATE
 -------------------------------- */
-.updateMessage {
+.ugsEditor-updateMessage {
   background-color: #BAE5A7;
   border: 1px solid #44A819;
   border-radius: 4px 4px 4px 4px;
@@ -217,7 +217,7 @@ html .active label {
   text-shadow: 0 -1px rgba(255, 190, 40, 0.3);
   width: 10em;
 }
-.updateMessage em {
+.ugsEditor-updateMessage em {
   border: 1px solid #66D836;
   border-radius: 3px 3px 3px 3px;
   -moz-box-shadow: 0 0 3px #559277 inset;
@@ -232,8 +232,24 @@ html .active label {
  * Author     : Buz
  * Description: All editor's buttons and button-like links.
  */
+/* <button>s that look like the links they replaced: the rules below and in the chord builder and
+   overlay files put the look back; this only takes the browser's button styling away
+------------------------------ */
+.ugsEditor-alternateBtn,
+.ugsEditor-noThanks,
+.ugsEditor-closeBtn,
+.ugsEditor-resizeBtn,
+.ugsEditor-toolChip {
+  appearance: none;
+  background: none;
+  border: 0;
+  box-sizing: content-box;
+  font: inherit;
+  margin: 0;
+  padding: 0;
+}
 /* "base button" is rounded & gray with white text */
-.baseBtn {
+.ugsEditor-baseBtn {
   background-color: #999;
   border: 1px solid #333;
   -moz-border-radius: 4px;
@@ -249,12 +265,12 @@ html .active label {
   /* Remove underline in case this is applied to a link */
   text-decoration: none;
 }
-.baseBtn:hover {
+.ugsEditor-baseBtn:hover {
   background-color: #888;
   /* Force colorin case this is applied to a link */
   color: #fff;
 }
-.blueBtn {
+.ugsEditor-blueBtn {
   background-color: #89b9e3;
   background-image: -webkit-linear-gradient(top, #89b9e3 0%, #3d6bbb 100%);
   background-image: -o-linear-gradient(top, #89b9e3 0%, #3d6bbb 100%);
@@ -264,7 +280,7 @@ html .active label {
   border-color: #3765B7;
   text-shadow: #89b9e3 0px 1px 0, #3765b7 0 -1px 0;
 }
-.blueBtn:hover {
+.ugsEditor-blueBtn:hover {
   background-color: #4c85e8;
   background-image: -webkit-linear-gradient(top, #4c85e8 0%, #2f5493 100%);
   background-image: -o-linear-gradient(top, #4c85e8 0%, #2f5493 100%);
@@ -274,7 +290,7 @@ html .active label {
   text-shadow: black 0px 1px 0, #3765b7 0 -1px 0;
 }
 /* orange */
-.orange {
+.ugsEditor-orange {
   color: #fef4e9;
   border: solid 1px #da7c0c;
   background: #f78d1d;
@@ -285,7 +301,7 @@ html .active label {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffaa51a', endColorstr='#fff47a20', GradientType=0);
   text-shadow: #da7c0c 0px 1px 0, #faa51a 0 -1px 0;
 }
-.orange:hover {
+.ugsEditor-orange:hover {
   background: #f47c20;
   background-image: -webkit-linear-gradient(top, #f88e11 0%, #f06015 100%);
   background-image: -o-linear-gradient(top, #f88e11 0%, #f06015 100%);
@@ -294,7 +310,7 @@ html .active label {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff88e11', endColorstr='#fff06015', GradientType=0);
   text-shadow: #f47c20 0px 1px 0, #f88e11 0 -1px 0;
 }
-.orange:active {
+.ugsEditor-orange:active {
   color: #fcd3a5;
   background-image: -webkit-linear-gradient(top, #f47a20 0%, #faa51a 100%);
   background-image: -o-linear-gradient(top, #f47a20 0%, #faa51a 100%);
@@ -302,29 +318,29 @@ html .active label {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff47a20', endColorstr='#fffaa51a', GradientType=0);
 }
-.btnBar {
+.ugsEditor-btnBar {
   height: 30px;
 }
-.btnBar .baseBtn {
+.ugsEditor-btnBar .ugsEditor-baseBtn {
   float: right;
   font-size: 110%;
   margin-bottom: 5px;
 }
 /* "Cancel"/"No Thanks" (subtle, alternate) buttons
 ------------------------------ */
-.alternateBtn,
-.noThanks {
+.ugsEditor-alternateBtn,
+.ugsEditor-noThanks {
   color: #3965B0;
   float: right;
   line-height: 33px;
   margin-right: 1.5em;
   text-decoration: none;
 }
-.alternateBtn:hover,
-.noThanks:hover {
+.ugsEditor-alternateBtn:hover,
+.ugsEditor-noThanks:hover {
   color: #0646AD;
 }
-.noThanks {
+.ugsEditor-noThanks {
   background-color: #EFD292;
   border-radius: 6px;
   padding: 0 0.4em;
@@ -334,7 +350,7 @@ html .active label {
   -o-transition: background-color 0.4s ease;
   transition: background-color 0.4s ease;
 }
-.noThanks:hover {
+.ugsEditor-noThanks:hover {
   background-color: #F2E2C1;
 }
 /*
@@ -344,7 +360,7 @@ html .active label {
  */
 /* Chord Builder's elements
 ------------------------------ */
-.chordBuilderDlg input[type=text] {
+.ugsEditor-chordBuilderDlg input[type=text] {
   border: 1px solid #D7D7D7;
   border-radius: 5px 5px 5px 5px;
   display: block;
@@ -354,7 +370,7 @@ html .active label {
   max-width: 100%;
   width: 100%;
 }
-.chordBuilderDlg pre {
+.ugsEditor-chordBuilderDlg pre {
   font-size: 12pt;
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
@@ -363,7 +379,7 @@ html .active label {
   word-wrap: break-word;
 }
 /* ** canvas & editor stack */
-html body .editorSurface {
+html body .ugsEditor-editorSurface {
   background-color: #fff;
   border-radius: 5px ;
   font-size: 0.9em;
@@ -378,7 +394,7 @@ html body .editorSurface {
   box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.5) inset;
 }
 /* ** stacking order ** */
-.editorSurface canvas {
+.ugsEditor-editorSurface canvas {
   border: none;
   cursor: none;
   left: 0;
@@ -391,11 +407,11 @@ html body .editorSurface {
 #cdBldCursorCanvas {
   z-index: 2;
 }
-.toolboxEdgeShadow {
+.ugsEditor-toolboxEdgeShadow {
   z-index: 4;
 }
 /* -- toolbox and its contents -- */
-.chordToolbox {
+.ugsEditor-chordToolbox {
   border: 0 solid #ccc;
   background-color: #F0EEF0;
   /*464646;*/
@@ -413,58 +429,58 @@ html body .editorSurface {
   transition: background-color 0.4s ease, border-color 0.4s ease, left 0.4s ease-out, right 0.4s ease-out;
   z-index: 3;
 }
-.chordToolbox.open,
-.chordToolbox:hover {
+.ugsEditor-chordToolbox.ugsEditor-open,
+.ugsEditor-chordToolbox:hover {
   background-color: #fafafa;
   border-color: #8C8C8C;
   -moz-box-shadow: 4px 6px 9px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 4px 6px 9px rgba(0, 0, 0, 0.3);
   box-shadow: 4px 6px 9px rgba(0, 0, 0, 0.3);
 }
-.chordToolbox.leftEdge {
+.ugsEditor-chordToolbox.ugsEditor-leftEdge {
   border-radius: 0 7px 7px 0;
   border-width: 2px 2px 2px 0;
   left: -110px;
 }
-.chordToolbox.leftEdge.open,
-.chordToolbox.leftEdge:hover {
+.ugsEditor-chordToolbox.ugsEditor-leftEdge.ugsEditor-open,
+.ugsEditor-chordToolbox.ugsEditor-leftEdge:hover {
   left: 0;
 }
-.chordToolbox.rightEdge {
+.ugsEditor-chordToolbox.ugsEditor-rightEdge {
   border-radius: 7px 0 0 7px;
   border-width: 2px 0 2px 2px;
   right: -110px;
 }
-.chordToolbox.rightEdge.open,
-.chordToolbox.rightEdge:hover {
+.ugsEditor-chordToolbox.ugsEditor-rightEdge.ugsEditor-open,
+.ugsEditor-chordToolbox.ugsEditor-rightEdge:hover {
   right: 0;
 }
-.chordToolboxInner {
+.ugsEditor-chordToolboxInner {
   margin: 10px auto;
   width: 100px;
 }
 /* forceed shadow over toolbox(es) */
-.toolboxEdgeShadow {
+.ugsEditor-toolboxEdgeShadow {
   background-color: transparent;
   height: 255px;
   position: absolute;
   top: 26px;
   width: 10px;
 }
-.toolboxEdgeShadow.leftEdge {
+.ugsEditor-toolboxEdgeShadow.ugsEditor-leftEdge {
   -moz-box-shadow: 4px 0 6px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 4px 0 6px rgba(0, 0, 0, 0.3);
   box-shadow: 4px 0 6px rgba(0, 0, 0, 0.3);
   left: -10px;
 }
-.toolboxEdgeShadow.rightEdge {
+.ugsEditor-toolboxEdgeShadow.ugsEditor-rightEdge {
   -moz-box-shadow: -4px 0 6px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: -4px 0 6px rgba(0, 0, 0, 0.3);
   box-shadow: -4px 0 6px rgba(0, 0, 0, 0.3);
   right: -10px;
 }
 /* --- */
-.toolChip {
+.ugsEditor-toolChip {
   background-color: #fafafa;
   border: 1px solid #fafafa;
   border-radius: 5px;
@@ -483,20 +499,20 @@ html body .editorSurface {
   -o-transition: background-color 0.4s ease, border-color 0.4s ease;
   transition: background-color 0.4s ease, border-color 0.4s ease;
 }
-.toolChip:hover {
+.ugsEditor-toolChip:hover {
   background-color: #FEFEFE;
   border: 1px solid #EDEDED;
 }
-.toolChip img,
-.toolChip .bigDot {
+.ugsEditor-toolChip img,
+.ugsEditor-toolChip .ugsEditor-bigDot {
   opacity: 0.75;
 }
-.toolChip:hover img,
-.toolChip:hover .bigDot {
+.ugsEditor-toolChip:hover img,
+.ugsEditor-toolChip:hover .ugsEditor-bigDot {
   opacity: 1;
 }
-html .selected,
-html .selected:hover {
+html .ugsEditor-selected,
+html .ugsEditor-selected:hover {
   border-color: #AAA73F;
   -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -507,7 +523,7 @@ html .selected:hover {
   display: block;
   font-size: 0.67em;
 }
-.bigDot {
+.ugsEditor-bigDot {
   background-color: #E78333;
   border: 3px solid #973100;
   border-radius: 23px 23px 23px 23px;
@@ -517,12 +533,12 @@ html .selected:hover {
   width: 23px;
 }
 /* some "active" button (hover) efx */
-.selected img,
-.selected .bigDot {
+.ugsEditor-selected img,
+.ugsEditor-selected .ugsEditor-bigDot {
   opacity: 1;
 }
 /* hand */
-.fingerToolImage {
+.ugsEditor-fingerToolImage {
   background: url("../img/editor/hand.png") top center no-repeat;
   display: block;
   height: 83px;
@@ -530,7 +546,7 @@ html .selected:hover {
   position: relative;
   width: 88px;
 }
-.fingerDot {
+.ugsEditor-fingerDot {
   background-color: #F9F340;
   border: solid 2px #AF9607;
   border-radius: 8px;
@@ -539,44 +555,44 @@ html .selected:hover {
   position: absolute;
   width: 8px;
 }
-.finger0 .fingerDot {
+.ugsEditor-finger0 .ugsEditor-fingerDot {
   display: none;
 }
-.finger1 .fingerDot {
+.ugsEditor-finger1 .ugsEditor-fingerDot {
   right: 22px;
   top: 3px;
 }
-.finger2 .fingerDot {
+.ugsEditor-finger2 .ugsEditor-fingerDot {
   right: 1px;
   top: 11px;
 }
-.finger3 .fingerDot {
+.ugsEditor-finger3 .ugsEditor-fingerDot {
   right: 1px;
   top: 28px;
 }
-.finger4 .fingerDot {
+.ugsEditor-finger4 .ugsEditor-fingerDot {
   right: 1px;
   top: 44px;
 }
 /* sliders (up/down arrows) */
 label[for=cdBldStartingFret],
-html .arrowUp,
-html .arrowDown {
+html .ugsEditor-arrowUp,
+html .ugsEditor-arrowDown {
   min-height: 52px;
 }
-html .arrowUp,
-html .arrowDown {
+html .ugsEditor-arrowUp,
+html .ugsEditor-arrowDown {
   background-repeat: no-repeat;
   background-position: center 29px;
 }
-html .arrowUp {
+html .ugsEditor-arrowUp {
   background-image: url("../img/editor/basic-up-arrow.png");
 }
-html .arrowDown {
+html .ugsEditor-arrowDown {
   background-image: url("../img/editor/basic-down-arrow.png");
 }
 /* output area */
-.outputBox {
+.ugsEditor-outputBox {
   max-height: 30em;
   overflow: hidden;
   -webkit-transition: max-height 0.8s ease;
@@ -585,7 +601,7 @@ html .arrowDown {
   -o-transition: max-height 0.8s ease;
   transition: max-height 0.8s ease;
 }
-.outputBox.collapseOutput {
+.ugsEditor-outputBox.ugsEditor-collapseOutput {
   max-height: 0;
 }
 /* ________ colorized chordPro defintion ________ */
@@ -642,12 +658,12 @@ html .arrowDown {
   /* #ffdb5b; */
   text-shadow: 0px 2px 0px #551D00;
 }
-.ugsChordChooser .newChord {
+.ugsChordChooser .ugsEditor-newChord {
   background-color: #b2612d;
   color: #551d00;
   font-weight: bold;
 }
-.ugsChordChooser .deleteChord {
+.ugsChordChooser .ugsEditor-deleteChord {
   background: url("../img/editor/delete-btn.png") right center no-repeat;
   display: block;
   float: right;
@@ -660,7 +676,7 @@ html .arrowDown {
   -o-transition: opacity 0.4s ease;
   transition: opacity 0.4s ease;
 }
-.ugsChordChooser li:hover .deleteChord {
+.ugsChordChooser li:hover .ugsEditor-deleteChord {
   opacity: 1;
 }
 .ugsChordChooser .ugs-diagrams--chord-img {
@@ -729,7 +745,8 @@ body {
   float: left;
   position: relative;
 }
-.ugsAppMenuBar > ul > li > a {
+.ugsAppMenuBar > ul > li > a,
+.ugsAppMenuBar > ul > li > button {
   border: solid 1px transparent;
   color: #f4e19f;
   cursor: pointer;
@@ -742,14 +759,23 @@ body {
   text-decoration: none;
   text-shadow: 1px 2px 0 rgba(86, 3, 5, 0.95);
 }
-.ugsAppMenuBar > ul > li > a:hover {
+.ugsAppMenuBar > ul > li > button {
+  appearance: none;
+  background: none;
+  font: inherit;
+  margin: 0;
+  text-align: left;
+}
+.ugsAppMenuBar > ul > li > a:hover,
+.ugsAppMenuBar > ul > li > button:hover {
   border-color: #600000;
   background-color: #451212;
   background: url("../img/editor/editorSprite.png") 0 -145px repeat-x;
   color: #fdda61;
   text-shadow: none;
 }
-.ugsAppMenuBar > ul > .active > a {
+.ugsAppMenuBar > ul > .ugsEditor-active > a,
+.ugsAppMenuBar > ul > .ugsEditor-active > button {
   background-color: #451212;
   background: url("../img/editor/editorSprite.png") 0 -145px repeat-x;
   color: #fef5e3;
@@ -757,7 +783,8 @@ body {
 }
 /* Icons/Sprits
 -------------------------------- */
-.ugsAppMenuBar > ul > li > a span {
+.ugsAppMenuBar > ul > li > a span,
+.ugsAppMenuBar > ul > li > button span {
   background-image: url("../img/editor/editorSprite.png");
   background-repeat: no-repeat;
   float: left;
@@ -765,67 +792,67 @@ body {
   margin-top: 7px;
   width: 25px;
 }
-.navSong span {
+.ugsEditor-navSong span {
   background-position: -75px 0px;
 }
-.navSong.active span,
-.navSong a:hover span {
+.ugsEditor-navSong.ugsEditor-active span,
+.ugsEditor-navSong :is(a, button):hover span {
   background-position: -75px -50px;
 }
-.navInstruments span {
+.ugsEditor-navInstruments span {
   background-position: -50px 0px;
 }
-.navInstruments.active span,
-.navInstruments a:hover span {
+.ugsEditor-navInstruments.ugsEditor-active span,
+.ugsEditor-navInstruments :is(a, button):hover span {
   background-position: -50px -50px;
 }
-.navTranspose span {
+.ugsEditor-navTranspose span {
   background-position: -25px 0px;
 }
-.navTranspose.active span,
-.navTranspose a:hover span {
+.ugsEditor-navTranspose.ugsEditor-active span,
+.ugsEditor-navTranspose :is(a, button):hover span {
   background-position: -25px -50px;
 }
-.navDiagrams span {
+.ugsEditor-navDiagrams span {
   background-position: 0px 0px;
 }
-.navDiagrams.active span,
-.navDiagrams a:hover span {
+.ugsEditor-navDiagrams.ugsEditor-active span,
+.ugsEditor-navDiagrams :is(a, button):hover span {
   background-position: 0px -50px;
 }
-.navLayout span {
+.ugsEditor-navLayout span {
   background-position: -100px 0px;
 }
-.navLayout.active span,
-.navLayout a:hover span {
+.ugsEditor-navLayout.ugsEditor-active span,
+.ugsEditor-navLayout :is(a, button):hover span {
   background-position: -100px -50px;
 }
-.navColors span {
+.ugsEditor-navColors span {
   background-position: -125px 0px;
 }
-.navColors.active span,
-.navColors a:hover span {
+.ugsEditor-navColors.ugsEditor-active span,
+.ugsEditor-navColors :is(a, button):hover span {
   background-position: -125px -50px;
 }
-.navZoom span {
+.ugsEditor-navZoom span {
   background-position: -150px 0px;
 }
-.navZoom.active span,
-.navZoom a:hover span {
+.ugsEditor-navZoom.ugsEditor-active span,
+.ugsEditor-navZoom :is(a, button):hover span {
   background-position: -150px -50px;
 }
-.navEdit span {
+.ugsEditor-navEdit span {
   background-position: -175px 0px;
 }
-.navEdit.active span,
-.navEdit a:hover span {
+.ugsEditor-navEdit.ugsEditor-active span,
+.ugsEditor-navEdit :is(a, button):hover span {
   background-position: -175px -50px;
 }
-.navOptions span {
+.ugsEditor-navOptions span {
   background-position: -200px 0px;
 }
-.navOptions.active span,
-.navOptions a:hover span {
+.ugsEditor-navOptions.ugsEditor-active span,
+.ugsEditor-navOptions :is(a, button):hover span {
   background-position: -200px -50px;
 }
 /* / */
@@ -836,7 +863,7 @@ body {
  */
 /* FLOATIN EDITOR
 -------------------------------- */
-.overlay {
+.ugsEditor-overlay {
   position: fixed;
   top: 45px;
   right: 20px;
@@ -852,7 +879,7 @@ body {
   width: 490px;
   z-index: 0;
 }
-.overlay > div {
+.ugsEditor-overlay > div {
   background: url("../img/editor/woodChip.png") repeat scroll 0 0 transparent;
   border-radius: 0 0 13px 13px;
   overflow: hidden;
@@ -860,23 +887,23 @@ body {
 }
 /* MOVED FROM PAGE: SECTION 4
 ------------------------------ */
-.isHidden {
+.ugsEditor-isHidden {
   display: none;
 }
 /* Form inputs,
 ----------------------------------- */
-.overlay select {
+.ugsEditor-overlay select {
   font-size: 1.1em;
 }
-.overlay input[type=text],
-.overlay input[type=password] {
+.ugsEditor-overlay input[type=text],
+.ugsEditor-overlay input[type=password] {
   display: block;
   font-size: 1.2em;
   margin-bottom: 0.4em;
   padding: 0.1em;
   width: 98%;
 }
-.overlay textarea {
+.ugsEditor-overlay textarea {
   font-family: Monaco, "Consolas", "Lucida Console", "Courier New", courier, monospace;
   font-size: 10pt;
   line-height: 1.25;
@@ -887,9 +914,9 @@ body {
   height: 525px;
   width: 98%;
 }
-.overlay input[type=text],
-.overlay input[type=password],
-.overlay textarea {
+.ugsEditor-overlay input[type=text],
+.ugsEditor-overlay input[type=password],
+.ugsEditor-overlay textarea {
   background-color: rgba(255, 255, 255, 0.7);
   border: solid 1px #E1B166;
   max-width: 100%;
@@ -900,22 +927,22 @@ body {
   -o-transition: background-color 500ms linear;
   transition: background-color 500ms linear;
 }
-.overlay input[type=text]:hover,
-.overlay input[type=password]:hover,
-.overlay textarea:hover {
+.ugsEditor-overlay input[type=text]:hover,
+.ugsEditor-overlay input[type=password]:hover,
+.ugsEditor-overlay textarea:hover {
   background-color: rgba(255, 255, 200, 0.7);
   border-color: #444;
 }
-.overlay input[type=text]:focus,
-.overlay input[type=password]:focus,
-.overlay textarea:focus {
+.ugsEditor-overlay input[type=text]:focus,
+.ugsEditor-overlay input[type=password]:focus,
+.ugsEditor-overlay textarea:focus {
   background-color: rgba(255, 255, 255, 0.9);
   border-color: #6C280C;
   -moz-box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3);
   box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3);
 }
-.overlay h3 {
+.ugsEditor-overlay h3 {
   background: url("../img/editor/editorSprite.png") repeat-x 0 -100px #933f17;
   border-bottom: 1px solid #240E01;
   border-radius: 12px 12px 0 0;
@@ -927,7 +954,7 @@ body {
   padding: 0 20px;
   text-shadow: 1px 2px 0 #592108;
 }
-.overlay .closeBtn {
+.ugsEditor-overlay .ugsEditor-closeBtn {
   background: url("../img/editor/closeBtn.png") no-repeat 0 0 transparent;
   display: block;
   height: 30px;
@@ -938,7 +965,7 @@ body {
   top: 14px;
   width: 30px;
 }
-.overlay .resizeBtn {
+.ugsEditor-overlay .ugsEditor-resizeBtn {
   background: url("../img/editor/resizeBtn.png") no-repeat 0 0 transparent;
   display: block;
   height: 20px;
@@ -950,26 +977,26 @@ body {
   width: 20px;
 }
 /* _________ Specific Overlays _________ */
-html .helpDlg {
+html .ugsEditor-helpDlg {
   top: 75px;
   right: 70px;
   width: 300px;
   z-index: 1;
 }
-html .optionsDlg {
+html .ugsEditor-optionsDlg {
   top: 100px;
   right: 210px;
   width: 380px;
   z-index: 2;
 }
-.optionsDlg div {
+.ugsEditor-optionsDlg div {
   font-size: 0.91em;
 }
-.optionsDlg div li {
+.ugsEditor-optionsDlg div li {
   padding-bottom: 0.82em;
 }
 /* _________ Chord Builder Dialog _________ */
-.chordBuilderDlg {
+.ugsEditor-chordBuilderDlg {
   right: 210px;
   top: 70px;
   width: 490px;
@@ -979,60 +1006,60 @@ html .optionsDlg {
   -o-transition: width 0.6s ease;
   transition: width 0.6s ease;
 }
-html .chordBuilderNarrow {
+html .ugsEditor-chordBuilderNarrow {
   width: 345px;
 }
 /* STANDARD appearance HTML for Help Section
 -------------------------------- */
-.helpDlg {
+.ugsEditor-helpDlg {
   font-size: 0.9em;
 }
-.normalHtml p,
-.normalHtml ul,
-.normalHtml ol {
+.ugsEditor-normalHtml p,
+.ugsEditor-normalHtml ul,
+.ugsEditor-normalHtml ol {
   margin-bottom: 1em;
 }
-.normalHtml li {
+.ugsEditor-normalHtml li {
   list-style: disc outside none;
   margin-left: 1em;
   padding-bottom: 0.4em;
 }
-.normalHtml h3 {
+.ugsEditor-normalHtml h3 {
   font-size: 1.2em;
   font-weight: bold;
 }
 /* Reformat Dialog
 ------------------------------ */
-.reformatDlg {
+.ugsEditor-reformatDlg {
   right: 25%;
   top: 100px;
   width: 480px;
   z-index: 3;
 }
-.instructions {
+.ugsEditor-instructions {
   width: 28em;
   padding: 0 0 0.7em;
   color: #563324;
 }
-.instructions.small {
+.ugsEditor-instructions.ugsEditor-small {
   clear: both;
   font-size: 0.8em;
   display: block;
   width: 35em;
 }
-html .reformatDlg textarea {
+html .ugsEditor-reformatDlg textarea {
   height: 15em;
 }
 /* postitioning the drop-down menus & arrows
 -------------------------------------- */
-.layoutOptions {
+.ugsEditor-layoutOptions {
   left: 50px;
 }
-.layoutOptions:after,
-.layoutOptions:before {
+.ugsEditor-layoutOptions:after,
+.ugsEditor-layoutOptions:before {
   left: 22%;
 }
-.tuningOptions {
+.ugsEditor-tuningOptions {
   left: 150px;
 }
 #transposeOptions em {
@@ -1040,31 +1067,31 @@ html .reformatDlg textarea {
   float: right;
   font-size: 0.86em;
 }
-.otherOptions {
+.ugsEditor-otherOptions {
   left: 250px;
 }
-.helpOptions {
+.ugsEditor-helpOptions {
   left: 320px;
 }
-.hasSongbookLink .layoutOptions:after,
-.hasSongbookLink .layoutOptions:before {
+.hasSongbookLink .ugsEditor-layoutOptions:after,
+.hasSongbookLink .ugsEditor-layoutOptions:before {
   left: 72%;
 }
-.hasSongbookLink .tuningOptions {
+.hasSongbookLink .ugsEditor-tuningOptions {
   left: 250px;
 }
-.hasSongbookLink .otherOptions {
+.hasSongbookLink .ugsEditor-otherOptions {
   left: 300px;
 }
-.hasSongbookLink .otherOptions:after,
-.hasSongbookLink .otherOptions:before {
+.hasSongbookLink .ugsEditor-otherOptions:after,
+.hasSongbookLink .ugsEditor-otherOptions:before {
   left: 70%;
 }
-.hasSongbookLink .helpOptions {
+.hasSongbookLink .ugsEditor-helpOptions {
   left: 340px;
 }
-.hasSongbookLink .helpOptions:after,
-.hasSongbookLink .helpOptions:before {
+.hasSongbookLink .ugsEditor-helpOptions:after,
+.hasSongbookLink .ugsEditor-helpOptions:before {
   left: 80%;
 }
 /*
@@ -1102,7 +1129,7 @@ html .reformatDlg textarea {
   background-color: #888;
   color: #000;
 }
-.theme-reversed .overlay {
+.theme-reversed .ugsEditor-overlay {
   background-color: #4E1C07;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
@@ -1117,7 +1144,7 @@ html .reformatDlg textarea {
   color: #56A0A5;
   font-family: "Comic Sans MS", "Marker Felt", cursive, sans-serif;
 }
-.theme-jellyBean .scalablePrintArea hgroup {
+.theme-jellyBean .scalablePrintArea header.ugs-songInfo {
   color: #FF9417;
   text-align: center;
 }
@@ -1151,7 +1178,7 @@ html .reformatDlg textarea {
 .theme-western .scalablePrintArea {
   color: #88410A;
 }
-.theme-western .scalablePrintArea hgroup {
+.theme-western .scalablePrintArea header.ugs-songInfo {
   color: #88410A;
   font-family: 'Smokum', Arial, sans-serif;
   text-align: center;
@@ -1186,7 +1213,7 @@ html .reformatDlg textarea {
 .theme-pumpkin .scalablePrintArea {
   color: #68391D;
 }
-.theme-pumpkin .scalablePrintArea hgroup {
+.theme-pumpkin .scalablePrintArea header.ugs-songInfo {
   color: #B14623;
   text-align: center;
 }
@@ -1225,7 +1252,7 @@ html .reformatDlg textarea {
 .theme-zombie .scalablePrintArea {
   color: #798666;
 }
-.theme-zombie .scalablePrintArea hgroup {
+.theme-zombie .scalablePrintArea header.ugs-songInfo {
   color: #902374;
   text-align: center;
 }
@@ -1266,7 +1293,7 @@ html .reformatDlg textarea {
 .theme-frosty .scalablePrintArea {
   color: #154286;
 }
-.theme-frosty .scalablePrintArea hgroup {
+.theme-frosty .scalablePrintArea header.ugs-songInfo {
   color: #6A97DB;
   text-align: center;
 }
@@ -1310,7 +1337,7 @@ http://www.colourlovers.com/palette/510474/vintage_Christmas
 .theme-krampus .scalablePrintArea {
   color: #929867;
 }
-.theme-krampus .scalablePrintArea hgroup {
+.theme-krampus .scalablePrintArea header.ugs-songInfo {
   color: #929867;
   text-align: center;
 }
@@ -1358,7 +1385,7 @@ http://www.colourlovers.com/palette/510474/vintage_Christmas
   color: #443377;
   font-family: 'Architects Daughter', Arial, sans-serif;
 }
-.theme-notebook .scalablePrintArea hgroup {
+.theme-notebook .scalablePrintArea header.ugs-songInfo {
   color: #2E2ECC;
   font-family: inherit;
   text-align: center;
@@ -1407,13 +1434,13 @@ http://www.colourlovers.com/palette/510474/vintage_Christmas
   color: #000;
   font-weight: bold;
 }
-.theme-justBlack .scalablePrintArea hgroup,
-.theme-justBlack .scalablePrintArea hgroup * {
+.theme-justBlack .scalablePrintArea header.ugs-songInfo,
+.theme-justBlack .scalablePrintArea header.ugs-songInfo * {
   /* first choice: museo slab 500 */
   font-family: 'Bree Serif', Arial, sans-serif;
   font-style: normal;
 }
-.theme-justBlack .scalablePrintArea hgroup {
+.theme-justBlack .scalablePrintArea header.ugs-songInfo {
   text-align: center;
 }
 /*
@@ -1432,7 +1459,7 @@ http://www.colourlovers.com/palette/510474/vintage_Christmas
   -webkit-box-shadow: 3px 0 9px rgba(0, 0, 0, 0.4);
   box-shadow: 3px 0 9px rgba(0, 0, 0, 0.4);
 }
-.scalablePrintArea hgroup {
+.scalablePrintArea header.ugs-songInfo {
   padding-bottom: 0.15in;
 }
 /* Alternate Layouts: Hide Diagrams
@@ -1464,8 +1491,8 @@ html .diagramsOnTop .ugs-source-wrap {
 .diagramsOnSide .ugs-source-wrap {
   margin-left: 250px;
 }
-.liBtn,
-.liBtn * {
+.ugsEditor-liBtn,
+.ugsEditor-liBtn * {
   cursor: pointer;
 }
 /* page widths
@@ -1513,7 +1540,7 @@ html .diagramsOnTop .ugs-source-wrap {
   display: block;
 }
 .aceEditorActive .ugsAppMenuBar,
-.aceEditorActive .overlay,
+.aceEditorActive .ugsEditor-overlay,
 .aceEditorActive .scalablePrintArea {
   display: none;
 }
@@ -1548,7 +1575,7 @@ html .diagramsOnTop .ugs-source-wrap {
 }
 /*	Show/Hide Sidebar Button
 	------------------------------------------ */
-.aceSideBtn {
+.ugsEditor-aceSideBtn {
   background-color: rgba(0, 0, 0, 0);
   border: 1px solid #DDDDDD;
   border-radius: 4px;
@@ -1561,7 +1588,7 @@ html .diagramsOnTop .ugs-source-wrap {
   -o-transition: background-color 0.3s ease;
   transition: background-color 0.3s ease;
 }
-.aceSideBtn span {
+.ugsEditor-aceSideBtn span {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -1577,10 +1604,10 @@ html .diagramsOnTop .ugs-source-wrap {
   -o-transition: background-color 0.3s ease;
   transition: background-color 0.3s ease;
 }
-.aceSideBtn:hover {
+.ugsEditor-aceSideBtn:hover {
   background-color: #333;
 }
-.aceSideBtn:hover span {
+.ugsEditor-aceSideBtn:hover span {
   background-color: #eee;
 }
 /*	Help sidebar
@@ -1601,41 +1628,41 @@ html .diagramsOnTop .ugs-source-wrap {
   overflow-y: auto;
   text-align: left;
 }
-.aceHelp {
+.ugsEditor-aceHelp {
   border-top: 2px solid #333;
   padding: 1em 0.6em;
 }
-.aceHelp h1,
-.aceHelp h3 {
+.ugsEditor-aceHelp h1,
+.ugsEditor-aceHelp h3 {
   color: #222222;
   font-size: 2.5em;
   font-weight: 500;
   line-height: 1em;
   margin: 0 0 1em;
 }
-.aceHelp h3 {
+.ugsEditor-aceHelp h3 {
   font-size: 1.3em;
 }
-.aceHelp p {
+.ugsEditor-aceHelp p {
   line-height: 1.6em;
   margin: 0 0 1em;
 }
-.aceHelp table {
+.ugsEditor-aceHelp table {
   margin: 20px 0 10px;
 }
-.aceHelp strong {
+.ugsEditor-aceHelp strong {
   font-weight: bold;
 }
-.aceHelp td,
-.aceHelp th {
+.ugsEditor-aceHelp td,
+.ugsEditor-aceHelp th {
   color: #787878;
   padding: 0 0.8em 0.8em 0;
   vertical-align: baseline;
 }
-.aceHelp th {
+.ugsEditor-aceHelp th {
   font-weight: bold;
 }
-.aceHelp .key {
+.ugsEditor-aceHelp .ugsEditor-key {
   background-color: #666;
   border: 0 none;
   border-radius: 0.22em;
@@ -1648,7 +1675,7 @@ html .diagramsOnTop .ugs-source-wrap {
   padding: 0.22em 0.4em;
   text-transform: uppercase;
 }
-.aceHelp .shortKeys {
+.ugsEditor-aceHelp .ugsEditor-shortKeys {
   white-space: nowrap;
   padding-right: 1.4em;
 }

@@ -14,6 +14,17 @@ function h( $value ) {
 }
 
 /**
+ * HTML-encodes a value's exact text, for a <textarea>: every "&" is escaped, so a song
+ * with "&amp;" shows (and saves) "&amp;", not "&".
+ *
+ * @param mixed $value
+ * @return string
+ */
+function hText( $value ) {
+	return htmlspecialchars( (string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', true );
+}
+
+/**
  * JSON-encodes a value for safe output inside an inline <script> block.
  *
  * @param mixed $value

@@ -144,8 +144,13 @@ test('existing HTML entities in song files are not double-escaped', async () => 
   assert.ok(!list.text.includes('&amp;amp;') && !list.text.includes('&amp;copy;'));
 
   const song = await req('/songbook/grass-shack');
-  assert.ok(song.text.includes('[C]Tom &amp; Jerry'), 'bare & still escaped');
-  assert.ok(!song.text.includes('&amp;quot;'));
+  // the songsheet keeps entities; the Edit Song box holds the file's exact text
+  const [sheet, editBox] = song.text.split('<textarea id="chordProSource"');
+  assert.ok(sheet.includes('{title: Grass &quot;Shack&quot;}'), 'songsheet entities kept');
+  assert.ok(sheet.includes('[C]Tom &amp; Jerry'), 'bare & still escaped');
+  assert.ok(!sheet.includes('&amp;quot;') && !sheet.includes('&amp;copy;'));
+  assert.ok(editBox.includes('{title: Grass &amp;quot;Shack&amp;quot;}'), 'Edit Song box: exact text');
+  assert.ok(editBox.includes('[C]Tom &amp; Jerry'));
 });
 
 test('static files are served', async () => {
