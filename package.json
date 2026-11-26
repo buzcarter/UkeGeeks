@@ -1,7 +1,7 @@
 {
-  "name": "ukegeeks-scriptasaurus",
+  "name": "@ukegeeks/songbook",
   "version": "1.6.0",
-  "description": "UkeGeeks Scriptasaurus: ChordPro songbook with ukulele chord diagrams, served by a small Node.js server",
+  "description": "UkeGeeks Songbook (Scriptasaurus): ChordPro songbook with ukulele chord diagrams, served by a small Node.js server",
   "private": false,
   "license": "GPL-3.0",
   "author": {
