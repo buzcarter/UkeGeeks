@@ -10,6 +10,7 @@ Changes on `main` since 1.5.1.
 
 ### Changed
 
+- Song editor 2.0.0-beta.6 (UGS-0035). It only adds hooks for host pages (`editMenu`, `setSong()`, `openChordBuilder()`), which the Songbook doesn't use; the editor's markup and behaviour here are unchanged.
 - The default branch is now `main` (it was `master`). CI builds and deploys the demo on merges to `main`.
 - **The Song-a-matic editor is its own package now**, [`@ukegeeks/song-editor`](https://github.com/buzcarter/song-editor) 1.0.0-beta. The build copies its bundle, CSS, images and page markup in, like Song Formatter's; the editor's sources, LESS and `lazyload.js` left `src/`, and `less` is no longer a devDependency. Pages are unchanged: the editable song page's HTML is the same byte for byte.
 - The song list page loads its quick search and New Song dialog from a new `js/ugsSongList.min.js` (built from `src/js/songList/`), after `js/ugsEditorPlus.min.js`.
