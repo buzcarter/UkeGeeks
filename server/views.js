@@ -45,7 +45,7 @@ function songListDetailed(m) {
         <em style="font-size:.8em; padding-right:1.5em; color:#BCB59C;">${sayHello()}, ${user.displayName}!
           (<a href="/logout">Logout</a>)
         </em>
-        ${m.isNewAllowed ? html`<input type="button" id="openNewDlgBtn" class="baseBtn blueBtn" value="New Song" title="Start editing a new song" />` : ''}
+        ${m.isNewAllowed ? html`<input type="button" id="openNewDlgBtn" class="ugsEditor-baseBtn ugsEditor-blueBtn" value="New Song" title="Start editing a new song" />` : ''}
       </aside>`
       : m.showLoginLink
         ? html`<aside style="float:right;"><em style="font-size:.8em; padding-right:1.5em; color:#BCB59C;"><a href="/login">Login</a></em></aside>`
@@ -61,18 +61,18 @@ function songListDetailed(m) {
   <script src="${m.base}js/ugsEditorPlus.min.js"></script>
   <script src="${m.base}js/ugsSongList.min.js"></script>
   ${m.isNewAllowed
-    ? html`<section class="overlay" style="top:100px; right:40%; display:none;" id="newSongForm">
+    ? html`<section class="ugsEditor-overlay" style="top:100px; right:40%; display:none;" id="newSongForm">
       <hgroup>
         <h3>Add Song</h3>
       </hgroup>
-      <div><a title="close this" href="#close" id="hideNewSongBtn" class="closeBtn">Close</a>
+      <div><a title="close this" href="#close" id="hideNewSongBtn" class="ugsEditor-closeBtn">Close</a>
         <p id="loadingSpinner"><img src="${m.base}img/editor/busy.gif" alt="" /> Saving&hellip;</p>
         <p class="errorMessage" style="display:none;"></p>
         <label for="songTitle">Title</label>
         <input type="text" name="songTitle" id="songTitle" value="" />
         <label for="songArtist">Artist</label>
         <input type="text" name="songArtist" id="songArtist" value="" />
-        <input type="button" id="newSongBtn" class="baseBtn blueBtn" value="Continue" title="Save &amp; continue editing" />
+        <input type="button" id="newSongBtn" class="ugsEditor-baseBtn ugsEditor-blueBtn" value="Continue" title="Save &amp; continue editing" />
       </div>
     </section>
     <script nonce="${m.nonce}">
@@ -223,7 +223,7 @@ function login(m) {
 <body class="loginPage">
 <section class="contentWrap">
 </section>
-<section class="overlay">
+<section class="ugsEditor-overlay">
   <hgroup>
     <h3>Login</h3>
   </hgroup>
@@ -240,8 +240,8 @@ function login(m) {
         <input type="password" name="password" id="password" size="20" autocomplete="current-password" />
         <p class="hint">yo! this is cAsEsenSiTIvE.</p>
       </li>
-      <li class="btnBar">
-        <input type="submit" value="Login" name="loginBtn" class="baseBtn blueBtn" />
+      <li class="ugsEditor-btnBar">
+        <input type="submit" value="Login" name="loginBtn" class="ugsEditor-baseBtn ugsEditor-blueBtn" />
       </li>
     </ul>
     <p class="help">Problems or you need access? <a href="mailto:${m.supportEmail}?subject=I humbly beseech thee, songbook access, please...">Drop a line.</a></p>

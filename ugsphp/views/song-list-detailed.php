@@ -54,7 +54,7 @@ function MakeRowHtml($song){
 				</em>
 				<?php if ($model->IsNewAllowed) {
 					?>
-					<input type="button" id="openNewDlgBtn" class="baseBtn blueBtn" value="New Song" title="Start editing a new song" />
+					<input type="button" id="openNewDlgBtn" class="ugsEditor-baseBtn ugsEditor-blueBtn" value="New Song" title="Start editing a new song" />
 					<?php
 				}
 				?>
@@ -77,18 +77,18 @@ function MakeRowHtml($song){
 	<script type="text/javascript" src="<?php echo($model->StaticsPrefix); ?>js/ugsSongList.min.js"></script>
 	<?php if ($model->IsNewAllowed) {
 		?>
-		<section class="overlay" style="top:100px; right:40%; display:none;" id="newSongForm">
+		<section class="ugsEditor-overlay" style="top:100px; right:40%; display:none;" id="newSongForm">
 			<hgroup>
 				<h3>Add Song</h3>
 			</hgroup>
-			<div><a title="close this" href="#close" id="hideNewSongBtn" class="closeBtn">Close</a>
+			<div><a title="close this" href="#close" id="hideNewSongBtn" class="ugsEditor-closeBtn">Close</a>
 				<p id="loadingSpinner"><img src="<?php echo($model->StaticsPrefix); ?>img/editor/busy.gif" /> Saving&hellip;</p>
 				<p class="errorMessage" style="display:none;"></p>
 				<label for="songTitle">Title</label>
 				<input type="text" name="songTitle" id="songTitle" value="" />
 				<label for="songArtist">Artist</label>
 				<input type="text" name="songArtist" id="songArtist" value="" />
-				<input type="button" id="newSongBtn" class="baseBtn blueBtn" value="Continue" title="Save &amp; continue editing" />
+				<input type="button" id="newSongBtn" class="ugsEditor-baseBtn ugsEditor-blueBtn" value="Continue" title="Save &amp; continue editing" />
 			</div>
 		</section>
 		<script type="text/javascript">

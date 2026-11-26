@@ -16,7 +16,7 @@ $errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
 <body class="loginPage">
 <section class="contentWrap">
 </section>
-<section class="overlay">
+<section class="ugsEditor-overlay">
 	<hgroup>
 		<h3>Login</h3>
 	</hgroup>
@@ -33,8 +33,8 @@ $errCssstyle = (strlen($model->ErrorMessage) > 0) ? 'block' : 'none';
 				<input type="password" name="password" id="password" size="20" />
 				<p class="hint">yo! this is cAsEsenSiTIvE.</p>
 			</li>
-			<li class="btnBar">
-				<input type="submit" value="Login" name="loginBtn" class="baseBtn blueBtn" />
+			<li class="ugsEditor-btnBar">
+				<input type="submit" value="Login" name="loginBtn" class="ugsEditor-baseBtn ugsEditor-blueBtn" />
 			</li>
 		</ul>
 		<p class="help">Problems or you need access? <a href="mailto:<?php echo(h($model->SupportEmail)); ?>?subject=I humbly beseech thee, songbook access, please...">Drop a line.</a></p>

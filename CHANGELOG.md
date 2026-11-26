@@ -10,7 +10,7 @@ Changes on `main` since 1.5.1.
 
 ### Changed
 
-- Song editor 2.0.0-beta.6 (UGS-0035). It only adds hooks for host pages (`editMenu`, `setSong()`, `openChordBuilder()`), which the Songbook doesn't use; the editor's markup and behaviour here are unchanged.
+- **Song Editor 2.0.0-beta.6** (UGS-0035). The editor's class names are prefixed (`.overlay` is `.ugsEditor-overlay`, `.baseBtn` is `.ugsEditor-baseBtn`…) and its links that act as buttons are `<button>`s. The login page, the New Song dialog and the PHP views use the new names; if you styled or scripted the old ones, add the prefix. 2.0 also adds hooks for host pages (`editMenu`, `setSong()`, `openChordBuilder()`), which the Songbook doesn't use.
 - The default branch is now `main` (it was `master`). CI builds and deploys the demo on merges to `main`.
 - **The Song-a-matic editor is its own package now**, [`@ukegeeks/song-editor`](https://github.com/buzcarter/song-editor) 1.0.0-beta. The build copies its bundle, CSS, images and page markup in, like Song Formatter's; the editor's sources, LESS and `lazyload.js` left `src/`, and `less` is no longer a devDependency. Pages are unchanged: the editable song page's HTML is the same byte for byte.
 - The song list page loads its quick search and New Song dialog from a new `js/ugsSongList.min.js` (built from `src/js/songList/`), after `js/ugsEditorPlus.min.js`.
@@ -18,6 +18,11 @@ Changes on `main` since 1.5.1.
 - Chord diagrams and tablature are drawn as SVG instead of `<canvas>`.
 - Output is unchanged: all 16 sample songs render with the same text, chords, diagrams and tabs, in standard, baritone and ADF#B tunings, and with mini-diagrams.
 - Song-a-matic editor: the Fullscreen editor uses the [Ace ChordPro extension](https://github.com/buzcarter/ace-chordpro-extension) 1.0.0. That's Ace 1.26 (up from a 2014 build) with the ChordPro mode, snippets, chord completer and theme in one file, `js/ace/ace-chordpro.min.js`.
+
+### Fixed
+
+- The Edit Song box holds the song's exact text: a file with `&amp;` or `&copy;` used to show `&` or ©, and saving wrote it that way. (PHP too, with a new `hText()` helper.)
+- From Song Editor 2.0: Chord Builder fixes for names with `$` or quotes, a muted string's X is visible on dark themes, and Reformat expands tabs to their tab stops.
 
 ### Removed
 

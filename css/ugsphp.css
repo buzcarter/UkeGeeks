@@ -78,7 +78,7 @@ a {
 
 /* login page's form
  ------------------------------------------- */
-.loginPage .overlay{
+.loginPage .ugsEditor-overlay{
 	top:100px;
 	right:40%;
 	width: 17em;
@@ -87,10 +87,10 @@ a {
 .loginPage input[type=password]{
 	width: 97%;
 }
-.loginPage .btnBar{
+.loginPage .ugsEditor-btnBar{
 	padding: .5em 0;
 }
-.loginPage .baseBtn{
+.loginPage .ugsEditor-baseBtn{
 	font-size: 1.2em;
 }
 .loginPage .hint{
