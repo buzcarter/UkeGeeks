@@ -584,7 +584,8 @@ ugsEditorPlus.options = {
  *
  * The text lives in the Edit Song box (#chordProSource), or in Ace while Fullscreen is
  * open. Typing fires the box's own "input" event; code that sets the text (Transpose,
- * Reformat, the Chord Builder, Fullscreen) calls changed().
+ * Reformat, the Chord Builder, Fullscreen) calls changed(). A host page that edits the
+ * song itself (its own editor window, say) puts its text here with set().
  *
  * @class songText
  * @namespace ugsEditorPlus
@@ -602,6 +603,15 @@ ugsEditorPlus.songText = (function () {
     _public.get = function () {
         const fullscreenText = ugsEditorPlus.resize.getText();
         return fullscreenText !== null ? fullscreenText : box().value;
+    };
+    _public.set = function (text, options) {
+        box().value = String(text);
+        ugsEditorPlus.resize.setText(box().value);
+        _public.changed();
+        if (!options || options.render !== false) {
+            // as the Update button does, but the Reformat offer isn't repeated once it's declined
+            ugsEditorPlus.actions.run(true, true);
+        }
     };
     _public.changed = function () {
         const text = _public.get();
@@ -779,13 +789,15 @@ ugsEditorPlus.actions = (function () {
      * Rebuilds song, info, chord diagrams using current settings.
      * @method run
      * @param isDoBackup {bool} true forces backup; optional, default false.
+     * @param isLive {bool} true when the host page redraws as its user types (songText.set()):
+     *   the Reformat offer isn't shown again once it has been declined. Optional, default false.
      */
-    _public.run = function (isDoBackup) {
+    _public.run = function (isDoBackup, isLive) {
         isDoBackup = (arguments.length > 0) && isDoBackup;
         // run(markup) HTML-escapes the raw (untrusted) ChordPro text for us
         _song = ukeGeeks.scriptasaurus.run(_ele.cpmSource.value);
         if (_song && _song.chords.length < 1) {
-            ugsEditorPlus.autoReformat.run(_ele);
+            ugsEditorPlus.autoReformat.run(_ele, isLive);
         }
         if (_song) {
             ugsEditorPlus.songUi.update(_song);
@@ -1848,8 +1860,10 @@ ugsEditorPlus.autoReformat = (function () {
     let _ele = {};
     let _formatted;
     let _isDisabled = false;
-    _public.run = function (elements) {
-        if (_isDisabled) {
+    /** "No, Thanks!" was clicked: a host page that redraws as its user types doesn't get the offer again on every key */
+    let _isDeclined = false;
+    _public.run = function (elements, isLive) {
+        if (_isDisabled || (isLive && _isDeclined)) {
             return;
         }
         const dom = ugsEditorPlus.dom;
@@ -1863,6 +1877,7 @@ ugsEditorPlus.autoReformat = (function () {
             return false;
         };
         dom.byId('reformatNoBtn', HTMLElement).onclick = function () {
+            _isDeclined = true;
             doClose();
             return false;
         };
@@ -1912,6 +1927,73 @@ ugsEditorPlus.topMenus = (function () {
      * @public
      * @return {void}
      */
+    /** the host's Edit menu (see setEditMenu), or null: Edit shows the Edit Song box */
+    let _editMenu = null;
+    const EDIT_MENU_ID = 'editMenuDlg';
+    /**
+     * The Edit menu's drop-down box, made the first time a host asks for a menu: the
+     * editor's own markup (editorHtml()) doesn't have it.
+     * @method _editMenuBox
+     * @private
+     * @return {DOM-element}
+     */
+    const _editMenuBox = function () {
+        const dom = ugsEditorPlus.dom;
+        let box = dom.one('#' + EDIT_MENU_ID);
+        if (!box) {
+            dom.byId('ugsAppToolbar', HTMLElement).insertAdjacentHTML('afterend', '<aside class="ugsEditor-arrowBox ugsEditor-editMenu" id="' + EDIT_MENU_ID + '">'
+                + '<fieldset class="ugsEditor-arrowBoxContent ugsEditor-linksList"><ul></ul></fieldset></aside>');
+            box = dom.byId(EDIT_MENU_ID, HTMLElement);
+            box.addEventListener('click', _onEditMenuClick);
+        }
+        return box;
+    };
+    /**
+     * @method _setEditMenu
+     * @param items {Array} `{ label, onSelect, checked }` each; null or an empty list for no menu
+     */
+    const _setEditMenu = function (items) {
+        const dom = ugsEditorPlus.dom;
+        _editMenu = Array.isArray(items) && items.length > 0 ? items.slice() : null;
+        if (!_editMenu) {
+            dom.hide(dom.one('#' + EDIT_MENU_ID));
+            return;
+        }
+        const list = dom.find('ul', HTMLElement, _editMenuBox());
+        list.textContent = '';
+        _editMenu.forEach(function (item, index) {
+            const li = document.createElement('li');
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = String(item.label);
+            button.dataset.index = String(index);
+            li.classList.toggle('ugsEditor-checked', !!item.checked);
+            li.appendChild(button);
+            list.appendChild(li);
+        });
+    };
+    /**
+     * A click in the Edit menu: on an item, closes the menu and tells the host.
+     * @method _onEditMenuClick
+     * @private
+     */
+    const _onEditMenuClick = function (e) {
+        const button = e.target instanceof Element ? e.target.closest('button[data-index]') : null;
+        const item = button && _editMenu ? _editMenu[Number(button.dataset.index)] : undefined;
+        if (!item) {
+            return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        _closeAll();
+        try {
+            item.onSelect();
+        }
+        catch (err) {
+            // the host's problem: the editor carries on
+            console.error('[ugsEditorPlus] Edit menu "' + item.label + '":', err);
+        }
+    };
     const _init = function () {
         const dom = ugsEditorPlus.dom;
         // (a, button: Songbook 1.5 pages have links here)
@@ -1972,9 +2054,23 @@ ugsEditorPlus.topMenus = (function () {
      * @return {bool} false to kill event bubbling
      */
     const _onShowDlgBtnClick = function (e) {
+        const dialogId = this.getAttribute('data-dialog') || '';
+        if (_editMenu && dialogId === 'songSourceDlg') {
+            // the host's own Edit menu, not the Edit Song box
+            const box = _editMenuBox();
+            const wasOpen = ugsEditorPlus.dom.isVisible(box);
+            _closeAll();
+            if (!wasOpen) {
+                ugsEditorPlus.dom.fadeIn(box);
+                this.classList.add('ugsEditor-active');
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
         _closeAll();
         // now show dialog associated with the clicked button
-        ugsEditorPlus.dom.fadeIn(document.getElementById(this.getAttribute('data-dialog') || ''));
+        ugsEditorPlus.dom.fadeIn(document.getElementById(dialogId));
         // prevent event bubbling
         e.preventDefault();
         e.stopPropagation();
@@ -2026,7 +2122,8 @@ ugsEditorPlus.topMenus = (function () {
     // ---------------------------------------
     return {
         init: _init,
-        makeAllInactive: _makeAllInactive
+        makeAllInactive: _makeAllInactive,
+        setEditMenu: _setEditMenu
     };
 }());
 ;/**
@@ -2671,6 +2768,13 @@ ugsEditorPlus.resize = (function () {
     _public.getText = function () {
         return (isBig && editor !== null) ? editor.getValue() : null;
     };
+    _public.setText = function (text) {
+        if (isBig && editor !== null && editor.getValue() !== text) {
+            isCopying = true;
+            editor.setValue(text);
+            isCopying = false;
+        }
+    };
     _public.toggle = function (dlgElement) {
         if (dlg === null) {
             setup(dlgElement);
@@ -2744,11 +2848,19 @@ ugsEditorPlus.chordBuilder = (function () {
      */
     const onShowDlgBtnClick = function (evt) {
         evt.preventDefault();
-        // (init() makes the builder before it listens for this click)
-        if (_builder) {
-            _builder.reload();
+        _public.open();
+    };
+    /**
+     * Shows the Chord Builder, re-reading the song's chords.
+     * @method open
+     */
+    _public.open = function () {
+        // (init() makes the builder; before that there's nothing to open)
+        if (!_builder) {
+            return;
         }
-        ugsEditorPlus.dom.fadeIn(document.getElementById(this.getAttribute('data-dialog') || ''));
+        _builder.reload();
+        ugsEditorPlus.dom.fadeIn(ugsEditorPlus.dom.byId('cdBldDlg', HTMLElement));
     };
     // ---------------------------------------
     // return public interface "JSON handle"
@@ -2908,12 +3020,16 @@ ugsEditorPlus.songAmatic = (function () {
  *     song: chordProText,
  *     save: async (text) => 'Saved.', // optional; without it there's no Save button
  *     onChange: (text) => {},          // optional: the song's text changed
+ *     editMenu: [{ label: 'Edit Song', onSelect: () => {} }], // optional: the Edit button's own menu
  *     aceUrl: '/js/ace/',              // optional
  *     imgUrl: '/img/editor/',          // optional
  *     fontSize: 14,                    // ...and any other ugsEditorPlus.options
  *   });
  *   editor.getSong();
  *   editor.save(); // what the Save button does
+ *   editor.setSong(text); // the host's own editor changed the song
+ *   editor.setEditMenu(items); // new items (a changed label or check mark)
+ *   editor.openChordBuilder();
  *
  * The editor finds its elements by id, so a page holds one editor.
  *
@@ -2945,11 +3061,19 @@ ugsEditorPlus.songAmatic = (function () {
      * @param [options.imgUrl] {string} folder holding the editor images; default "../img/editor/" from the bundle's folder
      * @param [options.aceUrl] {string} folder holding ace-chordpro.min.js; default "ace/" in the bundle's folder
      * @param [options.onChange] {Function} called with the ChordPro text each time it changes
-     * @return {Object} `{ getSong(), save() }`
+     * @param [options.editMenu] {Array} `{ label, onSelect, checked }` items: the toolbar's Edit button shows them
+     *   in a drop-down menu instead of the Edit Song box (which then stays closed). For a host page that edits
+     *   the song its own way and passes the text back with `setSong()`
+     * @return {Object} `{ getSong(), setSong(), save(), setEditMenu(), openChordBuilder() }`
      */
     ugsEditorPlus.songAmatic.mount = (container, options) => {
-        const { song = '', save, onChange, imgUrl, ...editorOptions } = options || {};
+        const { song = '', save, onChange, editMenu, imgUrl, ...editorOptions } = options || {};
         const canSave = typeof save === 'function';
+        const hasEditMenu = Array.isArray(editMenu) && editMenu.length > 0;
+        if (hasEditMenu) {
+            // the host edits the song its own way: the Edit Song box has no button to bring it back
+            editorOptions.showEditOnLoad = false;
+        }
         container.innerHTML = ugsEditorPlus.markup.editorHtml({
             canSave,
             imgUrl: imgUrl || (scriptFolder() + '../img/editor/'),
@@ -2957,6 +3081,8 @@ ugsEditorPlus.songAmatic = (function () {
         });
         document.body.classList.add('editableSongPage', 'pageWidth_screen');
         ugsEditorPlus.songAmatic.init(editorOptions);
+        // (after init(): the menu's box goes inside the editor's element)
+        ugsEditorPlus.topMenus.setEditMenu(hasEditMenu ? editMenu : null);
         if (canSave) {
             ugsEditorPlus.updateSong.setSaveHandler(save);
         }
@@ -2965,6 +3091,12 @@ ugsEditorPlus.songAmatic = (function () {
         return {
             /** @return {string} the ChordPro text: the Fullscreen editor's while it's open, else the Edit Song box's */
             getSong: ugsEditorPlus.songText.get,
+            /** Replaces the song's text and redraws the songsheet (`{ render: false }`: the text only) */
+            setSong: ugsEditorPlus.songText.set,
+            /** Replaces the Edit button's menu (see the `editMenu` option); null or none brings back the Edit Song box */
+            setEditMenu: ugsEditorPlus.topMenus.setEditMenu,
+            /** Opens the Chord Builder, as its button in the Edit Song box does */
+            openChordBuilder: ugsEditorPlus.chordBuilder.open,
             /** @return {Promise<boolean>} saves as the Save button does; true when it saved */
             save: ugsEditorPlus.updateSong.save,
         };

@@ -190,15 +190,32 @@ html .ugsEditor-active label {
   text-align: left;
   float: none;
 }
-.ugsEditor-linksList a {
+.ugsEditor-linksList a,
+.ugsEditor-linksList button {
   border-radius: 8px;
   color: #B9B9B9;
   display: block;
   padding: 0.6em;
   text-decoration: none;
 }
-.ugsEditor-linksList a:hover {
+.ugsEditor-linksList a:hover,
+.ugsEditor-linksList button:hover {
   background-color: #000;
+  color: #fff;
+}
+.ugsEditor-linksList button {
+  appearance: none;
+  background: none;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font: inherit;
+  padding-left: 30px;
+  text-align: left;
+  width: 100%;
+}
+.ugsEditor-linksList .ugsEditor-checked button {
+  background: url("../img/editor/checked.png") no-repeat scroll 8px center transparent;
   color: #fff;
 }
 /* Feedback message -- on UPDATE
@@ -1061,6 +1078,14 @@ html .ugsEditor-reformatDlg textarea {
 }
 .ugsEditor-tuningOptions {
   left: 150px;
+}
+.ugsEditor-editMenu {
+  left: 6px;
+  width: 200px;
+}
+.ugsEditor-editMenu:after,
+.ugsEditor-editMenu:before {
+  left: 34px;
 }
 #transposeOptions em {
   color: #CCCCCC;
